@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "installCommand": "cd kaspi-app && npm ci",
+  "buildCommand": "cd kaspi-app && npm run build",
+  "outputDirectory": "kaspi-app/dist"
+}
