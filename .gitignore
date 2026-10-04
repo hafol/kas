@@ -1,0 +1,25 @@
+# Archived reference material (APKs, decompiled sources, screenshots, videos) — ~1 GB, kept locally only
+_archive/
+
+# Dependencies & build output
+node_modules/
+dist/
+dist-ssr/
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs & local env
+*.log
+*.local
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json

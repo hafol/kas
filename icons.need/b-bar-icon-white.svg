@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="13 8 35.500 53" width="142" height="212" fill="#FFFFFF">
+  <!-- Bar above the letter -->
+  <rect x="15.5" y="10" width="26.5" height="4.5"/>
+  <!-- Letter Б -->
+  <path fill-rule="evenodd" d="M15.5 22.5H41.5V27.5H23.5V36H38A8 8 0 0 1 46 44V50.500A8 8 0 0 1 38 58.500H15.500ZM23.500 41V53.500H35.500A2.500 2.500 0 0 0 38 51V43.500A2.500 2.500 0 0 0 35.500 41Z"/>
+</svg>

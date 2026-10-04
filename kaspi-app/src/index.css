@@ -1,0 +1,184 @@
+@font-face {
+  font-family: 'Roboto Flex Kaspi';
+  src: url('/fonts/roboto_flex_kaspi.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/roboto_regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/roboto_medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/fonts/roboto_bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+:root {
+  /* Kaspi Official Design System Tokens (Ds) */
+  --ds-active-primary: #F14635;
+  --ds-active-primary-hover: #E23627;
+  --ds-active-primary-pressed: #D42417;
+  --ds-active-primary-disabled: #FDBBB0;
+  
+  --ds-back-base: #F2F2F2;
+  --ds-back-layer1: #FFFFFF;
+  --ds-back-layer2: #F9F9F9;
+  
+  --ds-text-main: #1F1F1F;
+  --ds-text-secondary: #757575;
+  --ds-text-additional: #969696;
+  --ds-text-disabled: #A8A8A8;
+  --ds-text-inverse: #FFFFFF;
+  
+  --ds-brand-gold: #D5AE6C;
+  --ds-brand-bonus: #58A000;
+  --ds-brand-deposit: #FECC03;
+  --ds-brand-shop: #0089D0;
+  --ds-brand-gov: #00ABC2;
+  --ds-brand-magnum: #F50F64;
+  --ds-brand-travel: #00AEEF;
+  --ds-brand-red: #F14635;
+  
+  --ds-element-border-light: #EBEBEB;
+  --ds-element-border-dark: #C2C2C2;
+  --ds-element-fill-light: #F2F2F2;
+  
+  /* Corners (dimens.xml) */
+  --ds-radius-sm: 4px;
+  --ds-radius-card: 8px;     /* Ds.Shared.300 */
+  --ds-radius-md: 12px;    /* Ds.Shared.400 */
+  --ds-radius-lg: 16px;    /* Ds.Shared.500 */
+  --ds-radius-pill: 24px;  /* Ds.Shared.600 */
+  --ds-radius-full: 9999px;
+  
+  /* Spacing */
+  --ds-spacing-xs: 4px;
+  --ds-spacing-sm: 8px;
+  --ds-spacing-md: 12px;
+  --ds-spacing-screen: 16px; /* Ds.Spacing.500 */
+  --ds-spacing-lg: 20px;
+  --ds-spacing-xl: 24px;
+  
+  /* Shadows */
+  --ds-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --ds-shadow-floating: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --ds-shadow-bottom-nav: 0 -2px 10px rgba(0, 0, 0, 0.04);
+  
+  font-family: 'Roboto Flex Kaspi', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--ds-text-main);
+  background-color: #E5E5E5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #EBECEE;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  max-width: 430px;
+  margin: 16px auto;
+  min-height: calc(100vh - 32px);
+  min-height: calc(100dvh - 32px);
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+  position: relative;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  overflow-x: hidden;
+}
+
+/* App container - looks native mobile on desktop, 100% full screen on mobile */
+.app-viewport {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  background-color: #FFFFFF;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+@media (max-width: 600px) {
+  body {
+    background-color: #FFFFFF;
+  }
+  #root {
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .app-viewport {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+}
+
+/* Touch interaction classes */
+.touchable {
+  transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.12s ease;
+  cursor: pointer;
+  user-select: none;
+}
+.touchable:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+

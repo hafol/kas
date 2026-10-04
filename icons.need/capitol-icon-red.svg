@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 8 158 154" width="158" height="154" fill="none" stroke="#DF4E3E" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Flag and pole -->
+  <path d="M138.5 64V22.5h46v24h-46"/>
+  <!-- Dome -->
+  <path d="M106 98a33 33 0 0 1 66 0"/>
+  <!-- Building -->
+  <rect x="75.5" y="98.5" width="127" height="48" rx="7"/>
+  <!-- Columns -->
+  <path d="M114 124.5v22M139 124.5v22M164.5 124.5v22"/>
+</svg>

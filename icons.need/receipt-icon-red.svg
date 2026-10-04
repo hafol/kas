@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="45 30 302 286" width="151" height="143" fill="none" stroke="#DF4E3E" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Printer slot (open where the receipt overlaps) -->
+  <path d="M119 128H89a20 20 0 0 1-20-20V74a20 20 0 0 1 20-20h214a20 20 0 0 1 20 20v34a20 20 0 0 1-20 20h-34"/>
+  <!-- Receipt with wavy bottom edge -->
+  <path d="M119 290V106a8 8 0 0 1 8-8h134a8 8 0 0 1 8 8v184C257 290 257 283 245 283C232.5 283 232.5 292 220 292C207.5 292 207.5 283 195 283C182.5 283 182.5 292 170 292C157 292 157 283 144 283C131.5 283 131.5 290 119 290Z"/>
+  <!-- Text lines -->
+  <path d="M167 167.5h54M167 211.5h54" stroke-width="24"/>
+</svg>

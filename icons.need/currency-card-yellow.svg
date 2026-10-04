@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="17 15 243 189" width="243" height="189">
+  <!-- Yellow card -->
+  <rect x="17" y="15" width="243" height="189" rx="24" fill="#FFD302"/>
+  <!-- Tenge sign: square-cut bars and stem -->
+  <g fill="#FFFFFF">
+    <rect x="76" y="74" width="63" height="9.5"/>
+    <rect x="76" y="91.5" width="63" height="9.5"/>
+    <rect x="101" y="96" width="11" height="51"/>
+  </g>
+  <!-- Dollar sign: square-cut ends -->
+  <g fill="none" stroke="#FFFFFF" stroke-linecap="butt" stroke-linejoin="miter">
+    <path d="M197.5 99C197.5 89.5 190 84 180.5 84C169 84 160.5 88.5 160.5 97C160.5 106 170 109.5 180.5 113C191 116.5 198.5 120 198.5 128.5C198.5 137.5 190 142 180 142C169 142 159 137.5 159 125" stroke-width="12"/>
+    <path d="M180.5 68v14M180 144v9" stroke-width="9.5"/>
+  </g>
+</svg>
