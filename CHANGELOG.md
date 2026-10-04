@@ -2,6 +2,30 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-05 01:05] — Настройка 100% официальной иконки Kaspi для добавления на экран «Домой» (iOS / Android PWA)
+
+### 🎯 Запрос пользователя:
+> *«when i will put it on my home page as native i wnat it icon to be just like kaspi app icon copy»*
+
+### 🛠️ Что сделано:
+1. **Генерация официальных иконок Kaspi для мобильных экранов**:
+   - Из оригинального официального ассета Kaspi (`kaspi-logo.png` 512×512, фирменный красный фон `#F14635` с белым логотипом) сгенерирован полный набор иконок в [`kaspi-app/public/`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/):
+     - `apple-touch-icon.png` и `apple-touch-icon-180x180.png` (180×180) — для добавления на домашний экран iOS (Safari «На экран Домой»). iOS автоматически скругляет иконку в нативный сквиркл без черных рамок.
+     - `icon-192.png` и `icon-192-maskable.png` (192×192) — для Android PWA и адаптивных иконок.
+     - `icon-512.png` и `icon-512-maskable.png` (512×512) — для экранов загрузки (Splash Screen) и HD дисплеев.
+     - `favicon.svg` — векторная иконка логотипа Kaspi (заменен стандартный фиолетовый логотип Vite).
+     - `favicon-32x32.png`, `favicon-16x16.png`, `favicon.ico` — для вкладок браузера.
+2. **Создание Web App Manifest ([`manifest.json`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/manifest.json))**:
+   - Настроены параметры установки: `name: "Kaspi.kz"`, `short_name: "Kaspi.kz"`, `display: "standalone"`, `theme_color: "#FFFFFF"`, `background_color: "#F14635"`.
+3. **Обновление метатегов в [`index.html`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html)**:
+   - Подключены все `apple-touch-icon`, `manifest.json`, favicons.
+   - Добавлены `apple-mobile-web-app-title: "Kaspi.kz"`, `apple-mobile-web-app-capable: "yes"`, `mobile-web-app-capable: "yes"` — на экране телефона ярлык подписывается строго как **Kaspi.kz**.
+4. **Проверка**:
+   - `npm run build` выполнен успешно (370.64 kB, 0 ошибок).
+   - Все сгенерированные иконки и манифест проверены в `dist/`.
+
+---
+
 ## [2026-10-05 01:45] — Исправление 404 NOT_FOUND на Vercel
 
 ### 🎯 Запрос пользователя:
