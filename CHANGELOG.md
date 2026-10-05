@@ -2,6 +2,22 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-05 16:42] — Исправление ошибки Vercel: No Output Directory named "dist" found
+
+### 🎯 Проблема:
+> *«Error: No Output Directory named "dist" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory.»*
+
+### 🔍 Причина:
+- В настройках проекта Vercel в качестве Output Directory ожидалась папка `dist` в корне проекта. При этом Vite по умолчанию собирал файлы внутри поддиректории `kaspi-app/dist`.
+- Vercel искал папку `./dist` на верхнем уровне и не находил её.
+
+### 🛠️ Что сделано:
+1. В корневом [`vercel.json`](file:///C:/Users/Молдир/.gemini/antigravity-ide/scratch/kas/vercel.json) команда сборки дополнена копированием артефактов: `mkdir -p ../dist && cp -r dist/* ../dist/`, а `outputDirectory` установлен в `"dist"`.
+2. Локально выполнена сборка `npm run build` — проверено формирование бандла и копирование в корневую `dist/`.
+3. Теперь Vercel находит артефакты `dist/` при любом режиме сборки (как через корень, так и через подпапку).
+
+---
+
 ## [2026-10-05 16:38] — Исправление сборки Vercel (Root Directory kaspi-app)
 
 ### 🎯 Проблема:
