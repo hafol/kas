@@ -2,6 +2,22 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-05 16:38] — Исправление сборки Vercel (Root Directory kaspi-app)
+
+### 🎯 Проблема:
+> *«❗️ The vercel.json file should be inside of the provided root directory. Error: Command 'cd kaspi-app && npm ci' exited with 1»*
+
+### 🔍 Причина:
+- В настройках проекта Vercel параметр Root Directory был указан как `kaspi-app`.
+- Vercel запускал команды сборки уже находясь внутри папки `kaspi-app/`, где команды `cd kaspi-app` вызывали ошибку `cd: no such file or directory`.
+- Кроме того, Vercel требовал наличия `vercel.json` непосредственно внутри установленной корневой директории.
+
+### 🛠️ Что сделано:
+1. Создан [`kaspi-app/vercel.json`](file:///C:/Users/Молдир/.gemini/antigravity-ide/scratch/kas/kaspi-app/vercel.json) с конфигурацией `framework: vite`.
+2. В корневом [`vercel.json`](file:///C:/Users/Молдир/.gemini/antigravity-ide/scratch/kas/vercel.json) команды `installCommand` и `buildCommand` сделаны условными (`if [ -d kaspi-app ]; then cd kaspi-app && npm ci; else npm ci; fi`), чтобы сборка проходила успешно при любой конфигурации Root Directory в Vercel.
+
+---
+
 ## [2026-10-05 16:01] — Настройка Open Graph (og:image) превью карточки для меню Safari («Поделиться»)
 
 ### 🎯 Запрос пользователя:

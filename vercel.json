@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
-  "installCommand": "cd kaspi-app && npm ci",
-  "buildCommand": "cd kaspi-app && npm run build",
+  "installCommand": "if [ -d kaspi-app ]; then cd kaspi-app && npm ci; else npm ci; fi",
+  "buildCommand": "if [ -d kaspi-app ]; then cd kaspi-app && npm run build; else npm run build; fi",
   "outputDirectory": "kaspi-app/dist"
 }
