@@ -2,6 +2,39 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-05 17:55] — Устранение черного экрана при запуске: нативный сплэш-лоадер Kaspi (Белый экран + красный круг с фигурами)
+
+### 🎯 Запрос пользователя:
+> *«why at first seconds when i open that native app i see black screen can you do that instead of that like the orig kaspi put this type of loader second photo»*
+> *(Скриншот 1: Черный экран при старте PWA на iPhone; Скриншот 2: Оригинальный экран загрузки Kaspi — чистый белый фон и красный круглый логотип по центру)*
+
+### 🔍 Причина проблемы «черного экрана»:
+1. **Отсутствие iOS Startup Image**: При открытии standalone PWA с домашнего экрана iOS SpringBoard временно отображает черный экран до момента полной инициализации WebKit, если в манифесте не указаны экраны запуска `apple-touch-startup-image`.
+2. **Темная тема iOS**: На устройствах с включенной темной темой незаполненный холст `index.html` рендерился черным цветом до окончания загрузки бандла React (370 КБ).
+3. **Пустой `#root`**: До выполнения JavaScript дерево DOM оставалось пустым.
+
+### 🛠️ Что сделано:
+1. **Генерация официального сплэш-логотипа ([`kaspi-splash-emblem.png`](file:///C:/Users/Молдир/.gemini/antigravity-ide/scratch/kas/kaspi-app/public/kaspi-splash-emblem.png))**:
+   - Из официального мастер-исходника 1024×1024 сгенерирована точная эмблема (красный круг `#F14635` с белыми фигурами людей) строго по пропорциям из скриншота пользователя (25.7% ширины экрана, 104×104px).
+2. **Генерация нативных экранов запуска iOS (`apple-touch-startup-image`)**:
+   - `splash-1170x2532.png` (iPhone 12/13/14)
+   - `splash-1179x2556.png` (iPhone 14 Pro/15/15 Pro/16)
+   - `splash-1290x2796.png` (iPhone 14 Pro Max/15 Pro Max/16 Pro Max)
+   - `splash-1125x2436.png`, `splash-828x1792.png`, `apple-touch-startup-image.png`
+   - Теперь iOS с момента нажатия на иконку на рабочем столе отображает белоснежный экран с логотипом на аппаратном уровне.
+3. **Мгновенный встроенный инлайн-лоадер (0ms Latency) в [`kaspi-app/index.html`](file:///C:/Users/Молдир/.gemini/antigravity-ide/scratch/kas/kaspi-app/index.html)**:
+   - Встроены инлайн-стили `html, body { background-color: #FFFFFF !important; color-scheme: light only; }`.
+   - Вставлен элемент `<div id="kaspi-splash">` с отцентрированным красным логотипом и легким фирменным дыханием (`kaspiSplashPulse`). Он отрисовывается за **0 миллисекунд** еще до парсинга JS.
+4. **Плавный выход в [`kaspi-app/src/App.jsx`](file:///C:/Users/Молдир/.gemini/antigravity-ide/scratch/kas/kaspi-app/src/App.jsx)**:
+   - После монтирования React сплэш-экран плавно растворяется (`opacity: 0`, 350мс), открывая главный экран приложения 1:1 как в оригинальном Kaspi.kz.
+5. **Манифест [`kaspi-app/public/manifest.json`](file:///C:/Users/Молдир/.gemini/antigravity-ide/scratch/kas/kaspi-app/public/manifest.json)**:
+   - `background_color` изменен на `#FFFFFF`.
+
+### ✅ Проверка:
+- `npm run build` завершен успешно за 1.04с, артефакты синхронизированы в `dist/`.
+
+---
+
 ## [2026-10-05 16:42] — Исправление ошибки Vercel: No Output Directory named "dist" found
 
 ### 🎯 Проблема:

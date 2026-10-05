@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { initialUserData } from './data/userData';
 import { HomeScreen } from './components/HomeScreen';
 import { BottomNavBar } from './components/BottomNavBar';
@@ -17,6 +17,18 @@ export default function App() {
   const [userData, setUserData] = useState(initialUserData);
   const [activeTab, setActiveTab] = useState('home'); // 'home' | 'qr' | 'messages' | 'services'
   
+  // Smoothly dismiss the instant native Kaspi splash screen
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const splash = document.getElementById('kaspi-splash');
+      if (splash) {
+        splash.style.opacity = '0';
+        setTimeout(() => splash.remove(), 400);
+      }
+    }, 700);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Modal / Subscreen Navigation stack
   const [currentScreen, setCurrentScreen] = useState('tab'); // 'tab' | 'passcode' | 'my_bank' | 'gold_detail' | 'gov' | 'digital_id' | 'transfers' | 'settings' | 'qr_modal'
   const [pendingSecureScreen, setPendingSecureScreen] = useState(null);
