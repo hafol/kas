@@ -33,6 +33,28 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState('tab'); // 'tab' | 'passcode' | 'my_bank' | 'gold_detail' | 'gov' | 'digital_id' | 'transfers' | 'settings' | 'qr_modal'
   const [pendingSecureScreen, setPendingSecureScreen] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // eGov splash shown for ~1.5 s before the ID card screen opens
+  const [egovSplash, setEgovSplash] = useState(null); // null | 'in' | 'out'
+
+  // Preload so the splash appears instantly on tap
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/kaspi_assets/egov_splash.png';
+  }, []);
+
+  const handleOpenGovDoc = (docId) => {
+    if (docId !== 'id_card') {
+      setCurrentScreen('digital_id');
+      return;
+    }
+    if (egovSplash) return;
+    setEgovSplash('in');
+    setTimeout(() => {
+      setCurrentScreen('digital_id');
+      setEgovSplash('out');
+    }, 1500);
+    setTimeout(() => setEgovSplash(null), 1750);
+  };
 
   // Navigation handlers
   const handleOpenMyBank = () => {
@@ -169,7 +191,7 @@ export default function App() {
         {currentScreen === 'gov' && (
           <GovServicesScreen
             govData={userData.gov}
-            onOpenDoc={() => setCurrentScreen('digital_id')}
+            onOpenDoc={handleOpenGovDoc}
             onBack={() => setCurrentScreen('tab')}
           />
         )}
@@ -197,6 +219,16 @@ export default function App() {
           />
         )}
       </div>
+
+      {/* eGov splash (Удостоверение личности) */}
+      {egovSplash && (
+        <div
+          className={`egov-splash${egovSplash === 'out' ? ' egov-splash--out' : ''}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <img src="/kaspi_assets/egov_splash.png" alt="" draggable={false} />
+        </div>
+      )}
 
       {/* Bottom Navigation (visible on main tabs and inside services) */}
       {(currentScreen === 'tab' || currentScreen === 'my_bank' || currentScreen === 'gov') && (

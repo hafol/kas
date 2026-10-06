@@ -86,3 +86,43 @@ export async function loadDocumentCard() {
   }
   return null;
 }
+
+// Requisites entered by the user on the "Реквизиты" tab (ФИО, ИИН, dates, number), same store
+const REQS_KEY = 'id_document_requisites';
+
+export async function saveRequisites(values) {
+  try {
+    const db = await openIdDB();
+    if (db) {
+      return new Promise((resolve) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).put(values, REQS_KEY);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      });
+    }
+    localStorage.setItem(REQS_KEY, JSON.stringify(values));
+    return true;
+  } catch (err) {
+    console.warn('Error saving requisites:', err);
+    return false;
+  }
+}
+
+export async function loadRequisites() {
+  try {
+    const db = await openIdDB();
+    if (db) {
+      return new Promise((resolve) => {
+        const req = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME).get(REQS_KEY);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      });
+    }
+    const raw = localStorage.getItem(REQS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (err) {
+    console.warn('Error loading requisites:', err);
+  }
+  return null;
+}

@@ -182,3 +182,66 @@ body {
   display: none;
 }
 
+
+/* Full-height screen with its own scroll area and a pinned footer (DigitalIdScreen) */
+.screen-fill {
+  height: calc(100vh - 32px - env(safe-area-inset-top, 0px));
+  height: calc(100dvh - 32px - env(safe-area-inset-top, 0px));
+}
+@media (max-width: 600px) {
+  .screen-fill {
+    height: calc(100vh - env(safe-area-inset-top, 0px));
+    height: calc(100dvh - env(safe-area-inset-top, 0px));
+  }
+}
+
+/* DigitalIdScreen footer buttons: pressed states (100 ms) */
+.did-btn-primary {
+  transition: opacity 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.did-btn-primary:active {
+  opacity: 0.85;
+}
+.did-btn-secondary {
+  transition: background-color 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.did-btn-secondary:active {
+  background-color: #EEF2FE !important;
+}
+
+/* eGov splash before «Удостоверение личности» (App.jsx) */
+.egov-splash {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  z-index: 1000;
+  background-color: #FDFDFD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: egov-splash-in 150ms ease-out;
+  transition: opacity 250ms ease;
+}
+.egov-splash--out {
+  opacity: 0;
+}
+.egov-splash img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+@keyframes egov-splash-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

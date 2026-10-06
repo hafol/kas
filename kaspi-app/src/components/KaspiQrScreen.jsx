@@ -1,150 +1,220 @@
-import React, { useState } from 'react';
-import { X, Image, Zap } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+
+// All sizes are measured from the original Kaspi QR screen at 336px width
+// and scaled to the real screen width (max 430px).
+const u = (n) => `calc(min(100vw, 430px) * ${n / 336})`;
+
+const RED = '#F14635';
+const ARM = 46;
+const STROKE = 3.5;
+const RADIUS = 8;
+
+const Corner = ({ pos }) => {
+  const top = pos[0] === 't';
+  const left = pos[1] === 'l';
+  return (
+    <div style={{
+      position: 'absolute',
+      [top ? 'top' : 'bottom']: 0,
+      [left ? 'left' : 'right']: 0,
+      width: u(ARM),
+      height: u(ARM),
+      boxSizing: 'border-box',
+      [top ? 'borderTop' : 'borderBottom']: `${u(STROKE)} solid ${RED}`,
+      [left ? 'borderLeft' : 'borderRight']: `${u(STROKE)} solid ${RED}`,
+      [`border${top ? 'Top' : 'Bottom'}${left ? 'Left' : 'Right'}Radius`]: u(RADIUS)
+    }} />
+  );
+};
 
 export const KaspiQrScreen = ({ onClose }) => {
+  const videoRef = useRef(null);
+  const trackRef = useRef(null);
   const [torchOn, setTorchOn] = useState(false);
+
+  // Open the phone's rear camera
+  useEffect(() => {
+    let stream = null;
+    let cancelled = false;
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }
+      }).then((s) => {
+        if (cancelled) {
+          s.getTracks().forEach((t) => t.stop());
+          return;
+        }
+        stream = s;
+        trackRef.current = s.getVideoTracks()[0] || null;
+        if (videoRef.current) {
+          videoRef.current.srcObject = s;
+          videoRef.current.play().catch(() => {});
+        }
+      }).catch(() => {});
+    }
+    return () => {
+      cancelled = true;
+      if (stream) stream.getTracks().forEach((t) => t.stop());
+      trackRef.current = null;
+    };
+  }, []);
+
+  const toggleTorch = () => {
+    const next = !torchOn;
+    setTorchOn(next);
+    const track = trackRef.current;
+    if (track && track.applyConstraints) {
+      track.applyConstraints({ advanced: [{ torch: next }] }).catch(() => {});
+    }
+  };
 
   return (
     <div style={{
       position: 'fixed',
       top: 0,
-      left: 0,
-      right: 0,
       bottom: 0,
-      backgroundColor: '#000000',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: '100%',
+      maxWidth: '430px',
+      backgroundColor: '#999999',
       zIndex: 250,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      padding: 'max(env(safe-area-inset-top), 20px) 16px 40px 16px',
-      maxWidth: '440px',
-      margin: '0 auto'
+      overflow: 'hidden'
     }}>
-      {/* Top Header */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        color: '#FFFFFF'
-      }}>
-        <div style={{ width: '40px' }} />
+      {/* Live camera feed */}
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover'
+        }}
+      />
 
-        <span style={{ fontSize: '18px', fontWeight: '700' }}>
+      {/* Safe-area offset so the overlay sits below the status bar */}
+      <div style={{ position: 'absolute', inset: 0, top: 'env(safe-area-inset-top, 0px)' }}>
+        {/* Clear viewfinder window; everything around it is dimmed */}
+        <div style={{
+          position: 'absolute',
+          top: u(157),
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: u(262),
+          height: u(262),
+          borderRadius: u(RADIUS),
+          boxShadow: '0 0 0 200vmax rgba(0, 0, 0, 0.4)'
+        }}>
+          <Corner pos="tl" />
+          <Corner pos="tr" />
+          <Corner pos="bl" />
+          <Corner pos="br" />
+        </div>
+
+        {/* Title */}
+        <div style={{
+          position: 'absolute',
+          top: u(16),
+          left: 0,
+          right: 0,
+          height: u(20),
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#FFFFFF',
+          fontSize: u(16),
+          fontWeight: 600,
+          letterSpacing: u(0.2)
+        }}>
           Kaspi QR
-        </span>
+        </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div className="touchable" style={{ padding: '6px' }}>
-            <Image size={22} color="#FFFFFF" />
-          </div>
-          <div onClick={onClose} className="touchable" style={{ padding: '6px' }}>
-            <X size={24} color="#FFFFFF" />
+        {/* Close */}
+        <div
+          onClick={onClose}
+          className="touchable"
+          style={{
+            position: 'absolute',
+            top: u(3),
+            right: u(-3),
+            width: u(44),
+            height: u(44),
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer'
+          }}
+        >
+          <div style={{
+            width: u(29),
+            height: u(29),
+            borderRadius: u(7),
+            backgroundColor: 'rgba(0, 0, 0, 0.16)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <svg width={u(14)} height={u(14)} viewBox="0 0 14 14" style={{ width: u(14), height: u(14) }}>
+              <path d="M1.5 1.5 L12.5 12.5 M12.5 1.5 L1.5 12.5" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" />
+            </svg>
           </div>
         </div>
-      </div>
 
-      {/* Center Viewfinder */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
+        {/* Subtitle */}
         <div style={{
-          fontSize: '15px',
+          position: 'absolute',
+          top: u(95),
+          left: 0,
+          right: 0,
+          height: u(20),
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           color: '#FFFFFF',
-          marginBottom: '28px',
-          fontWeight: '500'
+          fontSize: u(16),
+          fontWeight: 500,
+          letterSpacing: u(0.6)
         }}>
           Сканируйте QR-код
         </div>
 
-        {/* Red Scanner Corners */}
-        <div style={{
-          width: '240px',
-          height: '240px',
-          position: 'relative'
-        }}>
-          {/* Top-Left */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '36px',
-            height: '36px',
-            borderTop: '3.5px solid #F14635',
-            borderLeft: '3.5px solid #F14635',
-            borderTopLeftRadius: '12px'
-          }} />
-
-          {/* Top-Right */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            width: '36px',
-            height: '36px',
-            borderTop: '3.5px solid #F14635',
-            borderRight: '3.5px solid #F14635',
-            borderTopRightRadius: '12px'
-          }} />
-
-          {/* Bottom-Left */}
-          <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: '36px',
-            height: '36px',
-            borderBottom: '3.5px solid #F14635',
-            borderLeft: '3.5px solid #F14635',
-            borderBottomLeftRadius: '12px'
-          }} />
-
-          {/* Bottom-Right */}
-          <div style={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            width: '36px',
-            height: '36px',
-            borderBottom: '3.5px solid #F14635',
-            borderRight: '3.5px solid #F14635',
-            borderBottomRightRadius: '12px'
-          }} />
-
-          {/* Red Laser Scanning Effect */}
-          <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '10px',
-            right: '10px',
-            height: '2px',
-            backgroundColor: '#F14635',
-            boxShadow: '0 0 12px 2px #F14635',
-            animation: 'scanPulse 2s infinite ease-in-out'
-          }} />
-        </div>
-      </div>
-
-      {/* Bottom Torch / Flashlight Button */}
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {/* Torch */}
         <div
-          onClick={() => setTorchOn(!torchOn)}
+          onClick={toggleTorch}
           className="touchable"
           style={{
-            width: '54px',
-            height: '54px',
-            borderRadius: '50%',
-            backgroundColor: torchOn ? '#FFFFFF' : 'rgba(255, 255, 255, 0.25)',
+            position: 'absolute',
+            top: u(434 - 3),
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: u(45),
+            height: u(45),
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: torchOn ? '#000000' : '#FFFFFF',
-            backdropFilter: 'blur(10px)'
+            cursor: 'pointer'
           }}
         >
-          <Zap size={24} />
+          <div style={{
+            width: u(39),
+            height: u(39),
+            borderRadius: '50%',
+            backgroundColor: torchOn ? '#FFFFFF' : 'rgba(255, 255, 255, 0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'background-color 0.15s ease'
+          }}>
+            <svg viewBox="0 0 12 21" style={{ width: u(12), height: u(21), display: 'block' }}>
+              <path d="M0 0 H12 V2.5 L9.5 6.5 V20 Q9.5 21 8.5 21 H3.5 Q2.5 21 2.5 20 V6.5 L0 2.5 Z" fill="#2B2B2B" />
+              <circle cx="6" cy="9.5" r="1.1" fill={torchOn ? '#FFFFFF' : '#C2C2C2'} />
+            </svg>
+          </div>
         </div>
       </div>
     </div>
