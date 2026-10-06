@@ -667,13 +667,6 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           4. DEPOSIT ROWS
-          First tile 23 below divider.
-          Tile 56 x 44, radius 6, depositYellow #FFD302, white glyph about 26.
-          Row pitch 53, gap between two tiles is 9.
-          Text 15.5 right of tile: 19 pt Regular textPrimary, line height 24, both lines #000.
-          Row 1: two lines ("Накопительный" / "Депозит" + pill), top-aligned with tile.
-          Row 2: one line ("Kaspi Депозит 15%"), vertically centred on tile.
-          Rate pill after "Депозит", 6 pt gap: height 22.5, padding 6 horizontal, radius 11, fill #FFD302, text "18%" 16 pt Semibold #000.
       ===================================================================== */}
       <div style={{
         marginTop: '23px',
@@ -686,118 +679,111 @@ export const HomeScreen = ({
         boxSizing: 'border-box'
       }}>
         {/* Row 1: Накопительный Депозит 18% */}
-        <div className="touchable" style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer', height: '44px' }}>
-          {/* Tile 56 x 44, radius 6, depositYellow #FFD302, white coins glyph 26 */}
+        <div className="touchable" style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+          {/* Yellow card with enlarged 3 stacked coins SVG */}
           <div style={{
-            width: '56px',
-            height: '44px',
-            borderRadius: '6px',
-            backgroundColor: '#FFD302',
+            width: '53px',
+            height: '41px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0
           }}>
-            <svg viewBox="90 60 115 100" width="26" height="26" fill="none" stroke="#FFFFFF" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round">
-              <ellipse cx="148" cy="91.75" rx="43" ry="22.75" />
-              <path d="M105 92Q110.5 103.5 106 115Q110.5 127 105 139" />
-              <path d="M191 92Q188 103.5 190.5 115Q188 127 191 139" />
-              <path d="M106 115a42 22.5 0 0 0 84 0" />
-              <path d="M105 139a43 22.5 0 0 0 86 0" />
+            <svg viewBox="26 20 243 188" width="53" height="41">
+              {/* Yellow card */}
+              <rect x="26" y="20" width="243" height="188" rx="26" fill="#FFD302" />
+              {/* Stack of three coins - enlarged & centered */}
+              <g transform="translate(148, 115) scale(1.35) translate(-148, -115)" fill="none" stroke="#FFFFFF" strokeWidth="9.5" strokeLinecap="round" strokeLinejoin="round">
+                {/* top coin face */}
+                <ellipse cx="148" cy="91.75" rx="43" ry="22.75" />
+                {/* sides, pinched in between the coins */}
+                <path d="M105 92Q110.5 103.5 106 115Q110.5 127 105 139" />
+                <path d="M191 92Q188 103.5 190.5 115Q188 127 191 139" />
+                {/* lower rims of the second and third coins */}
+                <path d="M106 115a42 22.5 0 0 0 84 0" />
+                <path d="M105 139a43 22.5 0 0 0 86 0" />
+              </g>
             </svg>
           </div>
 
-          {/* Text 15.5 right of tile, top-aligned */}
-          <div style={{ marginLeft: '15.5px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
-            <div style={{ fontSize: '19px', fontWeight: '400', color: '#000000', lineHeight: '24px', letterSpacing: 0 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ fontSize: '15.5px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
               Накопительный
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '19px', fontWeight: '400', color: '#000000', lineHeight: '24px', letterSpacing: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '1px' }}>
+              <span style={{ fontSize: '15.5px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
                 Депозит
               </span>
-              {/* Rate pill: height 22.5, padding 6 horizontal, radius 11, fill #FFD302, text "18%" 16 pt Semibold #000 */}
-              <div style={{
-                height: '22.5px',
-                padding: '0 6px',
-                borderRadius: '11px',
+              <span style={{
                 backgroundColor: '#FFD302',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxSizing: 'border-box'
+                color: '#1F1F1F',
+                fontSize: '11.5px',
+                fontWeight: '700',
+                padding: '1px 6.5px',
+                borderRadius: '9px',
+                lineHeight: '14px',
+                letterSpacing: '0.2px'
               }}>
-                <span style={{ fontSize: '16px', fontWeight: '600', color: '#000000', lineHeight: '22.5px', letterSpacing: 0 }}>
-                  18%
-                </span>
-              </div>
+                18%
+              </span>
             </div>
           </div>
         </div>
 
         {/* Row 2: Kaspi Депозит 15% */}
-        <div className="touchable" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', height: '44px' }}>
-          {/* Tile 56 x 44, radius 6, depositYellow #FFD302, white ₸$ glyph 26 */}
+        <div className="touchable" style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+          {/* Yellow card with enlarged ₸$ SVG */}
           <div style={{
-            width: '56px',
-            height: '44px',
-            borderRadius: '6px',
-            backgroundColor: '#FFD302',
+            width: '53px',
+            height: '41px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0
           }}>
-            <svg viewBox="70 65 140 100" width="26" height="26">
-              <g fill="#FFFFFF">
-                <rect x="76" y="74" width="63" height="9.5" />
-                <rect x="76" y="91.5" width="63" height="9.5" />
-                <rect x="101" y="96" width="11" height="51" />
-              </g>
-              <g fill="none" stroke="#FFFFFF" strokeLinecap="butt" strokeLinejoin="miter">
-                <path d="M197.5 99C197.5 89.5 190 84 180.5 84C169 84 160.5 88.5 160.5 97C160.5 106 170 109.5 180.5 113C191 116.5 198.5 120 198.5 128.5C198.5 137.5 190 142 180 142C169 142 159 137.5 159 125" strokeWidth="12" />
-                <path d="M180.5 68v14M180 144v9" strokeWidth="9.5" />
+            <svg viewBox="17 15 243 189" width="53" height="41">
+              {/* Yellow card */}
+              <rect x="17" y="15" width="243" height="189" rx="24" fill="#FFD302" />
+              {/* Tenge sign & Dollar sign - enlarged & centered */}
+              <g transform="translate(138, 109) scale(1.35) translate(-138, -109)">
+                <g fill="#FFFFFF">
+                  <rect x="76" y="74" width="63" height="9.5" />
+                  <rect x="76" y="91.5" width="63" height="9.5" />
+                  <rect x="101" y="96" width="11" height="51" />
+                </g>
+                <g fill="none" stroke="#FFFFFF" strokeLinecap="butt" strokeLinejoin="miter">
+                  <path d="M197.5 99C197.5 89.5 190 84 180.5 84C169 84 160.5 88.5 160.5 97C160.5 106 170 109.5 180.5 113C191 116.5 198.5 120 198.5 128.5C198.5 137.5 190 142 180 142C169 142 159 137.5 159 125" strokeWidth="12" />
+                  <path d="M180.5 68v14M180 144v9" strokeWidth="9.5" />
+                </g>
               </g>
             </svg>
           </div>
 
-          {/* Text 15.5 right of tile, vertically centred */}
-          <div style={{ marginLeft: '15.5px', display: 'flex', alignItems: 'center' }}>
-            <span style={{ fontSize: '19px', fontWeight: '400', color: '#000000', lineHeight: '24px', letterSpacing: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ fontSize: '15.5px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
               Kaspi Депозит 15%
-            </span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* =====================================================================
           5. "ВЫ НЕДАВНО СМОТРЕЛИ" CAROUSEL
-          Section title: 18 pt Bold #1E1E1E, x 17.5, 27 below last deposit tile.
-          Cards: horizontal scroll, first card x 16, image 110 x 110 (square), card pitch 119 (gap 9).
-          Image radius 11, 1 px border #EFEFEF, white fill, image contain.
-          Chip on image: height 19, radius 6, 13 Bold white, pinned bottom-left, 1.5 inset.
-          Price: 17 pt Bold #000, 10 below image. Discounted price accentRed + old price struck through 13 pt #8E8E8E.
-          Bonus box: 110 x 36, radius 6, bonusBoxBg #E6F8D0, padding 4. Line 1 bonus price 14 pt Bold bonusGreen #54A000. Line 2 "с учетом Бонусов" 14 pt Regular #000.
-          Product name: 14 pt Regular #000, 1 line, tail ellipsis, 6 below bonus box (or 6 below price if no bonus box).
-          Rating row: value 14 Semibold #000, star 13 accentRed #F14635, count 14 Regular textSecondary #8E8E8E.
-          Cards stack rows with no empty slots.
-          Hairline divider 0.5 under carousel, 10 above tab bar.
       ===================================================================== */}
       <div style={{
-        marginTop: '27px',
+        marginTop: '22px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        {/* Section Title: x 17.5, 18 pt Bold #1E1E1E */}
+        {/* Section Title */}
         <div style={{
-          paddingLeft: '17.5px',
+          paddingLeft: '16px',
           paddingRight: '16px',
           fontSize: '18px',
           fontWeight: '700',
           color: '#1E1E1E',
           lineHeight: '22px',
-          marginBottom: '8px',
-          letterSpacing: 0
+          marginBottom: '10px'
         }}>
           Вы недавно смотрели
         </div>
@@ -805,9 +791,9 @@ export const HomeScreen = ({
         {/* Horizontal Carousel */}
         <div style={{
           display: 'flex',
-          gap: '9px', // card pitch 119 = 110 width + 9 gap
+          gap: '10px',
           overflowX: 'auto',
-          paddingLeft: '16px', // first card x 16
+          paddingLeft: '16px',
           paddingRight: '16px',
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
@@ -820,20 +806,22 @@ export const HomeScreen = ({
               className="touchable"
               style={{
                 flexShrink: 0,
-                width: '110px',
+                width: '102px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 cursor: 'pointer'
               }}
             >
-              {/* Image box: 110 x 110, radius 11, 1px border #EFEFEF, white fill, image contain */}
+              {/* Image box: 102 x 102, radius 10, 1px border #ECECEC, white fill, objectFit cover */}
               <div style={{
-                width: '110px',
-                height: '110px',
-                borderRadius: '11px',
-                border: '1px solid #EFEFEF',
+                width: '102px',
+                height: '102px',
+                minWidth: '102px',
+                minHeight: '102px',
+                borderRadius: '10px',
                 backgroundColor: '#FFFFFF',
+                border: '1px solid #ECECEC',
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
@@ -847,174 +835,181 @@ export const HomeScreen = ({
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'contain',
+                    objectFit: 'cover',
                     display: 'block'
                   }}
                 />
 
-                {/* Chip on image: height 19, radius 6, 13 Bold white, pinned bottom-left, 1.5 inset */}
-                {(item.discountChip || item.bonusChip) && (
-                  <div style={{
-                    position: 'absolute',
-                    left: '1.5px',
-                    bottom: '1.5px',
-                    height: '19px',
-                    padding: '0 6px',
-                    borderRadius: '6px',
-                    backgroundColor: item.discountChip ? '#F14635' : '#54A000',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 2,
-                    boxSizing: 'border-box'
-                  }}>
-                    {item.bonusChip ? (
-                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
-                        {item.hasFlame && (
-                          <KaspiYellowFlame size={11} style={{ marginRight: '1px' }} />
-                        )}
-                        <span style={{
-                          fontSize: '13px',
-                          fontWeight: '700',
-                          color: '#FFFFFF',
-                          lineHeight: '19px',
-                          letterSpacing: 0,
+                {/* Chips at bottom-left corner */}
+                <div style={{
+                  position: 'absolute',
+                  left: '0px',
+                  bottom: '0px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '3px',
+                  zIndex: 2
+                }}>
+                  {(item.discountChip || item.bonusChip) && (
+                    <div style={{
+                      height: '16px',
+                      padding: '0 5px',
+                      borderTopLeftRadius: '3px',
+                      borderTopRightRadius: '4px',
+                      borderBottomRightRadius: '4px',
+                      borderBottomLeftRadius: '9px',
+                      backgroundColor: item.discountChip ? '#F14635' : '#54A000',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      {item.bonusChip ? (
+                        <div style={{
                           display: 'inline-flex',
-                          alignItems: 'baseline',
+                          alignItems: 'center',
                           gap: '2px'
                         }}>
-                          <span>{item.bonusChip.replace(/\s*[БB]$/i, '').trim()}</span>
-                          <KaspiBonusSymbol height={9} color="#FFFFFF" />
+                          {item.hasFlame && (
+                            <KaspiYellowFlame size={10} style={{ marginRight: '1px' }} />
+                          )}
+                          <span style={{
+                            fontSize: '9.5px',
+                            fontWeight: '700',
+                            color: '#FFFFFF',
+                            lineHeight: '16px',
+                            letterSpacing: '-0.2px',
+                            display: 'inline-flex',
+                            alignItems: 'baseline',
+                            gap: '2px'
+                          }}>
+                            <span>{item.bonusChip.replace(/\s*[БB]$/i, '').trim()}</span>
+                            <KaspiBonusSymbol height={7} color="#FFFFFF" />
+                          </span>
+                        </div>
+                      ) : (
+                        <span style={{
+                          fontSize: '9.5px',
+                          fontWeight: '700',
+                          color: '#FFFFFF',
+                          lineHeight: '16px',
+                          letterSpacing: '-0.2px'
+                        }}>
+                          {item.discountChip}
                         </span>
-                      </div>
-                    ) : (
-                      <span style={{
-                        fontSize: '13px',
-                        fontWeight: '700',
-                        color: '#FFFFFF',
-                        lineHeight: '19px',
-                        letterSpacing: 0
-                      }}>
-                        {item.discountChip}
-                      </span>
-                    )}
-                  </div>
-                )}
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* Price: 17 pt Bold #000, 10 below image. Discounted price accentRed + old price struck through, 13 pt #8E8E8E */}
+              {/* Price row */}
               <div style={{
-                marginTop: '10px',
+                marginTop: '4px',
                 display: 'flex',
                 alignItems: 'baseline',
-                gap: '5px',
+                gap: '4px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 width: '100%'
               }}>
                 <span style={{
-                  fontSize: '17px',
+                  fontSize: '14.5px',
                   fontWeight: '700',
                   color: item.oldPrice ? '#F14635' : '#000000',
-                  lineHeight: '20px',
-                  letterSpacing: 0,
+                  lineHeight: '17px',
                   flexShrink: 0
                 }}>
                   {item.price}
                 </span>
                 {item.oldPrice && (
                   <span style={{
-                    fontSize: '13px',
+                    fontSize: '10.5px',
                     fontWeight: '400',
-                    color: '#8E8E8E',
+                    color: '#757575',
                     textDecoration: 'line-through',
-                    lineHeight: '16px',
+                    lineHeight: '13px',
                     whiteSpace: 'nowrap',
-                    letterSpacing: 0
+                    overflow: 'hidden'
                   }}>
                     {item.oldPrice}
                   </span>
                 )}
               </div>
 
-              {/* Bonus box: 110 x 36, radius 6, bonusBoxBg #E6F8D0, padding 4.
-                  Line 1: 14 pt Bold bonusGreen #54A000. Line 2: 14 pt Regular #000 */}
+              {/* Bonus box */}
               {item.bonusBox && (
                 <div style={{
-                  marginTop: '4px',
-                  width: '110px',
-                  height: '36px',
-                  borderRadius: '6px',
+                  marginTop: '3px',
+                  height: '28px',
+                  width: '100%',
+                  padding: '2px 5px',
+                  borderRadius: '5px',
                   backgroundColor: '#E6F8D0',
-                  padding: '4px',
                   boxSizing: 'border-box',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center'
                 }}>
                   <div style={{
-                    fontSize: '14px',
+                    fontSize: '11.5px',
                     fontWeight: '700',
                     color: '#54A000',
-                    lineHeight: '16px',
+                    lineHeight: '13px',
                     whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    letterSpacing: 0
+                    overflow: 'hidden'
                   }}>
                     {item.bonusBox.price}
                   </div>
                   <div style={{
-                    fontSize: '14px',
+                    fontSize: '9px',
                     fontWeight: '400',
-                    color: '#000000',
-                    lineHeight: '16px',
-                    whiteSpace: 'nowrap',
-                    letterSpacing: 0
+                    color: '#1F1F1F',
+                    lineHeight: '11px',
+                    marginTop: '1px',
+                    letterSpacing: '-0.25px',
+                    whiteSpace: 'nowrap'
                   }}>
                     {item.bonusBox.caption}
                   </div>
                 </div>
               )}
 
-              {/* Product name: 14 pt Regular #000, 1 line, tail ellipsis, 6 below bonus box (or 6 below price if no bonus box) */}
+              {/* Product name */}
               <div style={{
-                marginTop: '6px',
-                fontSize: '14px',
+                marginTop: '3px',
+                fontSize: '11.5px',
                 fontWeight: '400',
-                color: '#000000',
+                color: '#1F1F1F',
                 width: '100%',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                lineHeight: '18px',
-                letterSpacing: 0
+                lineHeight: '14px'
               }}>
                 {item.title}
               </div>
 
-              {/* Rating row: value 14 Semibold #000, star 13 accentRed, count 14 Regular textSecondary #8E8E8E */}
+              {/* Rating row */}
               <div style={{
-                marginTop: '4px',
+                marginTop: '2px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '3px'
               }}>
                 <span style={{
-                  fontSize: '14px',
+                  fontSize: '11px',
                   fontWeight: '600',
-                  color: '#000000',
-                  lineHeight: '16px',
-                  letterSpacing: 0
+                  color: '#1F1F1F',
+                  lineHeight: '13px'
                 }}>
                   {item.rating}
                 </span>
-                <KaspiRatingStar size={13} color="#F14635" />
+                <KaspiRatingStar size={10} color="#F14635" />
                 <span style={{
-                  fontSize: '14px',
+                  fontSize: '10.5px',
                   fontWeight: '400',
-                  color: '#8E8E8E',
-                  lineHeight: '16px',
-                  letterSpacing: 0
+                  color: '#757575',
+                  lineHeight: '13px'
                 }}>
                   {item.reviews}
                 </span>
