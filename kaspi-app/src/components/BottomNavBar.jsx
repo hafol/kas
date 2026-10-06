@@ -53,7 +53,7 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
   const tabs = [
     { id: 'home', label: 'Главная', IconComponent: NavIconHome },
     { id: 'qr', label: 'Kaspi QR', IconComponent: NavIconQR },
-    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, badge: 9 },
+    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, badge: 15 },
     { id: 'services', label: 'Сервисы', IconComponent: NavIconServices }
   ];
 
@@ -112,23 +112,25 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
               }}>
                 <IconComponent color={iconColor} />
 
-                {/* Badge on Сообщения: pill 20.5 x 14.5, accentRed #F14635, 11 Semibold white */}
+                {/* Badge on Сообщения: round 17 x 17 (grows into a pill for wider counts), centre at
+                    (19, 0.5) of the icon box as in the original, accentRed #F14635, 11 Semibold white */}
                 {tab.badge && (
                   <div style={{
                     position: 'absolute',
-                    top: '-4px',
-                    right: '-8.5px',
+                    top: '-8px',
+                    left: '10.5px',
                     backgroundColor: '#F14635',
                     color: '#FFFFFF',
-                    borderRadius: '7.25px',
-                    width: '20.5px',
-                    height: '14.5px',
+                    borderRadius: '8.5px',
+                    minWidth: '17px',
+                    height: '17px',
+                    padding: '0 2px',
                     fontSize: '11px',
                     fontWeight: '600',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    lineHeight: '14.5px',
+                    lineHeight: '17px',
                     boxSizing: 'border-box',
                     pointerEvents: 'none'
                   }}>

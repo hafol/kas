@@ -706,33 +706,46 @@ export const HomeScreen = ({
             </svg>
           </div>
 
+          {/* Text — Row 1 */}
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <div style={{ fontSize: '15px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
+            <div style={{
+              fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
+              fontSize: '15px',
+              fontWeight: '400',
+              color: '#1F1F1F',
+              lineHeight: '20px'
+            }}>
               Накопительный
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', marginTop: '1px' }}>
-              <span style={{ fontSize: '15px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginTop: '2px' }}>
+              <div style={{
+                fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
+                fontSize: '15px',
+                fontWeight: '400',
+                color: '#1F1F1F',
+                lineHeight: '20px'
+              }}>
                 Депозит
-              </span>
-              {/* 18% pill: exact compact dimensions from reference screenshot */}
+              </div>
+              {/* 18% pill */}
               <div style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: '#FFD302',
-                borderRadius: '9px',
-                height: '17px',
-                padding: '0 6px',
-                marginLeft: '6px'
+                borderRadius: '50px',
+                padding: '2px 8px',
+                marginLeft: '7px'
               }}>
-                <span style={{
-                  fontSize: '11px',
+                <div style={{
+                  fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
+                  fontSize: '15px',
                   fontWeight: '700',
                   color: '#000000',
                   lineHeight: 1
                 }}>
                   18%
-                </span>
+                </div>
               </div>
             </div>
           </div>
@@ -767,13 +780,21 @@ export const HomeScreen = ({
             </svg>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ fontSize: '15px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
+          {/* Text — Row 2: identical structure & styles as Row 1 */}
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{
+              fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
+              fontSize: '15px',
+              fontWeight: '400',
+              color: '#1F1F1F',
+              lineHeight: '20px'
+            }}>
               Kaspi Депозит 15%
             </div>
           </div>
         </div>
       </div>
+
 
       {/* =====================================================================
           5. "ВЫ НЕДАВНО СМОТРЕЛИ" CAROUSEL

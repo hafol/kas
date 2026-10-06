@@ -13,9 +13,13 @@ const textSecondary = '#8C8C8C'; // row subtitle
 const placeholder   = '#A0A0A0'; // search placeholder and magnifier
 const chevronGrey   = '#BDBDBD';
 
-// 1. Back Chevron (<) SVG: glyph 12 x 20, thin stroke, centered
+// Russian typography rule used by Kaspi: glue 1–2 letter words (к, в, и, по…) to the next word
+// with a no-break space, so titles wrap as "Прикрепление / к медорганизации".
+const glueShortWords = (text) => text.replace(/(?<=^|[\s ])([а-яё]{1,2}) /gi, '$1 ');
+
+// 1. Back Chevron (<) SVG: glyph ≈ 8 x 16 (measured from the original), centered
 const BackChevronIcon = () => (
-  <svg width="12" height="20" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <path
       d="M16.707,2.793C17.098,3.183 17.098,3.817 16.707,4.207L8.914,12L16.707,19.793C17.098,20.183 17.098,20.817 16.707,21.207C16.317,21.598 15.683,21.598 15.293,21.207L7.5,13.414C6.719,12.633 6.719,11.367 7.5,10.586L15.293,2.793C15.683,2.402 16.317,2.402 16.707,2.793Z"
       fill={textPrimary}
@@ -33,9 +37,9 @@ const SearchMagnifierIcon = () => (
   </svg>
 );
 
-// 3. Link Chevron SVG ("Все документы"): glyph 10 x 15, color linkBlue
+// 3. Link Chevron SVG ("Все документы"): visible glyph 9 x 15, color linkBlue
 const LinkChevronIcon = () => (
-  <svg width="10" height="15" viewBox="0 0 16 16" fill="none" style={{ display: 'block' }}>
+  <svg width="18" height="18" viewBox="0 0 16 16" fill="none" style={{ display: 'block' }}>
     <path
       d="M5.734,1.293C5.337,0.902 4.694,0.902 4.298,1.293C3.931,1.653 3.903,2.221 4.213,2.613L4.298,2.707L9.674,8L4.298,13.293C3.931,13.653 3.903,14.221 4.213,14.613L4.298,14.707C4.664,15.068 5.24,15.095 5.638,14.79L5.734,14.707L11.613,8.919C12.094,8.445 12.127,7.697 11.71,7.186L11.613,7.081L5.734,1.293Z"
       fill={linkBlue}
@@ -43,9 +47,9 @@ const LinkChevronIcon = () => (
   </svg>
 );
 
-// 4. Row Chevron SVG: glyph 8 x 14, color chevronGrey
+// 4. Row Chevron SVG: visible glyph 8 x 13, color chevronGrey
 const RowChevronIcon = () => (
-  <svg width="8" height="14" viewBox="0 0 16 16" fill="none" style={{ display: 'block' }}>
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ display: 'block' }}>
     <path
       d="M5.734,1.293C5.337,0.902 4.694,0.902 4.298,1.293C3.931,1.653 3.903,2.221 4.213,2.613L4.298,2.707L9.674,8L4.298,13.293C3.931,13.653 3.903,14.221 4.213,14.613L4.298,14.707C4.664,15.068 5.24,15.095 5.638,14.79L5.734,14.707L11.613,8.919C12.094,8.445 12.127,7.697 11.71,7.186L11.613,7.081L5.734,1.293Z"
       fill={chevronGrey}
@@ -412,7 +416,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             className="touchable"
             style={{
               position: 'absolute',
-              left: '7px', // 29px center - 22px half-width = 7px
+              left: '5.5px', // glyph center at x 27.5 (original) - 22px half-width
               top: 0,
               width: '44px',
               height: '44px',
@@ -430,10 +434,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             <BackChevronIcon />
           </button>
 
-          {/* Title "Госуслуги": 17pt Semibold, textPrimary, centered horizontally */}
+          {/* Title "Госуслуги": 18pt Semibold (text width 83/390 W in original), centered horizontally */}
           <h1 style={{
             margin: 0,
-            fontSize: '17px',
+            fontSize: '18px',
             fontWeight: '600',
             color: textPrimary,
             letterSpacing: 0,
@@ -445,12 +449,12 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           </h1>
         </div>
 
-        {/* Segmented Control ("Все услуги" | "Мои заявки") */}
+        {/* Segmented Control ("Все услуги" | "Мои заявки"): 7 below nav bar, height 40 */}
         <div style={{
-          marginTop: '12px',
+          marginTop: '7px',
           marginRight: '16px',
           marginLeft: '16px',
-          height: '42px',
+          height: '40px',
           backgroundColor: fill,
           borderRadius: '12px',
           position: 'relative',
@@ -458,7 +462,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           boxSizing: 'border-box',
           padding: '2px'
         }}>
-          {/* Sliding white pill (inset 2 on all sides, height 38, radius 10) */}
+          {/* Sliding white pill (inset 2 on all sides, height 36, radius 10) */}
           <div style={{
             position: 'absolute',
             top: '2px',
@@ -493,10 +497,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           >
             <span style={{
               fontSize: '15px',
-              fontWeight: '400',
+              fontWeight: '500',
               color: textPrimary,
               letterSpacing: 0,
-              lineHeight: '38px',
+              lineHeight: '36px',
               whiteSpace: 'nowrap'
             }}>
               Все услуги
@@ -523,10 +527,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           >
             <span style={{
               fontSize: '15px',
-              fontWeight: '400',
+              fontWeight: '500',
               color: textPrimary,
               letterSpacing: 0,
-              lineHeight: '38px',
+              lineHeight: '36px',
               whiteSpace: 'nowrap'
             }}>
               Мои заявки
@@ -534,9 +538,9 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           </button>
         </div>
 
-        {/* Search Field (height 48, background fill, radius 12) */}
+        {/* Search Field (16 below segmented, height 48, background fill, radius 12) */}
         <div style={{
-          marginTop: '18px',
+          marginTop: '16px',
           marginLeft: '16px',
           marginRight: '16px',
           height: '48px',
@@ -547,10 +551,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           alignItems: 'center',
           boxSizing: 'border-box'
         }}>
-          {/* Magnifier SVG 20 x 20, left edge at 21 inside the field (x 37 on screen) */}
+          {/* Magnifier SVG 20 x 20, left edge at 17 inside the field (x 33 on screen) */}
           <div style={{
             position: 'absolute',
-            left: '21px',
+            left: '17px',
             top: '14px',
             width: '20px',
             height: '20px',
@@ -562,7 +566,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             <SearchMagnifierIcon />
           </div>
 
-          {/* Search Input: placeholder starts at 59 from left edge (x 75 on screen), 16pt Regular */}
+          {/* Search Input: placeholder starts at 54 from left edge (x 70 on screen), 17pt Regular (iOS search size) */}
           <input
             type="text"
             value={searchQuery}
@@ -574,9 +578,9 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
               backgroundColor: 'transparent',
               border: 'none',
               outline: 'none',
-              paddingLeft: '59px',
+              paddingLeft: '54px',
               paddingRight: '16px',
-              fontSize: '16px',
+              fontSize: '17px',
               fontWeight: '400',
               color: textPrimary,
               letterSpacing: 0,
@@ -585,8 +589,8 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           />
         </div>
 
-        {/* Block A bottom padding below search field: 19 */}
-        <div style={{ height: '19px' }} />
+        {/* Block A bottom padding below search field: 16 */}
+        <div style={{ height: '16px' }} />
       </div>
 
       {/* 10pt Gap between Block A and Block B */}
@@ -599,17 +603,17 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
         width: '100%',
         backgroundColor: surface,
         borderRadius: '16px',
-        paddingTop: '18px',
+        paddingTop: '17px',
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box'
       }}>
-        {/* Horizontal scroll row of document cards: padding left 18, gap 14 */}
+        {/* Horizontal scroll row of document cards: padding left 16, gap 12 (3rd card peeks ~34 pt) */}
         <div style={{
           display: 'flex',
-          gap: '14px',
-          paddingLeft: '18px',
-          paddingRight: '18px',
+          gap: '12px',
+          paddingLeft: '16px',
+          paddingRight: '16px',
           overflowX: 'auto',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -622,8 +626,8 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
               onClick={() => onOpenDoc && onOpenDoc(doc.id)}
               className="touchable"
               style={{
-                width: '167px',
-                height: '115px',
+                width: '158px',
+                height: '109px',
                 backgroundColor: fill,
                 borderRadius: '16px',
                 flexShrink: 0,
@@ -632,13 +636,13 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                 boxSizing: 'border-box'
               }}
             >
-              {/* Document picture: balanced 66x40px matching original app ratio, flush with text */}
+              {/* Document picture: 58 x 38 box (art ≈ 56 x 37 in original), flush with text */}
               <div style={{
                 position: 'absolute',
-                top: '13px',
+                top: '12px',
                 left: '14px',
-                width: '66px',
-                height: '40px',
+                width: '58px',
+                height: '38px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'flex-start',
@@ -662,7 +666,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
               {/* Label: 15 pt Regular, textPrimary, line height 19, max 2 lines, flush with icon left */}
               <div style={{
                 position: 'absolute',
-                top: '67px',
+                top: '62px',
                 left: '14px',
                 right: '12px',
                 fontSize: '15px',
@@ -681,15 +685,16 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           ))}
         </div>
 
-        {/* Row with link "Все документы" on left and chevron on right (margin top 13, height 44) */}
+        {/* Row with link "Все документы" on left and chevron on right (margin top 1, height 44:
+            link centre sits 23 below the cards, as in the original) */}
         <div
           onClick={() => onOpenDoc && onOpenDoc('all')}
           className="touchable"
           style={{
-            marginTop: '13px',
+            marginTop: '1px',
             height: '44px',
-            paddingLeft: '18px',
-            paddingRight: '22px',
+            paddingLeft: '16px',
+            paddingRight: '16.5px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -708,12 +713,12 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             Все документы
           </span>
 
-          {/* Chevron SVG: glyph 10 x 15, colour linkBlue, right edge 22 from screen edge */}
+          {/* Chevron SVG: visible glyph 9 x 15, colour linkBlue, glyph right edge 21 from screen edge */}
           <LinkChevronIcon />
         </div>
 
-        {/* Block B bottom padding: 18 after link text */}
-        <div style={{ height: '18px' }} />
+        {/* Block B bottom padding: 3 after the link row */}
+        <div style={{ height: '3px' }} />
       </div>
 
       {/* 10pt Gap between Block B and Block C */}
@@ -729,12 +734,12 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
         borderTopRightRadius: '16px',
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        paddingTop: '16px',
+        paddingTop: '17px',
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box'
       }}>
-        {/* Category Row (Horizontal scroll row, padding left 22, gap 28) */}
+        {/* Category Row (Horizontal scroll row, padding left 20, gap 25 → 5th category peeks past "Жилье") */}
         <div style={{
           position: 'relative',
           width: '100%',
@@ -742,9 +747,9 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
         }}>
           <div style={{
             display: 'flex',
-            gap: '28px',
-            paddingLeft: '22px',
-            paddingRight: '22px',
+            gap: '25px',
+            paddingLeft: '20px',
+            paddingRight: '20px',
             overflowX: 'auto',
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -767,10 +772,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     position: 'relative'
                   }}
                 >
-                  {/* Category Tile: 56 x 56, background fill, radius 16 */}
+                  {/* Category Tile: 54 x 54, background fill, radius 16 */}
                   <div style={{
-                    width: '56px',
-                    height: '56px',
+                    width: '54px',
+                    height: '54px',
                     backgroundColor: fill,
                     borderRadius: '16px',
                     display: 'flex',
@@ -778,10 +783,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     justifyContent: 'center',
                     boxSizing: 'border-box'
                   }}>
-                    {/* 3D SVG icon box 40 x 40 (empty if missing, never invent substitute) */}
+                    {/* 3D SVG icon box 44 x 44 (art fills ~65–75% of the tile, as in the original) */}
                     <div style={{
-                      width: '40px',
-                      height: '40px',
+                      width: '44px',
+                      height: '44px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -792,8 +797,8 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                           src={cat.icon}
                           alt={cat.label}
                           style={{
-                            width: '40px',
-                            height: '40px',
+                            width: '44px',
+                            height: '44px',
                             objectFit: 'contain'
                           }}
                         />
@@ -801,9 +806,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     </div>
                   </div>
 
-                  {/* Label: margin top 6, 15pt, single line, centered under tile */}
+                  {/* Label: margin top 4, 15pt / 20 line height, single line, centered under tile */}
                   <span style={{
-                    marginTop: '6px',
+                    marginTop: '4px',
+                    lineHeight: '20px',
                     fontSize: '15px',
                     fontWeight: isSelected ? '500' : '400',
                     color: isSelected ? accentRed : textPrimary,
@@ -814,10 +820,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     {cat.label}
                   </span>
 
-                  {/* Selected Underline: 2 pt tall, accentRed, 12 below label, square ends, sits on divider */}
+                  {/* Selected Underline: 2 pt tall, accentRed, 11 below label, square ends, sits on divider */}
                   {isSelected && (
                     <div style={{
-                      marginTop: '12px',
+                      marginTop: '11px',
                       height: '2px',
                       width: '100%',
                       backgroundColor: accentRed,
@@ -829,7 +835,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
 
                   {!isSelected && (
                     <div style={{
-                      marginTop: '12px',
+                      marginTop: '11px',
                       height: '2px',
                       width: '100%',
                       backgroundColor: 'transparent'
@@ -852,13 +858,13 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           }} />
         </div>
 
-        {/* Section Title: "Популярные и новые", 17 pt Bold, left 18, margin top 18 below divider, margin bottom 18 */}
+        {/* Section Title: "Популярные и новые", 17 pt Semibold, left 16, margin top 16 below divider, margin bottom 17 */}
         <div style={{
-          marginTop: '18px',
-          marginBottom: '18px',
-          paddingLeft: '18px',
+          marginTop: '16px',
+          marginBottom: '17px',
+          paddingLeft: '16px',
           fontSize: '17px',
-          fontWeight: '700',
+          fontWeight: '600',
           color: textPrimary,
           lineHeight: '22px',
           letterSpacing: 0
@@ -893,11 +899,11 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                   className="touchable"
                   aria-label={`${service.title}${service.hasBadge ? ', new' : ''}`}
                   style={{
-                    minHeight: '74px',
-                    paddingTop: '16px',
-                    paddingBottom: '16px',
-                    paddingLeft: '18px',
-                    paddingRight: '22px',
+                    minHeight: '72px',
+                    paddingTop: '14px',
+                    paddingBottom: '14px',
+                    paddingLeft: '15px',
+                    paddingRight: '16px',
                     display: 'flex',
                     alignItems: 'center',
                     backgroundColor: isPressed ? fill : 'transparent',
@@ -906,7 +912,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     boxSizing: 'border-box'
                   }}
                 >
-                  {/* [IconCircle]: 44 x 44 circle, background iconCircle #F7F7F7, center at x 40 */}
+                  {/* [IconCircle]: 44 x 44 circle, background iconCircle #F7F7F7, center at x 37 */}
                   <div style={{
                     width: '44px',
                     height: '44px',
@@ -917,38 +923,40 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     justifyContent: 'center',
                     flexShrink: 0
                   }}>
-                    {/* Red line icon placed centered at 26 x 26 */}
+                    {/* Red line icon placed centered at 24 x 24 */}
                     {IconComponent ? (
-                      <IconComponent size={26} />
+                      <IconComponent size={24} />
                     ) : (
-                      <div style={{ width: '26px', height: '26px' }} />
+                      <div style={{ width: '24px', height: '24px' }} />
                     )}
                   </div>
 
-                  {/* Gap 18 to text column */}
-                  <div style={{ width: '18px', flexShrink: 0 }} />
+                  {/* Gap 16 to text column */}
+                  <div style={{ width: '16px', flexShrink: 0 }} />
 
-                  {/* [Text column, flex 1]: starts at x 80 */}
+                  {/* [Text column, flex 1]: starts at x 75; its centre sits 2 above the icon/badge centre
+                      (marginTop -4 in a centred flex row), as measured on the original */}
                   <div style={{
                     flex: 1,
                     minWidth: 0,
+                    marginTop: '-4px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center'
                   }}>
-                    {/* Title: 15 pt Regular, textPrimary, line height 21, max 2 lines, wraps naturally */}
+                    {/* Title: 15 pt Regular, textPrimary, line height 22, max 2 lines, short words glued forward */}
                     <div style={{
                       fontSize: '15px',
                       fontWeight: '400',
                       color: textPrimary,
-                      lineHeight: '21px',
+                      lineHeight: '22px',
                       letterSpacing: 0,
                       display: '-webkit-box',
                       WebkitLineClamp: 2,
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden'
                     }}>
-                      {service.title}
+                      {glueShortWords(service.title)}
                     </div>
 
                     {/* Optional subtitle: margin top 2, 13 pt Regular, textSecondary, line height 17 */}
@@ -969,13 +977,13 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     )}
                   </div>
 
-                  {/* NEW Badge: height 22, horizontal padding 8, radius 11, background accentRed */}
+                  {/* NEW Badge: height 21, horizontal padding 10, radius 10.5, background accentRed */}
                   {service.hasBadge && (
                     <div style={{
                       marginLeft: '12px',
-                      height: '22px',
-                      padding: '0 8px',
-                      borderRadius: '11px',
+                      height: '21px',
+                      padding: '0 10px',
+                      borderRadius: '10.5px',
                       backgroundColor: accentRed,
                       display: 'flex',
                       alignItems: 'center',
@@ -983,11 +991,11 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                       flexShrink: 0
                     }}>
                       <span style={{
-                        fontSize: '13px',
+                        fontSize: '12px',
                         fontWeight: '600',
                         color: '#FFFFFF',
                         letterSpacing: 0,
-                        lineHeight: '22px',
+                        lineHeight: '21px',
                         textTransform: 'uppercase'
                       }}>
                         NEW
@@ -995,10 +1003,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     </div>
                   )}
 
-                  {/* Gap 22 to Chevron */}
-                  <div style={{ width: '22px', flexShrink: 0 }} />
+                  {/* Gap 16 to Chevron box (visible glyph starts 20 after the badge) */}
+                  <div style={{ width: '16px', flexShrink: 0 }} />
 
-                  {/* Chevron: SVG glyph 8 x 14, color chevronGrey, right edge 22 from screen edge */}
+                  {/* Chevron: visible glyph 8 x 13, color chevronGrey, glyph right edge 20 from screen edge */}
                   <div style={{ flexShrink: 0 }}>
                     <RowChevronIcon />
                   </div>

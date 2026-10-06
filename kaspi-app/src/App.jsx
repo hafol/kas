@@ -201,7 +201,7 @@ export default function App() {
       {/* Bottom Navigation (visible on main tabs and inside services) */}
       {(currentScreen === 'tab' || currentScreen === 'my_bank' || currentScreen === 'gov') && (
         <BottomNavBar
-          activeTab={activeTab}
+          activeTab={currentScreen === 'gov' ? 'services' : activeTab} // Госуслуги lives under «Сервисы»
           onTabChange={handleTabChange}
         />
       )}
