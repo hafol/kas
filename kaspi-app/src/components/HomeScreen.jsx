@@ -18,7 +18,7 @@ import {
   KaspiHeartIcon
 } from './KaspiServiceIcons';
 
-// Filled vector star icon (SF Symbol "star.fill" / Material "star"), 13 pt, color #F14635
+// Filled vector star icon, 13 pt, color #F14635
 const KaspiRatingStar = ({ size = 13, color = "#F14635" }) => (
   <svg
     width={size}
@@ -43,22 +43,22 @@ export const HomeScreen = ({
     {
       id: 1,
       src: '/kaspi_assets/banners/banner_backpacks.png',
-      alt: 'Куда же без рюкзака? 🔥 Бонусы'
+      alt: 'Рюкзаки'
     },
     {
       id: 2,
       src: '/kaspi_assets/banners/banner_home_appliances.png',
-      alt: 'Для важных дел по дому. Скидки до 20%'
+      alt: 'Бытовая техника'
     },
     {
       id: 3,
       src: '/kaspi_assets/banners/banner_wardrobe_basics.png',
-      alt: 'База гардероба. 🔥 Бонусы'
+      alt: 'Одежда'
     },
     {
       id: 4,
       src: '/kaspi_assets/banners/banner_basic_jeans.png',
-      alt: 'Базовые джинсы. 🔥 Бонусы'
+      alt: 'Джинсы'
     }
   ];
 
@@ -98,7 +98,7 @@ export const HomeScreen = ({
     setActiveBannerIndex(index);
   };
 
-  // Auto-advance banner every 4.5 seconds (pauses when dragging)
+  // Auto-advance banner every 4.5 seconds
   useEffect(() => {
     if (isDraggingBanner) return;
     const timer = setInterval(() => {
@@ -109,7 +109,7 @@ export const HomeScreen = ({
     return () => clearInterval(timer);
   }, [activeBannerIndex, isDraggingBanner]);
 
-  // Desktop mouse drag handlers with global listeners
+  // Mouse drag handlers for desktop emulation
   const handleBannerMouseDown = (e) => {
     if (!bannerScrollRef.current) return;
     setIsDraggingBanner(true);
@@ -119,13 +119,11 @@ export const HomeScreen = ({
 
   useEffect(() => {
     if (!isDraggingBanner) return;
-
     const onMouseMove = (e) => {
       if (!bannerScrollRef.current) return;
       const walk = (e.pageX - dragStartX) * 1.15;
       bannerScrollRef.current.scrollLeft = dragScrollLeft - walk;
     };
-
     const onMouseUp = () => {
       setIsDraggingBanner(false);
       if (bannerScrollRef.current) {
@@ -134,7 +132,6 @@ export const HomeScreen = ({
         scrollToBanner(nearest);
       }
     };
-
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
     return () => {
@@ -143,144 +140,7 @@ export const HomeScreen = ({
     };
   }, [isDraggingBanner, dragStartX, dragScrollLeft]);
 
-  // Products for the 2-column feed matching exact reference specification
-  const allFeedProducts = [
-    {
-      id: 'prod_castom',
-      title: 'Castom GS-D16 16" / 32 ГБ / SSD 1000 ГБ / Win 11 / D16',
-      price: '519 900 ₸',
-      bonusBadge: '15 597 Б',
-      bonusDiscountPrice: '504 303 ₸',
-      installmentPrice: '30 999 ₸',
-      installmentTerm: 'x24',
-      rating: '4.9',
-      reviews: '113',
-      dotsCount: 6,
-      activeDot: 0,
-      image: '/kaspi_assets/products/laptop_industria.jpg',
-      tagType: 'bonuses'
-    },
-    {
-      id: 'prod_macbook',
-      title: 'Apple MacBook Neo 13 2026 13" / 8 ГБ / SSD 512 ГБ /...',
-      price: '488 000 ₸',
-      bonusBadge: '14 640 Б',
-      bonusDiscountPrice: '473 360 ₸',
-      installmentPrice: '29 097 ₸',
-      installmentTerm: 'x24',
-      rating: '5.0',
-      reviews: '55',
-      dotsCount: 3,
-      activeDot: 0,
-      image: '/kaspi_assets/products/laptop_lenovo_white.jpg',
-      tagType: 'bonuses'
-    },
-    {
-      id: 'prod_socket',
-      title: 'Умная розетка Wi-Fi 16A с разъемами Type-C и USB белый',
-      price: '3 600 ₸',
-      isAd: true,
-      installmentPrice: '300 ₸',
-      installmentTerm: 'x12',
-      rating: '4.8',
-      reviews: '42',
-      dotsCount: 5,
-      activeDot: 0,
-      image: '/kaspi_assets/products/charger_pd20.jpg',
-      tagType: 'recommendations'
-    },
-    {
-      id: 'prod_cable',
-      title: 'Кабель YARIUM Type-C - Type-C 1 м белый быстрая зарядка',
-      price: '2 059 ₸',
-      isAd: true,
-      bonusBadge: '308 Б',
-      hasFlame: true,
-      installmentPrice: '172 ₸',
-      installmentTerm: 'x12',
-      rating: '4.9',
-      reviews: '128',
-      dotsCount: 6,
-      activeDot: 0,
-      image: '/kaspi_assets/products/spray_kudo.png',
-      tagType: 'bonuses'
-    },
-    {
-      id: 'prod_iphone16',
-      title: 'Apple iPhone 16 Pro Max 256GB Desert Titanium',
-      price: '799 990 ₸',
-      oldPrice: '889 990 ₸',
-      discountBadge: '-10%',
-      installmentPrice: '33 333 ₸',
-      installmentTerm: 'x24',
-      rating: '5.0',
-      reviews: '142',
-      dotsCount: 5,
-      activeDot: 0,
-      image: '/kaspi_assets/products/iphone16.jpg',
-      tagType: 'discounts'
-    },
-    {
-      id: 'prod_leadbros',
-      title: 'Холодильник Leadbros 400 л No Frost серый',
-      price: '279 990 ₸',
-      bonusBadge: '20 399 Б',
-      bonusDiscountPrice: '259 591 ₸',
-      installmentPrice: '11 666 ₸',
-      installmentTerm: 'x24',
-      rating: '5.0',
-      reviews: '18',
-      dotsCount: 4,
-      activeDot: 0,
-      image: '/kaspi_assets/products/leadbros_fridge.jpg',
-      tagType: 'bonuses'
-    },
-    {
-      id: 'prod_dyson',
-      title: 'Стайлер Dyson Airwrap Multi-Styler Complete Long Copper',
-      price: '319 990 ₸',
-      bonusBadge: '15 999 Б',
-      bonusDiscountPrice: '303 991 ₸',
-      installmentPrice: '13 333 ₸',
-      installmentTerm: 'x24',
-      rating: '4.9',
-      reviews: '88',
-      dotsCount: 4,
-      activeDot: 0,
-      image: '/kaspi_assets/products/dyson.jpg',
-      tagType: 'bonuses'
-    },
-    {
-      id: 'prod_ps5',
-      title: 'Игровая приставка Sony PlayStation 5 Slim 1TB White',
-      price: '264 990 ₸',
-      installmentPrice: '11 041 ₸',
-      installmentTerm: 'x24',
-      rating: '5.0',
-      reviews: '312',
-      dotsCount: 5,
-      activeDot: 0,
-      image: '/kaspi_assets/products/ps5.jpg',
-      tagType: 'recommendations'
-    },
-    {
-      id: 'prod_lenovo',
-      title: 'Ноутбук Lenovo LOQ 15 Gaming RTX 5050 8GB / 16 ГБ',
-      price: '649 874 ₸',
-      oldPrice: '759 999 ₸',
-      discountBadge: '-14%',
-      installmentPrice: '27 078 ₸',
-      installmentTerm: 'x24',
-      rating: '4.9',
-      reviews: '10',
-      dotsCount: 4,
-      activeDot: 0,
-      image: '/kaspi_assets/products/laptop_lenovo.jpg',
-      tagType: 'discounts'
-    }
-  ];
-
-  // "Вы недавно смотрели" - 102 pt cards matching exact specifications
+  // "Вы недавно смотрели" carousel items
   const viewedProducts = [
     {
       id: 'viewed_leadbros',
@@ -317,6 +177,7 @@ export const HomeScreen = ({
       oldPrice: null,
       discountChip: null,
       bonusChip: '26 398 Б',
+      hasFlame: true,
       bonusBox: {
         price: '853 559 ₸',
         caption: 'с учетом Бонусов'
@@ -375,6 +236,67 @@ export const HomeScreen = ({
     }
   ];
 
+  // Feed items below the divider
+  const allFeedProducts = [
+    {
+      id: 'prod_castom',
+      title: 'Castom GS-D16 16" / 32 ГБ / SSD 1000 ГБ / Win 11 / D16',
+      price: '209 990 ₸',
+      installmentPrice: '8 750 ₸',
+      installmentTerm: 'x24',
+      rating: '4.8',
+      reviews: '64',
+      dotsCount: 4,
+      activeDot: 0,
+      image: '/kaspi_assets/products/laptop_castom.jpg',
+      tagType: 'recommendations'
+    },
+    {
+      id: 'prod_dyson',
+      title: 'Фен Dyson Supersonic Nural HD16 Vinca Blue / Topaz',
+      price: '289 990 ₸',
+      bonusBadge: '14 500 Б',
+      bonusDiscountPrice: '275 490 ₸',
+      installmentPrice: '12 083 ₸',
+      installmentTerm: 'x24',
+      rating: '5.0',
+      reviews: '128',
+      hasFlame: true,
+      dotsCount: 5,
+      activeDot: 0,
+      image: '/kaspi_assets/products/dyson.jpg',
+      tagType: 'bonuses'
+    },
+    {
+      id: 'prod_ps5',
+      title: 'Игровая приставка Sony PlayStation 5 Slim 1TB White',
+      price: '264 990 ₸',
+      installmentPrice: '11 041 ₸',
+      installmentTerm: 'x24',
+      rating: '5.0',
+      reviews: '312',
+      dotsCount: 5,
+      activeDot: 0,
+      image: '/kaspi_assets/products/ps5.jpg',
+      tagType: 'recommendations'
+    },
+    {
+      id: 'prod_lenovo_feed',
+      title: 'Ноутбук Lenovo LOQ 15 Gaming RTX 5050 8GB / 16 ГБ',
+      price: '649 874 ₸',
+      oldPrice: '759 999 ₸',
+      discountBadge: '-14%',
+      installmentPrice: '27 078 ₸',
+      installmentTerm: 'x24',
+      rating: '4.9',
+      reviews: '10',
+      dotsCount: 4,
+      activeDot: 0,
+      image: '/kaspi_assets/products/laptop_lenovo.jpg',
+      tagType: 'discounts'
+    }
+  ];
+
   const filteredFeed = allFeedProducts.filter((item) => {
     if (activeFilterTab === 'recommendations') return true;
     if (activeFilterTab === 'bonuses') return !!item.bonusBadge || !!item.bonusDiscountPrice || item.tagType === 'bonuses';
@@ -391,97 +313,139 @@ export const HomeScreen = ({
       minHeight: '100%',
       display: 'flex',
       flexDirection: 'column',
-      paddingBottom: '90px',
+      paddingTop: '52.5px', // Exact search field top is 52.5 from the top of the screen (4.5 below 48 pt status bar)
+      paddingBottom: 'calc(87.5px + 20px)', // Scroll content clears the fixed bottom tab bar (87.5 pt)
       overflowX: 'hidden',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      fontFamily: 'system-ui, -apple-system, Roboto, sans-serif',
+      letterSpacing: 0
     }}>
-      {/* 1. Official Header / Search Bar */}
+      {/* =====================================================================
+          1. HEADER (search + cart)
+          Search field: x 18, width = screen - 18 - 64.5 (331.5 on 414), height 40.5, radius 8, fill searchBg #F2F2F2, no border.
+          Magnifier: 20 x 20, colour textSecondary #8E8E8E, left edge 11 inside field, vertically centred.
+          Placeholder: 17 pt Regular, colour #8E8E8E, 10 pt after magnifier.
+          Camera/scan icon: box 28.5 x 22, right edge 12 inside field.
+          Cart icon: 26 x 25, colour #9E9E9E, 15.5 right of field, vertically centred.
+          Badge: 15.5 circle accentRed #F14635, number 11 Semibold white, top-right of cart.
+      ===================================================================== */}
       <div style={{
-        padding: '10px 16px 8px 16px',
+        paddingLeft: '18px',
+        paddingRight: '23px',
         display: 'flex',
         alignItems: 'center',
-        gap: '12px',
-        backgroundColor: '#FFFFFF'
+        height: '40.5px',
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
-        {/* Search Input Box */}
+        {/* Search Field */}
         <div
           onClick={onOpenSearch}
           className="touchable"
           style={{
             flex: 1,
-            height: '40px',
-            backgroundColor: '#F2F2F4',
-            borderRadius: '10px',
+            height: '40.5px',
+            backgroundColor: '#F2F2F2',
+            borderRadius: '8px',
+            border: 'none',
             display: 'flex',
             alignItems: 'center',
-            padding: '0 12px',
-            gap: '10px',
-            cursor: 'pointer'
+            paddingLeft: '11px',
+            paddingRight: '12px',
+            cursor: 'pointer',
+            boxSizing: 'border-box'
           }}
         >
-          <Search size={18} color="#757575" strokeWidth={2.2} />
+          {/* Magnifier: 20 x 20, #8E8E8E */}
+          <Search size={20} color="#8E8E8E" strokeWidth={2.2} style={{ flexShrink: 0 }} />
+
+          {/* Placeholder: 17 pt Regular, 10 pt after magnifier */}
           <span style={{
-            fontSize: '14.5px',
-            color: '#757575',
+            fontSize: '17px',
             fontWeight: '400',
+            color: '#8E8E8E',
+            marginLeft: '10px',
             flex: 1,
-            userSelect: 'none'
+            userSelect: 'none',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            letterSpacing: 0
           }}>
             Поиск по Kaspi.kz
           </span>
-          <CameraSparkleIcon size={26.5} color="#555555" />
+
+          {/* Camera/scan icon: box 28.5 x 22, right edge 12 inside field */}
+          <div style={{ width: '28.5px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <CameraSparkleIcon size={25} color="#555555" />
+          </div>
         </div>
 
-        {/* Cart Icon with red badge */}
+        {/* 15.5 right of the field: Cart icon 26 x 25 */}
         <div
           onClick={() => onOpenService('cart')}
           className="touchable"
           style={{
+            marginLeft: '15.5px',
+            width: '26px',
+            height: '25px',
             position: 'relative',
-            padding: '4px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            flexShrink: 0
           }}
         >
-          <TopBarCartIcon />
+          <TopBarCartIcon color="#9E9E9E" />
+          {/* Badge: 15.5 circle accentRed, number 11 Semibold white, top-right */}
           <div style={{
             position: 'absolute',
-            top: '1px',
-            right: '0px',
-            backgroundColor: '#EB3B2C',
-            color: '#FFFFFF',
+            top: '-5px',
+            right: '-5px',
+            width: '15.5px',
+            height: '15.5px',
             borderRadius: '50%',
-            width: '14px',
-            height: '14px',
-            fontSize: '9.5px',
-            fontWeight: '500',
-            fontFamily: '-apple-system, "SF Pro Text", Roboto, sans-serif',
+            backgroundColor: '#F14635',
+            color: '#FFFFFF',
+            fontSize: '11px',
+            fontWeight: '600',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            lineHeight: 1
+            lineHeight: '15.5px',
+            boxSizing: 'border-box',
+            pointerEvents: 'none'
           }}>
             3
           </div>
         </div>
       </div>
 
-      {/* 2. Top Banner Carousel (4 authentic 1024x341 banners with smooth scroll & indicators) */}
-      <div style={{ padding: '2px 16px 10px 16px', width: '100%', boxSizing: 'border-box' }}>
-        <div
-          style={{
-            width: '100%',
-            maxWidth: '100%',
-            borderRadius: '12px',
-            overflow: 'hidden',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-            userSelect: 'none',
-            position: 'relative'
-          }}
-        >
-          {/* Scrollable track with native CSS scroll-snap */}
+      {/* =====================================================================
+          2. PROMO BANNER
+          8 pt below search field.
+          Box: x 17, width = screen - 33 (381), height 117.5. Aspect ratio 3.23 : 1, radius 10.
+          ONE supplied image, object-fit: cover, NO text/chips on top in code.
+          Page dots: 4 pt dots, 6 pt apart, centred horizontally, 6 pt above banner bottom; active white, others white 50 %.
+      ===================================================================== */}
+      <div style={{
+        marginTop: '8px',
+        paddingLeft: '17px',
+        paddingRight: '16px',
+        width: '100%',
+        boxSizing: 'border-box'
+      }}>
+        <div style={{
+          width: '100%',
+          height: '117.5px',
+          borderRadius: '10px',
+          overflow: 'hidden',
+          position: 'relative',
+          userSelect: 'none',
+          boxSizing: 'border-box'
+        }}>
+          {/* Scrollable track */}
           <div
             ref={bannerScrollRef}
             onScroll={handleBannerScroll}
@@ -489,14 +453,14 @@ export const HomeScreen = ({
             className="hide-scrollbar"
             style={{
               display: 'flex',
+              width: '100%',
+              height: '100%',
               overflowX: 'auto',
               scrollSnapType: isDraggingBanner ? 'none' : 'x mandatory',
               scrollBehavior: isDraggingBanner ? 'auto' : 'smooth',
               cursor: isDraggingBanner ? 'grabbing' : 'grab',
               WebkitOverflowScrolling: 'touch',
-              touchAction: 'pan-y',
-              width: '100%',
-              minWidth: 0
+              touchAction: 'pan-y'
             }}
           >
             {topBanners.map((banner) => (
@@ -505,8 +469,8 @@ export const HomeScreen = ({
                 style={{
                   flex: '0 0 100%',
                   width: '100%',
+                  height: '100%',
                   minWidth: '100%',
-                  maxWidth: '100%',
                   scrollSnapAlign: 'start',
                   position: 'relative',
                   overflow: 'hidden'
@@ -518,8 +482,8 @@ export const HomeScreen = ({
                   draggable={false}
                   style={{
                     width: '100%',
-                    maxWidth: '100%',
-                    height: 'auto',
+                    height: '100%',
+                    objectFit: 'cover',
                     display: 'block',
                     pointerEvents: 'none'
                   }}
@@ -528,35 +492,27 @@ export const HomeScreen = ({
             ))}
           </div>
 
-          {/* Authentic Kaspi 4 indicator dots centered horizontally at bottom */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '8px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              zIndex: 2,
-              pointerEvents: 'auto'
-            }}
-          >
+          {/* Page dots: 4 pt dots, 6 pt apart, centred horizontally, 6 pt above bottom; active white, others white 50 % */}
+          <div style={{
+            position: 'absolute',
+            bottom: '6px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            zIndex: 2,
+            pointerEvents: 'none'
+          }}>
             {topBanners.map((_, idx) => (
               <div
                 key={idx}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  scrollToBanner(idx);
-                }}
                 style={{
-                  width: activeBannerIndex === idx ? '6px' : '5px',
-                  height: activeBannerIndex === idx ? '6px' : '5px',
+                  width: '4px',
+                  height: '4px',
                   borderRadius: '50%',
-                  backgroundColor: activeBannerIndex === idx ? '#FFFFFF' : 'rgba(255, 255, 255, 0.55)',
-                  boxShadow: activeBannerIndex === idx ? '0 1px 3px rgba(0,0,0,0.45)' : '0 1px 2px rgba(0,0,0,0.3)',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+                  backgroundColor: activeBannerIndex === idx ? '#FFFFFF' : 'rgba(255, 255, 255, 0.5)',
+                  transition: 'background-color 0.2s ease'
                 }}
               />
             ))}
@@ -564,15 +520,26 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* 3. 8 Main Services Grid (Exact 36x36 size, responsive spacing, bolder font) */}
+      {/* =====================================================================
+          3. SHORTCUT GRID (2 rows x 4)
+          4 equal columns, centres at 62.5 / 159.5 / 256.5 / 353.5 on 414. Row pitch 78.5.
+          First icon row top 17 below banner.
+          Icon box 34 x 34. Colour accentRed #F14635. Magnum tile 34 x 34, radius 8.
+          Label: 16 pt Regular textPrimary #000, centred under icon, label top 8 below icon.
+          Hairline divider (full width, 0.5, divider #E8E8E8) 14 below second row labels.
+      ===================================================================== */}
       <div style={{
-        padding: '6px 18px 14px 18px'
+        marginTop: '17px',
+        paddingLeft: '14px',
+        paddingRight: '12px',
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          rowGap: '16px',
-          columnGap: '8px'
+          rowGap: '16.5px', // 34px icon + 8px gap + ~20px label = 62px cell. 62px + 16.5px = 78.5px row pitch!
+          width: '100%'
         }}>
           {/* Row 1 */}
           {/* 1. Магазин */}
@@ -581,10 +548,10 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconShop size={35.5} />
+            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IconShop size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '13px', fontWeight: '500', color: '#1A1A1A', marginTop: '5px', letterSpacing: '-0.2px' }}>
+            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
               Магазин
             </span>
           </div>
@@ -595,10 +562,10 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconMyBank size={36} />
+            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IconMyBank size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '13px', fontWeight: '500', color: '#1A1A1A', marginTop: '5px', letterSpacing: '-0.2px' }}>
+            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
               Мой Банк
             </span>
           </div>
@@ -609,10 +576,10 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconPayments size={35} />
+            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IconPayments size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '13px', fontWeight: '500', color: '#1A1A1A', marginTop: '5px', letterSpacing: '-0.2px' }}>
+            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
               Платежи
             </span>
           </div>
@@ -623,10 +590,10 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconTransfers size={34} />
+            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IconTransfers size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '13px', fontWeight: '500', color: '#1A1A1A', marginTop: '5px', letterSpacing: '-0.2px' }}>
+            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
               Переводы
             </span>
           </div>
@@ -638,10 +605,10 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconMagnum size={36} />
+            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IconMagnum size={34} />
             </div>
-            <span style={{ fontSize: '13px', fontWeight: '500', color: '#1A1A1A', marginTop: '5px', letterSpacing: '-0.2px' }}>
+            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
               Magnum
             </span>
           </div>
@@ -652,10 +619,10 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconTravel size={36} />
+            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IconTravel size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '13px', fontWeight: '500', color: '#1A1A1A', marginTop: '5px', letterSpacing: '-0.2px' }}>
+            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
               Travel
             </span>
           </div>
@@ -666,113 +633,127 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconGov size={36} />
+            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IconGov size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '13px', fontWeight: '500', color: '#1A1A1A', marginTop: '5px', letterSpacing: '-0.2px' }}>
+            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
               Госуслуги
             </span>
           </div>
 
-          {/* 8. Работа (Briefcase with magnifying glass) */}
+          {/* 8. Работа */}
           <div
             onClick={() => onOpenService('jobs')}
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconJobs size={34.5} />
+            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IconJobs size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '13px', fontWeight: '500', color: '#1A1A1A', marginTop: '5px', letterSpacing: '-0.2px' }}>
+            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
               Работа
             </span>
           </div>
         </div>
       </div>
 
-      {/* Full-width thin line divider spanning edge-to-edge without cut */}
-      <div style={{ height: '1px', backgroundColor: '#ECECED', width: '100%' }} />
-
-      {/* 4. Deposits Section (Exact 1:1 size, proportions, and colors from real Kaspi app) */}
+      {/* Hairline divider (full width, 0.5, #E8E8E8) 14 below second row labels */}
       <div style={{
-        padding: '14px 16px',
+        marginTop: '14px',
+        height: '0.5px',
+        backgroundColor: '#E8E8E8',
+        width: '100%'
+      }} />
+
+      {/* =====================================================================
+          4. DEPOSIT ROWS
+          First tile 23 below divider.
+          Tile 56 x 44, radius 6, depositYellow #FFD302, white glyph about 26.
+          Row pitch 53, gap between two tiles is 9.
+          Text 15.5 right of tile: 19 pt Regular textPrimary, line height 24, both lines #000.
+          Row 1: two lines ("Накопительный" / "Депозит" + pill), top-aligned with tile.
+          Row 2: one line ("Kaspi Депозит 15%"), vertically centred on tile.
+          Rate pill after "Депозит", 6 pt gap: height 22.5, padding 6 horizontal, radius 11, fill #FFD302, text "18%" 16 pt Semibold #000.
+      ===================================================================== */}
+      <div style={{
+        marginTop: '23px',
+        paddingLeft: '17px',
+        paddingRight: '16px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '14px'
+        gap: '9px',
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
-        {/* Row 1: Накопительный Депозит 19% */}
-        <div className="touchable" style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
-          {/* Yellow rounded card with 3 stacked coins from coins-card-yellow.svg (53px × 41px) */}
+        {/* Row 1: Накопительный Депозит 18% */}
+        <div className="touchable" style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer', height: '44px' }}>
+          {/* Tile 56 x 44, radius 6, depositYellow #FFD302, white coins glyph 26 */}
           <div style={{
-            width: '53px',
-            height: '41px',
+            width: '56px',
+            height: '44px',
+            borderRadius: '6px',
+            backgroundColor: '#FFD302',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0
           }}>
-            <svg viewBox="26 20 243 188" width="53" height="41">
-              {/* Yellow card */}
-              <rect x="26" y="20" width="243" height="188" rx="26" fill="#FFD302" />
-              {/* Stack of three coins */}
-              <g fill="none" stroke="#FFFFFF" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round">
-                {/* top coin face */}
-                <ellipse cx="148" cy="91.75" rx="43" ry="22.75" />
-                {/* sides, pinched in between the coins */}
-                <path d="M105 92Q110.5 103.5 106 115Q110.5 127 105 139" />
-                <path d="M191 92Q188 103.5 190.5 115Q188 127 191 139" />
-                {/* lower rims of the second and third coins */}
-                <path d="M106 115a42 22.5 0 0 0 84 0" />
-                <path d="M105 139a43 22.5 0 0 0 86 0" />
-              </g>
+            <svg viewBox="90 60 115 100" width="26" height="26" fill="none" stroke="#FFFFFF" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round">
+              <ellipse cx="148" cy="91.75" rx="43" ry="22.75" />
+              <path d="M105 92Q110.5 103.5 106 115Q110.5 127 105 139" />
+              <path d="M191 92Q188 103.5 190.5 115Q188 127 191 139" />
+              <path d="M106 115a42 22.5 0 0 0 84 0" />
+              <path d="M105 139a43 22.5 0 0 0 86 0" />
             </svg>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <div style={{ fontSize: '15px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
+          {/* Text 15.5 right of tile, top-aligned */}
+          <div style={{ marginLeft: '15.5px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+            <div style={{ fontSize: '19px', fontWeight: '400', color: '#000000', lineHeight: '24px', letterSpacing: 0 }}>
               Накопительный
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginTop: '1px' }}>
-              <span style={{ fontSize: '15px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '19px', fontWeight: '400', color: '#000000', lineHeight: '24px', letterSpacing: 0 }}>
                 Депозит
               </span>
-              <span style={{
+              {/* Rate pill: height 22.5, padding 6 horizontal, radius 11, fill #FFD302, text "18%" 16 pt Semibold #000 */}
+              <div style={{
+                height: '22.5px',
+                padding: '0 6px',
+                borderRadius: '11px',
                 backgroundColor: '#FFD302',
-                color: '#1F1F1F',
-                fontSize: '11px',
-                fontWeight: '700',
-                padding: '1px 6.5px',
-                borderRadius: '9px',
-                lineHeight: '14px',
-                letterSpacing: '0.2px'
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxSizing: 'border-box'
               }}>
-                19%
-              </span>
+                <span style={{ fontSize: '16px', fontWeight: '600', color: '#000000', lineHeight: '22.5px', letterSpacing: 0 }}>
+                  18%
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Row 2: Kaspi Депозит 15% */}
-        <div className="touchable" style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
-          {/* Yellow rounded card with ₸$ from currency-card-yellow.svg (53px × 41px) */}
+        <div className="touchable" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', height: '44px' }}>
+          {/* Tile 56 x 44, radius 6, depositYellow #FFD302, white ₸$ glyph 26 */}
           <div style={{
-            width: '53px',
-            height: '41px',
+            width: '56px',
+            height: '44px',
+            borderRadius: '6px',
+            backgroundColor: '#FFD302',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0
           }}>
-            <svg viewBox="17 15 243 189" width="53" height="41">
-              {/* Yellow card */}
-              <rect x="17" y="15" width="243" height="189" rx="24" fill="#FFD302" />
-              {/* Tenge sign: square-cut bars and stem */}
+            <svg viewBox="70 65 140 100" width="26" height="26">
               <g fill="#FFFFFF">
                 <rect x="76" y="74" width="63" height="9.5" />
                 <rect x="76" y="91.5" width="63" height="9.5" />
                 <rect x="101" y="96" width="11" height="51" />
               </g>
-              {/* Dollar sign: square-cut ends */}
               <g fill="none" stroke="#FFFFFF" strokeLinecap="butt" strokeLinejoin="miter">
                 <path d="M197.5 99C197.5 89.5 190 84 180.5 84C169 84 160.5 88.5 160.5 97C160.5 106 170 109.5 180.5 113C191 116.5 198.5 120 198.5 128.5C198.5 137.5 190 142 180 142C169 142 159 137.5 159 125" strokeWidth="12" />
                 <path d="M180.5 68v14M180 144v9" strokeWidth="9.5" />
@@ -780,45 +761,55 @@ export const HomeScreen = ({
             </svg>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ fontSize: '15px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
+          {/* Text 15.5 right of tile, vertically centred */}
+          <div style={{ marginLeft: '15.5px', display: 'flex', alignItems: 'center' }}>
+            <span style={{ fontSize: '19px', fontWeight: '400', color: '#000000', lineHeight: '24px', letterSpacing: 0 }}>
               Kaspi Депозит 15%
-            </div>
+            </span>
           </div>
         </div>
       </div>
 
-      {/* 5. "Вы недавно смотрели" - no divider above it, brought slightly closer to yellow cards */}
+      {/* =====================================================================
+          5. "ВЫ НЕДАВНО СМОТРЕЛИ" CAROUSEL
+          Section title: 18 pt Bold #1E1E1E, x 17.5, 27 below last deposit tile.
+          Cards: horizontal scroll, first card x 16, image 110 x 110 (square), card pitch 119 (gap 9).
+          Image radius 11, 1 px border #EFEFEF, white fill, image contain.
+          Chip on image: height 19, radius 6, 13 Bold white, pinned bottom-left, 1.5 inset.
+          Price: 17 pt Bold #000, 10 below image. Discounted price accentRed + old price struck through 13 pt #8E8E8E.
+          Bonus box: 110 x 36, radius 6, bonusBoxBg #E6F8D0, padding 4. Line 1 bonus price 14 pt Bold bonusGreen #54A000. Line 2 "с учетом Бонусов" 14 pt Regular #000.
+          Product name: 14 pt Regular #000, 1 line, tail ellipsis, 6 below bonus box (or 6 below price if no bonus box).
+          Rating row: value 14 Semibold #000, star 13 accentRed #F14635, count 14 Regular textSecondary #8E8E8E.
+          Cards stack rows with no empty slots.
+          Hairline divider 0.5 under carousel, 10 above tab bar.
+      ===================================================================== */}
       <div style={{
-        padding: '6px 0 16px 0',
+        marginTop: '27px',
         width: '100%',
-        maxWidth: '100%',
-        minWidth: 0,
-        boxSizing: 'border-box',
-        fontFamily: '-apple-system, "SF Pro Text", Inter, sans-serif'
+        boxSizing: 'border-box'
       }}>
+        {/* Section Title: x 17.5, 18 pt Bold #1E1E1E */}
         <div style={{
+          paddingLeft: '17.5px',
+          paddingRight: '16px',
           fontSize: '18px',
           fontWeight: '700',
           color: '#1E1E1E',
-          marginBottom: '12px',
-          paddingLeft: '16px',
-          paddingRight: '16px'
+          lineHeight: '22px',
+          marginBottom: '8px',
+          letterSpacing: 0
         }}>
           Вы недавно смотрели
         </div>
 
-        {/* Horizontal Carousel of Viewed Products */}
+        {/* Horizontal Carousel */}
         <div style={{
           display: 'flex',
-          gap: '10px',
+          gap: '9px', // card pitch 119 = 110 width + 9 gap
           overflowX: 'auto',
-          paddingLeft: '16px',
+          paddingLeft: '16px', // first card x 16
           paddingRight: '16px',
           scrollbarWidth: 'none',
-          width: '100%',
-          maxWidth: '100%',
-          minWidth: 0,
           WebkitOverflowScrolling: 'touch',
           touchAction: 'pan-y',
           alignItems: 'flex-start'
@@ -829,23 +820,20 @@ export const HomeScreen = ({
               className="touchable"
               style={{
                 flexShrink: 0,
-                width: '102px',
+                width: '110px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
-                cursor: 'pointer',
-                fontFamily: '-apple-system, "SF Pro Text", Inter, sans-serif'
+                cursor: 'pointer'
               }}
             >
-              {/* Image Box: 102 x 102 pt, corner radius 10 pt, white fill, 1px solid #ECECEC border, aspect fit, centered */}
+              {/* Image box: 110 x 110, radius 11, 1px border #EFEFEF, white fill, image contain */}
               <div style={{
-                width: '102px',
-                height: '102px',
-                minWidth: '102px',
-                minHeight: '102px',
-                borderRadius: '10px',
+                width: '110px',
+                height: '110px',
+                borderRadius: '11px',
+                border: '1px solid #EFEFEF',
                 backgroundColor: '#FFFFFF',
-                border: '1px solid #ECECEC',
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
@@ -859,181 +847,174 @@ export const HomeScreen = ({
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover',
+                    objectFit: 'contain',
                     display: 'block'
                   }}
                 />
 
-                {/* Chips at bottom-left corner (rounded with card shape) */}
-                <div style={{
-                  position: 'absolute',
-                  left: '0px',
-                  bottom: '0px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3px',
-                  zIndex: 2
-                }}>
-                  {(item.discountChip || item.bonusChip) && (
-                    <div style={{
-                      height: '16px',
-                      padding: '0 5px',
-                      borderTopLeftRadius: '3px',
-                      borderTopRightRadius: '4px',
-                      borderBottomRightRadius: '4px',
-                      borderBottomLeftRadius: '9px',
-                      backgroundColor: item.discountChip ? '#F14635' : '#54A000',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      {item.bonusChip ? (
-                        <div style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '2px'
-                        }}>
-                          {item.hasFlame && (
-                            <KaspiYellowFlame size={10} style={{ marginRight: '1px' }} />
-                          )}
-                          <span style={{
-                            fontSize: '9.5px',
-                            fontWeight: '700',
-                            color: '#FFFFFF',
-                            lineHeight: '16px',
-                            letterSpacing: '-0.2px',
-                            display: 'inline-flex',
-                            alignItems: 'baseline',
-                            gap: '2px'
-                          }}>
-                            <span>{item.bonusChip.replace(/\s*[БB]$/i, '').trim()}</span>
-                            <KaspiBonusSymbol height={7} color="#FFFFFF" />
-                          </span>
-                        </div>
-                      ) : (
+                {/* Chip on image: height 19, radius 6, 13 Bold white, pinned bottom-left, 1.5 inset */}
+                {(item.discountChip || item.bonusChip) && (
+                  <div style={{
+                    position: 'absolute',
+                    left: '1.5px',
+                    bottom: '1.5px',
+                    height: '19px',
+                    padding: '0 6px',
+                    borderRadius: '6px',
+                    backgroundColor: item.discountChip ? '#F14635' : '#54A000',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 2,
+                    boxSizing: 'border-box'
+                  }}>
+                    {item.bonusChip ? (
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                        {item.hasFlame && (
+                          <KaspiYellowFlame size={11} style={{ marginRight: '1px' }} />
+                        )}
                         <span style={{
-                          fontSize: '9.5px',
+                          fontSize: '13px',
                           fontWeight: '700',
                           color: '#FFFFFF',
-                          lineHeight: '16px',
-                          letterSpacing: '-0.2px'
+                          lineHeight: '19px',
+                          letterSpacing: 0,
+                          display: 'inline-flex',
+                          alignItems: 'baseline',
+                          gap: '2px'
                         }}>
-                          {item.discountChip}
+                          <span>{item.bonusChip.replace(/\s*[БB]$/i, '').trim()}</span>
+                          <KaspiBonusSymbol height={9} color="#FFFFFF" />
                         </span>
-                      )}
-                    </div>
-                  )}
-                </div>
+                      </div>
+                    ) : (
+                      <span style={{
+                        fontSize: '13px',
+                        fontWeight: '700',
+                        color: '#FFFFFF',
+                        lineHeight: '19px',
+                        letterSpacing: 0
+                      }}>
+                        {item.discountChip}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
 
-              {/* Price row: 4 pt from image */}
+              {/* Price: 17 pt Bold #000, 10 below image. Discounted price accentRed + old price struck through, 13 pt #8E8E8E */}
               <div style={{
-                marginTop: '4px',
+                marginTop: '10px',
                 display: 'flex',
                 alignItems: 'baseline',
-                gap: '4px',
+                gap: '5px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 width: '100%'
               }}>
                 <span style={{
-                  fontSize: '14.5px',
+                  fontSize: '17px',
                   fontWeight: '700',
                   color: item.oldPrice ? '#F14635' : '#000000',
-                  lineHeight: '17px',
+                  lineHeight: '20px',
+                  letterSpacing: 0,
                   flexShrink: 0
                 }}>
                   {item.price}
                 </span>
                 {item.oldPrice && (
                   <span style={{
-                    fontSize: '10.5px',
+                    fontSize: '13px',
                     fontWeight: '400',
-                    color: '#757575',
+                    color: '#8E8E8E',
                     textDecoration: 'line-through',
-                    lineHeight: '13px',
+                    lineHeight: '16px',
                     whiteSpace: 'nowrap',
-                    overflow: 'hidden'
+                    letterSpacing: 0
                   }}>
                     {item.oldPrice}
                   </span>
                 )}
               </div>
 
-              {/* Bonus box: 3 pt from price, height 28 pt, full width, fill #E6F8D0, radius 5 pt, padding 2px 5px */}
+              {/* Bonus box: 110 x 36, radius 6, bonusBoxBg #E6F8D0, padding 4.
+                  Line 1: 14 pt Bold bonusGreen #54A000. Line 2: 14 pt Regular #000 */}
               {item.bonusBox && (
                 <div style={{
-                  marginTop: '3px',
-                  height: '28px',
-                  width: '100%',
-                  padding: '2px 5px',
-                  borderRadius: '5px',
+                  marginTop: '4px',
+                  width: '110px',
+                  height: '36px',
+                  borderRadius: '6px',
                   backgroundColor: '#E6F8D0',
+                  padding: '4px',
                   boxSizing: 'border-box',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center'
                 }}>
                   <div style={{
-                    fontSize: '11.5px',
+                    fontSize: '14px',
                     fontWeight: '700',
                     color: '#54A000',
-                    lineHeight: '13px',
+                    lineHeight: '16px',
                     whiteSpace: 'nowrap',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    letterSpacing: 0
                   }}>
                     {item.bonusBox.price}
                   </div>
                   <div style={{
-                    fontSize: '9px',
+                    fontSize: '14px',
                     fontWeight: '400',
-                    color: '#1F1F1F',
-                    lineHeight: '11px',
-                    marginTop: '1px',
-                    letterSpacing: '-0.25px',
-                    whiteSpace: 'nowrap'
+                    color: '#000000',
+                    lineHeight: '16px',
+                    whiteSpace: 'nowrap',
+                    letterSpacing: 0
                   }}>
                     {item.bonusBox.caption}
                   </div>
                 </div>
               )}
 
-              {/* Name: 3 pt from bonus box (or price), 11.5 pt Regular, #1F1F1F, 1 line ellipsis */}
+              {/* Product name: 14 pt Regular #000, 1 line, tail ellipsis, 6 below bonus box (or 6 below price if no bonus box) */}
               <div style={{
-                marginTop: '3px',
-                fontSize: '11.5px',
+                marginTop: '6px',
+                fontSize: '14px',
                 fontWeight: '400',
-                color: '#1F1F1F',
+                color: '#000000',
                 width: '100%',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                lineHeight: '14px'
+                lineHeight: '18px',
+                letterSpacing: 0
               }}>
                 {item.title}
               </div>
 
-              {/* Rating row: 2 pt from name */}
+              {/* Rating row: value 14 Semibold #000, star 13 accentRed, count 14 Regular textSecondary #8E8E8E */}
               <div style={{
-                marginTop: '2px',
+                marginTop: '4px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '3px'
               }}>
                 <span style={{
-                  fontSize: '11px',
+                  fontSize: '14px',
                   fontWeight: '600',
-                  color: '#1F1F1F',
-                  lineHeight: '13px'
+                  color: '#000000',
+                  lineHeight: '16px',
+                  letterSpacing: 0
                 }}>
                   {item.rating}
                 </span>
-                <KaspiRatingStar size={10} color="#F14635" />
+                <KaspiRatingStar size={13} color="#F14635" />
                 <span style={{
-                  fontSize: '10.5px',
+                  fontSize: '14px',
                   fontWeight: '400',
-                  color: '#757575',
-                  lineHeight: '13px'
+                  color: '#8E8E8E',
+                  lineHeight: '16px',
+                  letterSpacing: 0
                 }}>
                   {item.reviews}
                 </span>
@@ -1043,17 +1024,24 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* Full-width thin line divider spanning edge-to-edge without cut */}
-      <div style={{ height: '1px', backgroundColor: '#ECECED', width: '100%' }} />
-
-      {/* 6. Filter Chips Row: 3 equal-size buttons with bold outline, equal side margins */}
+      {/* Hairline divider 0.5 under the carousel, #E8E8E8 */}
       <div style={{
-        padding: '16px 16px 16px 16px',
+        marginTop: '16px',
+        height: '0.5px',
+        backgroundColor: '#E8E8E8',
+        width: '100%'
+      }} />
+
+      {/* =====================================================================
+          6. FILTER PILLS (part of scroll content below divider, not pinned to bottom)
+          Followed by the two-column product feed.
+      ===================================================================== */}
+      <div style={{
+        padding: '14px 16px',
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
         width: '100%',
-        maxWidth: '100%',
         boxSizing: 'border-box'
       }}>
         {[
@@ -1074,12 +1062,11 @@ export const HomeScreen = ({
                 height: '36px',
                 padding: '0 4px',
                 borderRadius: '18px',
-                border: '2px solid #F14635',
+                border: '1.5px solid #F14635',
                 backgroundColor: isActive ? '#F14635' : '#FFFFFF',
                 color: isActive ? '#FFFFFF' : '#F14635',
                 fontSize: '13px',
                 fontWeight: '600',
-                letterSpacing: '-0.2px',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
                 display: 'flex',
@@ -1087,7 +1074,8 @@ export const HomeScreen = ({
                 justifyContent: 'center',
                 gap: '6px',
                 boxSizing: 'border-box',
-                transition: 'all 0.15s ease'
+                transition: 'all 0.15s ease',
+                letterSpacing: 0
               }}
             >
               {IconComp && (
@@ -1104,7 +1092,7 @@ export const HomeScreen = ({
         })}
       </div>
 
-      {/* 7. Two-Column Store Feed: 4px side padding, 4px column gap, 16px row gap */}
+      {/* Two-Column Store Feed */}
       <div style={{ padding: '0 4px 20px 4px' }}>
         <div style={{
           display: 'grid',
@@ -1118,7 +1106,6 @@ export const HomeScreen = ({
               <div
                 key={item.id}
                 className="touchable"
-                aria-label={`${item.title}, ${item.price} tenge${item.bonusBadge ? `, bonus ${item.bonusBadge}` : ''}${item.rating ? `, rating ${item.rating}` : ''}`}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -1126,7 +1113,7 @@ export const HomeScreen = ({
                   position: 'relative'
                 }}
               >
-                {/* 3.1 ImageTile: square 1:1, radius 8, border 1 #F2F2F2, contain with 8px padding */}
+                {/* Image Tile */}
                 <div style={{
                   width: '100%',
                   aspectRatio: '1 / 1',
@@ -1152,11 +1139,10 @@ export const HomeScreen = ({
                     }}
                   />
 
-                  {/* 3.2 Favorite (heart) button: top 12, right 12 to icon, 44x44 tap area, no background/circle/blur */}
+                  {/* Favorite button */}
                   <button
                     type="button"
                     onClick={(e) => toggleFavorite(item.id, e)}
-                    aria-label={isFav ? "Удалить из избранного" : "Добавить в избранное"}
                     style={{
                       position: 'absolute',
                       top: '2px',
@@ -1174,13 +1160,10 @@ export const HomeScreen = ({
                       outline: 'none'
                     }}
                   >
-                    <KaspiHeartIcon
-                      size={24}
-                      isFavorite={isFav}
-                    />
+                    <KaspiHeartIcon size={24} isFavorite={isFav} />
                   </button>
 
-                  {/* 3.3 Bonus / discount badge: anchored bottom-left (flush 0, 0), height 22, radius 0 8px 0 8px */}
+                  {/* Badge */}
                   {(item.discountBadge || item.bonusBadge) && (
                     <div style={{
                       position: 'absolute',
@@ -1222,48 +1205,11 @@ export const HomeScreen = ({
                   )}
                 </div>
 
-                {/* 3.4 Dots (photo carousel indicator): 4x4 circles, gap 4, max 6 dots */}
-                {item.dotsCount && item.dotsCount > 1 && (
+                {/* Text Block */}
+                <div style={{ padding: '0 8px', display: 'flex', flexDirection: 'column' }}>
+                  {/* Price */}
                   <div style={{
                     marginTop: '8px',
-                    height: '4px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}>
-                    {Array.from({ length: Math.min(item.dotsCount, 6) }).map((_, idx) => (
-                      <div
-                        key={idx}
-                        style={{
-                          width: '4px',
-                          height: '4px',
-                          borderRadius: '50%',
-                          backgroundColor: idx === (item.activeDot || 0) ? '#1E1E1E' : '#D0D0D0'
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {/* Text Block: horizontal inset 8 from column's edges */}
-                <div style={{ padding: '0 8px', display: 'flex', flexDirection: 'column' }}>
-                  {/* 3.5 AdLabel: only for sponsored items, 13pt Regular textSecondary, margin top 6 */}
-                  {item.isAd && (
-                    <div style={{
-                      marginTop: '6px',
-                      fontSize: '13px',
-                      fontWeight: '400',
-                      color: '#9A9A9A',
-                      lineHeight: '16px'
-                    }}>
-                      Реклама
-                    </div>
-                  )}
-
-                  {/* 3.6 PriceRow: margin top 8 (from dots) or 12 (from tile), 19pt Bold textPrimary, old price strikethrough 13pt Regular */}
-                  <div style={{
-                    marginTop: (item.isAd || (item.dotsCount && item.dotsCount > 1)) ? '6px' : '12px',
                     display: 'flex',
                     alignItems: 'baseline',
                     gap: '6px',
@@ -1273,8 +1219,7 @@ export const HomeScreen = ({
                       fontSize: '19px',
                       fontWeight: '700',
                       color: '#1E1E1E',
-                      lineHeight: '23px',
-                      letterSpacing: '-0.3px'
+                      lineHeight: '23px'
                     }}>
                       {item.price}
                     </span>
@@ -1282,7 +1227,7 @@ export const HomeScreen = ({
                       <span style={{
                         fontSize: '13px',
                         fontWeight: '400',
-                        color: '#9A9A9A',
+                        color: '#8E8E8E',
                         textDecoration: 'line-through',
                         lineHeight: '23px'
                       }}>
@@ -1291,48 +1236,13 @@ export const HomeScreen = ({
                     )}
                   </div>
 
-                  {/* 3.7 BonusBox: margin top 6, height 22, bg bonusBg #E6F7CC, radius 8, single line */}
-                  {item.bonusDiscountPrice && (
-                    <div style={{
-                      marginTop: '6px',
-                      height: '22px',
-                      width: '100%',
-                      backgroundColor: '#E6F7CC',
-                      borderRadius: '8px',
-                      padding: '0 6px',
-                      boxSizing: 'border-box',
-                      display: 'flex',
-                      alignItems: 'center',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden'
-                    }}>
-                      <span style={{
-                        fontSize: '12.5px',
-                        fontWeight: '700',
-                        color: '#54A000',
-                        whiteSpace: 'nowrap'
-                      }}>
-                        {item.bonusDiscountPrice}
-                      </span>
-                      <span style={{
-                        fontSize: '12px',
-                        fontWeight: '400',
-                        color: '#333333',
-                        whiteSpace: 'nowrap',
-                        marginLeft: '4px'
-                      }}>
-                        с учетом Бонусов
-                      </span>
-                    </div>
-                  )}
-
-                  {/* 3.8 Title: margin top 8, 14.5pt Regular textPrimary, line height 17, max 2 lines, tail ellipsis */}
+                  {/* Title */}
                   <div style={{
-                    marginTop: '8px',
-                    fontSize: '14.5px',
+                    marginTop: '6px',
+                    fontSize: '14px',
                     fontWeight: '400',
-                    color: '#1E1E1E',
-                    lineHeight: '17px',
+                    color: '#000000',
+                    lineHeight: '18px',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
@@ -1342,10 +1252,10 @@ export const HomeScreen = ({
                     {item.title}
                   </div>
 
-                  {/* 3.9 RatingRow: margin top 6, height 17, 13pt Semibold textPrimary, star 12x12 accentRed, (reviews) 13pt Regular textSecondary */}
+                  {/* Rating */}
                   {item.rating && (
                     <div style={{
-                      marginTop: '6px',
+                      marginTop: '4px',
                       height: '17px',
                       display: 'flex',
                       alignItems: 'center',
@@ -1355,13 +1265,13 @@ export const HomeScreen = ({
                         {item.rating}
                       </span>
                       <KaspiRatingStar size={12} color="#F14635" />
-                      <span style={{ fontSize: '13px', fontWeight: '400', color: '#9A9A9A', lineHeight: '17px' }}>
+                      <span style={{ fontSize: '13px', fontWeight: '400', color: '#8E8E8E', lineHeight: '17px' }}>
                         ({item.reviews})
                       </span>
                     </div>
                   )}
 
-                  {/* 3.10 InstallmentRow: ALWAYS the last element of the card, margin top 6, yellow chip + outside x24 */}
+                  {/* Installment */}
                   {item.installmentPrice && (
                     <div style={{
                       marginTop: '6px',
@@ -1389,7 +1299,7 @@ export const HomeScreen = ({
                         <span style={{
                           fontSize: '14.5px',
                           fontWeight: '400',
-                          color: '#9A9A9A',
+                          color: '#8E8E8E',
                           lineHeight: '24px'
                         }}>
                           {item.installmentTerm}

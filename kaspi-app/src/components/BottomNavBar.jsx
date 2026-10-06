@@ -17,7 +17,7 @@ const NavIconHome = ({ color }) => (
 const NavIconQR = ({ color }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
     <path
-      d="M1,2.5C1,1.6716 1.6716,1 2.5,1H7C7.5523,1 8,1.4477 8,2C8,2.5523 7.5523,3 7,3H3V7C3,7.5523 2.5523,8 2,8C1.4477,8 1,7.5523 1,7V2.5ZM16,2C16,1.4477 16.4477,1 17,1H21.5C22.3284,1 23,1.6716 23,2.5V7C23,7.5523 22.5523,8 22,8C21.4477,8 21,7.5523 21,7V3H17C16.4477,3 16,2.5523 16,2ZM2,16C2.5523,16 3,16.4477 3,17V21H7C7.5523,21 8,21.4477 8,22C8,22.5523 7.5523,23 7,23H2.5C1.6716,23 1,22.3284 1,21.5V17C1,16.4477 1.4477,16 2,16ZM22,16C22.5523,16 23,16.4477 23,17V21.5C23,22.3284 22.3284,23 21.5,23H17C16.4477,23 16,22.5523 16,22C16,21.4477 16.4477,21 17,21H21V17C21,16.4477 21.4477,16 22,16ZM5.5,4.5C4.9477,4.5 4.5,4.9477 4.5,5.5V10.5C4.5,11.0523 4.9477,11.5 5.5,11.5H10.5C11.0523,11.5 11.5,11.0523 11.5,10.5V5.5C11.0523,4.9477 11.0523,4.5 10.5,4.5H5.5ZM12.5,5.5C12.5,4.9477 12.9477,4.5 13.5,4.5H18.5C19.0523,4.5 19.5,4.9477 19.5,5.5V10.5C19.5,11.0523 19.0523,11.5 18.5,11.5H13.5C12.9477,11.5 12.5,11.0523 12.5,10.5V5.5ZM5.5,12.5C4.9477,12.5 4.5,12.9477 4.5,13.5V18.5C4.5,19.0523 4.9477,19.5 5.5,19.5H10.5C11.0523,19.5 11.5,19.0523 11.5,18.5V13.5C11.5,12.9477 11.0523,12.5 10.5,12.5H5.5ZM13.5,12.5H17.1667V14.5H14.5V17.167H12.5V13.5C12.5,12.9477 12.9477,12.5 13.5,12.5ZM14.5,9.5V6.5H17.5V9.5H14.5ZM17.5,14.8337V17.5H14.8334V19.5H18.5C19.0523,19.5 19.5,19.0523 19.5,18.5V14.8337H17.5ZM6.5,14.5V17.5H9.5V14.5H6.5ZM16.75,7.25H15.25V8.75H16.75V7.25ZM15.25,15.25H16.75V16.75H15.25V15.25ZM8.75,15.25H7.25V16.75H8.75V15.25ZM6.5,6.5V9.5H9.5V6.5H6.5ZM7.25,7.25H8.75V8.75H7.25V7.25Z"
+      d="M1,2.5C1,1.6716 1.6716,1 2.5,1H7C7.5523,1 8,1.4477 8,2C8,2.5523 7.5523,3 7,3H3V7C3,7.5523 2.5523,8 2,8C1.4477,8 1,7.5523 1,7V2.5ZM16,2C16,1.4477 16.4477,1 17,1H21.5C22.3284,1 23,1.6716 23,2.5V7C23,7.5523 22.5523,8 22,8C21.4477,8 21,7.5523 21,7V3H17C16.4477,3 16,2.5523 16,2ZM2,16C2.5523,16 3,16.4477 3,17V21H7C7.5523,21 8,21.4477 8,22C8,22.5523 7.5523,23 7,23H2.5C1.6716,23 1,22.3284 1,21.5V17C1,16.4477 1.4477,16 2,16ZM22,16C22.5523,16 23,16.4477 23,17V21.5C23,22.3284 22.3284,23 21.5,23H17C16.4477,23 16,22.5523 16,22C16,21.4477 16.4477,21 17,21H21V17C21,16.4477 21.4477,16 22,16ZM5.5,4.5C4.9477,4.5 4.5,4.9477 4.5,5.5V10.5C4.5,11.0523 4.9477,11.5 5.5,11.5H10.5C11.0523,11.5 11.5,11.0523 11.5,10.5V5.5C11.0523,4.9477 11.0523,4.5 10.5,4.5H5.5ZM12.5,5.5C12.5,4.9477 12.9477,4.5 13.5,4.5H18.5C19.0523,4.5 19.5,4.9477 19.5,5.5V10.5C19.5,11.0523 19.0523,11.5 18.5,11.5H13.5C12.9477,11.5 12.5,11.0523 12.5,10.5V5.5ZM5.5,12.5C4.9477,12.5 4.5,12.9477 4.5,13.5V18.5C4.5,19.0523 4.9477,19.5 5.5,19.5H10.5C11.0523,19.5 11.5,19.0523 11.5,18.5V13.5C11.0523,12.9477 11.0523,12.5 10.5,12.5H5.5ZM13.5,12.5H17.1667V14.5H14.5V17.167H12.5V13.5C12.5,12.9477 12.9477,12.5 13.5,12.5ZM14.5,9.5V6.5H17.5V9.5H14.5ZM17.5,14.8337V17.5H14.8334V19.5H18.5C19.0523,19.5 19.5,19.0523 19.5,18.5V14.8337H17.5ZM6.5,14.5V17.5H9.5V14.5H6.5ZM16.75,7.25H15.25V8.75H16.75V7.25ZM15.25,15.25H16.75V16.75H15.25V15.25ZM8.75,15.25H7.25V16.75H8.75V15.25ZM6.5,6.5V9.5H9.5V6.5H6.5ZM7.25,7.25H8.75V8.75H7.25V7.25Z"
       fill={color}
       fillRule="evenodd"
       clipRule="evenodd"
@@ -59,26 +59,31 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
 
   return (
     <div style={{
-      position: 'sticky',
+      position: 'fixed',
       bottom: 0,
+      left: 0,
+      right: 0,
       width: '100%',
+      maxWidth: '430px',
+      margin: '0 auto',
       backgroundColor: '#FFFFFF',
-      borderTop: '1px solid #ECECEC',
-      boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.04)',
+      borderTop: '0.5px solid #E8E8E8',
       zIndex: 60,
-      paddingBottom: 'max(env(safe-area-inset-bottom), 6px)'
+      height: 'calc(53.5px + env(safe-area-inset-bottom, 34px))',
+      paddingBottom: 'env(safe-area-inset-bottom, 34px)',
+      boxSizing: 'border-box'
     }}>
       <div style={{
         display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        height: '52px',
-        padding: '0 8px'
+        height: '53.5px',
+        width: '100%',
+        alignItems: 'stretch'
       }}>
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           const { IconComponent } = tab;
-          const itemColor = isActive ? '#F14635' : '#9E9E9E';
+          const iconColor = isActive ? '#F14635' : '#5A5A5A';
+          const labelColor = isActive ? '#F14635' : '#8E8E8E';
 
           return (
             <div
@@ -89,44 +94,57 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
                 flex: 1,
                 position: 'relative',
                 height: '100%',
-                cursor: 'pointer'
+                paddingTop: '8px', // Icon center is exactly 8 + 12 = 20px below bar top
+                cursor: 'pointer',
+                fontFamily: 'system-ui, -apple-system, Roboto, sans-serif'
               }}
             >
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <IconComponent color={itemColor} />
+              <div style={{
+                position: 'relative',
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <IconComponent color={iconColor} />
 
+                {/* Badge on Сообщения: pill 20.5 x 14.5, accentRed #F14635, 11 Semibold white */}
                 {tab.badge && (
                   <div style={{
                     position: 'absolute',
-                    top: '-3px',
-                    right: '-7px',
+                    top: '-4px',
+                    right: '-8.5px',
                     backgroundColor: '#F14635',
                     color: '#FFFFFF',
-                    borderRadius: '50%',
-                    width: '14px',
-                    height: '14px',
-                    fontSize: '9px',
-                    fontWeight: '700',
+                    borderRadius: '7.25px',
+                    width: '20.5px',
+                    height: '14.5px',
+                    fontSize: '11px',
+                    fontWeight: '600',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '1.5px solid #FFFFFF'
+                    lineHeight: '14.5px',
+                    boxSizing: 'border-box',
+                    pointerEvents: 'none'
                   }}>
                     {tab.badge}
                   </div>
                 )}
               </div>
 
+              {/* Label: 13 pt Regular, 4 below icon */}
               <span style={{
-                fontSize: '10.5px',
-                fontWeight: isActive ? '700' : '400',
-                color: itemColor,
-                marginTop: '3px',
-                letterSpacing: '-0.1px'
+                fontSize: '13px',
+                fontWeight: '400',
+                color: labelColor,
+                marginTop: '4px',
+                lineHeight: '16px',
+                letterSpacing: 0
               }}>
                 {tab.label}
               </span>
