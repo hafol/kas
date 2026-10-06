@@ -680,7 +680,7 @@ export const HomeScreen = ({
       }}>
         {/* Row 1: Накопительный Депозит 18% */}
         <div className="touchable" style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
-          {/* Yellow card with enlarged 3 stacked coins SVG */}
+          {/* Yellow card with exact proportional 3 stacked coins SVG */}
           <div style={{
             width: '53px',
             height: '41px',
@@ -692,8 +692,8 @@ export const HomeScreen = ({
             <svg viewBox="26 20 243 188" width="53" height="41">
               {/* Yellow card */}
               <rect x="26" y="20" width="243" height="188" rx="26" fill="#FFD302" />
-              {/* Stack of three coins - enlarged & centered */}
-              <g transform="translate(148, 115) scale(1.35) translate(-148, -115)" fill="none" stroke="#FFFFFF" strokeWidth="9.5" strokeLinecap="round" strokeLinejoin="round">
+              {/* Stack of three coins - exact ratio matching reference screenshot */}
+              <g transform="translate(148, 115) scale(1.10) translate(-148, -115)" fill="none" stroke="#FFFFFF" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round">
                 {/* top coin face */}
                 <ellipse cx="148" cy="91.75" rx="43" ry="22.75" />
                 {/* sides, pinched in between the coins */}
@@ -707,32 +707,40 @@ export const HomeScreen = ({
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <div style={{ fontSize: '15.5px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
+            <div style={{ fontSize: '15px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
               Накопительный
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '1px' }}>
-              <span style={{ fontSize: '15.5px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginTop: '1px' }}>
+              <span style={{ fontSize: '15px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
                 Депозит
               </span>
-              <span style={{
+              {/* 18% pill: exact compact dimensions from reference screenshot */}
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 backgroundColor: '#FFD302',
-                color: '#1F1F1F',
-                fontSize: '11.5px',
-                fontWeight: '700',
-                padding: '1px 6.5px',
                 borderRadius: '9px',
-                lineHeight: '14px',
-                letterSpacing: '0.2px'
+                height: '17px',
+                padding: '0 6px',
+                marginLeft: '6px'
               }}>
-                18%
-              </span>
+                <span style={{
+                  fontSize: '11px',
+                  fontWeight: '700',
+                  color: '#000000',
+                  lineHeight: 1
+                }}>
+                  18%
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Row 2: Kaspi Депозит 15% */}
         <div className="touchable" style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
-          {/* Yellow card with enlarged ₸$ SVG */}
+          {/* Yellow card with exact proportional ₸$ SVG */}
           <div style={{
             width: '53px',
             height: '41px',
@@ -744,23 +752,23 @@ export const HomeScreen = ({
             <svg viewBox="17 15 243 189" width="53" height="41">
               {/* Yellow card */}
               <rect x="17" y="15" width="243" height="189" rx="24" fill="#FFD302" />
-              {/* Tenge sign & Dollar sign - enlarged & centered */}
-              <g transform="translate(138, 109) scale(1.35) translate(-138, -109)">
+              {/* Tenge sign & Dollar sign - exact ratio matching reference screenshot */}
+              <g transform="translate(138, 109) scale(1.05) translate(-138, -109)">
                 <g fill="#FFFFFF">
                   <rect x="76" y="74" width="63" height="9.5" />
                   <rect x="76" y="91.5" width="63" height="9.5" />
                   <rect x="101" y="96" width="11" height="51" />
                 </g>
                 <g fill="none" stroke="#FFFFFF" strokeLinecap="butt" strokeLinejoin="miter">
-                  <path d="M197.5 99C197.5 89.5 190 84 180.5 84C169 84 160.5 88.5 160.5 97C160.5 106 170 109.5 180.5 113C191 116.5 198.5 120 198.5 128.5C198.5 137.5 190 142 180 142C169 142 159 137.5 159 125" strokeWidth="12" />
-                  <path d="M180.5 68v14M180 144v9" strokeWidth="9.5" />
+                  <path d="M197.5 99C197.5 89.5 190 84 180.5 84C169 84 160.5 88.5 160.5 97C160.5 106 170 109.5 180.5 113C191 116.5 198.5 120 198.5 128.5C198.5 137.5 190 142 180 142C169 142 159 137.5 159 125" strokeWidth="10" />
+                  <path d="M180.5 68v14M180 144v9" strokeWidth="9" />
                 </g>
               </g>
             </svg>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ fontSize: '15.5px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
+            <div style={{ fontSize: '15px', fontWeight: '400', color: '#1F1F1F', lineHeight: '20px' }}>
               Kaspi Депозит 15%
             </div>
           </div>
