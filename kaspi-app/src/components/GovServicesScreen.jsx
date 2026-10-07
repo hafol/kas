@@ -391,9 +391,9 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
         flexDirection: 'column',
         boxSizing: 'border-box'
       }}>
-        {/* Status Bar simulation (48pt) */}
+        {/* Safe Area Inset */}
         <div style={{
-          height: 'max(env(safe-area-inset-top, 0px), 48px)',
+          height: 'env(safe-area-inset-top, 0px)',
           width: '100%',
           flexShrink: 0
         }} />

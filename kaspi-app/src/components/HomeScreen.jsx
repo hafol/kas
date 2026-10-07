@@ -313,7 +313,7 @@ export const HomeScreen = ({
       minHeight: '100%',
       display: 'flex',
       flexDirection: 'column',
-      paddingTop: 'calc(max(env(safe-area-inset-top, 0px), 44px) + 7.5px)', // 51.5px on standard/desktop, flows naturally on scroll
+      paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)', // 12px top padding in browser, plus safe area on notch devices
       paddingBottom: 'calc(53.5px + env(safe-area-inset-bottom, 34px) + 20px)',
       overflowX: 'hidden',
       boxSizing: 'border-box',

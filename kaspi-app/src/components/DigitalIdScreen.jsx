@@ -182,27 +182,17 @@ export const DigitalIdScreen = ({ onBack }) => {
     };
   }, []);
 
-  // Handle image upload with 100% original high-resolution preservation + INSTANT AUTO-SAVE
+  // Handle image upload with 100% original high-resolution preservation (first time setup)
   const handlePhotoUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = async () => {
+      reader.onload = () => {
         const result = reader.result;
         setPhotoUrl(result);
         setScale(1);
         setOffset({ x: 0, y: 0 });
-        setIsSaved(true);
-
-        // Instantly save to persistent storage so it NEVER disappears when revisiting
-        await saveDocumentCard({
-          photoUrl: result,
-          scale: 1,
-          offsetX: 0,
-          offsetY: 0,
-          isSaved: true,
-          savedAt: Date.now()
-        });
+        setIsSaved(false); // Allow framing and show "Сохранить" button on first upload
       };
       reader.readAsDataURL(file);
     }
@@ -419,10 +409,10 @@ export const DigitalIdScreen = ({ onBack }) => {
         onChange={handlePhotoUpload}
       />
 
-      {/* Status Bar simulation (48pt) */}
-      <div style={{ height: 'max(env(safe-area-inset-top, 0px), 48px)', flexShrink: 0 }} />
+      {/* Safe Area Inset */}
+      <div style={{ height: 'env(safe-area-inset-top, 0px)', flexShrink: 0 }} />
 
-      {/* Nav Bar: height 52 (y 48–100), white, no divider */}
+      {/* Nav Bar: height 52, white, no divider */}
       <div style={{
         height: '52px',
         flexShrink: 0,
@@ -469,31 +459,6 @@ export const DigitalIdScreen = ({ onBack }) => {
         }}>
           Удостоверение личности
         </h1>
-
-        {/* Replace photo option */}
-        {photoUrl && (
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            style={{
-              position: 'absolute',
-              right: '12px',
-              top: '4px',
-              height: '44px',
-              padding: '0 8px',
-              display: 'flex',
-              alignItems: 'center',
-              background: 'none',
-              border: 'none',
-              fontSize: '13px',
-              color: primaryBlue,
-              cursor: 'pointer',
-              outline: 'none'
-            }}
-          >
-            Заменить
-          </button>
-        )}
       </div>
 
       {/* Segmented Control: top y 115, margins 18, height 40, radius 12 */}
@@ -578,8 +543,8 @@ export const DigitalIdScreen = ({ onBack }) => {
                   <span style={{ fontSize: '13px', color: textSecondary }}>Загрузка документа...</span>
                 </div>
               ) : (
-                <div style={{ padding: '43px 30px 24px 30px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {/* Document picture slot: no frame, no border, no shadow, radius 6 */}
+                <div style={{ padding: '16px 16px 20px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {/* Document picture slot: no frame, no border, no shadow, radius 8 */}
                   <div
                     ref={cardContainerRef}
                     onMouseDown={handleMouseDown}
@@ -593,7 +558,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                     }}
                     style={{
                       width: '100%',
-                      borderRadius: '6px',
+                      borderRadius: '8px',
                       overflow: 'hidden',
                       position: 'relative',
                       cursor: isSaved ? 'default' : photoUrl ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
@@ -611,9 +576,9 @@ export const DigitalIdScreen = ({ onBack }) => {
                           width: '100%',
                           height: 'auto',
                           objectFit: 'contain',
-                          objectPosition: 'center top',
+                          objectPosition: 'center center',
                           transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
-                          transformOrigin: 'center top',
+                          transformOrigin: 'center center',
                           transition: isDragging ? 'none' : 'transform 0.05s ease-out',
                           pointerEvents: 'none'
                         }}
@@ -642,13 +607,13 @@ export const DigitalIdScreen = ({ onBack }) => {
                     )}
                   </div>
 
-                  {/* Adjustment controls — only before saving */}
+                  {/* Adjustment controls — only before saving (first upload) */}
                   {photoUrl && !isSaved && (
                     <>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <button
                           type="button"
-                          onClick={() => setScale((s) => Math.max(0.4, parseFloat((s - 0.1).toFixed(2))))}
+                          onClick={() => setScale((s) => Math.max(0.3, parseFloat((s - 0.1).toFixed(2))))}
                           style={editControlButton}
                           aria-label="Уменьшить"
                         >
@@ -657,15 +622,15 @@ export const DigitalIdScreen = ({ onBack }) => {
                         <input
                           type="range"
                           min="0.5"
-                          max="3.0"
-                          step="0.05"
+                          max="5.0"
+                          step="0.02"
                           value={scale}
                           onChange={(e) => setScale(parseFloat(e.target.value))}
                           style={{ flex: 1, minWidth: 0, accentColor: primaryBlue, cursor: 'pointer' }}
                         />
                         <button
                           type="button"
-                          onClick={() => setScale((s) => Math.min(3.5, parseFloat((s + 0.1).toFixed(2))))}
+                          onClick={() => setScale((s) => Math.min(5.0, parseFloat((s + 0.1).toFixed(2))))}
                           style={editControlButton}
                           aria-label="Увеличить"
                         >
@@ -676,13 +641,15 @@ export const DigitalIdScreen = ({ onBack }) => {
                       <button
                         type="button"
                         onClick={handleSave}
-                        className="did-btn-primary"
+                        className="did-btn-primary touchable"
                         style={{
                           ...footerButtonBase,
                           height: '48px',
                           backgroundColor: primaryBlue,
                           border: 'none',
-                          color: onPrimary
+                          color: onPrimary,
+                          fontSize: '16px',
+                          fontWeight: 600
                         }}
                       >
                         <Check size={20} strokeWidth={2.5} />
