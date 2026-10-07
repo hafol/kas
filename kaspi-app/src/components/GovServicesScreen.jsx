@@ -393,7 +393,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
       }}>
         {/* Status Bar simulation (48pt) */}
         <div style={{
-          height: '48px',
+          height: 'max(env(safe-area-inset-top, 0px), 48px)',
           width: '100%',
           flexShrink: 0
         }} />

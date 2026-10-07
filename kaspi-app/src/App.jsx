@@ -132,13 +132,6 @@ export default function App() {
 
   return (
     <div className="app-viewport">
-      {/* Native Safe Area (Uses real OS status bar, no fake web status bar) */}
-      <div style={{
-        height: 'env(safe-area-inset-top, 0px)',
-        backgroundColor: currentScreen === 'gold_detail' ? '#D5AE6C' : '#FFFFFF',
-        transition: 'background-color 0.2s ease'
-      }} />
-
       {/* Screen Router */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '100%', minWidth: 0, overflowX: 'hidden' }}>
         {/* Main Tab Bar Views */}

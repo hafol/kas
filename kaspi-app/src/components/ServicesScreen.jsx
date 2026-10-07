@@ -57,7 +57,7 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
       {/* Top Profile & Language Header */}
       <div style={{
         backgroundColor: '#FFFFFF',
-        padding: '12px 16px',
+        padding: 'calc(12px + env(safe-area-inset-top, 0px)) 16px 12px 16px',
         borderBottom: '1px solid #EBEBEB',
         display: 'flex',
         justifyContent: 'space-between',

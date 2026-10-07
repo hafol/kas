@@ -313,7 +313,7 @@ export const HomeScreen = ({
       minHeight: '100%',
       display: 'flex',
       flexDirection: 'column',
-      paddingTop: '51.5px', // Exact search field top is 51.5 on 414 x 896
+      paddingTop: 'calc(max(env(safe-area-inset-top, 0px), 44px) + 7.5px)', // 51.5px on standard/desktop, flows naturally on scroll
       paddingBottom: 'calc(53.5px + env(safe-area-inset-bottom, 34px) + 20px)',
       overflowX: 'hidden',
       boxSizing: 'border-box',

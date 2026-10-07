@@ -138,12 +138,15 @@ export const MessagesScreen = ({ messages, onBack }) => {
         position: 'sticky',
         top: 0,
         zIndex: 50,
-        height: '48px',
+        height: 'calc(48px + env(safe-area-inset-top, 0px))',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
         backgroundColor: '#FFFFFF',
         borderBottom: '1px solid #F0F0F0',
         display: 'flex',
         alignItems: 'center',
-        padding: '0 16px',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        boxSizing: 'border-box',
         gap: '12px'
       }}>
         {selectedThread ? (

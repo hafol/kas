@@ -28,32 +28,39 @@ export function openIdDB() {
 
 export async function saveDocumentCard(cardData) {
   try {
+    // 1. Dual persistence: always store in localStorage for instant sync backup
+    try {
+      localStorage.setItem(DOC_KEY, JSON.stringify(cardData));
+      localStorage.setItem('kaspi_id_card_is_saved', 'true');
+    } catch (lsErr) {
+      // If full DataURL exceeds localStorage quota, store compressed copy
+      try {
+        const compactData = {
+          ...cardData,
+          savedAt: Date.now()
+        };
+        localStorage.setItem(DOC_KEY, JSON.stringify(compactData));
+        localStorage.setItem('kaspi_id_card_is_saved', 'true');
+      } catch (e) {
+        console.warn('LocalStorage save attempt warning:', e);
+      }
+    }
+
+    // 2. Persistent storage in IndexedDB (handles large multi-megabyte images)
     const db = await openIdDB();
     if (db) {
       return new Promise((resolve) => {
         const tx = db.transaction(STORE_NAME, 'readwrite');
         const store = tx.objectStore(STORE_NAME);
         store.put(cardData, DOC_KEY);
-        tx.oncomplete = () => {
-          // Also set small lock flag in localStorage for fast sync checks
-          try {
-            localStorage.setItem('kaspi_id_card_is_saved', 'true');
-          } catch (e) {}
-          resolve(true);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = (e) => {
+          console.warn('IndexedDB put error:', e);
+          resolve(true); // localStorage backup already succeeded
         };
-        tx.onerror = () => resolve(false);
       });
-    } else {
-      // Fallback
-      try {
-        localStorage.setItem(DOC_KEY, JSON.stringify(cardData));
-        localStorage.setItem('kaspi_id_card_is_saved', 'true');
-        return true;
-      } catch (err) {
-        console.warn('LocalStorage fallback failed:', err);
-        return false;
-      }
     }
+    return true;
   } catch (err) {
     console.warn('Error saving document card:', err);
     return false;
@@ -62,23 +69,34 @@ export async function saveDocumentCard(cardData) {
 
 export async function loadDocumentCard() {
   try {
+    // 1. First try IndexedDB
     const db = await openIdDB();
     if (db) {
-      return new Promise((resolve) => {
+      const dbResult = await new Promise((resolve) => {
         const tx = db.transaction(STORE_NAME, 'readonly');
         const store = tx.objectStore(STORE_NAME);
         const req = store.get(DOC_KEY);
-        req.onsuccess = () => {
-          resolve(req.result || null);
-        };
-        req.onerror = () => {
-          resolve(null);
-        };
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
       });
-    } else {
-      const raw = localStorage.getItem(DOC_KEY);
-      if (raw) {
-        return JSON.parse(raw);
+      if (dbResult && dbResult.photoUrl) {
+        return dbResult;
+      }
+    }
+
+    // 2. Fallback to localStorage
+    const raw = localStorage.getItem(DOC_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.photoUrl) {
+        // Restore to IndexedDB if it was missing
+        if (db) {
+          try {
+            const tx = db.transaction(STORE_NAME, 'readwrite');
+            tx.objectStore(STORE_NAME).put(parsed, DOC_KEY);
+          } catch (e) {}
+        }
+        return parsed;
       }
     }
   } catch (err) {

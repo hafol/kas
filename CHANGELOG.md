@@ -2,6 +2,45 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-07 23:35] — Устранение пустого пространства сверху, блокировка оверскролла за границы, естественный скролл хедера и автосохранение фото документов
+
+### 🎯 Запрос пользователя:
+> *«why when i fisrt open this native app there is this open space in the top like can you block the able to scroll more than borders like in real kaspi you cant do that this thing also happens to other pages as well»*  
+> *«forgot to mention the top search bar and top block in general gotta flow way you scroll down and why the photo that i upload dissapears when i revisit the app»*
+
+### 🛠️ Что сделано:
+1. **Устранение двойного верхнего отступа (Open Space at the Top)**:
+   - В [`App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx) удалён дублирующий статический блок `<div style={{ height: 'env(safe-area-inset-top, 0px)' }} />`, который добавлял 47–54px поверх собственного `paddingTop` каждого экрана (в сумме давая гигантскую дыру свыше 100px).
+   - В [`HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx) верхний отступ переведён на точную формулу `calc(max(env(safe-area-inset-top, 0px), 44px) + 7.5px)`. На десктопе он равен точно 51.5px (эталон), а на мобильных устройствах поле поиска прижато на 7.5px ниже строки состояния (Notch / Dynamic Island).
+   - Экраны [`GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx), [`MyBankScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx), [`TransfersScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/TransfersScreen.jsx), [`MessagesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MessagesScreen.jsx), [`ServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/ServicesScreen.jsx), [`SettingsScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/SettingsScreen.jsx) адаптированы под `env(safe-area-inset-top, 0px)` без лишних пробелов.
+
+2. **Блокировка прокрутки за пределы границ (Block scroll beyond borders)**:
+   - В [`index.css`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css) на `html`, `body` и `#root` установлено `overflow: hidden; overscroll-behavior: none; overscroll-behavior-y: none;`. Это полностью отключает браузерный эластичный резиновый отскок (rubber-banding) iOS Safari / Chrome, при котором весь фрейм приложения съезжал вниз или вверх, обнажая серый фон и пустоту за границами контейнера.
+   - Контейнер `.app-viewport` стал выделенной областью прокрутки с `overflow-y: auto`, `-webkit-overflow-scrolling: touch` и `overscroll-behavior: none;`.
+
+3. **Естественный уход верхнего блока при скролле (Flow away on scroll)**:
+   - Верхний блок поиска, баннер и сервисы теперь находятся в нормальном потоке документа внутри скролл-контейнера `.app-viewport` без паразитных статических проставок сверху. При прокрутке вниз они плавно и естественно уходят вверх за верхний край экрана, точно как в оригинальном нативном приложении Kaspi.kz.
+
+4. **Автосохранение фото документа при перезагрузке и повторном входе**:
+   - В [`DigitalIdScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/DigitalIdScreen.jsx) обработчик `handlePhotoUpload` теперь мгновенно вызывает `saveDocumentCard(...)` сразу при выборе файла, а не ждёт нажатия скрытой кнопки «Сохранить».
+   - В [`idStorage.js`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/utils/idStorage.js) реализована дублирующая схема персистентности: высококачественное фото хранится в IndexedDB (без лимитов размера) и дублируется в localStorage с обработкой превышения квоты. При повторном открытии экрана фото автоматически считывается и отображается.
+   - В шапку добавлена кнопка «Заменить» для возможности смены фото в любой момент.
+
+5. **Затронутые файлы**:
+   - [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+   - [`kaspi-app/src/index.css`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css)
+   - [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+   - [`kaspi-app/src/components/DigitalIdScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/DigitalIdScreen.jsx)
+   - [`kaspi-app/src/utils/idStorage.js`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/utils/idStorage.js)
+   - [`kaspi-app/src/components/GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx)
+   - [`kaspi-app/src/components/MyBankScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx)
+   - [`kaspi-app/src/components/TransfersScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/TransfersScreen.jsx)
+   - [`kaspi-app/src/components/MessagesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MessagesScreen.jsx)
+   - [`kaspi-app/src/components/ServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/ServicesScreen.jsx)
+   - [`kaspi-app/src/components/SettingsScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/SettingsScreen.jsx)
+
+---
+
 ## [2026-10-07 16:30] — Главный экран и таббар: 1:1 калибровка по чёткому скриншоту референса (414 x 896)
 
 ### 🎯 Запрос пользователя:

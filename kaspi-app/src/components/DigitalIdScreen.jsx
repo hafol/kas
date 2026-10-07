@@ -182,20 +182,28 @@ export const DigitalIdScreen = ({ onBack }) => {
     };
   }, []);
 
-  // Handle image upload with 100% original high-resolution preservation
+  // Handle image upload with 100% original high-resolution preservation + INSTANT AUTO-SAVE
   const handlePhotoUpload = (e) => {
-    if (isSaved) return; // Strictly locked once saved
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload = async () => {
         const result = reader.result;
         setPhotoUrl(result);
         setScale(1);
         setOffset({ x: 0, y: 0 });
-        setIsSaved(false);
+        setIsSaved(true);
+
+        // Instantly save to persistent storage so it NEVER disappears when revisiting
+        await saveDocumentCard({
+          photoUrl: result,
+          scale: 1,
+          offsetX: 0,
+          offsetY: 0,
+          isSaved: true,
+          savedAt: Date.now()
+        });
       };
-      // Read original image preserving full fidelity and detail
       reader.readAsDataURL(file);
     }
   };
@@ -402,19 +410,17 @@ export const DigitalIdScreen = ({ onBack }) => {
       fontFamily,
       letterSpacing: 0
     }}>
-      {/* Hidden file input: only active when not saved */}
-      {!isSaved && (
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={handlePhotoUpload}
-        />
-      )}
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handlePhotoUpload}
+      />
 
       {/* Status Bar simulation (48pt) */}
-      <div style={{ height: '48px', flexShrink: 0 }} />
+      <div style={{ height: 'max(env(safe-area-inset-top, 0px), 48px)', flexShrink: 0 }} />
 
       {/* Nav Bar: height 52 (y 48–100), white, no divider */}
       <div style={{
@@ -463,6 +469,31 @@ export const DigitalIdScreen = ({ onBack }) => {
         }}>
           Удостоверение личности
         </h1>
+
+        {/* Replace photo option */}
+        {photoUrl && (
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            style={{
+              position: 'absolute',
+              right: '12px',
+              top: '4px',
+              height: '44px',
+              padding: '0 8px',
+              display: 'flex',
+              alignItems: 'center',
+              background: 'none',
+              border: 'none',
+              fontSize: '13px',
+              color: primaryBlue,
+              cursor: 'pointer',
+              outline: 'none'
+            }}
+          >
+            Заменить
+          </button>
+        )}
       </div>
 
       {/* Segmented Control: top y 115, margins 18, height 40, radius 12 */}

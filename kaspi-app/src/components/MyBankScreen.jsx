@@ -11,12 +11,15 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
     }}>
       {/* Top Header */}
       <div style={{
-        height: '48px',
+        height: 'calc(48px + env(safe-area-inset-top, 0px))',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
         backgroundColor: '#FFFFFF',
         borderBottom: '1px solid #EBEBEB',
         display: 'flex',
         alignItems: 'center',
-        padding: '0 16px',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        boxSizing: 'border-box',
         gap: '12px'
       }}>
         <div onClick={onBack} className="touchable" style={{ padding: '6px' }}>
