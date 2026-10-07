@@ -53,7 +53,7 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
   const tabs = [
     { id: 'home', label: 'Главная', IconComponent: NavIconHome },
     { id: 'qr', label: 'Kaspi QR', IconComponent: NavIconQR },
-    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, badge: 15 },
+    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, badge: 17 },
     { id: 'services', label: 'Сервисы', IconComponent: NavIconServices }
   ];
 
@@ -67,7 +67,8 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
       maxWidth: '430px',
       margin: '0 auto',
       backgroundColor: '#FFFFFF',
-      borderTop: '0.5px solid #E8E8E8',
+      borderTop: '0.5px solid #E0E0E0',
+      boxShadow: 'none',
       zIndex: 60,
       height: 'calc(53.5px + env(safe-area-inset-bottom, 34px))',
       paddingBottom: 'env(safe-area-inset-bottom, 34px)',
@@ -97,7 +98,7 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 flex: 1,
                 position: 'relative',
                 height: '100%',
-                paddingTop: '8px', // Icon center is exactly 8 + 12 = 20px below bar top
+                paddingTop: '8.5px', // Icon box (24px) top is 8.5; icon centre is 8.5 + 12 = 20.5 below bar top (y 829 on 414)
                 cursor: 'pointer',
                 fontFamily: 'system-ui, -apple-system, Roboto, sans-serif'
               }}
@@ -112,25 +113,23 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
               }}>
                 <IconComponent color={iconColor} />
 
-                {/* Badge on Сообщения: round 17 x 17 (grows into a pill for wider counts), centre at
-                    (19, 0.5) of the icon box as in the original, accentRed #F14635, 11 Semibold white */}
+                {/* Messages badge: pill 20.5 x 14.5, radius 7.25, #F14635, 11 Semibold white, left edge at icon center (12px), top 2 above icon top (-2px) */}
                 {tab.badge && (
                   <div style={{
                     position: 'absolute',
-                    top: '-8px',
-                    left: '10.5px',
+                    top: '-2px',
+                    left: '12px',
+                    width: '20.5px',
+                    height: '14.5px',
+                    borderRadius: '7.25px',
                     backgroundColor: '#F14635',
                     color: '#FFFFFF',
-                    borderRadius: '8.5px',
-                    minWidth: '17px',
-                    height: '17px',
-                    padding: '0 2px',
                     fontSize: '11px',
                     fontWeight: '600',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    lineHeight: '17px',
+                    lineHeight: 1,
                     boxSizing: 'border-box',
                     pointerEvents: 'none'
                   }}>
@@ -139,13 +138,13 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 )}
               </div>
 
-              {/* Label: 13 pt Regular, 4 below icon */}
+              {/* Label: 12 Regular, label cap top 40.5 below bar top (y 849) */}
               <span style={{
-                fontSize: '13px',
+                fontSize: '12px',
                 fontWeight: '400',
                 color: labelColor,
                 marginTop: '4px',
-                lineHeight: '16px',
+                lineHeight: '14px',
                 letterSpacing: 0
               }}>
                 {tab.label}

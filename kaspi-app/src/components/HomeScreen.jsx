@@ -313,8 +313,8 @@ export const HomeScreen = ({
       minHeight: '100%',
       display: 'flex',
       flexDirection: 'column',
-      paddingTop: '52.5px', // Exact search field top is 52.5 from the top of the screen (4.5 below 48 pt status bar)
-      paddingBottom: 'calc(87.5px + 20px)', // Scroll content clears the fixed bottom tab bar (87.5 pt)
+      paddingTop: '51.5px', // Exact search field top is 51.5 on 414 x 896
+      paddingBottom: 'calc(53.5px + env(safe-area-inset-bottom, 34px) + 20px)',
       overflowX: 'hidden',
       boxSizing: 'border-box',
       fontFamily: 'system-ui, -apple-system, Roboto, sans-serif',
@@ -322,19 +322,20 @@ export const HomeScreen = ({
     }}>
       {/* =====================================================================
           1. HEADER (search + cart)
-          Search field: x 18, width = screen - 18 - 64.5 (331.5 on 414), height 40.5, radius 8, fill searchBg #F2F2F2, no border.
-          Magnifier: 20 x 20, colour textSecondary #8E8E8E, left edge 11 inside field, vertically centred.
-          Placeholder: 17 pt Regular, colour #8E8E8E, 10 pt after magnifier.
-          Camera/scan icon: box 28.5 x 22, right edge 12 inside field.
-          Cart icon: 26 x 25, colour #9E9E9E, 15.5 right of field, vertically centred.
-          Badge: 15.5 circle accentRed #F14635, number 11 Semibold white, top-right of cart.
+          Search field: x 18, width = screen - 64 (332 on 414), top 51.5, height 42,
+          corner radius 10, fill #F2F2F2. No border.
+          Magnifier 19 x 19, left edge 12 inside field, vertically centred, #8E8E8E.
+          Placeholder "Поиск по Kaspi.kz": 17 Regular, #8E8E8E, starts x 60 (11 after magnifier).
+          Camera icon box 23.5 x 20, right edge 14.5 inside field.
+          Cart icon 26 x 25, left edge 14.5 after field (x 364.5). Vertical centre y 72.5.
+          Cart badge: circle 15.5, #F14635, number 11 Semibold white, top-right.
       ===================================================================== */}
       <div style={{
         paddingLeft: '18px',
-        paddingRight: '23px',
+        paddingRight: '23.5px',
         display: 'flex',
         alignItems: 'center',
-        height: '40.5px',
+        height: '42px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
@@ -344,49 +345,57 @@ export const HomeScreen = ({
           className="touchable"
           style={{
             flex: 1,
-            height: '40.5px',
+            height: '42px',
             backgroundColor: '#F2F2F2',
-            borderRadius: '8px',
+            borderRadius: '10px',
             border: 'none',
             display: 'flex',
             alignItems: 'center',
-            paddingLeft: '11px',
-            paddingRight: '12px',
+            paddingLeft: '12px',
+            paddingRight: '14.5px',
             cursor: 'pointer',
             boxSizing: 'border-box'
           }}
         >
-          {/* Magnifier: 20 x 20, #8E8E8E */}
-          <Search size={20} color="#8E8E8E" strokeWidth={2.2} style={{ flexShrink: 0 }} />
+          {/* Magnifier 19 x 19, #8E8E8E */}
+          <Search size={19} color="#8E8E8E" strokeWidth={2.2} style={{ flexShrink: 0 }} />
 
-          {/* Placeholder: 17 pt Regular, 10 pt after magnifier */}
+          {/* Placeholder: 17 Regular, #8E8E8E, 11 after magnifier */}
           <span style={{
             fontSize: '17px',
             fontWeight: '400',
             color: '#8E8E8E',
-            marginLeft: '10px',
+            marginLeft: '11px',
             flex: 1,
             userSelect: 'none',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            letterSpacing: 0
+            letterSpacing: 0,
+            lineHeight: '22px'
           }}>
             Поиск по Kaspi.kz
           </span>
 
-          {/* Camera/scan icon: box 28.5 x 22, right edge 12 inside field */}
-          <div style={{ width: '28.5px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <CameraSparkleIcon size={25} color="#555555" />
+          {/* Camera icon box 23.5 x 20, right edge 14.5 inside field */}
+          <div style={{
+            width: '23.5px',
+            height: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            <CameraSparkleIcon size={20} color="#555555" />
           </div>
         </div>
 
-        {/* 15.5 right of the field: Cart icon 26 x 25 */}
+        {/* Cart icon 26 x 25, 14.5 after field */}
         <div
           onClick={() => onOpenService('cart')}
           className="touchable"
           style={{
-            marginLeft: '15.5px',
+            marginLeft: '14.5px',
             width: '26px',
             height: '25px',
             position: 'relative',
@@ -398,7 +407,7 @@ export const HomeScreen = ({
           }}
         >
           <TopBarCartIcon color="#9E9E9E" />
-          {/* Badge: 15.5 circle accentRed, number 11 Semibold white, top-right */}
+          {/* Cart badge: circle 15.5, #F14635, number 11 Semibold white */}
           <div style={{
             position: 'absolute',
             top: '-5px',
@@ -423,22 +432,23 @@ export const HomeScreen = ({
       </div>
 
       {/* =====================================================================
-          2. PROMO BANNER
-          8 pt below search field.
-          Box: x 17, width = screen - 33 (381), height 117.5. Aspect ratio 3.23 : 1, radius 10.
-          ONE supplied image, object-fit: cover, NO text/chips on top in code.
-          Page dots: 4 pt dots, 6 pt apart, centred horizontally, 6 pt above banner bottom; active white, others white 50 %.
+          2. BANNER
+          12 below search field (top 105.5).
+          Box x 17, width = screen - 34 (380), height 111.5. Aspect ratio 3.40 : 1, radius 10.
+          Page indicator: capsule 39 x 7.5, radius 3.75, fill white 30%, bottom 6 above banner bottom.
+          4 dots, 4 pt each, centre-to-centre 8.75. Active pure white, others white 50%.
       ===================================================================== */}
       <div style={{
-        marginTop: '8px',
+        marginTop: '12px',
         paddingLeft: '17px',
-        paddingRight: '16px',
+        paddingRight: '17px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
         <div style={{
           width: '100%',
-          height: '117.5px',
+          aspectRatio: '3.40 / 1',
+          maxHeight: '111.5px',
           borderRadius: '10px',
           overflow: 'hidden',
           position: 'relative',
@@ -492,15 +502,20 @@ export const HomeScreen = ({
             ))}
           </div>
 
-          {/* Page dots: 4 pt dots, 6 pt apart, centred horizontally, 6 pt above bottom; active white, others white 50 % */}
+          {/* Page indicator: capsule 39 x 7.5, radius 3.75, fill white 30%, bottom 6 above banner bottom */}
           <div style={{
             position: 'absolute',
             bottom: '6px',
             left: '50%',
             transform: 'translateX(-50%)',
+            width: '39px',
+            height: '7.5px',
+            borderRadius: '3.75px',
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px',
+            justifyContent: 'center',
+            gap: '4.75px',
             zIndex: 2,
             pointerEvents: 'none'
           }}>
@@ -512,7 +527,8 @@ export const HomeScreen = ({
                   height: '4px',
                   borderRadius: '50%',
                   backgroundColor: activeBannerIndex === idx ? '#FFFFFF' : 'rgba(255, 255, 255, 0.5)',
-                  transition: 'background-color 0.2s ease'
+                  transition: 'background-color 0.2s ease',
+                  flexShrink: 0
                 }}
               />
             ))}
@@ -521,24 +537,25 @@ export const HomeScreen = ({
       </div>
 
       {/* =====================================================================
-          3. SHORTCUT GRID (2 rows x 4)
-          4 equal columns, centres at 62.5 / 159.5 / 256.5 / 353.5 on 414. Row pitch 78.5.
-          First icon row top 17 below banner.
-          Icon box 34 x 34. Colour accentRed #F14635. Magnum tile 34 x 34, radius 8.
-          Label: 16 pt Regular textPrimary #000, centred under icon, label top 8 below icon.
-          Hairline divider (full width, 0.5, divider #E8E8E8) 14 below second row labels.
+          3. SHORTCUT GRID (2 x 4)
+          4 equal columns, centres x 63.5 / 159.5 / 256 / 353.
+          Icon box 34 x 34. Magnum tile 34 x 34, radius 8. Line icons #F14635.
+          Row 1 icon top 20 below banner (y 237.5).
+          Label: 15 Regular #000, centred, cap top 13.5 below icon box bottom.
+          Row pitch 77.5 (icon top to icon top).
+          Divider: full width, 0.5 pt, #EBEBEB, 14 below row 2 labels (y 389).
       ===================================================================== */}
       <div style={{
-        marginTop: '17px',
-        paddingLeft: '14px',
-        paddingRight: '12px',
+        marginTop: '20px',
+        paddingLeft: '15.5px',
+        paddingRight: '15.5px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          rowGap: '16.5px', // 34px icon + 8px gap + ~20px label = 62px cell. 62px + 16.5px = 78.5px row pitch!
+          rowGap: '12px', // icon 34 + label 13.5 + text 18 = 65.5; 65.5 + 12 = 77.5 pitch!
           width: '100%'
         }}>
           {/* Row 1 */}
@@ -551,7 +568,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconShop size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Магазин
             </span>
           </div>
@@ -565,7 +582,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconMyBank size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Мой Банк
             </span>
           </div>
@@ -579,7 +596,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconPayments size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Платежи
             </span>
           </div>
@@ -593,7 +610,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconTransfers size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Переводы
             </span>
           </div>
@@ -608,7 +625,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconMagnum size={34} />
             </div>
-            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Magnum
             </span>
           </div>
@@ -622,7 +639,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconTravel size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Travel
             </span>
           </div>
@@ -636,7 +653,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconGov size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Госуслуги
             </span>
           </div>
@@ -650,28 +667,35 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconJobs size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '16px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '20px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Работа
             </span>
           </div>
         </div>
       </div>
 
-      {/* Hairline divider (full width, 0.5, #E8E8E8) 14 below second row labels */}
+      {/* Divider: full width, 0.5 pt, #EBEBEB, 14 below row 2 labels (y 389) */}
       <div style={{
         marginTop: '14px',
         height: '0.5px',
-        backgroundColor: '#E8E8E8',
+        backgroundColor: '#EBEBEB',
         width: '100%'
       }} />
 
       {/* =====================================================================
           4. DEPOSIT ROWS
+          Tile 1 top 23 below divider (y 412).
+          Tiles: x 18, 56 x 44, radius 6, #FFD302.
+          Row pitch 53, gap between tiles is 9.
+          Text starts 21 after tile (x 95). 18 Regular #000, line height 24.5.
+          Row 1: line 1 "Накопительный" top aligned with tile top. Line 2 "Депозит" + pill.
+          Rate pill: 6 after "Депозит", 39 x 23, radius 11.5, #FFD302, text "18%" 15.5 Semibold #000.
+          Row 2: "Kaspi Депозит 15%" one line, vertically centred on tile.
       ===================================================================== */}
       <div style={{
         marginTop: '23px',
-        paddingLeft: '17px',
-        paddingRight: '16px',
+        paddingLeft: '18px',
+        paddingRight: '18px',
         display: 'flex',
         flexDirection: 'column',
         gap: '9px',
@@ -679,93 +703,96 @@ export const HomeScreen = ({
         boxSizing: 'border-box'
       }}>
         {/* Row 1: Накопительный Депозит 18% */}
-        <div className="touchable" style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
-          {/* Yellow card with exact proportional 3 stacked coins SVG */}
+        <div className="touchable" style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer' }}>
+          {/* Yellow tile: 56 x 44, radius 6, #FFD302 */}
           <div style={{
-            width: '53px',
-            height: '41px',
+            width: '56px',
+            height: '44px',
+            borderRadius: '6px',
+            backgroundColor: '#FFD302',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexShrink: 0
+            flexShrink: 0,
+            overflow: 'hidden'
           }}>
-            <svg viewBox="26 20 243 188" width="53" height="41">
-              {/* Yellow card */}
-              <rect x="26" y="20" width="243" height="188" rx="26" fill="#FFD302" />
-              {/* Stack of three coins - exact ratio matching reference screenshot */}
+            <svg viewBox="26 20 243 188" width="56" height="44">
               <g transform="translate(148, 115) scale(1.10) translate(-148, -115)" fill="none" stroke="#FFFFFF" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round">
-                {/* top coin face */}
                 <ellipse cx="148" cy="91.75" rx="43" ry="22.75" />
-                {/* sides, pinched in between the coins */}
                 <path d="M105 92Q110.5 103.5 106 115Q110.5 127 105 139" />
                 <path d="M191 92Q188 103.5 190.5 115Q188 127 191 139" />
-                {/* lower rims of the second and third coins */}
                 <path d="M106 115a42 22.5 0 0 0 84 0" />
                 <path d="M105 139a43 22.5 0 0 0 86 0" />
               </g>
             </svg>
           </div>
 
-          {/* Text — Row 1 */}
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          {/* Text starts 21 after tile (x 95) */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            marginLeft: '21px'
+          }}>
             <div style={{
-              fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
-              fontSize: '15px',
+              fontSize: '18px',
               fontWeight: '400',
-              color: '#1F1F1F',
-              lineHeight: '20px'
+              color: '#000000',
+              lineHeight: '24.5px',
+              letterSpacing: 0
             }}>
               Накопительный
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', marginTop: '2px' }}>
-              <div style={{
-                fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
-                fontSize: '15px',
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{
+                fontSize: '18px',
                 fontWeight: '400',
-                color: '#1F1F1F',
-                lineHeight: '20px'
+                color: '#000000',
+                lineHeight: '24.5px',
+                letterSpacing: 0
               }}>
                 Депозит
-              </div>
-              {/* 18% pill */}
+              </span>
+              {/* Rate pill: 6 after "Депозит", 39 x 23, radius 11.5, #FFD302, 18% 15.5 Semibold #000 */}
               <div style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: '#FFD302',
-                borderRadius: '50px',
-                padding: '2px 8px',
-                marginLeft: '7px'
+                borderRadius: '11.5px',
+                width: '39px',
+                height: '23px',
+                marginLeft: '6px',
+                flexShrink: 0
               }}>
-                <div style={{
-                  fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
-                  fontSize: '15px',
-                  fontWeight: '700',
+                <span style={{
+                  fontSize: '15.5px',
+                  fontWeight: '600',
                   color: '#000000',
                   lineHeight: 1
                 }}>
                   18%
-                </div>
+                </span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Row 2: Kaspi Депозит 15% */}
-        <div className="touchable" style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
-          {/* Yellow card with exact proportional ₸$ SVG */}
+        <div className="touchable" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+          {/* Yellow tile: 56 x 44, radius 6, #FFD302 */}
           <div style={{
-            width: '53px',
-            height: '41px',
+            width: '56px',
+            height: '44px',
+            borderRadius: '6px',
+            backgroundColor: '#FFD302',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexShrink: 0
+            flexShrink: 0,
+            overflow: 'hidden'
           }}>
-            <svg viewBox="17 15 243 189" width="53" height="41">
-              {/* Yellow card */}
-              <rect x="17" y="15" width="243" height="189" rx="24" fill="#FFD302" />
-              {/* Tenge sign & Dollar sign - exact ratio matching reference screenshot */}
+            <svg viewBox="17 15 243 189" width="56" height="44">
               <g transform="translate(138, 109) scale(1.05) translate(-138, -109)">
                 <g fill="#FFFFFF">
                   <rect x="76" y="74" width="63" height="9.5" />
@@ -780,50 +807,66 @@ export const HomeScreen = ({
             </svg>
           </div>
 
-          {/* Text — Row 2: identical structure & styles as Row 1 */}
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <div style={{
-              fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
-              fontSize: '15px',
+          {/* Text — Row 2: 21 after tile, vertically centred on tile */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginLeft: '21px',
+            height: '44px'
+          }}>
+            <span style={{
+              fontSize: '18px',
               fontWeight: '400',
-              color: '#1F1F1F',
-              lineHeight: '20px'
+              color: '#000000',
+              lineHeight: '24.5px',
+              letterSpacing: 0
             }}>
               Kaspi Депозит 15%
-            </div>
+            </span>
           </div>
         </div>
       </div>
 
-
       {/* =====================================================================
           5. "ВЫ НЕДАВНО СМОТРЕЛИ" CAROUSEL
+          Title: 18 Bold #000, x 18, top 26 below tile 2 bottom.
+          Images start 15.5 below title bottom.
+          Card: image 110 x 110, radius 10, white fill, 1 px border #EFEFEF, x of first card 18.
+          Card pitch 119.5, gap between cards 9.5.
+          Image chip: height 19.5, radius 6, 13 Bold white, pinned bottom-left, 1 inside image.
+          Price: 15 Bold #000, 7.5 below image. Discount: price #F14635, old price 12 Regular #8E8E8E, 4 after it.
+          Bonus box: 8 below price bottom. Size 110 x 38, radius 8, fill #E6F8D0, padding 5 left, 4 top.
+            Line 1: bonus price 13 Bold #54A000.
+            Line 2: "с учетом Бонусов" 12 Regular #000.
+          Product name: 13 Regular #000, 1 line, tail ellipsis, 5.5 below box (or 8 below price if no bonus box).
+          Rating row: top 18.5 below name top (y 767.5). Value 13 Semibold #000, star 12 #F14635, count 13 Regular #8E8E8E.
+          Divider 0.5 #EBEBEB at y 799 (17.5 under rating row), full width.
       ===================================================================== */}
       <div style={{
-        marginTop: '22px',
+        marginTop: '26px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        {/* Section Title */}
+        {/* Section Title: 18 Bold #000, x 18 */}
         <div style={{
-          paddingLeft: '16px',
-          paddingRight: '16px',
+          paddingLeft: '18px',
+          paddingRight: '18px',
           fontSize: '18px',
           fontWeight: '700',
-          color: '#1E1E1E',
-          lineHeight: '22px',
-          marginBottom: '10px'
+          color: '#000000',
+          lineHeight: '22px'
         }}>
           Вы недавно смотрели
         </div>
 
-        {/* Horizontal Carousel */}
+        {/* Horizontal Carousel: images start 15.5 below title bottom */}
         <div style={{
+          marginTop: '15.5px',
           display: 'flex',
-          gap: '10px',
+          gap: '9.5px',
           overflowX: 'auto',
-          paddingLeft: '16px',
-          paddingRight: '16px',
+          paddingLeft: '18px',
+          paddingRight: '18px',
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
           touchAction: 'pan-y',
@@ -835,22 +878,22 @@ export const HomeScreen = ({
               className="touchable"
               style={{
                 flexShrink: 0,
-                width: '102px',
+                width: '110px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 cursor: 'pointer'
               }}
             >
-              {/* Image box: 102 x 102, radius 10, 1px border #ECECEC, white fill, objectFit cover */}
+              {/* Image box: 110 x 110, radius 10, white fill, 1 px border #EFEFEF */}
               <div style={{
-                width: '102px',
-                height: '102px',
-                minWidth: '102px',
-                minHeight: '102px',
+                width: '110px',
+                height: '110px',
+                minWidth: '110px',
+                minHeight: '110px',
                 borderRadius: '10px',
                 backgroundColor: '#FFFFFF',
-                border: '1px solid #ECECEC',
+                border: '1px solid #EFEFEF',
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
@@ -869,94 +912,83 @@ export const HomeScreen = ({
                   }}
                 />
 
-                {/* Chips at bottom-left corner */}
-                <div style={{
-                  position: 'absolute',
-                  left: '0px',
-                  bottom: '0px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3px',
-                  zIndex: 2
-                }}>
-                  {(item.discountChip || item.bonusChip) && (
-                    <div style={{
-                      height: '16px',
-                      padding: '0 5px',
-                      borderTopLeftRadius: '3px',
-                      borderTopRightRadius: '4px',
-                      borderBottomRightRadius: '4px',
-                      borderBottomLeftRadius: '9px',
-                      backgroundColor: item.discountChip ? '#F14635' : '#54A000',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      {item.bonusChip ? (
-                        <div style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '2px'
-                        }}>
-                          {item.hasFlame && (
-                            <KaspiYellowFlame size={10} style={{ marginRight: '1px' }} />
-                          )}
-                          <span style={{
-                            fontSize: '9.5px',
-                            fontWeight: '700',
-                            color: '#FFFFFF',
-                            lineHeight: '16px',
-                            letterSpacing: '-0.2px',
-                            display: 'inline-flex',
-                            alignItems: 'baseline',
-                            gap: '2px'
-                          }}>
-                            <span>{item.bonusChip.replace(/\s*[БB]$/i, '').trim()}</span>
-                            <KaspiBonusSymbol height={7} color="#FFFFFF" />
-                          </span>
-                        </div>
-                      ) : (
+                {/* Image chip: height 19.5, radius 6, 13 Bold white, pinned bottom-left, 1 inside image */}
+                {(item.discountChip || item.bonusChip) && (
+                  <div style={{
+                    position: 'absolute',
+                    left: '1px',
+                    bottom: '1px',
+                    height: '19.5px',
+                    borderRadius: '6px',
+                    padding: '0 6px',
+                    backgroundColor: item.discountChip ? '#F14635' : '#54A000',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 2
+                  }}>
+                    {item.bonusChip ? (
+                      <div style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '2px'
+                      }}>
+                        {item.hasFlame && (
+                          <KaspiYellowFlame size={10} style={{ marginRight: '1px' }} />
+                        )}
                         <span style={{
-                          fontSize: '9.5px',
+                          fontSize: '13px',
                           fontWeight: '700',
                           color: '#FFFFFF',
-                          lineHeight: '16px',
-                          letterSpacing: '-0.2px'
+                          lineHeight: '19.5px',
+                          display: 'inline-flex',
+                          alignItems: 'baseline',
+                          gap: '2px'
                         }}>
-                          {item.discountChip}
+                          <span>{item.bonusChip.replace(/\s*[БB]$/i, '').trim()}</span>
+                          <KaspiBonusSymbol height={8} color="#FFFFFF" />
                         </span>
-                      )}
-                    </div>
-                  )}
-                </div>
+                      </div>
+                    ) : (
+                      <span style={{
+                        fontSize: '13px',
+                        fontWeight: '700',
+                        color: '#FFFFFF',
+                        lineHeight: '19.5px'
+                      }}>
+                        {item.discountChip}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
 
-              {/* Price row */}
+              {/* Price: 15 Bold #000, 7.5 below image */}
               <div style={{
-                marginTop: '4px',
+                marginTop: '7.5px',
                 display: 'flex',
                 alignItems: 'baseline',
-                gap: '4px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 width: '100%'
               }}>
                 <span style={{
-                  fontSize: '14.5px',
+                  fontSize: '15px',
                   fontWeight: '700',
                   color: item.oldPrice ? '#F14635' : '#000000',
-                  lineHeight: '17px',
+                  lineHeight: '18px',
                   flexShrink: 0
                 }}>
                   {item.price}
                 </span>
                 {item.oldPrice && (
                   <span style={{
-                    fontSize: '10.5px',
+                    fontSize: '12px',
                     fontWeight: '400',
-                    color: '#757575',
+                    color: '#8E8E8E',
                     textDecoration: 'line-through',
-                    lineHeight: '13px',
+                    lineHeight: '15px',
+                    marginLeft: '4px',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden'
                   }}>
@@ -965,37 +997,35 @@ export const HomeScreen = ({
                 )}
               </div>
 
-              {/* Bonus box */}
+              {/* Bonus box: 8 below price bottom, 110 x 38, radius 8, fill #E6F8D0, padding 5 left, 4 top */}
               {item.bonusBox && (
                 <div style={{
-                  marginTop: '3px',
-                  height: '28px',
-                  width: '100%',
-                  padding: '2px 5px',
-                  borderRadius: '5px',
+                  marginTop: '8px',
+                  width: '110px',
+                  height: '38px',
+                  borderRadius: '8px',
                   backgroundColor: '#E6F8D0',
+                  padding: '4px 5px',
                   boxSizing: 'border-box',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center'
                 }}>
                   <div style={{
-                    fontSize: '11.5px',
+                    fontSize: '13px',
                     fontWeight: '700',
                     color: '#54A000',
-                    lineHeight: '13px',
+                    lineHeight: '15px',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden'
                   }}>
                     {item.bonusBox.price}
                   </div>
                   <div style={{
-                    fontSize: '9px',
+                    fontSize: '12px',
                     fontWeight: '400',
-                    color: '#1F1F1F',
-                    lineHeight: '11px',
-                    marginTop: '1px',
-                    letterSpacing: '-0.25px',
+                    color: '#000000',
+                    lineHeight: '14px',
                     whiteSpace: 'nowrap'
                   }}>
                     {item.bonusBox.caption}
@@ -1003,42 +1033,42 @@ export const HomeScreen = ({
                 </div>
               )}
 
-              {/* Product name */}
+              {/* Product name: 13 Regular #000, 1 line, tail ellipsis, 5.5 below box (or 8 below price if no bonus box) */}
               <div style={{
-                marginTop: '3px',
-                fontSize: '11.5px',
+                marginTop: item.bonusBox ? '5.5px' : '8px',
+                fontSize: '13px',
                 fontWeight: '400',
-                color: '#1F1F1F',
-                width: '100%',
+                color: '#000000',
+                width: '110px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                lineHeight: '14px'
+                lineHeight: '16px'
               }}>
                 {item.title}
               </div>
 
-              {/* Rating row */}
+              {/* Rating row: top 18.5 below name top (y 767.5). Value 13 Semibold #000, star 12 #F14635, count 13 Regular #8E8E8E */}
               <div style={{
-                marginTop: '2px',
+                marginTop: '2.5px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '3px'
               }}>
                 <span style={{
-                  fontSize: '11px',
+                  fontSize: '13px',
                   fontWeight: '600',
-                  color: '#1F1F1F',
-                  lineHeight: '13px'
+                  color: '#000000',
+                  lineHeight: '15px'
                 }}>
                   {item.rating}
                 </span>
-                <KaspiRatingStar size={10} color="#F14635" />
+                <KaspiRatingStar size={12} color="#F14635" />
                 <span style={{
-                  fontSize: '10.5px',
+                  fontSize: '13px',
                   fontWeight: '400',
-                  color: '#757575',
-                  lineHeight: '13px'
+                  color: '#8E8E8E',
+                  lineHeight: '15px'
                 }}>
                   {item.reviews}
                 </span>
@@ -1048,11 +1078,11 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* Hairline divider 0.5 under the carousel, #E8E8E8 */}
+      {/* Divider 0.5 #EBEBEB at y 799 (17.5 under rating row), full width */}
       <div style={{
-        marginTop: '16px',
+        marginTop: '17.5px',
         height: '0.5px',
-        backgroundColor: '#E8E8E8',
+        backgroundColor: '#EBEBEB',
         width: '100%'
       }} />
 
