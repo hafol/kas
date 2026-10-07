@@ -313,7 +313,7 @@ export const HomeScreen = ({
       minHeight: '100%',
       display: 'flex',
       flexDirection: 'column',
-      paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)', // 12px top padding in browser, plus safe area on notch devices
+      paddingTop: 0,
       paddingBottom: 'calc(53.5px + env(safe-area-inset-bottom, 34px) + 20px)',
       overflowX: 'hidden',
       boxSizing: 'border-box',
@@ -321,21 +321,26 @@ export const HomeScreen = ({
       letterSpacing: 0
     }}>
       {/* =====================================================================
-          1. HEADER (search + cart)
-          Search field: x 18, width = screen - 64 (332 on 414), top 51.5, height 42,
+          1. HEADER (search + cart) — STICKY WITH SCROLL
+          Search field: x 18, width = screen - 64 (332 on 414), height 42,
           corner radius 10, fill #F2F2F2. No border.
           Magnifier 19 x 19, left edge 12 inside field, vertically centred, #8E8E8E.
           Placeholder "Поиск по Kaspi.kz": 17 Regular, #8E8E8E, starts x 60 (11 after magnifier).
-          Camera icon box 23.5 x 20, right edge 14.5 inside field.
-          Cart icon 26 x 25, left edge 14.5 after field (x 364.5). Vertical centre y 72.5.
+          Camera icon box enlarged with sparkle.
+          Cart icon 26 x 25, left edge 14.5 after field.
           Cart badge: circle 15.5, #F14635, number 11 Semibold white, top-right.
       ===================================================================== */}
       <div style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 45,
+        backgroundColor: '#FFFFFF',
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 8px)',
+        paddingBottom: '6px',
         paddingLeft: '18px',
         paddingRight: '23.5px',
         display: 'flex',
         alignItems: 'center',
-        height: '42px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
@@ -352,7 +357,7 @@ export const HomeScreen = ({
             display: 'flex',
             alignItems: 'center',
             paddingLeft: '12px',
-            paddingRight: '14.5px',
+            paddingRight: '12px',
             cursor: 'pointer',
             boxSizing: 'border-box'
           }}
@@ -377,16 +382,16 @@ export const HomeScreen = ({
             Поиск по Kaspi.kz
           </span>
 
-          {/* Camera icon box 23.5 x 20, right edge 14.5 inside field */}
+          {/* Camera icon box enlarged with sparkle */}
           <div style={{
-            width: '23.5px',
-            height: '20px',
+            width: '30px',
+            height: '26px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0
           }}>
-            <CameraSparkleIcon size={20} color="#555555" />
+            <CameraSparkleIcon size={27} color="#555555" />
           </div>
         </div>
 
@@ -433,13 +438,13 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           2. BANNER
-          12 below search field (top 105.5).
+          6 below sticky search bar (giving total 12px from search field).
           Box x 17, width = screen - 34 (380), height 111.5. Aspect ratio 3.40 : 1, radius 10.
           Page indicator: capsule 39 x 7.5, radius 3.75, fill white 30%, bottom 6 above banner bottom.
           4 dots, 4 pt each, centre-to-centre 8.75. Active pure white, others white 50%.
       ===================================================================== */}
       <div style={{
-        marginTop: '12px',
+        marginTop: '6px',
         paddingLeft: '17px',
         paddingRight: '17px',
         width: '100%',
