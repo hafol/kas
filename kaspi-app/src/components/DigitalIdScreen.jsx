@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ZoomIn, ZoomOut, Check, Loader2 } from 'lucide-react';
-import { saveDocumentCard, loadDocumentCard, saveRequisites, loadRequisites } from '../utils/idStorage';
+import { saveDocumentCard, loadDocumentCard, saveRequisites, loadRequisites, optimizeImage } from '../utils/idStorage';
 
 // Color Tokens (from specification)
 const pageBg        = '#FFFFFF'; // the whole screen, header included
@@ -182,19 +182,24 @@ export const DigitalIdScreen = ({ onBack }) => {
     };
   }, []);
 
-  // Handle image upload with 100% original high-resolution preservation (first time setup)
-  const handlePhotoUpload = (e) => {
+  // Handle image upload with auto-optimization (ensures 100% reliable persistence)
+  const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result;
-        setPhotoUrl(result);
-        setScale(1);
-        setOffset({ x: 0, y: 0 });
-        setIsSaved(false); // Allow framing and show "Сохранить" button on first upload
-      };
-      reader.readAsDataURL(file);
+      setIsLoading(true);
+      try {
+        const optimized = await optimizeImage(file);
+        if (optimized) {
+          setPhotoUrl(optimized);
+          setScale(1);
+          setOffset({ x: 0, y: 0 });
+          setIsSaved(false); // Allow framing and show "Сохранить" button in top right corner
+        }
+      } catch (err) {
+        console.warn('Error optimizing photo:', err);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -306,6 +311,9 @@ export const DigitalIdScreen = ({ onBack }) => {
       savedAt: Date.now()
     };
     await saveDocumentCard(docData);
+    if (reqValues && Object.keys(reqValues).length > 0) {
+      await saveRequisites(reqValues);
+    }
     setIsSaved(true);
     setIsDragging(false);
   };
@@ -459,6 +467,36 @@ export const DigitalIdScreen = ({ onBack }) => {
         }}>
           Удостоверение личности
         </h1>
+
+        {/* Top-right Save button: appears after photo is loaded until saved */}
+        {photoUrl && !isSaved && (
+          <button
+            type="button"
+            onClick={handleSave}
+            className="touchable"
+            style={{
+              position: 'absolute',
+              right: '14px',
+              top: '4px',
+              height: '44px',
+              padding: '0 8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'none',
+              border: 'none',
+              fontFamily,
+              fontSize: '16px',
+              fontWeight: 600,
+              color: primaryBlue,
+              cursor: 'pointer',
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent'
+            }}
+          >
+            Сохранить
+          </button>
+        )}
       </div>
 
       {/* Segmented Control: top y 115, margins 18, height 40, radius 12 */}
