@@ -679,26 +679,24 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* Divider: full width, 0.5 pt, #EBEBEB, 14 below row 2 labels (y 389) */}
+      {/* Divider 1: full width, 1px, #E5E5E5, between service icons and deposit tiles */}
       <div style={{
         marginTop: '14px',
-        height: '0.5px',
-        backgroundColor: '#EBEBEB',
+        marginBottom: '16px',
+        height: '1px',
+        backgroundColor: '#E5E5E5',
         width: '100%'
       }} />
 
       {/* =====================================================================
           4. DEPOSIT ROWS
-          Tile 1 top 23 below divider (y 412).
-          Tiles: x 18, 56 x 44, radius 6, #FFD302.
-          Row pitch 53, gap between tiles is 9.
-          Text starts 21 after tile (x 95). 18 Regular #000, line height 24.5.
-          Row 1: line 1 "Накопительный" top aligned with tile top. Line 2 "Депозит" + pill.
-          Rate pill: 6 after "Депозит", 39 x 23, radius 11.5, #FFD302, text "18%" 15.5 Semibold #000.
+          Tiles: 53 x 42, radius 6, #FFD302.
+          Text starts 12px after tile, 18 Regular #000, height 42px matching tile.
+          Row 1: "Накопительный" / "Депозит" + pill "18%".
           Row 2: "Kaspi Депозит 15%" one line, vertically centred on tile.
       ===================================================================== */}
       <div style={{
-        marginTop: '23px',
+        marginTop: '0px',
         paddingLeft: '18px',
         paddingRight: '18px',
         display: 'flex',
@@ -708,7 +706,7 @@ export const HomeScreen = ({
         boxSizing: 'border-box'
       }}>
         {/* Row 1: Накопительный Депозит 18% */}
-        <div className="touchable" style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer' }}>
+        <div className="touchable" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
           {/* Yellow tile: 53 x 42, radius 6, #FFD302 */}
           <div style={{
             width: '53px',
@@ -732,41 +730,42 @@ export const HomeScreen = ({
             </svg>
           </div>
 
-          {/* Text starts 21 after tile (x 95) */}
+          {/* Text starts 12 after tile */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'flex-start',
-            marginLeft: '21px'
+            justifyContent: 'center',
+            marginLeft: '12px',
+            height: '42px'
           }}>
             <div style={{
               fontSize: '18px',
               fontWeight: '400',
               color: '#000000',
-              lineHeight: '24.5px',
+              lineHeight: '21px',
               letterSpacing: 0
             }}>
               Накопительный
             </div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', lineHeight: '21px' }}>
               <span style={{
                 fontSize: '18px',
                 fontWeight: '400',
                 color: '#000000',
-                lineHeight: '24.5px',
+                lineHeight: '21px',
                 letterSpacing: 0
               }}>
                 Депозит
               </span>
-              {/* Rate pill: 6 after "Депозит", 39 x 23, radius 11.5, #FFD302, 18% 15.5 Semibold #000 */}
+              {/* Rate pill: 6 after "Депозит", 39 x 21, radius 10.5, #FFD302, 18% 15.5 Semibold #000 */}
               <div style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: '#FFD302',
-                borderRadius: '11.5px',
+                borderRadius: '10.5px',
                 width: '39px',
-                height: '23px',
+                height: '21px',
                 marginLeft: '6px',
                 flexShrink: 0
               }}>
@@ -812,18 +811,18 @@ export const HomeScreen = ({
             </svg>
           </div>
 
-          {/* Text — Row 2: 21 after tile, vertically centred on tile */}
+          {/* Text — Row 2: 12 after tile, vertically centred on tile */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            marginLeft: '21px',
+            marginLeft: '12px',
             height: '42px'
           }}>
             <span style={{
               fontSize: '18px',
               fontWeight: '400',
               color: '#000000',
-              lineHeight: '24.5px',
+              lineHeight: '21px',
               letterSpacing: 0
             }}>
               Kaspi Депозит 15%
@@ -1086,11 +1085,11 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* Divider 0.5 #EBEBEB at y 799 (17.5 under rating row), full width */}
+      {/* Divider 2: full width, 1px, #E5E5E5, between product carousel and filter pills */}
       <div style={{
-        marginTop: '17.5px',
-        height: '0.5px',
-        backgroundColor: '#EBEBEB',
+        marginTop: '16px',
+        height: '1px',
+        backgroundColor: '#E5E5E5',
         width: '100%'
       }} />
 
