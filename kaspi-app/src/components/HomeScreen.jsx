@@ -679,13 +679,12 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* Divider 1: full width, 1px, #D0D0D0, between service icons and deposit tiles */}
+      {/* Divider 1: full width subtle hairline, 1px, #E8E8E8, between service icons and deposit tiles */}
       <div style={{
         marginTop: '14px',
         marginBottom: '16px',
         height: '1px',
-        minHeight: '1px',
-        backgroundColor: '#D0D0D0',
+        backgroundColor: '#E8E8E8',
         width: '100%',
         display: 'block',
         flexShrink: 0
@@ -1088,12 +1087,11 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* Divider 2: full width, 1px, #D0D0D0, between product carousel and filter pills */}
+      {/* Divider 2: full width subtle hairline, 1px, #E8E8E8, between product carousel and filter pills */}
       <div style={{
         marginTop: '16px',
         height: '1px',
-        minHeight: '1px',
-        backgroundColor: '#D0D0D0',
+        backgroundColor: '#E8E8E8',
         width: '100%',
         display: 'block',
         flexShrink: 0

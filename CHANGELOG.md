@@ -2,6 +2,26 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-08 16:10] — Смягчение разделительных линий до аутентичного тонкого hairline (#E8E8E8, 1px)
+
+### 🎯 Запрос пользователя:
+> *«its too thick and visable»*
+
+### 🛠️ Что сделано:
+1. **Смягчение толщины и контраста разделительных линий**:
+   - Тёмно-серый цвет `#D0D0D0` выглядел излишне грубо и навязчиво на светлом экране.
+   - Цвет обеих линий в [`HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx) заменён на мягкий, деликатный и чистый оттенок **`#E8E8E8`** (`height: 1px`).
+   - Убрано агрессивное затемнение: теперь линии выглядят как аутентичные тончайшие волосковые разделители (hairline) оригинального интерфейса Kaspi.kz — аккуратные, ровные, видимые, но не бросающиеся в глаза.
+2. **Синхронизация с [`AGENTS.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/AGENTS.md)**:
+   - В правило 4 внесён нативный стандарт тонких разделителей (`#E8E8E8`, 1px).
+
+3. **Затронутые файлы**:
+   - [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+   - [`AGENTS.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/AGENTS.md)
+   - [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-08 16:07] — Повышение контрастности и видимости разделительных линий (#D0D0D0, minHeight: 1px)
 
 ### 🎯 Запрос пользователя:
