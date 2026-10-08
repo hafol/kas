@@ -917,14 +917,17 @@ export const HomeScreen = ({
                   }}
                 />
 
-                {/* Image chip: height 19.5, radius 6, 13 Bold white, pinned bottom-left, 1 inside image */}
+                {/* Image chip: pinned flush to bottom-left corner with card-matching border radius */}
                 {(item.discountChip || item.bonusChip) && (
                   <div style={{
                     position: 'absolute',
-                    left: '1px',
-                    bottom: '1px',
+                    left: '0px',
+                    bottom: '0px',
                     height: '19.5px',
-                    borderRadius: '6px',
+                    borderTopLeftRadius: '3px',
+                    borderTopRightRadius: '4px',
+                    borderBottomRightRadius: '4px',
+                    borderBottomLeftRadius: '9px',
                     padding: '0 6px',
                     backgroundColor: item.discountChip ? '#F14635' : '#54A000',
                     display: 'inline-flex',
