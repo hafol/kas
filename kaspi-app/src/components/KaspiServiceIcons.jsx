@@ -47,7 +47,7 @@ export const IconMyBank = ({ size = 36, color = "#DF4E3E" }) => (
 );
 
 // 3. Платежи (Exact vector from receipt-icon-red.svg)
-export const IconPayments = ({ size = 35, color = "#DF4E3E" }) => (
+export const IconPayments = ({ size = 30.5, color = "#DF4E3E" }) => (
   <svg
     width={size}
     height={size}
@@ -68,7 +68,7 @@ export const IconPayments = ({ size = 35, color = "#DF4E3E" }) => (
 );
 
 // 4. Переводы (Exact vector from repeat-icon-red.svg)
-export const IconTransfers = ({ size = 34, color = "#DF4E3E" }) => (
+export const IconTransfers = ({ size = 30.5, color = "#DF4E3E" }) => (
   <svg
     width={size}
     height={size}

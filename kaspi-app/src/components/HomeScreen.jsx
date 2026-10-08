@@ -599,7 +599,7 @@ export const HomeScreen = ({
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconPayments size={34} color="#F14635" />
+              <IconPayments size={30.5} color="#F14635" />
             </div>
             <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Платежи
@@ -613,7 +613,7 @@ export const HomeScreen = ({
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconTransfers size={34} color="#F14635" />
+              <IconTransfers size={30.5} color="#F14635" />
             </div>
             <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '13.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Переводы
