@@ -709,10 +709,10 @@ export const HomeScreen = ({
       }}>
         {/* Row 1: Накопительный Депозит 18% */}
         <div className="touchable" style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer' }}>
-          {/* Yellow tile: 56 x 44, radius 6, #FFD302 */}
+          {/* Yellow tile: 53 x 42, radius 6, #FFD302 */}
           <div style={{
-            width: '56px',
-            height: '44px',
+            width: '53px',
+            height: '42px',
             borderRadius: '6px',
             backgroundColor: '#FFD302',
             display: 'flex',
@@ -721,8 +721,8 @@ export const HomeScreen = ({
             flexShrink: 0,
             overflow: 'hidden'
           }}>
-            <svg viewBox="26 20 243 188" width="56" height="44">
-              <g transform="translate(148, 115) scale(1.045) translate(-148, -115)" fill="none" stroke="#FFFFFF" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg viewBox="26 20 243 188" width="53" height="42">
+              <g transform="translate(148, 115) scale(1.10) translate(-148, -115)" fill="none" stroke="#FFFFFF" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round">
                 <ellipse cx="148" cy="91.75" rx="43" ry="22.75" />
                 <path d="M105 92Q110.5 103.5 106 115Q110.5 127 105 139" />
                 <path d="M191 92Q188 103.5 190.5 115Q188 127 191 139" />
@@ -785,10 +785,10 @@ export const HomeScreen = ({
 
         {/* Row 2: Kaspi Депозит 15% */}
         <div className="touchable" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-          {/* Yellow tile: 56 x 44, radius 6, #FFD302 */}
+          {/* Yellow tile: 53 x 42, radius 6, #FFD302 */}
           <div style={{
-            width: '56px',
-            height: '44px',
+            width: '53px',
+            height: '42px',
             borderRadius: '6px',
             backgroundColor: '#FFD302',
             display: 'flex',
@@ -797,8 +797,8 @@ export const HomeScreen = ({
             flexShrink: 0,
             overflow: 'hidden'
           }}>
-            <svg viewBox="17 15 243 189" width="56" height="44">
-              <g transform="translate(138, 109) scale(0.9975) translate(-138, -109)">
+            <svg viewBox="17 15 243 189" width="53" height="42">
+              <g transform="translate(138, 109) scale(1.05) translate(-138, -109)">
                 <g fill="#FFFFFF">
                   <rect x="76" y="74" width="63" height="9.5" />
                   <rect x="76" y="91.5" width="63" height="9.5" />
@@ -817,7 +817,7 @@ export const HomeScreen = ({
             display: 'flex',
             alignItems: 'center',
             marginLeft: '21px',
-            height: '44px'
+            height: '42px'
           }}>
             <span style={{
               fontSize: '18px',
