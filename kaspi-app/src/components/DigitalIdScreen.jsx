@@ -82,15 +82,15 @@ const paneScrollStyle = {
 
 const footerButtonBase = {
   width: '100%',
-  height: '60px',
-  borderRadius: '12px',
+  height: '50px',
+  borderRadius: '11px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '12px',
+  gap: '10px',
   padding: 0,
   fontFamily,
-  fontSize: '17px',
+  fontSize: '16px',
   fontWeight: 500,
   letterSpacing: 0,
   whiteSpace: 'nowrap',
@@ -101,9 +101,9 @@ const footerButtonBase = {
 };
 
 const editControlButton = {
-  width: '44px',
-  height: '44px',
-  borderRadius: '10px',
+  width: '40px',
+  height: '40px',
+  borderRadius: '8px',
   border: 'none',
   backgroundColor: segTrack,
   color: textPrimary,
@@ -344,11 +344,10 @@ export const DigitalIdScreen = ({ onBack }) => {
       flexShrink: 0,
       position: 'relative',
       backgroundColor: pageBg,
-      // bottom: 17 + home-indicator safe area (34 on iPhone 11; never less, so the footer keeps the reference height)
-      padding: '19px 18px calc(17px + max(env(safe-area-inset-bottom, 0px), 34px)) 18px',
+      padding: '14px 18px calc(14px + max(env(safe-area-inset-bottom, 0px), 28px)) 18px',
       display: 'flex',
       flexDirection: 'column',
-      gap: '14px'
+      gap: '10px'
     }}>
       {tab === 'doc' && (
         <>
@@ -682,15 +681,15 @@ export const DigitalIdScreen = ({ onBack }) => {
                         className="did-btn-primary touchable"
                         style={{
                           ...footerButtonBase,
-                          height: '48px',
+                          height: '44px',
                           backgroundColor: primaryBlue,
                           border: 'none',
                           color: onPrimary,
-                          fontSize: '16px',
+                          fontSize: '15.5px',
                           fontWeight: 600
                         }}
                       >
-                        <Check size={20} strokeWidth={2.5} />
+                        <Check size={19} strokeWidth={2.5} />
                         Сохранить
                       </button>
                     </>
