@@ -32,19 +32,6 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState('tab'); // 'tab' | 'passcode' | 'my_bank' | 'gold_detail' | 'gov' | 'digital_id' | 'transfers' | 'settings' | 'qr_modal'
   const [pendingSecureScreen, setPendingSecureScreen] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Auto-switch container to landscape when viewing Digital ID (exact official Kaspi presentation)
-  useEffect(() => {
-    const rootEl = document.getElementById('root');
-    if (currentScreen === 'digital_id') {
-      rootEl?.classList.add('root--landscape');
-    } else {
-      rootEl?.classList.remove('root--landscape');
-    }
-    return () => {
-      rootEl?.classList.remove('root--landscape');
-    };
-  }, [currentScreen]);
   // eGov splash shown for ~1.5 s before the ID card screen opens
   const [egovSplash, setEgovSplash] = useState(null); // null | 'in' | 'out'
 
