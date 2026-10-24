@@ -27,6 +27,15 @@
   font-style: normal;
 }
 
+/* Official Kazakhstan National Identity Document Font (DIN 1451 Mittelschrift / Bahnschrift) */
+@font-face {
+  font-family: 'KazakhstanIdFont';
+  src: url('/fonts/kz_id_font.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Kaspi Official Design System Tokens (Ds) */
   --ds-active-primary: #F14635;

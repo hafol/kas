@@ -23,7 +23,10 @@ const outlineBorder = '#A9BCF5';
 const outlineText   = '#1446E0';
 
 const fontFamily = "'Roboto Flex Kaspi', 'Roboto', system-ui, -apple-system, sans-serif";
-const docFontFamily = "'Roboto Flex Kaspi', 'Roboto', Arial, -apple-system, sans-serif";
+// Official Kazakhstan National Identity Document Font (DIN 1451 / Bahnschrift)
+const docFontFamily = "'KazakhstanIdFont', 'Bahnschrift', 'DIN 1451', 'DIN Alternate', 'Roboto Condensed', sans-serif";
+// Official Serif font for Document Number on the back (e.g. 064142898)
+const docNumFontFamily = "'Times New Roman', 'Liberation Serif', Georgia, serif";
 const monoFontFamily = "'SF Mono', 'Roboto Mono', Consolas, monospace";
 
 // Back Chevron Icon
@@ -291,19 +294,19 @@ export const DigitalIdScreen = ({ onBack }) => {
   const isDocTab = activeTab === 'doc';
   const requisites = requisiteFields.map((field) => ({ ...field, value: reqValues[field.key] ?? '' }));
 
-  // Authentic printed document text style matching real Kaspi screenshot
+  // Authentic printed document text style matching official Kazakhstan National ID card (DIN 1451 / Bahnschrift)
   const cardInputStyle = {
     fontFamily: docFontFamily,
-    fontWeight: 700,
+    fontWeight: 500,
     textTransform: 'uppercase',
-    color: '#111111',
+    color: '#0A0A0A',
     background: 'transparent',
     border: 'none',
     outline: 'none',
     padding: 0,
     margin: 0,
     lineHeight: 1,
-    letterSpacing: '0.2px',
+    letterSpacing: '0.4px',
     boxSizing: 'border-box'
   };
 
@@ -696,13 +699,16 @@ export const DigitalIdScreen = ({ onBack }) => {
                     }}
                   />
 
-                  {/* ОБОРОТНАЯ СТОРОНА: Номер документа (вверху справа) */}
+                  {/* ОБОРОТНАЯ СТОРОНА: Номер документа (вверху справа, официальный Serif / Times New Roman) */}
                   <input
                     type="text"
                     value={cardValues.docNumber || ''}
                     onChange={(e) => handleCardFieldChange('docNumber', e.target.value)}
                     style={{
                       ...cardInputStyle,
+                      fontFamily: docNumFontFamily,
+                      fontWeight: 400,
+                      letterSpacing: '0.6px',
                       position: 'absolute',
                       left: '63.0%',
                       top: '53.5%',
