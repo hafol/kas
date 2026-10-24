@@ -98,18 +98,26 @@ export async function saveDocumentCard(cardData) {
   }
 }
 
+export function loadDocumentCardSync() {
+  try {
+    const raw = localStorage.getItem(DOC_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        return parsed;
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
 export async function loadDocumentCard() {
   try {
     // 1. Try localStorage first (synchronous & instantaneous recovery)
-    try {
-      const raw = localStorage.getItem(DOC_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed && parsed.photoUrl) {
-          return parsed;
-        }
-      }
-    } catch (e) {}
+    const syncData = loadDocumentCardSync();
+    if (syncData) {
+      return syncData;
+    }
 
     // 2. Fallback to IndexedDB
     const db = await openIdDB();
@@ -121,7 +129,7 @@ export async function loadDocumentCard() {
         req.onsuccess = () => resolve(req.result || null);
         req.onerror = () => resolve(null);
       });
-      if (dbResult && dbResult.photoUrl) {
+      if (dbResult && typeof dbResult === 'object') {
         // Sync back to localStorage for faster access next time
         try {
           localStorage.setItem(DOC_KEY, JSON.stringify(dbResult));
@@ -133,6 +141,17 @@ export async function loadDocumentCard() {
   } catch (err) {
     console.warn('Error loading document card:', err);
   }
+  return null;
+}
+
+export function loadRequisitesSync() {
+  try {
+    const raw = localStorage.getItem(REQS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') return parsed;
+    }
+  } catch (e) {}
   return null;
 }
 

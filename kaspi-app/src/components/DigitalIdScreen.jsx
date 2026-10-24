@@ -1,25 +1,33 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ZoomIn, ZoomOut, Check, Loader2 } from 'lucide-react';
-import { saveDocumentCard, loadDocumentCard, saveRequisites, loadRequisites, optimizeImage } from '../utils/idStorage';
+import React, { useState, useEffect, useRef } from 'react';
+import { Camera, Check } from 'lucide-react';
+import {
+  saveDocumentCard,
+  loadDocumentCard,
+  loadDocumentCardSync,
+  saveRequisites,
+  loadRequisites,
+  loadRequisitesSync,
+  optimizeImage
+} from '../utils/idStorage';
 
-// Color Tokens (from specification)
-const pageBg        = '#FFFFFF'; // the whole screen, header included
+// Official Kaspi Colors
+const pageBg        = '#FFFFFF';
 const segTrack      = '#EEEEF0';
 const segPill       = '#FFFFFF';
-const hairline      = '#E5E5EA';
 const textPrimary   = '#1C1C1E';
 const textSecondary = '#8E8E93';
-const primaryBlue   = '#1446E0'; // main button fill (deep royal blue)
+const primaryBlue   = '#1446E0';
 const onPrimary     = '#FFFFFF';
-const outlineBorder = '#A9BCF5'; // light blue (was lavender #B8B2DC, read as pink)
-const outlineText   = '#1446E0'; // royal blue like the main button, also the upload icon
+const outlineBorder = '#A9BCF5';
+const outlineText   = '#1446E0';
 
-const fontFamily = 'system-ui, -apple-system, Roboto, sans-serif';
+const fontFamily = "system-ui, -apple-system, Roboto, 'Segoe UI', sans-serif";
+const docFontFamily = "'Roboto', Arial, -apple-system, sans-serif";
+const monoFontFamily = "'SF Mono', 'Roboto Mono', Consolas, monospace";
 
-// 1. Back Chevron (<): APK ic_ds_chevron_left_400, glyph 8 x 14.2 in a 16 box.
-//    Rendered at 22.5 → glyph ≈ 11 x 20, stroke ≈ 2, tinted via currentColor.
+// Back Chevron Icon
 const BackChevronIcon = () => (
-  <svg width="22.5" height="22.5" viewBox="0 0 16 16" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block' }}>
+  <svg width="22" height="22" viewBox="0 0 16 16" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block' }}>
     <path
       d="M10.266,14.707C10.663,15.098 11.306,15.098 11.703,14.707C12.069,14.347 12.097,13.779 11.787,13.387L11.703,13.293L6.326,8L11.703,2.707C12.069,2.347 12.097,1.779 11.787,1.387L11.703,1.293C11.336,0.932 10.76,0.905 10.362,1.21L10.266,1.293L4.387,7.081C3.905,7.555 3.873,8.303 4.291,8.814L4.387,8.919L10.266,14.707Z"
       fill="currentColor"
@@ -27,9 +35,9 @@ const BackChevronIcon = () => (
   </svg>
 );
 
-// 2. QR-scan icon: APK ic_ds_scan_qr_500, 24 x 24, tinted via currentColor
+// QR Scan Icon
 const QrScanIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M1.1,2.5C1.1,1.727 1.727,1.1 2.5,1.1H7C7.497,1.1 7.9,1.503 7.9,2C7.9,2.497 7.497,2.9 7,2.9H2.9V7C2.9,7.497 2.497,7.9 2,7.9C1.503,7.9 1.1,7.497 1.1,7V2.5Z" fill="currentColor" />
     <path d="M16.1,2C16.1,1.503 16.503,1.1 17,1.1H21.5C22.273,1.1 22.9,1.727 22.9,2.5V7C22.9,7.497 22.497,7.9 22,7.9C21.503,7.9 21.1,7.497 21.1,7V2.9H17C16.503,2.9 16.1,2.497 16.1,2Z" fill="currentColor" />
     <path d="M7.35,8.65V7.35H8.65V8.65H7.35Z" fill="currentColor" />
@@ -46,76 +54,22 @@ const QrScanIcon = () => (
   </svg>
 );
 
-// 3. Upload icon (square tray + arrow up): APK ic_ds_share_ios_500, cropped to 22 x 24, tinted via currentColor
-const UploadIcon = () => (
-  <svg width="22" height="24" viewBox="1 0 22 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+// Share/Upload Icon
+const ShareIcon = () => (
+  <svg width="20" height="22" viewBox="1 0 22 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M20,18V12C20,10.895 19.105,10 18,10H16C15.448,10 15,9.552 15,9C15,8.448 15.448,8 16,8H18C20.209,8 22,9.791 22,12V18C22,20.209 20.209,22 18,22H6C3.791,22 2,20.209 2,18L2,12C2,9.791 3.791,8 6,8H8C8.552,8 9,8.448 9,9C9,9.552 8.552,10 8,10H6C4.895,10 4,10.895 4,12L4,18C4,19.105 4.895,20 6,20H18C19.105,20 20,19.105 20,18Z" fill="currentColor" />
     <path d="M12,15.5C12.552,15.5 13,15.052 13,14.5L13,4.414L14.293,5.707C14.683,6.098 15.317,6.098 15.707,5.707C16.098,5.317 16.098,4.683 15.707,4.293L12.707,1.293C12.317,0.902 11.683,0.902 11.293,1.293L8.293,4.293C7.902,4.683 7.902,5.317 8.293,5.707C8.683,6.098 9.317,6.098 9.707,5.707L11,4.414L11,14.5C11,15.052 11.448,15.5 12,15.5Z" fill="currentColor" />
   </svg>
 );
 
-// 4. Copy icon (two overlapping rounded squares): APK ic_ds_copy_500, 24 x 24, tinted via currentColor
+// Copy Icon
 const CopyIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M12,2C10.067,2 8.5,3.567 8.5,5.5V6C8.5,6.552 8.948,7 9.5,7C10.052,7 10.5,6.552 10.5,6V5.5C10.5,4.672 11.172,4 12,4H18.5C19.328,4 20,4.672 20,5.5V12.5C20,13.052 19.552,13.5 19,13.5H18C17.448,13.5 17,13.948 17,14.5C17,15.052 17.448,15.5 18,15.5H19C20.657,15.5 22,14.157 22,12.5V5.5C22,3.567 20.433,2 18.5,2H12Z" fill="currentColor" />
     <path d="M5.5,8C3.567,8 2,9.567 2,11.5V18.5C2,20.433 3.567,22 5.5,22H12.5C14.433,22 16,20.433 16,18.5V11.5C16,9.567 14.433,8 12.5,8H5.5ZM4,11.5C4,10.672 4.672,10 5.5,10H12.5C13.328,10 14,10.672 14,11.5V18.5C14,19.328 13.328,20 12.5,20H5.5C4.672,20 4,19.328 4,18.5V11.5Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd" />
   </svg>
 );
 
-// One page of the sliding track: half the track width, own scroll area + footer
-const paneStyle = {
-  width: '50%',
-  height: '100%',
-  flexShrink: 0,
-  display: 'flex',
-  flexDirection: 'column',
-  minWidth: 0
-};
-
-const paneScrollStyle = {
-  flex: 1,
-  minHeight: 0,
-  overflowY: 'auto',
-  overflowX: 'hidden',
-  WebkitOverflowScrolling: 'touch'
-};
-
-const footerButtonBase = {
-  width: '100%',
-  height: '50px',
-  borderRadius: '11px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '10px',
-  padding: 0,
-  fontFamily,
-  fontSize: '16px',
-  fontWeight: 500,
-  letterSpacing: 0,
-  whiteSpace: 'nowrap',
-  boxShadow: 'none',
-  cursor: 'pointer',
-  outline: 'none',
-  boxSizing: 'border-box'
-};
-
-const editControlButton = {
-  width: '40px',
-  height: '40px',
-  borderRadius: '8px',
-  border: 'none',
-  backgroundColor: segTrack,
-  color: textPrimary,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: 0,
-  cursor: 'pointer',
-  flexShrink: 0
-};
-
-// Requisites rows, in order. inputMode picks the phone keyboard (digits for ИИН and number).
 const requisiteFields = [
   { key: 'fullName', label: 'ФИО', inputMode: 'text' },
   { key: 'iin', label: 'ИИН', inputMode: 'numeric' },
@@ -128,52 +82,64 @@ const requisiteFields = [
 export const DigitalIdScreen = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState('doc'); // 'doc' | 'reqs'
   const fileInputRef = useRef(null);
-  const cardContainerRef = useRef(null);
 
-  // Document photo state
-  const [photoUrl, setPhotoUrl] = useState(null);
-  const [scale, setScale] = useState(1);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const [isSaved, setIsSaved] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  // Synchronous initial restore from localStorage so page reload NEVER resets
+  const syncDoc = loadDocumentCardSync() || {};
+  const syncReqs = loadRequisitesSync() || {};
 
-  // Dragging & gesture interaction state
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartRef = useRef({ x: 0, y: 0, initialOffsetX: 0, initialOffsetY: 0 });
-  const touchStartDistRef = useRef(null);
-  const touchStartScaleRef = useRef(1);
+  // 3x4 Portrait Photo
+  const [photoUrl, setPhotoUrl] = useState(() => syncDoc.photoUrl || null);
 
-  // Requisites typed in by the user (start empty)
-  const [reqValues, setReqValues] = useState({});
-  const reqEditedRef = useRef(false);
-
-  // Load cached requisites (IndexedDB); never overwrite what the user already started typing
-  useEffect(() => {
-    let isMounted = true;
-    loadRequisites().then((saved) => {
-      if (isMounted && saved && !reqEditedRef.current) setReqValues(saved);
-    });
-    return () => {
-      isMounted = false;
+  // Card text values (defaulting to the authentic Kazak ID card shown in the original screenshot if empty)
+  const [cardValues, setCardValues] = useState(() => {
+    return {
+      lastName: syncDoc.lastName || 'ЖҰМАШ',
+      firstName: syncDoc.firstName || 'ПАРАСАТ',
+      middleName: syncDoc.middleName || 'ДІЛМҰРАТҰЛЫ',
+      birthDate: syncDoc.birthDate || syncReqs.birthDate || '23.07.2010',
+      gender: syncDoc.gender || 'E',
+      iin: syncDoc.iin || syncReqs.iin || '100723552859',
+      docNumber: syncDoc.docNumber || syncReqs.docNumber || '064142898',
+      validity: syncDoc.validity || '14.08.2026 - 13.08.2036',
+      issueDate: syncDoc.issueDate || syncReqs.issueDate || '14.08.2026',
+      expiryDate: syncDoc.expiryDate || syncReqs.expiryDate || '13.08.2036'
     };
-  }, []);
+  });
 
-  // Load saved document from persistent cache (IndexedDB)
+  // Requisites values synced with card values
+  const [reqValues, setReqValues] = useState(() => {
+    const fn = [syncDoc.lastName || 'ЖҰМАШ', syncDoc.firstName || 'ПАРАСАТ', syncDoc.middleName || 'ДІЛМҰРАТҰЛЫ'].filter(Boolean).join(' ');
+    return {
+      fullName: syncReqs.fullName || fn,
+      iin: syncReqs.iin || syncDoc.iin || '100723552859',
+      birthDate: syncReqs.birthDate || syncDoc.birthDate || '23.07.2010',
+      docNumber: syncReqs.docNumber || syncDoc.docNumber || '064142898',
+      issueDate: syncReqs.issueDate || syncDoc.issueDate || '14.08.2026',
+      expiryDate: syncReqs.expiryDate || syncDoc.expiryDate || '13.08.2036',
+      ...syncReqs
+    };
+  });
+
+  const [savedMessage, setSavedMessage] = useState('');
+
+  // Asynchronous backup restore from IndexedDB
   useEffect(() => {
     let isMounted = true;
     async function loadData() {
       try {
-        const saved = await loadDocumentCard();
-        if (isMounted && saved && saved.photoUrl) {
-          setPhotoUrl(saved.photoUrl);
-          setScale(saved.scale || 1);
-          setOffset({ x: saved.offsetX || 0, y: saved.offsetY || 0 });
-          setIsSaved(Boolean(saved.isSaved));
+        const savedDoc = await loadDocumentCard();
+        const savedReqs = await loadRequisites();
+        if (isMounted) {
+          if (savedDoc) {
+            if (savedDoc.photoUrl && !photoUrl) setPhotoUrl(savedDoc.photoUrl);
+            setCardValues((prev) => ({ ...prev, ...savedDoc }));
+          }
+          if (savedReqs) {
+            setReqValues((prev) => ({ ...prev, ...savedReqs }));
+          }
         }
       } catch (err) {
-        console.warn('Error loading document card:', err);
-      } finally {
-        if (isMounted) setIsLoading(false);
+        console.warn('Error restoring ID data:', err);
       }
     }
     loadData();
@@ -182,232 +148,141 @@ export const DigitalIdScreen = ({ onBack }) => {
     };
   }, []);
 
-  // Handle image upload with auto-optimization (ensures 100% reliable persistence)
+  // Save all changes immediately to localStorage + IndexedDB
+  const persistAll = async (nextPhoto, nextCard, nextReqs) => {
+    const photo = nextPhoto !== undefined ? nextPhoto : photoUrl;
+    const card = nextCard !== undefined ? nextCard : cardValues;
+    const reqs = nextReqs !== undefined ? nextReqs : reqValues;
+
+    const docPayload = {
+      ...card,
+      photoUrl: photo,
+      isSaved: true,
+      updatedAt: Date.now()
+    };
+
+    await saveDocumentCard(docPayload);
+    await saveRequisites(reqs);
+  };
+
+  // Upload 3x4 portrait photo
   const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      setIsLoading(true);
       try {
         const optimized = await optimizeImage(file);
         if (optimized) {
           setPhotoUrl(optimized);
-          setScale(1);
-          setOffset({ x: 0, y: 0 });
-          setIsSaved(false); // Allow framing and show "Сохранить" button in top right corner
+          await persistAll(optimized, cardValues, reqValues);
+          triggerSaveFeedback('Фото 3×4 сохранено');
         }
       } catch (err) {
-        console.warn('Error optimizing photo:', err);
-      } finally {
-        setIsLoading(false);
+        console.warn('Error uploading photo:', err);
       }
     }
   };
 
-  // Mouse pan handlers (when not saved)
-  const handleMouseDown = (e) => {
-    if (isSaved || !photoUrl) return;
-    setIsDragging(true);
-    dragStartRef.current = {
-      x: e.clientX,
-      y: e.clientY,
-      initialOffsetX: offset.x,
-      initialOffsetY: offset.y
-    };
+  const triggerSaveFeedback = (msg = 'Сохранено') => {
+    setSavedMessage(msg);
+    setTimeout(() => setSavedMessage(''), 2000);
   };
 
-  const handleMouseMove = useCallback((e) => {
-    if (!isDragging || isSaved || !photoUrl) return;
-    const dx = e.clientX - dragStartRef.current.x;
-    const dy = e.clientY - dragStartRef.current.y;
-    setOffset({
-      x: dragStartRef.current.initialOffsetX + dx,
-      y: dragStartRef.current.initialOffsetY + dy
-    });
-  }, [isDragging, isSaved, photoUrl]);
+  // Update field and sync with requisites & auto-save
+  const handleCardFieldChange = (key, value) => {
+    const nextCard = { ...cardValues, [key]: value };
+    setCardValues(nextCard);
 
-  const handleMouseUp = useCallback(() => {
-    if (isDragging) {
-      setIsDragging(false);
+    const nextReqs = { ...reqValues };
+    if (key === 'lastName' || key === 'firstName' || key === 'middleName') {
+      const parts = [
+        key === 'lastName' ? value : nextCard.lastName,
+        key === 'firstName' ? value : nextCard.firstName,
+        key === 'middleName' ? value : nextCard.middleName
+      ].filter(Boolean);
+      nextReqs.fullName = parts.join(' ');
+    } else if (key === 'iin') {
+      nextReqs.iin = value;
+    } else if (key === 'birthDate') {
+      nextReqs.birthDate = value;
+    } else if (key === 'docNumber') {
+      nextReqs.docNumber = value;
+    } else if (key === 'validity') {
+      const parts = value.split('-').map(s => s.trim());
+      if (parts[0]) nextReqs.issueDate = parts[0];
+      if (parts[1]) nextReqs.expiryDate = parts[1];
     }
-  }, [isDragging]);
 
-  // Touch pan & pinch-zoom handlers for mobile
-  const handleTouchStart = (e) => {
-    if (isSaved || !photoUrl) return;
-    if (e.touches.length === 1) {
-      // Single finger pan
-      const touch = e.touches[0];
-      setIsDragging(true);
-      dragStartRef.current = {
-        x: touch.clientX,
-        y: touch.clientY,
-        initialOffsetX: offset.x,
-        initialOffsetY: offset.y
-      };
-    } else if (e.touches.length === 2) {
-      // Two finger pinch to zoom
-      setIsDragging(false);
-      const t1 = e.touches[0];
-      const t2 = e.touches[1];
-      const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
-      touchStartDistRef.current = dist;
-      touchStartScaleRef.current = scale;
-    }
+    setReqValues(nextReqs);
+    persistAll(photoUrl, nextCard, nextReqs);
   };
 
-  const handleTouchMove = (e) => {
-    if (isSaved || !photoUrl) return;
-    if (e.touches.length === 1 && isDragging) {
-      // Prevent screen vertical scrolling during image alignment
-      e.preventDefault();
-      const touch = e.touches[0];
-      const dx = touch.clientX - dragStartRef.current.x;
-      const dy = touch.clientY - dragStartRef.current.y;
-      setOffset({
-        x: dragStartRef.current.initialOffsetX + dx,
-        y: dragStartRef.current.initialOffsetY + dy
-      });
-    } else if (e.touches.length === 2 && touchStartDistRef.current) {
-      // Pinch zoom
-      e.preventDefault();
-      const t1 = e.touches[0];
-      const t2 = e.touches[1];
-      const currentDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
-      const factor = currentDist / touchStartDistRef.current;
-      const newScale = Math.min(3.5, Math.max(0.4, touchStartScaleRef.current * factor));
-      setScale(parseFloat(newScale.toFixed(2)));
-    }
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-    touchStartDistRef.current = null;
-  };
-
-  useEffect(() => {
-    const onWindowMouseUp = () => setIsDragging(false);
-    const onWindowMouseMove = (e) => {
-      if (isDragging && !isSaved) {
-        handleMouseMove(e);
-      }
-    };
-    window.addEventListener('mouseup', onWindowMouseUp);
-    window.addEventListener('mousemove', onWindowMouseMove);
-    return () => {
-      window.removeEventListener('mouseup', onWindowMouseUp);
-      window.removeEventListener('mousemove', onWindowMouseMove);
-    };
-  }, [isDragging, isSaved, handleMouseMove]);
-
-  // Save document permanently
-  const handleSave = async () => {
-    if (!photoUrl) return;
-    const docData = {
-      photoUrl,
-      scale,
-      offsetX: offset.x,
-      offsetY: offset.y,
-      isSaved: true,
-      savedAt: Date.now()
-    };
-    await saveDocumentCard(docData);
-    if (reqValues && Object.keys(reqValues).length > 0) {
-      await saveRequisites(reqValues);
-    }
-    setIsSaved(true);
-    setIsDragging(false);
-  };
-
-  const isDocTab = activeTab === 'doc';
-
-  // Requisites rows: empty until the user fills them in; values are cached in IndexedDB
-  const requisites = requisiteFields.map((field) => ({ ...field, value: reqValues[field.key] ?? '' }));
-
+  // Update requisite row and sync with card
   const handleRequisiteChange = (key, value) => {
-    reqEditedRef.current = true;
-    const next = { ...reqValues, [key]: value };
-    setReqValues(next);
-    saveRequisites(next);
+    const nextReqs = { ...reqValues, [key]: value };
+    setReqValues(nextReqs);
+
+    const nextCard = { ...cardValues };
+    if (key === 'fullName') {
+      const parts = value.trim().split(/\s+/);
+      nextCard.lastName = (parts[0] || '').toUpperCase();
+      nextCard.firstName = (parts[1] || '').toUpperCase();
+      nextCard.middleName = (parts.slice(2).join(' ') || '').toUpperCase();
+    } else if (key === 'iin') {
+      nextCard.iin = value;
+    } else if (key === 'birthDate') {
+      nextCard.birthDate = value;
+    } else if (key === 'docNumber') {
+      nextCard.docNumber = value;
+    } else if (key === 'issueDate' || key === 'expiryDate') {
+      const iDate = key === 'issueDate' ? value : nextReqs.issueDate;
+      const eDate = key === 'expiryDate' ? value : nextReqs.expiryDate;
+      if (iDate && eDate) nextCard.validity = `${iDate} - ${eDate}`;
+    }
+
+    setCardValues(nextCard);
+    persistAll(photoUrl, nextCard, nextReqs);
   };
 
   const copyToClipboard = (value) => {
-    try {
+    if (value) {
       navigator.clipboard?.writeText(value).catch(() => {});
-    } catch {
-      // Clipboard unavailable (insecure context): nothing to show
+      triggerSaveFeedback('Скопировано');
     }
   };
 
-  // Pinned footer of each page. Документ: hairline + two buttons; Реквизиты: one button, no hairline
-  const renderFooter = (tab) => (
-    <div style={{
-      flexShrink: 0,
-      position: 'relative',
-      backgroundColor: pageBg,
-      padding: '14px 18px calc(14px + max(env(safe-area-inset-bottom, 0px), 28px)) 18px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '10px'
-    }}>
-      {tab === 'doc' && (
-        <>
-          {/* Hairline: full width, 0.5 pt on retina */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 0,
-            borderTop: `0.5px solid ${hairline}`
-          }} />
+  const isDocTab = activeTab === 'doc';
+  const requisites = requisiteFields.map((field) => ({ ...field, value: reqValues[field.key] ?? '' }));
 
-          {/* Primary: "Предъявить документ" */}
-          <button
-            type="button"
-            className="did-btn-primary"
-            style={{
-              ...footerButtonBase,
-              backgroundColor: primaryBlue,
-              border: 'none',
-              color: onPrimary
-            }}
-          >
-            <QrScanIcon />
-            Предъявить документ
-          </button>
-        </>
-      )}
-
-      {/* Secondary: "Отправить документ" / "Отправить реквизиты" */}
-      <button
-        type="button"
-        className="did-btn-secondary"
-        style={{
-          ...footerButtonBase,
-          backgroundColor: pageBg,
-          // 1.5 border drawn as an inset ring: Chrome rounds 1.5px borders down to 1px
-          border: 'none',
-          boxShadow: `inset 0 0 0 1.5px ${outlineBorder}`,
-          color: outlineText
-        }}
-      >
-        <UploadIcon />
-        {tab === 'doc' ? 'Отправить документ' : 'Отправить реквизиты'}
-      </button>
-    </div>
-  );
+  // Authentic printed document text style
+  const cardInputStyle = {
+    fontFamily: docFontFamily,
+    fontWeight: 700,
+    textTransform: 'uppercase',
+    color: '#1A1D20',
+    background: 'transparent',
+    border: 'none',
+    outline: 'none',
+    padding: 0,
+    margin: 0,
+    lineHeight: 1.1,
+    letterSpacing: '0.2px',
+    boxSizing: 'border-box'
+  };
 
   return (
-    <div className="screen-fill" style={{
+    <div style={{
       width: '100%',
+      height: '100%',
       backgroundColor: pageBg,
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       overflow: 'hidden',
       fontFamily,
-      letterSpacing: 0
+      userSelect: 'none',
+      position: 'relative',
+      boxSizing: 'border-box'
     }}>
-      {/* Hidden file input */}
+      {/* Hidden file picker for 3x4 portrait photo */}
       <input
         ref={fileInputRef}
         type="file"
@@ -416,385 +291,522 @@ export const DigitalIdScreen = ({ onBack }) => {
         onChange={handlePhotoUpload}
       />
 
-      {/* Safe Area Inset */}
-      <div style={{ height: 'env(safe-area-inset-top, 0px)', flexShrink: 0 }} />
-
-      {/* Nav Bar: height 52, white, no divider */}
+      {/* 1. LEFT COLUMN: Nav back, Title, Vertical Segmented Control */}
       <div style={{
-        height: '52px',
+        width: '160px',
         flexShrink: 0,
-        position: 'relative',
+        height: '100%',
+        padding: '16px 12px 16px 14px',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
+        flexDirection: 'column',
+        boxSizing: 'border-box',
+        justifyContent: 'space-between'
       }}>
-        {/* Back button: tap area 44 x 44, chevron glyph left edge at x 24, centred at y 74 */}
-        <button
-          type="button"
-          onClick={onBack}
-          aria-label="Назад"
-          style={{
-            position: 'absolute',
-            left: '7.6px', // box centre 29.6 − glyph half-width 5.6 = glyph left edge 24
-            top: '4px',
-            width: '44px',
-            height: '44px',
+        <div>
+          {/* Header row: < Back Chevron + Title */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={onBack}
+              aria-label="Назад"
+              style={{
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                color: textPrimary,
+                cursor: 'pointer',
+                outline: 'none'
+              }}
+            >
+              <BackChevronIcon />
+            </button>
+            <h1 style={{
+              margin: 0,
+              fontSize: '15px',
+              fontWeight: 600,
+              color: textPrimary,
+              whiteSpace: 'nowrap'
+            }}>
+              Удостоверение личности
+            </h1>
+          </div>
+
+          {/* Vertical Segmented Control: Документ / Реквизиты */}
+          <div style={{
+            marginTop: '22px',
+            backgroundColor: segTrack,
+            borderRadius: '12px',
+            padding: '2px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2px',
+            position: 'relative'
+          }}>
+            {[
+              { id: 'doc', label: 'Документ' },
+              { id: 'reqs', label: 'Реквизиты' }
+            ].map((tab) => {
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    height: '36px',
+                    width: '100%',
+                    borderRadius: '10px',
+                    border: 'none',
+                    backgroundColor: active ? segPill : 'transparent',
+                    boxShadow: active ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+                    fontFamily,
+                    fontSize: '14px',
+                    fontWeight: active ? 500 : 400,
+                    color: active ? textPrimary : textSecondary,
+                    cursor: 'pointer',
+                    outline: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'background-color 0.15s ease'
+                  }}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Save feedback indicator */}
+        {savedMessage && (
+          <div style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            color: textPrimary,
-            cursor: 'pointer',
-            outline: 'none',
-            WebkitTapHighlightColor: 'transparent'
-          }}
-        >
-          <BackChevronIcon />
-        </button>
-
-        {/* Title: 17 Semibold, centred on the screen */}
-        <h1 style={{
-          margin: 0,
-          fontSize: '17px',
-          fontWeight: 600,
-          color: textPrimary,
-          lineHeight: '52px',
-          whiteSpace: 'nowrap',
-          textAlign: 'center'
-        }}>
-          Удостоверение личности
-        </h1>
-
-        {/* Top-right Save button: appears after photo is loaded until saved */}
-        {photoUrl && !isSaved && (
-          <button
-            type="button"
-            onClick={handleSave}
-            className="touchable"
-            style={{
-              position: 'absolute',
-              right: '14px',
-              top: '4px',
-              height: '44px',
-              padding: '0 8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: 'none',
-              border: 'none',
-              fontFamily,
-              fontSize: '16px',
-              fontWeight: 600,
-              color: primaryBlue,
-              cursor: 'pointer',
-              outline: 'none',
-              WebkitTapHighlightColor: 'transparent'
-            }}
-          >
-            Сохранить
-          </button>
+            gap: '4px',
+            fontSize: '12px',
+            fontWeight: 500,
+            color: '#059669',
+            padding: '4px 0'
+          }}>
+            <Check size={14} />
+            {savedMessage}
+          </div>
         )}
       </div>
 
-      {/* Segmented Control: top y 115, margins 18, height 40, radius 12 */}
+      {/* 2. CENTER AREA: Both Cards side-by-side OR Requisites List */}
       <div style={{
-        marginTop: '15px',
-        marginLeft: '18px',
-        marginRight: '18px',
-        height: '40px',
-        flexShrink: 0,
-        backgroundColor: segTrack,
-        borderRadius: '12px',
-        position: 'relative',
-        display: 'flex'
+        flex: 1,
+        minWidth: 0,
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '12px 8px',
+        boxSizing: 'border-box',
+        overflow: 'hidden'
       }}>
-        {/* Sliding white pill: inset 2, height 36, radius 10 */}
-        <div style={{
-          position: 'absolute',
-          top: '2px',
-          bottom: '2px',
-          left: '2px',
-          width: 'calc(50% - 4px)',
-          backgroundColor: segPill,
-          borderRadius: '10px',
-          boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
-          transform: isDocTab ? 'translateX(0)' : 'translateX(calc(100% + 4px))',
-          transition: 'transform 200ms ease'
-        }} />
-        {[
-          { id: 'doc', label: 'Документ' },
-          { id: 'reqs', label: 'Реквизиты' }
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            onClick={() => setActiveTab(tab.id)}
-            style={{
-              flex: 1,
-              position: 'relative',
-              zIndex: 1,
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              fontFamily,
-              fontSize: '15px',
-              fontWeight: 400,
-              color: textPrimary,
-              letterSpacing: 0,
-              cursor: 'pointer',
-              outline: 'none',
-              WebkitTapHighlightColor: 'transparent'
-            }}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+        {isDocTab ? (
+          /* BOTH CARDS SIDE BY SIDE (Front on left, Back on right) */
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            width: '100%',
+            maxWidth: '680px'
+          }}>
 
-      {/* Pages: Документ | Реквизиты side by side; the track slides over on tab change.
-          Each page carries its own scroll area and pinned footer. */}
-      <div style={{ flex: 1, minHeight: 0, overflow: 'hidden', position: 'relative' }}>
-        <div style={{
-          display: 'flex',
-          width: '200%',
-          height: '100%',
-          transform: isDocTab ? 'translateX(0)' : 'translateX(-50%)',
-          transition: 'transform 320ms cubic-bezier(0.25, 0.8, 0.25, 1)',
-          willChange: 'transform'
-        }}>
-          {/* Page 1: Документ */}
-          <section aria-label="Документ" inert={!isDocTab} style={paneStyle}>
-            <div className="hide-scrollbar" style={paneScrollStyle}>
-              {isLoading ? (
-                <div style={{
+            {/* CARD 1: FRONT SIDE (Лицевая сторона) */}
+            <div style={{
+              flex: 1,
+              maxWidth: '335px',
+              aspectRatio: '1036 / 660',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              position: 'relative',
+              backgroundImage: "url('/kaspi_assets/documents/kz_id_front.jpg')",
+              backgroundSize: '100% 100%',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: '#E7F2F6',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05)'
+            }}>
+
+              {/* 3x4 Portrait Photo Slot */}
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                title="Нажмите, чтобы загрузить фото 3×4"
+                style={{
+                  position: 'absolute',
+                  left: '4.8%',
+                  top: '15.5%',
+                  width: '28.5%',
+                  height: '60.5%',
+                  borderRadius: '3px',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  backgroundColor: photoUrl ? 'transparent' : 'rgba(238, 244, 255, 0.85)',
+                  border: photoUrl ? 'none' : '1px dashed #2563EB',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  padding: '60px 20px',
-                  gap: '12px'
-                }}>
-                  <Loader2 size={32} color={primaryBlue} className="animate-spin" />
-                  <span style={{ fontSize: '13px', color: textSecondary }}>Загрузка документа...</span>
-                </div>
-              ) : (
-                <div style={{ padding: '16px 16px 20px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {/* Document picture slot: no frame, no border, no shadow, radius 8 */}
-                  <div
-                    ref={cardContainerRef}
-                    onMouseDown={handleMouseDown}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    onClick={() => {
-                      if (!photoUrl && !isSaved) {
-                        fileInputRef.current?.click();
-                      }
-                    }}
-                    style={{
-                      width: '100%',
-                      borderRadius: '8px',
-                      overflow: 'hidden',
-                      position: 'relative',
-                      cursor: isSaved ? 'default' : photoUrl ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
-                      touchAction: photoUrl && !isSaved ? 'none' : 'pan-y',
-                      userSelect: 'none'
-                    }}
-                  >
-                    {photoUrl ? (
-                      <img
-                        src={photoUrl}
-                        alt="Удостоверение личности"
-                        draggable={false}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          height: 'auto',
-                          objectFit: 'contain',
-                          objectPosition: 'center center',
-                          transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
-                          transformOrigin: 'center center',
-                          transition: isDragging ? 'none' : 'transform 0.05s ease-out',
-                          pointerEvents: 'none'
-                        }}
-                      />
-                    ) : (
-                      // Empty slot: tap to pick the document image
-                      <div style={{
-                        height: '456px',
-                        backgroundColor: segTrack,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '6px',
-                        padding: '20px',
-                        textAlign: 'center',
-                        boxSizing: 'border-box'
-                      }}>
-                        <span style={{ fontSize: '15px', fontWeight: 500, color: textPrimary }}>
-                          Загрузить документ
-                        </span>
-                        <span style={{ fontSize: '13px', color: textSecondary }}>
-                          Нажмите, чтобы добавить фото удостоверения личности
-                        </span>
-                      </div>
-                    )}
+                  zIndex: 10,
+                  boxSizing: 'border-box'
+                }}
+              >
+                {photoUrl ? (
+                  <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                    <img
+                      src={photoUrl}
+                      alt="Фото 3×4"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block'
+                      }}
+                    />
                   </div>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '4px' }}>
+                    <Camera size={16} color="#1446E0" style={{ margin: '0 auto 2px' }} />
+                    <div style={{ fontSize: '9px', fontWeight: 700, color: '#1446E0', lineHeight: 1 }}>
+                      3×4
+                    </div>
+                  </div>
+                )}
+              </div>
 
-                  {/* Adjustment controls — only before saving (first upload) */}
-                  {photoUrl && !isSaved && (
-                    <>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <button
-                          type="button"
-                          onClick={() => setScale((s) => Math.max(0.3, parseFloat((s - 0.1).toFixed(2))))}
-                          style={editControlButton}
-                          aria-label="Уменьшить"
-                        >
-                          <ZoomOut size={18} />
-                        </button>
-                        <input
-                          type="range"
-                          min="0.5"
-                          max="5.0"
-                          step="0.02"
-                          value={scale}
-                          onChange={(e) => setScale(parseFloat(e.target.value))}
-                          style={{ flex: 1, minWidth: 0, accentColor: primaryBlue, cursor: 'pointer' }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setScale((s) => Math.min(5.0, parseFloat((s + 0.1).toFixed(2))))}
-                          style={editControlButton}
-                          aria-label="Увеличить"
-                        >
-                          <ZoomIn size={18} />
-                        </button>
-                      </div>
+              {/* ТЕГІ / ФАМИЛИЯ */}
+              <input
+                type="text"
+                value={cardValues.lastName || ''}
+                onChange={(e) => handleCardFieldChange('lastName', e.target.value.toUpperCase())}
+                style={{
+                  ...cardInputStyle,
+                  position: 'absolute',
+                  left: '38.5%',
+                  top: '36.5%',
+                  width: '58%',
+                  height: '8.5%',
+                  fontSize: 'clamp(9.5px, 1.4vw, 12px)'
+                }}
+              />
 
-                      <button
-                        type="button"
-                        onClick={handleSave}
-                        className="did-btn-primary touchable"
-                        style={{
-                          ...footerButtonBase,
-                          height: '44px',
-                          backgroundColor: primaryBlue,
-                          border: 'none',
-                          color: onPrimary,
-                          fontSize: '15.5px',
-                          fontWeight: 600
-                        }}
-                      >
-                        <Check size={19} strokeWidth={2.5} />
-                        Сохранить
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
+              {/* АТЫ / ИМЯ */}
+              <input
+                type="text"
+                value={cardValues.firstName || ''}
+                onChange={(e) => handleCardFieldChange('firstName', e.target.value.toUpperCase())}
+                style={{
+                  ...cardInputStyle,
+                  position: 'absolute',
+                  left: '38.5%',
+                  top: '49.5%',
+                  width: '58%',
+                  height: '8.5%',
+                  fontSize: 'clamp(9.5px, 1.4vw, 12px)'
+                }}
+              />
+
+              {/* ӘКЕСІНІҢ АТЫ / ОТЧЕСТВО */}
+              <input
+                type="text"
+                value={cardValues.middleName || ''}
+                onChange={(e) => handleCardFieldChange('middleName', e.target.value.toUpperCase())}
+                style={{
+                  ...cardInputStyle,
+                  position: 'absolute',
+                  left: '38.5%',
+                  top: '62.8%',
+                  width: '58%',
+                  height: '8.5%',
+                  fontSize: 'clamp(9.5px, 1.4vw, 12px)'
+                }}
+              />
+
+              {/* ТУҒАН КҮНІ / ДАТА РОЖДЕНИЯ */}
+              <input
+                type="text"
+                value={cardValues.birthDate || ''}
+                onChange={(e) => handleCardFieldChange('birthDate', e.target.value)}
+                style={{
+                  ...cardInputStyle,
+                  position: 'absolute',
+                  left: '38.5%',
+                  top: '75.8%',
+                  width: '30%',
+                  height: '8.5%',
+                  fontSize: 'clamp(8.5px, 1.2vw, 11px)'
+                }}
+              />
+
+              {/* ЖЫНЫСЫ / ПОЛ */}
+              <input
+                type="text"
+                value={cardValues.gender || ''}
+                onChange={(e) => handleCardFieldChange('gender', e.target.value.toUpperCase())}
+                style={{
+                  ...cardInputStyle,
+                  position: 'absolute',
+                  left: '70.0%',
+                  top: '75.8%',
+                  width: '26%',
+                  height: '8.5%',
+                  fontSize: 'clamp(8.5px, 1.2vw, 11px)'
+                }}
+              />
+
+              {/* ЖСН / ИИН */}
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={12}
+                value={cardValues.iin || ''}
+                onChange={(e) => handleCardFieldChange('iin', e.target.value)}
+                style={{
+                  ...cardInputStyle,
+                  position: 'absolute',
+                  left: '17.0%',
+                  top: '88.5%',
+                  width: '45%',
+                  height: '8.5%',
+                  fontSize: 'clamp(8.5px, 1.2vw, 11px)',
+                  letterSpacing: '0.4px'
+                }}
+              />
             </div>
-            {renderFooter('doc')}
-          </section>
 
-          {/* Page 2: Реквизиты — 6 rows from y 164 (9 below the segmented control), no card, no dividers */}
-          <section aria-label="Реквизиты" inert={isDocTab} style={paneStyle}>
-            <div className="hide-scrollbar" style={paneScrollStyle}>
-              <div style={{ paddingTop: '9px' }}>
-                {requisites.map((row) => (
-                  <div
-                    key={row.label}
-                    style={{
-                      height: '71px',
-                      padding: '14px 18px 14px 30px',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '12px',
-                      boxSizing: 'border-box'
-                    }}
-                  >
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{
-                        fontSize: '13px',
-                        fontWeight: 400,
-                        lineHeight: '16px',
-                        color: textSecondary,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis'
-                      }}>
-                        {row.label}
-                      </div>
-                      {/* Value: filled in by the user, looks like plain text (no field chrome) */}
-                      <input
-                        type="text"
-                        inputMode={row.inputMode}
-                        value={row.value}
-                        onChange={(e) => handleRequisiteChange(row.key, e.target.value)}
-                        aria-label={row.label}
-                        autoComplete="off"
-                        spellCheck={false}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          height: '22px',
-                          marginTop: '5px',
-                          padding: 0,
-                          border: 'none',
-                          outline: 'none',
-                          background: 'transparent',
-                          fontFamily,
-                          fontSize: '17px',
-                          fontWeight: 400,
-                          lineHeight: '22px',
-                          letterSpacing: 0,
-                          color: textPrimary,
-                          textOverflow: 'ellipsis',
-                          boxSizing: 'border-box',
-                          WebkitAppearance: 'none',
-                          borderRadius: 0
-                        }}
-                      />
+            {/* CARD 2: BACK SIDE (Оборотная сторона) */}
+            <div style={{
+              flex: 1,
+              maxWidth: '335px',
+              aspectRatio: '1036 / 660',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              position: 'relative',
+              backgroundImage: "url('/kaspi_assets/documents/kz_id_back.jpg')",
+              backgroundSize: '100% 100%',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: '#E7F2F6',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05)'
+            }}>
 
-                    </div>
+              {/* НОМЕР ДОКУМЕНТА (вверху) */}
+              <input
+                type="text"
+                value={cardValues.docNumber || ''}
+                onChange={(e) => handleCardFieldChange('docNumber', e.target.value)}
+                style={{
+                  ...cardInputStyle,
+                  position: 'absolute',
+                  left: '45.0%',
+                  top: '6.5%',
+                  width: '40%',
+                  height: '8.5%',
+                  fontSize: 'clamp(9.5px, 1.3vw, 12px)'
+                }}
+              />
 
-                    {/* Copy icon box 24 x 24, top at row top + 20, tap area 44 x 44 centred on it */}
-                    <div style={{ width: '24px', height: '24px', marginTop: '6px', flexShrink: 0, position: 'relative' }}>
-                      <button
-                        type="button"
-                        onClick={() => copyToClipboard(row.value)}
-                        aria-label={`Скопировать: ${row.label}`}
-                        style={{
-                          position: 'absolute',
-                          top: '-10px',
-                          left: '-10px',
-                          width: '44px',
-                          height: '44px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          background: 'none',
-                          border: 'none',
-                          padding: 0,
-                          color: textSecondary,
-                          cursor: 'pointer',
-                          outline: 'none',
-                          WebkitTapHighlightColor: 'transparent'
-                        }}
-                      >
-                        <CopyIcon />
-                      </button>
-                    </div>
-                  </div>
-                ))}
+              {/* Vertical Barcode on left */}
+              <div style={{
+                position: 'absolute',
+                left: '4.2%',
+                top: '22%',
+                width: '16px',
+                height: '52%',
+                display: 'flex',
+                gap: '1.5px',
+                alignItems: 'stretch',
+                opacity: 0.85
+              }}>
+                <div style={{ flex: 2, background: '#111' }} />
+                <div style={{ flex: 1, background: 'transparent' }} />
+                <div style={{ flex: 3, background: '#111' }} />
+                <div style={{ flex: 1, background: 'transparent' }} />
+                <div style={{ flex: 1, background: '#111' }} />
+                <div style={{ flex: 2, background: 'transparent' }} />
+                <div style={{ flex: 4, background: '#111' }} />
+                <div style={{ flex: 1, background: 'transparent' }} />
+                <div style={{ flex: 2, background: '#111' }} />
+                <div style={{ flex: 1, background: 'transparent' }} />
+                <div style={{ flex: 3, background: '#111' }} />
+              </div>
+
+              {/* ДАТА ВЫДАЧИ - СРОК ДЕЙСТВИЯ */}
+              <input
+                type="text"
+                value={cardValues.validity || ''}
+                onChange={(e) => handleCardFieldChange('validity', e.target.value)}
+                style={{
+                  ...cardInputStyle,
+                  position: 'absolute',
+                  left: '28.5%',
+                  top: '59.5%',
+                  width: '68%',
+                  height: '8.5%',
+                  fontSize: 'clamp(8.5px, 1.1vw, 10.5px)'
+                }}
+              />
+
+              {/* MRZ Machine-readable lines at bottom */}
+              <div style={{
+                position: 'absolute',
+                left: '5%',
+                right: '5%',
+                bottom: '4.5%',
+                height: '24%',
+                fontFamily: monoFontFamily,
+                fontSize: 'clamp(7.5px, 0.95vw, 9.5px)',
+                lineHeight: 1.25,
+                fontWeight: 700,
+                color: '#222',
+                letterSpacing: '1px',
+                pointerEvents: 'none',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}>
+                <div>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+                <div>{cardValues.lastName || 'ZHUMASH'}&lt;&lt;{cardValues.firstName || 'PARASSAT'}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+                <div>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
               </div>
             </div>
-            {renderFooter('reqs')}
-          </section>
-        </div>
+          </div>
+        ) : (
+          /* REQUISITES TAB */
+          <div style={{
+            width: '100%',
+            maxWidth: '520px',
+            maxHeight: '100%',
+            overflowY: 'auto',
+            padding: '4px 12px'
+          }}>
+            {requisites.map((row) => (
+              <div
+                key={row.key}
+                style={{
+                  height: '54px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderBottom: `0.5px solid ${segTrack}`
+                }}
+              >
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: '11.5px', color: textSecondary }}>{row.label}</div>
+                  <input
+                    type="text"
+                    inputMode={row.inputMode}
+                    value={row.value}
+                    onChange={(e) => handleRequisiteChange(row.key, e.target.value)}
+                    style={{
+                      width: '100%',
+                      background: 'transparent',
+                      border: 'none',
+                      outline: 'none',
+                      fontFamily,
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: textPrimary,
+                      padding: 0
+                    }}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(row.value)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: '8px',
+                    color: textSecondary,
+                    cursor: 'pointer'
+                  }}
+                >
+                  <CopyIcon />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* 3. RIGHT COLUMN: Action Buttons */}
+      <div style={{
+        width: '175px',
+        flexShrink: 0,
+        height: '100%',
+        padding: '16px 14px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        gap: '12px',
+        boxSizing: 'border-box'
+      }}>
+        {isDocTab && (
+          <button
+            type="button"
+            className="touchable"
+            style={{
+              width: '100%',
+              height: '50px',
+              borderRadius: '11px',
+              backgroundColor: primaryBlue,
+              border: 'none',
+              color: onPrimary,
+              fontFamily,
+              fontSize: '14.5px',
+              fontWeight: 500,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              boxSizing: 'border-box'
+            }}
+          >
+            <QrScanIcon />
+            Предъявить документ
+          </button>
+        )}
+
+        <button
+          type="button"
+          className="touchable"
+          style={{
+            width: '100%',
+            height: '50px',
+            borderRadius: '11px',
+            backgroundColor: pageBg,
+            boxShadow: `inset 0 0 0 1.5px ${outlineBorder}`,
+            border: 'none',
+            color: outlineText,
+            fontFamily,
+            fontSize: '14.5px',
+            fontWeight: 500,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            boxSizing: 'border-box'
+          }}
+        >
+          <ShareIcon />
+          {isDocTab ? 'Отправить документ' : 'Отправить реквизиты'}
+        </button>
       </div>
     </div>
   );
