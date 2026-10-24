@@ -10,7 +10,7 @@ import {
   optimizeImage
 } from '../utils/idStorage';
 
-// Official Kaspi Colors & Design System
+// Official Kaspi Colors
 const pageBg        = '#FFFFFF';
 const segTrack      = '#EEEEF0';
 const segPill       = '#FFFFFF';
@@ -121,39 +121,39 @@ export const DigitalIdScreen = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState('doc'); // 'doc' | 'reqs'
   const fileInputRef = useRef(null);
 
-  // Synchronous initial restore from localStorage so page reload NEVER resets
+  // Synchronous initial restore from localStorage so data NEVER resets on page reload
   const syncDoc = loadDocumentCardSync() || {};
   const syncReqs = loadRequisitesSync() || {};
 
   // 3x4 Portrait Photo
   const [photoUrl, setPhotoUrl] = useState(() => syncDoc.photoUrl || null);
 
-  // Card text values (defaulting to the authentic Kazak ID card from the user's original screenshot)
+  // Card text values (starts empty unless user already entered and saved data)
   const [cardValues, setCardValues] = useState(() => {
     return {
-      lastName: syncDoc.lastName || 'ЖҰМАШ',
-      firstName: syncDoc.firstName || 'ПАРАСАТ',
-      middleName: syncDoc.middleName || 'ДІЛМҰРАТҰЛЫ',
-      birthDate: syncDoc.birthDate || syncReqs.birthDate || '23.07.2010',
-      gender: syncDoc.gender || 'E',
-      iin: syncDoc.iin || syncReqs.iin || '100723552859',
-      docNumber: syncDoc.docNumber || syncReqs.docNumber || '064142898',
-      validity: syncDoc.validity || '14.08.2026 - 13.08.2036',
-      issueDate: syncDoc.issueDate || syncReqs.issueDate || '14.08.2026',
-      expiryDate: syncDoc.expiryDate || syncReqs.expiryDate || '13.08.2036'
+      lastName: syncDoc.lastName || '',
+      firstName: syncDoc.firstName || '',
+      middleName: syncDoc.middleName || '',
+      birthDate: syncDoc.birthDate || syncReqs.birthDate || '',
+      gender: syncDoc.gender || '',
+      iin: syncDoc.iin || syncReqs.iin || '',
+      docNumber: syncDoc.docNumber || syncReqs.docNumber || '',
+      validity: syncDoc.validity || '',
+      issueDate: syncDoc.issueDate || syncReqs.issueDate || '',
+      expiryDate: syncDoc.expiryDate || syncReqs.expiryDate || ''
     };
   });
 
-  // Requisites values
+  // Requisites values synced with card values
   const [reqValues, setReqValues] = useState(() => {
-    const fn = [syncDoc.lastName || 'ЖҰМАШ', syncDoc.firstName || 'ПАРАСАТ', syncDoc.middleName || 'ДІЛМҰРАТҰЛЫ'].filter(Boolean).join(' ');
+    const fn = [syncDoc.lastName, syncDoc.firstName, syncDoc.middleName].filter(Boolean).join(' ');
     return {
-      fullName: syncReqs.fullName || fn,
-      iin: syncReqs.iin || syncDoc.iin || '100723552859',
-      birthDate: syncReqs.birthDate || syncDoc.birthDate || '23.07.2010',
-      docNumber: syncReqs.docNumber || syncDoc.docNumber || '064142898',
-      issueDate: syncReqs.issueDate || syncDoc.issueDate || '14.08.2026',
-      expiryDate: syncReqs.expiryDate || syncDoc.expiryDate || '13.08.2036',
+      fullName: syncReqs.fullName || fn || '',
+      iin: syncReqs.iin || syncDoc.iin || '',
+      birthDate: syncReqs.birthDate || syncDoc.birthDate || '',
+      docNumber: syncReqs.docNumber || syncDoc.docNumber || '',
+      issueDate: syncReqs.issueDate || syncDoc.issueDate || '',
+      expiryDate: syncReqs.expiryDate || syncDoc.expiryDate || '',
       ...syncReqs
     };
   });
@@ -296,7 +296,7 @@ export const DigitalIdScreen = ({ onBack }) => {
     fontFamily: docFontFamily,
     fontWeight: 700,
     textTransform: 'uppercase',
-    color: '#1A1D20',
+    color: '#111111',
     background: 'transparent',
     border: 'none',
     outline: 'none',
@@ -313,7 +313,7 @@ export const DigitalIdScreen = ({ onBack }) => {
       flexShrink: 0,
       position: 'relative',
       backgroundColor: pageBg,
-      padding: '14px 18px calc(14px + max(env(safe-area-inset-bottom, 0px), 24px)) 18px',
+      padding: '12px 16px calc(12px + max(env(safe-area-inset-bottom, 0px), 20px)) 16px',
       display: 'flex',
       flexDirection: 'column',
       gap: '10px'
@@ -458,7 +458,7 @@ export const DigitalIdScreen = ({ onBack }) => {
 
       {/* 2. Horizontal Segmented Control */}
       <div style={{
-        marginTop: '10px',
+        marginTop: '6px',
         marginLeft: '16px',
         marginRight: '16px',
         height: '40px',
@@ -520,25 +520,21 @@ export const DigitalIdScreen = ({ onBack }) => {
           willChange: 'transform'
         }}>
 
-          {/* PAGE 1: Документ (Вертикальный официальный шаблон Казахстана) */}
+          {/* PAGE 1: Документ (Большое изображение без лишнего белого контейнера) */}
           <section aria-label="Документ" inert={!isDocTab} style={paneStyle}>
             <div className="hide-scrollbar" style={paneScrollStyle}>
-              <div style={{ padding: '16px 16px 20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ padding: '12px 14px 20px 14px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-                {/* Vertical Official Kazakhstan ID Template Container */}
+                {/* Vertical Official Kazakhstan ID Template — без рамки-контейнера, крупно */}
                 <div style={{
                   width: '100%',
-                  maxWidth: '390px',
-                  aspectRatio: '598 / 800',
-                  borderRadius: '10px',
-                  overflow: 'hidden',
+                  aspectRatio: '1036 / 1322',
                   position: 'relative',
-                  backgroundImage: "url('/kaspi_assets/documents/kz_id_full.jpg')",
+                  backgroundImage: "url('/kaspi_assets/documents/kz_id_clean.jpg')",
                   backgroundSize: '100% 100%',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
-                  backgroundColor: '#E7F2F6',
-                  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05)',
+                  borderRadius: '6px',
                   userSelect: 'none'
                 }}>
 
@@ -548,15 +544,15 @@ export const DigitalIdScreen = ({ onBack }) => {
                     title="Нажмите, чтобы загрузить фото 3×4"
                     style={{
                       position: 'absolute',
-                      left: '10.0%',
-                      top: '10.5%',
-                      width: '25.2%',
-                      height: '28.5%',
-                      borderRadius: '4px',
+                      left: '4.8%',
+                      top: '7.6%',
+                      width: '28.5%',
+                      height: '30.4%',
+                      borderRadius: '3px',
                       overflow: 'hidden',
                       cursor: 'pointer',
-                      backgroundColor: photoUrl ? 'transparent' : 'rgba(238, 244, 255, 0.85)',
-                      border: photoUrl ? 'none' : '1.5px dashed #2563EB',
+                      backgroundColor: photoUrl ? 'transparent' : 'rgba(238, 244, 255, 0.7)',
+                      border: photoUrl ? 'none' : '1px dashed #2563EB',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
@@ -582,22 +578,19 @@ export const DigitalIdScreen = ({ onBack }) => {
                           bottom: '3px',
                           right: '3px',
                           backgroundColor: 'rgba(0,0,0,0.5)',
-                          borderRadius: '4px',
-                          padding: '2px 4px',
+                          borderRadius: '3px',
+                          padding: '2px 3px',
                           display: 'flex',
                           alignItems: 'center'
                         }}>
-                          <Camera size={10} color="#FFFFFF" />
+                          <Camera size={9} color="#FFFFFF" />
                         </div>
                       </div>
                     ) : (
                       <div style={{ textAlign: 'center', padding: '4px' }}>
-                        <Camera size={18} color="#1446E0" style={{ margin: '0 auto 2px' }} />
-                        <div style={{ fontSize: '10px', fontWeight: 700, color: '#1446E0', lineHeight: 1 }}>
+                        <Camera size={16} color="#1446E0" style={{ margin: '0 auto 2px' }} />
+                        <div style={{ fontSize: '9.5px', fontWeight: 700, color: '#1446E0', lineHeight: 1 }}>
                           3×4
-                        </div>
-                        <div style={{ fontSize: '8px', color: '#6B7280', marginTop: '2px' }}>
-                          Фото
                         </div>
                       </div>
                     )}
@@ -611,9 +604,9 @@ export const DigitalIdScreen = ({ onBack }) => {
                     style={{
                       ...cardInputStyle,
                       position: 'absolute',
-                      left: '40.0%',
-                      top: '19.3%',
-                      width: '50%',
+                      left: '39.0%',
+                      top: '18.5%',
+                      width: '55%',
                       height: '3.8%',
                       fontSize: 'clamp(11px, 3.4vw, 13.5px)'
                     }}
@@ -627,9 +620,9 @@ export const DigitalIdScreen = ({ onBack }) => {
                     style={{
                       ...cardInputStyle,
                       position: 'absolute',
-                      left: '40.0%',
-                      top: '24.8%',
-                      width: '50%',
+                      left: '39.0%',
+                      top: '25.0%',
+                      width: '55%',
                       height: '3.8%',
                       fontSize: 'clamp(11px, 3.4vw, 13.5px)'
                     }}
@@ -643,9 +636,9 @@ export const DigitalIdScreen = ({ onBack }) => {
                     style={{
                       ...cardInputStyle,
                       position: 'absolute',
-                      left: '40.0%',
-                      top: '30.2%',
-                      width: '50%',
+                      left: '39.0%',
+                      top: '31.5%',
+                      width: '55%',
                       height: '3.8%',
                       fontSize: 'clamp(11px, 3.4vw, 13.5px)'
                     }}
@@ -659,15 +652,15 @@ export const DigitalIdScreen = ({ onBack }) => {
                     style={{
                       ...cardInputStyle,
                       position: 'absolute',
-                      left: '40.0%',
-                      top: '35.6%',
-                      width: '26%',
+                      left: '39.0%',
+                      top: '38.0%',
+                      width: '28%',
                       height: '3.8%',
                       fontSize: 'clamp(10px, 3.0vw, 12px)'
                     }}
                   />
 
-                  {/* ЖЫНЫСЫ / ПОЛ */}
+                  {/* ЖЫНЫСЫ / ПОЛ (по центру под ЖЫНЫСЫ/ПОЛ) */}
                   <input
                     type="text"
                     value={cardValues.gender || ''}
@@ -676,14 +669,15 @@ export const DigitalIdScreen = ({ onBack }) => {
                       ...cardInputStyle,
                       position: 'absolute',
                       left: '69.5%',
-                      top: '35.6%',
-                      width: '20%',
+                      top: '38.0%',
+                      width: '18%',
                       height: '3.8%',
+                      textAlign: 'center',
                       fontSize: 'clamp(10px, 3.0vw, 12px)'
                     }}
                   />
 
-                  {/* ЖСН / ИИН */}
+                  {/* ЖСН / ИИН (сразу после надписи ЖСН/ИИН) */}
                   <input
                     type="text"
                     inputMode="numeric"
@@ -694,15 +688,15 @@ export const DigitalIdScreen = ({ onBack }) => {
                       ...cardInputStyle,
                       position: 'absolute',
                       left: '19.5%',
-                      top: '41.5%',
-                      width: '40%',
+                      top: '45.4%',
+                      width: '35%',
                       height: '3.8%',
                       fontSize: 'clamp(10px, 3.0vw, 12px)',
                       letterSpacing: '0.4px'
                     }}
                   />
 
-                  {/* ОБОРОТНАЯ СТОРОНА: Номер документа */}
+                  {/* ОБОРОТНАЯ СТОРОНА: Номер документа (вверху справа) */}
                   <input
                     type="text"
                     value={cardValues.docNumber || ''}
@@ -710,11 +704,12 @@ export const DigitalIdScreen = ({ onBack }) => {
                     style={{
                       ...cardInputStyle,
                       position: 'absolute',
-                      left: '47.0%',
-                      top: '47.5%',
-                      width: '40%',
+                      left: '63.0%',
+                      top: '53.5%',
+                      width: '32%',
                       height: '3.8%',
-                      fontSize: 'clamp(10px, 3.0vw, 12.5px)'
+                      textAlign: 'center',
+                      fontSize: 'clamp(11px, 3.3vw, 13.5px)'
                     }}
                   />
 
@@ -726,11 +721,11 @@ export const DigitalIdScreen = ({ onBack }) => {
                     style={{
                       ...cardInputStyle,
                       position: 'absolute',
-                      left: '31.0%',
-                      top: '64.0%',
-                      width: '58%',
+                      left: '29.5%',
+                      top: '76.5%',
+                      width: '45%',
                       height: '3.8%',
-                      fontSize: 'clamp(9px, 2.7vw, 11px)'
+                      fontSize: 'clamp(9.5px, 2.9vw, 11.5px)'
                     }}
                   />
                 </div>
