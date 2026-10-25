@@ -516,19 +516,19 @@ export const DigitalIdScreen = ({ onBack }) => {
         )}
       </div>
 
-      {/* Segmented Control: top y 115, margins 18, height 40, radius 12 */}
+      {/* Segmented Control: native 32px height, preserved width (margins 18px) */}
       <div style={{
         marginTop: '15px',
         marginLeft: '18px',
         marginRight: '18px',
-        height: '40px',
+        height: '32px',
         flexShrink: 0,
         backgroundColor: segTrack,
-        borderRadius: '12px',
+        borderRadius: '9px',
         position: 'relative',
         display: 'flex'
       }}>
-        {/* Sliding white pill: inset 2, height 36, radius 10 */}
+        {/* Sliding white pill: inset 2, height 28, radius 7 */}
         <div style={{
           position: 'absolute',
           top: '2px',
@@ -536,7 +536,7 @@ export const DigitalIdScreen = ({ onBack }) => {
           left: '2px',
           width: 'calc(50% - 4px)',
           backgroundColor: segPill,
-          borderRadius: '10px',
+          borderRadius: '7px',
           boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
           transform: isDocTab ? 'translateX(0)' : 'translateX(calc(100% + 4px))',
           transition: 'transform 200ms ease'
@@ -557,13 +557,14 @@ export const DigitalIdScreen = ({ onBack }) => {
               border: 'none',
               padding: 0,
               fontFamily,
-              fontSize: '15px',
-              fontWeight: 400,
+              fontSize: '13px',
+              fontWeight: activeTab === tab.id ? 500 : 400,
               color: textPrimary,
               letterSpacing: 0,
               cursor: 'pointer',
               outline: 'none',
-              WebkitTapHighlightColor: 'transparent'
+              WebkitTapHighlightColor: 'transparent',
+              userSelect: 'none'
             }}
           >
             {tab.label}
