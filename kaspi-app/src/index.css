@@ -157,6 +157,13 @@ body {
   overscroll-behavior-y: none;
 }
 
+.app-viewport--lock {
+  overflow: hidden !important;
+  touch-action: none !important;
+  overscroll-behavior: none !important;
+}
+
+
 @media (min-width: 601px) {
   body {
     background-color: #EBECEE;

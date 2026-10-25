@@ -59,6 +59,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
   const [activeDigit, setActiveDigit] = useState(null);
   const [isSlidingIn, setIsSlidingIn] = useState(true);
   const [isDismissing, setIsDismissing] = useState(false);
+  const [scale, setScale] = useState(1);
   const timeoutRef = useRef(null);
 
   // Trigger smooth slide-up animation on mount
@@ -67,6 +68,42 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
       setIsSlidingIn(false);
     });
     return () => cancelAnimationFrame(frame);
+  }, []);
+
+  // Guarantee page is 100% STATIC: lock body/html scroll and block touchmove/wheel
+  useEffect(() => {
+    const preventScroll = (e) => {
+      // Prevent rubber-banding or page scrolling
+      e.preventDefault();
+    };
+
+    const updateScale = () => {
+      const h = window.innerHeight;
+      if (h < 750) {
+        setScale(Math.min(1, h / 760));
+      } else {
+        setScale(1);
+      }
+    };
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    window.addEventListener('wheel', preventScroll, { passive: false });
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      window.removeEventListener('resize', updateScale);
+      window.removeEventListener('touchmove', preventScroll);
+      window.removeEventListener('wheel', preventScroll);
+    };
   }, []);
 
   const handleDismiss = () => {
@@ -142,7 +179,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
@@ -157,8 +194,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         userSelect: 'none',
         WebkitUserSelect: 'none',
         boxSizing: 'border-box',
-        overflowY: 'hidden',
-        overflowX: 'hidden',
+        overflow: 'hidden',
+        overscrollBehavior: 'none',
+        touchAction: 'none',
         fontFamily: "'Roboto', sans-serif"
       }}
     >
@@ -166,8 +204,12 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         style={{
           position: 'relative',
           width: '100%',
-          height: '100%',
-          minHeight: '770px'
+          height: scale < 1 ? '770px' : '100%',
+          maxHeight: '100%',
+          transform: scale < 1 ? `scale(${scale})` : 'none',
+          transformOrigin: 'top center',
+          overflow: 'hidden',
+          touchAction: 'none'
         }}
       >
         {/* Top Header Icons (Centre y 62.0) */}

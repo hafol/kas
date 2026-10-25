@@ -147,7 +147,7 @@ export default function App() {
   };
 
   return (
-    <div className="app-viewport">
+    <div className={`app-viewport${currentScreen === 'passcode' ? ' app-viewport--lock' : ''}`}>
       {/* Screen Router */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '100%', minWidth: 0, overflowX: 'hidden' }}>
         {/* Main Tab Bar Views */}

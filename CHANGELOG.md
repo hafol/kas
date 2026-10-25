@@ -2,7 +2,32 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
-## [2026-10-26 03:58] — Полное устранение расхождений экрана «Код доступа» по сличению со скриншотом оригинала (1:1 Pixel-Perfect)
+## [2026-10-26 04:18] — Полная блокировка скролла экрана «Код доступа» (100% статичный нативный экран)
+
+### 🎯 Запрос пользователя:
+> *«why i can scroll it this page has to be static»*
+
+### 🛠️ Что сделано:
+1. **Удалён `minHeight: 770px`**:
+   - Внутренний контейнер экрана имел жёстко заданный `minHeight: 770px`. На экранах смартфонов высотой < 770px (например, 375×667 на iPhone SE/8 или 741px) это вызывало вертикальный скролл страницы на 103px.
+2. **Абсолютная фиксация и блокировка скролла**:
+   - Корневой контейнер переведён в `position: fixed; inset: 0; max-width: 430px; margin: 0 auto; overflow: hidden; overscroll-behavior: none; touch-action: none;`.
+   - Добавлен CSS-класс `.app-viewport--lock` со свойствами `overflow: hidden !important; touch-action: none !important; overscroll-behavior: none !important;`, активируемый при показе экрана ввода кода.
+3. **Обработчики событий touchmove и wheel**:
+   - На уровне окна и документа примонтирован перехватчик `touchmove` и `wheel` с `e.preventDefault()`, исключающий мобильный rubber-banding (пружинящую прокрутку Safari/Chrome) и случайные смещения.
+4. **Адаптивное масштабирование на компактных экранах**:
+   - Для экранов высотой < 750px (например, 667px) добавлен автоматический пропорциональный `scale(h / 760)` внутреннего содержимого без обрезки и переполнения. На стандартных и высоких экранах (>= 750px) масштаб строго 1.0.
+5. **Верификация**:
+   - Проверено в браузере при разрешении 375×667: `window.scrollY === 0`, `scrollTop === 0`, прокрутка заблокирована на 100%.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`kaspi-app/src/index.css`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 
 ### 🎯 Запрос пользователя:
 > *«look at this screenshot left is what you did right one is orig and i think you clearly can see the diffrence between them and now fix them»*
