@@ -516,9 +516,10 @@ export const DigitalIdScreen = ({ onBack }) => {
         )}
       </div>
 
-      {/* Segmented Control: height 36px, pill 32px, font 14px, preserved width (margins 18px) */}
+      {/* Segmented Control: height 36px, pill 32px, font 14px, shifted up by 4px without moving other elements */}
       <div style={{
-        marginTop: '15px',
+        marginTop: '11px',
+        marginBottom: '4px',
         marginLeft: '18px',
         marginRight: '18px',
         height: '36px',
