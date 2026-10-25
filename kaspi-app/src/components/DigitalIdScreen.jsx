@@ -17,16 +17,16 @@ const segPill       = '#FFFFFF';
 const hairline      = '#E5E5EA';
 const textPrimary   = '#1C1C1E';
 const textSecondary = '#8E8E93';
-const primaryBlue   = '#1446E0'; // main button fill (deep royal blue)
+const primaryBlue   = '#2155DB'; // less saturated, authentic iOS Kaspi blue (was #1446E0)
 const onPrimary     = '#FFFFFF';
-const outlineBorder = '#A9BCF5'; // light blue (was lavender #B8B2DC, read as pink)
-const outlineText   = '#1446E0'; // royal blue like the main button, also the upload icon
+const outlineBorder = '#B4C5F0'; // softer, less saturated outline
+const outlineText   = '#2155DB'; // matching less saturated blue
 
 const fontFamily = "'Roboto Flex Kaspi', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif";
 
-// 1. Back Chevron (<): Native iOS / Kaspi hairline chevron, less bold (strokeWidth 2.1)
+// 1. Back Chevron (<): larger size (25x25) but clean and not bolder (strokeWidth 1.9)
 const BackChevronIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+  <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
     <polyline points="15 18 9 12 15 6" />
   </svg>
 );
@@ -361,10 +361,10 @@ export const DigitalIdScreen = ({ onBack }) => {
     }}>
       {tab === 'doc' && (
         <>
-          {/* Hairline: full width, 0.5 pt on retina, shifted 7px up */}
+          {/* Hairline: full width, 0.5 pt on retina, lowered by 1px to -6px */}
           <div style={{
             position: 'absolute',
-            top: '-7px',
+            top: '-6px',
             left: 0,
             right: 0,
             height: 0,
@@ -596,7 +596,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                   <span style={{ fontSize: '13px', color: textSecondary }}>Загрузка документа...</span>
                 </div>
               ) : (
-                <div style={{ padding: '16px 16px 13px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ padding: '16px 16px 14px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   {/* Document picture slot: no frame, no border, no shadow, radius 8 */}
                   <div
                     ref={cardContainerRef}
