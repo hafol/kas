@@ -516,19 +516,19 @@ export const DigitalIdScreen = ({ onBack }) => {
         )}
       </div>
 
-      {/* Segmented Control: native 32px height, preserved width (margins 18px) */}
+      {/* Segmented Control: height 36px, pill 32px, font 14px, preserved width (margins 18px) */}
       <div style={{
         marginTop: '15px',
         marginLeft: '18px',
         marginRight: '18px',
-        height: '32px',
+        height: '36px',
         flexShrink: 0,
         backgroundColor: segTrack,
-        borderRadius: '9px',
+        borderRadius: '12px',
         position: 'relative',
         display: 'flex'
       }}>
-        {/* Sliding white pill: inset 2, height 28, radius 7 */}
+        {/* Sliding white pill: inset 2, height 32px, radius 10px */}
         <div style={{
           position: 'absolute',
           top: '2px',
@@ -536,7 +536,7 @@ export const DigitalIdScreen = ({ onBack }) => {
           left: '2px',
           width: 'calc(50% - 4px)',
           backgroundColor: segPill,
-          borderRadius: '7px',
+          borderRadius: '10px',
           boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
           transform: isDocTab ? 'translateX(0)' : 'translateX(calc(100% + 4px))',
           transition: 'transform 200ms ease'
@@ -557,7 +557,7 @@ export const DigitalIdScreen = ({ onBack }) => {
               border: 'none',
               padding: 0,
               fontFamily,
-              fontSize: '13px',
+              fontSize: '14px',
               fontWeight: activeTab === tab.id ? 500 : 400,
               color: textPrimary,
               letterSpacing: 0,
