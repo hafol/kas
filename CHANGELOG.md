@@ -2,7 +2,26 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
-## [2026-10-25 18:40] — Возврат к чистому экрану загрузки готового фото документа (Photo-Only Upload)
+## [2026-10-25 18:50] — Добавлен временный доступ для удаления и повторной загрузки фото документа
+
+### 🎯 Запрос пользователя:
+> *«дай мне доступ что бы я мог удалять фото и загружать потом новый но это потом надо убрать»*
+
+### 🛠️ Что сделано:
+1. **Функция полной очистки хранилища `clearDocumentCard()`**:
+   - В [`idStorage.js`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/utils/idStorage.js) добавлена и экспортирована функция `clearDocumentCard()`, удаляющая сохранённый документ одновременно из `localStorage` и `IndexedDB`.
+2. **Временные элементы управления удалением и заменой фото**:
+   - В правом верхнем углу шапки экрана добавлены кнопки *«Заменить»* и *«Удалить»* с иконкой корзины `Trash2`.
+   - Под карточкой документа добавлены удобные мобильные кнопки *«Заменить фото»* и *«Удалить фото»*.
+   - При нажатии на «Удалить» фото и его позиционирование мгновенно стираются из памяти, возвращая экран к исходному серому слоту *«Загрузить документ»*.
+   - Все временные блоки снабжены явной меткой `// TEMPORARY (remove later)` для быстрого и бесследного удаления по завершении тестов.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/utils/idStorage.js`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/utils/idStorage.js)
+- [`kaspi-app/src/components/DigitalIdScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/DigitalIdScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
 
 ### 🎯 Запрос пользователя:
 > *«alr lets get rid off that mess and just return how it was uploading the pic only»*

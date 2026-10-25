@@ -98,6 +98,26 @@ export async function saveDocumentCard(cardData) {
   }
 }
 
+export async function clearDocumentCard() {
+  try {
+    localStorage.removeItem(DOC_KEY);
+    localStorage.removeItem('kaspi_id_card_is_saved');
+    const db = await openIdDB();
+    if (db) {
+      await new Promise((resolve) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).delete(DOC_KEY);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      });
+    }
+    return true;
+  } catch (err) {
+    console.warn('Error clearing document card:', err);
+    return false;
+  }
+}
+
 export function loadDocumentCardSync() {
   try {
     const raw = localStorage.getItem(DOC_KEY);

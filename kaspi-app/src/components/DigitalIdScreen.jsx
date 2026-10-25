@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ZoomIn, ZoomOut, Check, Loader2 } from 'lucide-react';
+import { ZoomIn, ZoomOut, Check, Loader2, Trash2, RefreshCw } from 'lucide-react';
 import {
   saveDocumentCard,
   loadDocumentCard,
   loadDocumentCardSync,
+  clearDocumentCard,
   saveRequisites,
   loadRequisites,
   loadRequisitesSync,
@@ -332,6 +333,16 @@ export const DigitalIdScreen = ({ onBack }) => {
     setIsDragging(false);
   };
 
+  // TEMPORARY (remove later): Delete saved photo and return to clean upload slot
+  const handleDeletePhoto = async () => {
+    await clearDocumentCard();
+    setPhotoUrl(null);
+    setIsSaved(false);
+    setScale(1);
+    setOffset({ x: 0, y: 0 });
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
   const isDocTab = activeTab === 'doc';
 
   // Requisites rows: empty until the user fills them in; values are cached in IndexedDB
@@ -509,6 +520,58 @@ export const DigitalIdScreen = ({ onBack }) => {
           >
             Сохранить
           </button>
+        )}
+
+        {/* TEMPORARY (remove later): Replace / Delete buttons in header */}
+        {photoUrl && isSaved && (
+          <div style={{
+            position: 'absolute',
+            right: '12px',
+            top: '4px',
+            height: '44px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="touchable"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: primaryBlue,
+                fontSize: '13.5px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                padding: '4px 6px',
+                fontFamily
+              }}
+            >
+              Заменить
+            </button>
+            <button
+              type="button"
+              onClick={handleDeletePhoto}
+              className="touchable"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#DC2626',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '3px',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                padding: '4px 6px',
+                fontFamily
+              }}
+            >
+              <Trash2 size={14} />
+              Удалить
+            </button>
+          </div>
         )}
       </div>
 
@@ -707,6 +770,60 @@ export const DigitalIdScreen = ({ onBack }) => {
                         Сохранить
                       </button>
                     </>
+                  )}
+
+                  {/* TEMPORARY (remove later): Replace or Delete buttons below card */}
+                  {photoUrl && isSaved && (
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="touchable"
+                        style={{
+                          flex: 1,
+                          height: '38px',
+                          borderRadius: '8px',
+                          backgroundColor: segTrack,
+                          border: 'none',
+                          color: primaryBlue,
+                          fontSize: '13.5px',
+                          fontWeight: 500,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          cursor: 'pointer',
+                          fontFamily
+                        }}
+                      >
+                        <RefreshCw size={14} />
+                        Заменить фото
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleDeletePhoto}
+                        className="touchable"
+                        style={{
+                          flex: 1,
+                          height: '38px',
+                          borderRadius: '8px',
+                          backgroundColor: '#FEE2E2',
+                          border: 'none',
+                          color: '#DC2626',
+                          fontSize: '13.5px',
+                          fontWeight: 500,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          cursor: 'pointer',
+                          fontFamily
+                        }}
+                      >
+                        <Trash2 size={14} />
+                        Удалить фото
+                      </button>
+                    </div>
                   )}
                 </div>
               )}
