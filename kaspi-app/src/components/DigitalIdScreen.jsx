@@ -24,14 +24,10 @@ const outlineText   = '#1446E0'; // royal blue like the main button, also the up
 
 const fontFamily = "'Roboto Flex Kaspi', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif";
 
-// 1. Back Chevron (<): APK ic_ds_chevron_left_400, glyph 8 x 14.2 in a 16 box.
-//    Rendered at 22.5 → glyph ≈ 11 x 20, stroke ≈ 2, tinted via currentColor.
+// 1. Back Chevron (<): Native iOS / Kaspi hairline chevron, less bold (strokeWidth 2.1)
 const BackChevronIcon = () => (
-  <svg width="22.5" height="22.5" viewBox="0 0 16 16" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block' }}>
-    <path
-      d="M10.266,14.707C10.663,15.098 11.306,15.098 11.703,14.707C12.069,14.347 12.097,13.779 11.787,13.387L11.703,13.293L6.326,8L11.703,2.707C12.069,2.347 12.097,1.779 11.787,1.387L11.703,1.293C11.336,0.932 10.76,0.905 10.362,1.21L10.266,1.293L4.387,7.081C3.905,7.555 3.873,8.303 4.291,8.814L4.387,8.919L10.266,14.707Z"
-      fill="currentColor"
-    />
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+    <polyline points="15 18 9 12 15 6" />
   </svg>
 );
 
@@ -90,7 +86,7 @@ const paneScrollStyle = {
 
 const footerButtonBase = {
   width: '100%',
-  height: '52.5px', // +5% larger (50px * 1.05 = 52.5px)
+  height: '57.5px', // +5px higher (was 52.5px)
   borderRadius: '12px',
   display: 'flex',
   alignItems: 'center',
@@ -365,10 +361,10 @@ export const DigitalIdScreen = ({ onBack }) => {
     }}>
       {tab === 'doc' && (
         <>
-          {/* Hairline: full width, 0.5 pt on retina */}
+          {/* Hairline: full width, 0.5 pt on retina, shifted 7px up */}
           <div style={{
             position: 'absolute',
-            top: 0,
+            top: '-7px',
             left: 0,
             right: 0,
             height: 0,
@@ -600,7 +596,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                   <span style={{ fontSize: '13px', color: textSecondary }}>Загрузка документа...</span>
                 </div>
               ) : (
-                <div style={{ padding: '16px 16px 20px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ padding: '16px 16px 13px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   {/* Document picture slot: no frame, no border, no shadow, radius 8 */}
                   <div
                     ref={cardContainerRef}
