@@ -22,7 +22,7 @@ const onPrimary     = '#FFFFFF';
 const outlineBorder = '#A9BCF5'; // light blue (was lavender #B8B2DC, read as pink)
 const outlineText   = '#1446E0'; // royal blue like the main button, also the upload icon
 
-const fontFamily = 'system-ui, -apple-system, Roboto, sans-serif';
+const fontFamily = "'Roboto Flex Kaspi', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif";
 
 // 1. Back Chevron (<): APK ic_ds_chevron_left_400, glyph 8 x 14.2 in a 16 box.
 //    Rendered at 22.5 → glyph ≈ 11 x 20, stroke ≈ 2, tinted via currentColor.
@@ -430,8 +430,8 @@ export const DigitalIdScreen = ({ onBack }) => {
         onChange={handlePhotoUpload}
       />
 
-      {/* Safe Area Inset + 10px shift down */}
-      <div style={{ height: 'calc(env(safe-area-inset-top, 0px) + 10px)', flexShrink: 0 }} />
+      {/* Safe Area Inset */}
+      <div style={{ height: 'env(safe-area-inset-top, 0px)', flexShrink: 0 }} />
 
       {/* Nav Bar: height 52, white, no divider */}
       <div style={{
@@ -468,18 +468,20 @@ export const DigitalIdScreen = ({ onBack }) => {
           <BackChevronIcon />
         </button>
 
-        {/* Title: 17 Semibold, centred on the screen */}
+        {/* Title: reduced font size, slightly bolder */}
         <h1 style={{
           margin: 0,
-          fontSize: '17px',
-          fontWeight: 600,
+          fontFamily,
+          fontSize: '15.5px',
+          fontWeight: 700,
           color: textPrimary,
           lineHeight: '52px',
           whiteSpace: 'nowrap',
           textAlign: 'center',
           maxWidth: 'calc(100% - 100px)',
           overflow: 'hidden',
-          textOverflow: 'ellipsis'
+          textOverflow: 'ellipsis',
+          letterSpacing: '-0.1px'
         }}>
           Удостоверение личности
         </h1>
