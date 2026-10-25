@@ -29,7 +29,15 @@ export default function App() {
   }, []);
 
   // Modal / Subscreen Navigation stack
-  const [currentScreen, setCurrentScreen] = useState('tab'); // 'tab' | 'passcode' | 'my_bank' | 'gold_detail' | 'gov' | 'digital_id' | 'transfers' | 'settings' | 'qr_modal'
+  const [currentScreen, setCurrentScreen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('screen') === 'passcode' || window.location.hash === '#passcode') {
+        return 'passcode';
+      }
+    }
+    return 'tab';
+  });
   const [pendingSecureScreen, setPendingSecureScreen] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // eGov splash shown for ~1.5 s before the ID card screen opens
