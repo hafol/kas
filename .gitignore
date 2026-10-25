@@ -2,9 +2,10 @@
 _archive/
 
 # Dependencies & build output
-node_modules/
+**/node_modules/
 dist/
 dist-ssr/
+png/
 
 # Python
 __pycache__/
@@ -24,3 +25,4 @@ desktop.ini
 .vscode/*
 !.vscode/extensions.json
 .vercel
+.env*

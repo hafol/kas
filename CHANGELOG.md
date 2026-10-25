@@ -2,6 +2,31 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-25 19:28] — Исправление деплоя на Vercel (лимит 15 000 файлов) и успешная публикация на Production
+
+### 🎯 Проблема и запрос пользователя:
+> *«Created .env.local file and added it to .gitignore*  
+> *Error: Invalid request: `files` should NOT have more than 15000 items, received 23388.*  
+> *Try using `--archive=tgz` to limit the amount of files you upload.*  
+> *Learn More: https://vercel.com/docs/cli/deploy#archive»*
+
+### 🛠️ Что сделано:
+1. **Созданы конфигурации `.vercelignore`**:
+   - В корне проекта (`.vercelignore`) и внутри `kaspi-app/.vercelignore` добавлены правила исключения `node_modules`, `kaspi-app/node_modules`, `_archive`, `icons.need`, `png`, `.env*` и артефактов сборки.
+   - Число файлов для выгрузки снизилось с **23 388** до **95 файлов** (в 246 раз меньше лимита).
+2. **Использован флаг компрессии `--archive=tgz`**:
+   - Vercel CLI запаковывает весь проект в один архив перед отправкой, исключая любые сетевые сбои и превышения лимитов.
+3. **Успешный Production деплой**:
+   - Проект успешно собран и опубликован: [https://kas-two-rho.vercel.app](https://kas-two-rho.vercel.app).
+
+### 📁 Затронутые файлы:
+- [`.vercelignore`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/.vercelignore)
+- [`kaspi-app/.vercelignore`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/.vercelignore)
+- [`.gitignore`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/.gitignore)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-25 19:12] — Очистка всех лишних кнопок, одноразовая галочка сохранения, смещение верхнего блока на 10px вниз и увеличение нижних кнопок на 5%
 
 ### 🎯 Запрос пользователя:

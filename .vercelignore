@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+**/node_modules
+kaspi-app/node_modules
+.pnpm-store
+**/.vite
+**/.cache
+
+# Archives & local asset dumps
+_archive
+_archive/**
+icons.need
+icons.need/**
+png
+png/**
+*.py
+*.pyc
+__pycache__
+
+# Build output
+dist
+dist/**
+dist-ssr
+kaspi-app/dist
+kaspi-app/dist/**
+
+# Env & system & Git
+.env*
+.vercel
+.git
+.DS_Store
+Thumbs.db

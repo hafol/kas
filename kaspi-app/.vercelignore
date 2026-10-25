@@ -1,0 +1,17 @@
+# Dependencies
+node_modules
+**/node_modules
+.pnpm-store
+.vite
+.cache
+
+# Build output
+dist
+dist-ssr
+
+# Env & system
+.env*
+.vercel
+.git
+.DS_Store
+Thumbs.db
