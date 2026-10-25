@@ -27,10 +27,10 @@
   font-style: normal;
 }
 
-/* Official Kazakhstan National Identity Document Font (DIN 1451 Mittelschrift / Bahnschrift) */
+/* Official Kazakhstan National Identity Document Font (Clean Document Grotesque, 88% width, laser-print authentic) */
 @font-face {
   font-family: 'KazakhstanIdFont';
-  src: url('/fonts/kz_id_font.ttf') format('truetype');
+  src: url('/fonts/kz_id_font.ttf?v=2') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;

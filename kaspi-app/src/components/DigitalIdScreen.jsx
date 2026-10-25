@@ -23,8 +23,8 @@ const outlineBorder = '#A9BCF5';
 const outlineText   = '#1446E0';
 
 const fontFamily = "'Roboto Flex Kaspi', 'Roboto', system-ui, -apple-system, sans-serif";
-// Official Kazakhstan National Identity Document Font (DIN 1451 / Bahnschrift)
-const docFontFamily = "'KazakhstanIdFont', 'Bahnschrift', 'DIN 1451', 'DIN Alternate', 'Roboto Condensed', sans-serif";
+// Official Kazakhstan National Identity Document Font (Document Grotesque 88% width)
+const docFontFamily = "'KazakhstanIdFont', 'Arial', 'Helvetica Neue', sans-serif";
 // Official Serif font for Document Number on the back (e.g. 064142898)
 const docNumFontFamily = "'Times New Roman', 'Liberation Serif', Georgia, serif";
 const monoFontFamily = "'SF Mono', 'Roboto Mono', Consolas, monospace";
@@ -294,19 +294,19 @@ export const DigitalIdScreen = ({ onBack }) => {
   const isDocTab = activeTab === 'doc';
   const requisites = requisiteFields.map((field) => ({ ...field, value: reqValues[field.key] ?? '' }));
 
-  // Authentic printed document text style matching official Kazakhstan National ID card (DIN 1451 / Bahnschrift)
+  // Authentic printed document text style matching official Kazakhstan National ID card
   const cardInputStyle = {
     fontFamily: docFontFamily,
-    fontWeight: 500,
+    fontWeight: 400,
     textTransform: 'uppercase',
-    color: '#0A0A0A',
+    color: '#1C2220',
     background: 'transparent',
     border: 'none',
     outline: 'none',
     padding: 0,
     margin: 0,
     lineHeight: 1,
-    letterSpacing: '0.4px',
+    letterSpacing: '0.2px',
     boxSizing: 'border-box'
   };
 
@@ -601,6 +601,9 @@ export const DigitalIdScreen = ({ onBack }) => {
 
                   {/* ТЕГІ / ФАМИЛИЯ */}
                   <input
+                    id="card-lastName"
+                    name="lastName"
+                    aria-label="Фамилия"
                     type="text"
                     value={cardValues.lastName || ''}
                     onChange={(e) => handleCardFieldChange('lastName', e.target.value.toUpperCase())}
@@ -608,7 +611,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                       ...cardInputStyle,
                       position: 'absolute',
                       left: '39.0%',
-                      top: '18.5%',
+                      top: '18.8%',
                       width: '55%',
                       height: '3.8%',
                       fontSize: 'clamp(11px, 3.4vw, 13.5px)'
@@ -617,6 +620,9 @@ export const DigitalIdScreen = ({ onBack }) => {
 
                   {/* АТЫ / ИМЯ */}
                   <input
+                    id="card-firstName"
+                    name="firstName"
+                    aria-label="Имя"
                     type="text"
                     value={cardValues.firstName || ''}
                     onChange={(e) => handleCardFieldChange('firstName', e.target.value.toUpperCase())}
@@ -624,7 +630,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                       ...cardInputStyle,
                       position: 'absolute',
                       left: '39.0%',
-                      top: '25.0%',
+                      top: '25.3%',
                       width: '55%',
                       height: '3.8%',
                       fontSize: 'clamp(11px, 3.4vw, 13.5px)'
@@ -633,6 +639,9 @@ export const DigitalIdScreen = ({ onBack }) => {
 
                   {/* ӘКЕСІНІҢ АТЫ / ОТЧЕСТВО */}
                   <input
+                    id="card-middleName"
+                    name="middleName"
+                    aria-label="Отчество"
                     type="text"
                     value={cardValues.middleName || ''}
                     onChange={(e) => handleCardFieldChange('middleName', e.target.value.toUpperCase())}
@@ -640,7 +649,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                       ...cardInputStyle,
                       position: 'absolute',
                       left: '39.0%',
-                      top: '31.5%',
+                      top: '31.8%',
                       width: '55%',
                       height: '3.8%',
                       fontSize: 'clamp(11px, 3.4vw, 13.5px)'
@@ -649,6 +658,9 @@ export const DigitalIdScreen = ({ onBack }) => {
 
                   {/* ТУҒАН КҮНІ / ДАТА РОЖДЕНИЯ */}
                   <input
+                    id="card-birthDate"
+                    name="birthDate"
+                    aria-label="Дата рождения"
                     type="text"
                     value={cardValues.birthDate || ''}
                     onChange={(e) => handleCardFieldChange('birthDate', e.target.value)}
@@ -656,7 +668,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                       ...cardInputStyle,
                       position: 'absolute',
                       left: '39.0%',
-                      top: '38.0%',
+                      top: '38.4%',
                       width: '28%',
                       height: '3.8%',
                       fontSize: 'clamp(10px, 3.0vw, 12px)'
@@ -665,6 +677,9 @@ export const DigitalIdScreen = ({ onBack }) => {
 
                   {/* ЖЫНЫСЫ / ПОЛ (по центру под ЖЫНЫСЫ/ПОЛ) */}
                   <input
+                    id="card-gender"
+                    name="gender"
+                    aria-label="Пол"
                     type="text"
                     value={cardValues.gender || ''}
                     onChange={(e) => handleCardFieldChange('gender', e.target.value.toUpperCase())}
@@ -672,7 +687,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                       ...cardInputStyle,
                       position: 'absolute',
                       left: '69.5%',
-                      top: '38.0%',
+                      top: '38.4%',
                       width: '18%',
                       height: '3.8%',
                       textAlign: 'center',
@@ -682,6 +697,9 @@ export const DigitalIdScreen = ({ onBack }) => {
 
                   {/* ЖСН / ИИН (сразу после надписи ЖСН/ИИН) */}
                   <input
+                    id="card-iin"
+                    name="iin"
+                    aria-label="ИИН"
                     type="text"
                     inputMode="numeric"
                     maxLength={12}
@@ -690,9 +708,9 @@ export const DigitalIdScreen = ({ onBack }) => {
                     style={{
                       ...cardInputStyle,
                       position: 'absolute',
-                      left: '19.5%',
-                      top: '45.4%',
-                      width: '35%',
+                      left: '16.5%',
+                      top: '45.6%',
+                      width: '38%',
                       height: '3.8%',
                       fontSize: 'clamp(10px, 3.0vw, 12px)',
                       letterSpacing: '0.4px'
@@ -701,6 +719,9 @@ export const DigitalIdScreen = ({ onBack }) => {
 
                   {/* ОБОРОТНАЯ СТОРОНА: Номер документа (вверху справа, официальный Serif / Times New Roman) */}
                   <input
+                    id="card-docNumber"
+                    name="docNumber"
+                    aria-label="Номер документа"
                     type="text"
                     value={cardValues.docNumber || ''}
                     onChange={(e) => handleCardFieldChange('docNumber', e.target.value)}
@@ -710,9 +731,9 @@ export const DigitalIdScreen = ({ onBack }) => {
                       fontWeight: 400,
                       letterSpacing: '0.6px',
                       position: 'absolute',
-                      left: '63.0%',
-                      top: '53.5%',
-                      width: '32%',
+                      left: '61.0%',
+                      top: '53.8%',
+                      width: '34%',
                       height: '3.8%',
                       textAlign: 'center',
                       fontSize: 'clamp(11px, 3.3vw, 13.5px)'
@@ -721,14 +742,17 @@ export const DigitalIdScreen = ({ onBack }) => {
 
                   {/* ОБОРОТНАЯ СТОРОНА: Дата выдачи - срок действия */}
                   <input
+                    id="card-validity"
+                    name="validity"
+                    aria-label="Срок действия"
                     type="text"
                     value={cardValues.validity || ''}
                     onChange={(e) => handleCardFieldChange('validity', e.target.value)}
                     style={{
                       ...cardInputStyle,
                       position: 'absolute',
-                      left: '29.5%',
-                      top: '76.5%',
+                      left: '27.5%',
+                      top: '76.8%',
                       width: '45%',
                       height: '3.8%',
                       fontSize: 'clamp(9.5px, 2.9vw, 11.5px)'
