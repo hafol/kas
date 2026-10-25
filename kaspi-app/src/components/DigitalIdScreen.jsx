@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ZoomIn, ZoomOut, Check, Loader2, Trash2, RefreshCw } from 'lucide-react';
+import { ZoomIn, ZoomOut, Check, Loader2 } from 'lucide-react';
 import {
   saveDocumentCard,
   loadDocumentCard,
   loadDocumentCardSync,
-  clearDocumentCard,
   saveRequisites,
   loadRequisites,
   loadRequisitesSync,
@@ -36,9 +35,9 @@ const BackChevronIcon = () => (
   </svg>
 );
 
-// 2. QR-scan icon: APK ic_ds_scan_qr_500, 24 x 24, tinted via currentColor
+// 2. QR-scan icon: APK ic_ds_scan_qr_500, 25.2 x 25.2 (+5%), tinted via currentColor
 const QrScanIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="25.2" height="25.2" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M1.1,2.5C1.1,1.727 1.727,1.1 2.5,1.1H7C7.497,1.1 7.9,1.503 7.9,2C7.9,2.497 7.497,2.9 7,2.9H2.9V7C2.9,7.497 2.497,7.9 2,7.9C1.503,7.9 1.1,7.497 1.1,7V2.5Z" fill="currentColor" />
     <path d="M16.1,2C16.1,1.503 16.503,1.1 17,1.1H21.5C22.273,1.1 22.9,1.727 22.9,2.5V7C22.9,7.497 22.497,7.9 22,7.9C21.503,7.9 21.1,7.497 21.1,7V2.9H17C16.503,2.9 16.1,2.497 16.1,2Z" fill="currentColor" />
     <path d="M7.35,8.65V7.35H8.65V8.65H7.35Z" fill="currentColor" />
@@ -55,9 +54,9 @@ const QrScanIcon = () => (
   </svg>
 );
 
-// 3. Upload icon (square tray + arrow up): APK ic_ds_share_ios_500, cropped to 22 x 24, tinted via currentColor
+// 3. Upload icon (square tray + arrow up): APK ic_ds_share_ios_500, cropped to 23.1 x 25.2 (+5%), tinted via currentColor
 const UploadIcon = () => (
-  <svg width="22" height="24" viewBox="1 0 22 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="23.1" height="25.2" viewBox="1 0 22 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M20,18V12C20,10.895 19.105,10 18,10H16C15.448,10 15,9.552 15,9C15,8.448 15.448,8 16,8H18C20.209,8 22,9.791 22,12V18C22,20.209 20.209,22 18,22H6C3.791,22 2,20.209 2,18L2,12C2,9.791 3.791,8 6,8H8C8.552,8 9,8.448 9,9C9,9.552 8.552,10 8,10H6C4.895,10 4,10.895 4,12L4,18C4,19.105 4.895,20 6,20H18C19.105,20 20,19.105 20,18Z" fill="currentColor" />
     <path d="M12,15.5C12.552,15.5 13,15.052 13,14.5L13,4.414L14.293,5.707C14.683,6.098 15.317,6.098 15.707,5.707C16.098,5.317 16.098,4.683 15.707,4.293L12.707,1.293C12.317,0.902 11.683,0.902 11.293,1.293L8.293,4.293C7.902,4.683 7.902,5.317 8.293,5.707C8.683,6.098 9.317,6.098 9.707,5.707L11,4.414L11,14.5C11,15.052 11.448,15.5 12,15.5Z" fill="currentColor" />
   </svg>
@@ -91,15 +90,15 @@ const paneScrollStyle = {
 
 const footerButtonBase = {
   width: '100%',
-  height: '50px',
-  borderRadius: '11px',
+  height: '52.5px', // +5% larger (50px * 1.05 = 52.5px)
+  borderRadius: '12px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   gap: '10px',
   padding: 0,
   fontFamily,
-  fontSize: '16px',
+  fontSize: '16.8px', // +5% larger (16px * 1.05 = 16.8px)
   fontWeight: 500,
   letterSpacing: 0,
   whiteSpace: 'nowrap',
@@ -333,16 +332,6 @@ export const DigitalIdScreen = ({ onBack }) => {
     setIsDragging(false);
   };
 
-  // TEMPORARY (remove later): Delete saved photo and return to clean upload slot
-  const handleDeletePhoto = async () => {
-    await clearDocumentCard();
-    setPhotoUrl(null);
-    setIsSaved(false);
-    setScale(1);
-    setOffset({ x: 0, y: 0 });
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
-
   const isDocTab = activeTab === 'doc';
 
   // Requisites rows: empty until the user fills them in; values are cached in IndexedDB
@@ -441,8 +430,8 @@ export const DigitalIdScreen = ({ onBack }) => {
         onChange={handlePhotoUpload}
       />
 
-      {/* Safe Area Inset */}
-      <div style={{ height: 'env(safe-area-inset-top, 0px)', flexShrink: 0 }} />
+      {/* Safe Area Inset + 10px shift down */}
+      <div style={{ height: 'calc(env(safe-area-inset-top, 0px) + 10px)', flexShrink: 0 }} />
 
       {/* Nav Bar: height 52, white, no divider */}
       <div style={{
@@ -487,91 +476,41 @@ export const DigitalIdScreen = ({ onBack }) => {
           color: textPrimary,
           lineHeight: '52px',
           whiteSpace: 'nowrap',
-          textAlign: 'center'
+          textAlign: 'center',
+          maxWidth: 'calc(100% - 100px)',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
         }}>
           Удостоверение личности
         </h1>
 
-        {/* Top-right Save button: appears after photo is loaded until saved */}
+        {/* Top-right one-time checkmark button: appears after photo is loaded until saved */}
         {photoUrl && !isSaved && (
           <button
             type="button"
             onClick={handleSave}
+            aria-label="Сохранить"
             className="touchable"
             style={{
               position: 'absolute',
-              right: '14px',
+              right: '10px',
               top: '4px',
+              width: '44px',
               height: '44px',
-              padding: '0 8px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               background: 'none',
               border: 'none',
-              fontFamily,
-              fontSize: '16px',
-              fontWeight: 600,
+              padding: 0,
               color: primaryBlue,
               cursor: 'pointer',
               outline: 'none',
               WebkitTapHighlightColor: 'transparent'
             }}
           >
-            Сохранить
+            <Check size={24} strokeWidth={2.4} />
           </button>
-        )}
-
-        {/* TEMPORARY (remove later): Replace / Delete buttons in header */}
-        {photoUrl && isSaved && (
-          <div style={{
-            position: 'absolute',
-            right: '12px',
-            top: '4px',
-            height: '44px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="touchable"
-              style={{
-                background: 'none',
-                border: 'none',
-                color: primaryBlue,
-                fontSize: '13.5px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                padding: '4px 6px',
-                fontFamily
-              }}
-            >
-              Заменить
-            </button>
-            <button
-              type="button"
-              onClick={handleDeletePhoto}
-              className="touchable"
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#DC2626',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '3px',
-                fontSize: '13.5px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                padding: '4px 6px',
-                fontFamily
-              }}
-            >
-              <Trash2 size={14} />
-              Удалить
-            </button>
-          </div>
         )}
       </div>
 
@@ -723,105 +662,31 @@ export const DigitalIdScreen = ({ onBack }) => {
 
                   {/* Adjustment controls — only before saving (first upload) */}
                   {photoUrl && !isSaved && (
-                    <>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <button
-                          type="button"
-                          onClick={() => setScale((s) => Math.max(0.3, parseFloat((s - 0.1).toFixed(2))))}
-                          style={editControlButton}
-                          aria-label="Уменьшить"
-                        >
-                          <ZoomOut size={18} />
-                        </button>
-                        <input
-                          type="range"
-                          min="0.5"
-                          max="5.0"
-                          step="0.02"
-                          value={scale}
-                          onChange={(e) => setScale(parseFloat(e.target.value))}
-                          style={{ flex: 1, minWidth: 0, accentColor: primaryBlue, cursor: 'pointer' }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setScale((s) => Math.min(5.0, parseFloat((s + 0.1).toFixed(2))))}
-                          style={editControlButton}
-                          aria-label="Увеличить"
-                        >
-                          <ZoomIn size={18} />
-                        </button>
-                      </div>
-
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <button
                         type="button"
-                        onClick={handleSave}
-                        className="did-btn-primary touchable"
-                        style={{
-                          ...footerButtonBase,
-                          height: '44px',
-                          backgroundColor: primaryBlue,
-                          border: 'none',
-                          color: onPrimary,
-                          fontSize: '15.5px',
-                          fontWeight: 600
-                        }}
+                        onClick={() => setScale((s) => Math.max(0.3, parseFloat((s - 0.1).toFixed(2))))}
+                        style={editControlButton}
+                        aria-label="Уменьшить"
                       >
-                        <Check size={19} strokeWidth={2.5} />
-                        Сохранить
+                        <ZoomOut size={18} />
                       </button>
-                    </>
-                  )}
-
-                  {/* TEMPORARY (remove later): Replace or Delete buttons below card */}
-                  {photoUrl && isSaved && (
-                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <input
+                        type="range"
+                        min="0.5"
+                        max="5.0"
+                        step="0.02"
+                        value={scale}
+                        onChange={(e) => setScale(parseFloat(e.target.value))}
+                        style={{ flex: 1, minWidth: 0, accentColor: primaryBlue, cursor: 'pointer' }}
+                      />
                       <button
                         type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="touchable"
-                        style={{
-                          flex: 1,
-                          height: '38px',
-                          borderRadius: '8px',
-                          backgroundColor: segTrack,
-                          border: 'none',
-                          color: primaryBlue,
-                          fontSize: '13.5px',
-                          fontWeight: 500,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '6px',
-                          cursor: 'pointer',
-                          fontFamily
-                        }}
+                        onClick={() => setScale((s) => Math.min(5.0, parseFloat((s + 0.1).toFixed(2))))}
+                        style={editControlButton}
+                        aria-label="Увеличить"
                       >
-                        <RefreshCw size={14} />
-                        Заменить фото
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleDeletePhoto}
-                        className="touchable"
-                        style={{
-                          flex: 1,
-                          height: '38px',
-                          borderRadius: '8px',
-                          backgroundColor: '#FEE2E2',
-                          border: 'none',
-                          color: '#DC2626',
-                          fontSize: '13.5px',
-                          fontWeight: 500,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '6px',
-                          cursor: 'pointer',
-                          fontFamily
-                        }}
-                      >
-                        <Trash2 size={14} />
-                        Удалить фото
+                        <ZoomIn size={18} />
                       </button>
                     </div>
                   )}
