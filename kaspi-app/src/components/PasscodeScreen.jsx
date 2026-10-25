@@ -26,7 +26,7 @@ const CloseIcon = () => (
 
 // 3. Kaspi User Avatar: exact from icons-traced/01-user-avatar.svg
 const UserAvatarIcon = () => (
-  <svg width="78" height="78" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="92" height="92" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <defs>
       <clipPath id="avatar-clip">
         <circle cx="12" cy="12" r="11.4" />
@@ -43,7 +43,7 @@ const UserAvatarIcon = () => (
 
 // 4. Backspace Icon: authentic Kaspi delete symbol
 const BackspaceIcon = () => (
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <path
       d="M21 4H8l-6 8 6 8h13a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z"
       stroke="currentColor"
@@ -126,7 +126,8 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         zIndex: 9999,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
         maxWidth: '430px',
         margin: '0 auto',
         transform: isSlidingIn || isDismissing ? 'translateY(100%)' : 'translateY(0)',
@@ -134,12 +135,14 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         willChange: 'transform',
         userSelect: 'none',
         WebkitUserSelect: 'none',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        overflowY: 'auto'
       }}
     >
       {/* Top Header Bar */}
       <div
         style={{
+          width: '100%',
           paddingTop: 'calc(env(safe-area-inset-top, 44px) + 6px)',
           paddingLeft: '18px',
           paddingRight: '18px',
@@ -147,6 +150,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          boxSizing: 'border-box',
           flexShrink: 0
         }}
       >
@@ -207,17 +211,17 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           flexShrink: 0
         }}
       >
-        {/* Avatar Silhouette Circle */}
+        {/* Avatar Silhouette Circle (92px) */}
         <div
           style={{
-            width: '78px',
-            height: '78px',
+            width: '92px',
+            height: '92px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#FFFFFF',
-            marginBottom: '12px'
+            marginBottom: '10px'
           }}
         >
           <UserAvatarIcon />
@@ -226,8 +230,8 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         {/* User Name */}
         <div
           style={{
-            fontSize: '17px',
-            fontWeight: 600,
+            fontSize: '16px',
+            fontWeight: 400,
             color: '#1F1F1F',
             fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
             letterSpacing: '-0.1px'
@@ -239,10 +243,10 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         {/* "Код доступа" Title */}
         <div
           style={{
-            marginTop: '34px',
-            fontSize: '15px',
+            marginTop: '36px',
+            fontSize: '16px',
             fontWeight: 400,
-            color: '#757575',
+            color: '#1F1F1F',
             fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif"
           }}
         >
@@ -252,7 +256,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         {/* 4 Dots indicator */}
         <div
           style={{
-            marginTop: '16px',
+            marginTop: '12px',
             display: 'flex',
             alignItems: 'center',
             gap: '18px',
@@ -265,8 +269,8 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               <div
                 key={idx}
                 style={{
-                  width: '10px',
-                  height: '10px',
+                  width: '12px',
+                  height: '12px',
                   borderRadius: '50%',
                   backgroundColor: filled ? '#F14635' : '#D6D6DC',
                   transform: filled ? 'scale(1.1)' : 'scale(1)',
@@ -278,13 +282,14 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         </div>
       </div>
 
-      {/* Numeric Keypad Container */}
+      {/* Numeric Keypad Container (wide 314px, large 74px buttons, 36px font, 32px distance from dots) */}
       <div
         style={{
           width: '100%',
-          maxWidth: '320px',
+          maxWidth: '314px',
           margin: '0 auto',
-          padding: '0 16px',
+          marginTop: '32px',
+          padding: '0 8px',
           boxSizing: 'border-box',
           flexShrink: 0
         }}
@@ -293,8 +298,8 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
-            rowGap: '12px',
-            columnGap: '26px',
+            rowGap: '10px',
+            columnGap: '28px',
             justifyItems: 'center',
             alignItems: 'center'
           }}
@@ -317,7 +322,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                   justifyContent: 'center',
                   backgroundColor: isActive ? '#F14635' : 'transparent',
                   color: isActive ? '#FFFFFF' : '#1F1F1F',
-                  fontSize: '32px',
+                  fontSize: '36px',
                   fontWeight: 400,
                   fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
                   cursor: 'pointer',
@@ -353,7 +358,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                   justifyContent: 'center',
                   backgroundColor: isActive ? '#F14635' : 'transparent',
                   color: isActive ? '#FFFFFF' : '#1F1F1F',
-                  fontSize: '32px',
+                  fontSize: '36px',
                   fontWeight: 400,
                   fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
                   cursor: 'pointer',
@@ -409,8 +414,10 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
       {/* Bottom Link: "Забыли код доступа?" */}
       <div
         style={{
+          width: '100%',
           textAlign: 'center',
-          paddingBottom: 'calc(max(env(safe-area-inset-bottom, 20px), 24px) + 12px)',
+          marginTop: '24px',
+          paddingBottom: 'calc(max(env(safe-area-inset-bottom, 16px), 20px) + 8px)',
           flexShrink: 0
         }}
       >
