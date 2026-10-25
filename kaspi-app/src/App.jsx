@@ -65,6 +65,15 @@ export default function App() {
     }
   };
 
+  const handleOpenGov = () => {
+    if (!isAuthenticated) {
+      setPendingSecureScreen('gov');
+      setCurrentScreen('passcode');
+    } else {
+      setCurrentScreen('gov');
+    }
+  };
+
   const handleUnlock = () => {
     setIsAuthenticated(true);
     if (pendingSecureScreen) {
@@ -81,7 +90,7 @@ export default function App() {
     } else if (serviceId === 'transfers') {
       setCurrentScreen('transfers');
     } else if (serviceId === 'gov') {
-      setCurrentScreen('gov');
+      handleOpenGov();
     } else if (serviceId === 'shop') {
       // Stay on home/services or show shop
     }
@@ -143,7 +152,7 @@ export default function App() {
                 onOpenQr={() => setCurrentScreen('qr_modal')}
                 onOpenService={handleSelectService}
                 onOpenMyBank={handleOpenMyBank}
-                onOpenGov={() => setCurrentScreen('gov')}
+                onOpenGov={handleOpenGov}
               />
             )}
 
@@ -230,12 +239,17 @@ export default function App() {
         />
       )}
 
-      {/* Passcode / Face ID Screen */}
+      {/* Passcode / Lock Screen */}
       {currentScreen === 'passcode' && (
         <PasscodeScreen
           profile={userData.profile}
           onUnlock={handleUnlock}
           onBack={() => {
+            setPendingSecureScreen(null);
+            setCurrentScreen('tab');
+          }}
+          onLogout={() => {
+            setIsAuthenticated(false);
             setPendingSecureScreen(null);
             setCurrentScreen('tab');
           }}

@@ -2,6 +2,36 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 02:15] — 100% воссоздание экрана блокировки («Код доступа») по оригинальному фото (iPhone 11) с нативной анимацией
+
+### 🎯 Запрос пользователя:
+> *«alright lets create the lock screen page here you can see the original page as a phtot attached in icons-traced you can find svgs you need for that page review everyone of them after that try to re create absolute copy when you open appand for instance clik the гос услуги icon it just appears with static animation from below any code you write will be correct. when you click on numbers there is animation like red filled circle just on that number you clicked and the grey notes just below код доступа while typing it turns into red ones you know the pallet official from the apk and you cna check this apk file entirely as well but i want you to carefully sceth up this photo attached and calculate evry ratio this is ipone 11 screen btw»*
+
+### 🛠️ Что сделано:
+1. **Пропорции и компоновка 1:1 по приложенному фото iPhone 11 (`media_1792956220864.jpg`)**:
+   - Верхняя панель: иконка выхода слева (`ic_ds_logout_500` из APK Kaspi) и крестик закрытия справа (`ic_ds_close_500` из APK Kaspi), с учётом `safe-area-inset-top`.
+   - Центрированный блок профиля:
+     - Векторная круглая иконка аватара (`icons-traced/01-user-avatar.svg`) диаметром 78px с серым силуэтом `#B5B5B5` и тонким контуром `#C8C8C8`.
+     - Имя пользователя: *«Парасат Ж.»* полужирным нативным шрифтом `Roboto Flex Kaspi` (17px, 600).
+   - Заголовок *«Код доступа»* (15px, `#757575`).
+   - 4 круглых индикатора (10×10px, шаг 18px), меняющие серый цвет `#D6D6DC` на фирменный красный Kaspi `#F14635` при вводе цифр с эффектом масштабирования `scale(1.1)`.
+2. **Интерактивная цифровая клавиатура с красной круговой анимацией**:
+   - Сетка 3×4 кнопок размером 74×74px с шрифтом 32px (без лишних латинских подписей букв, как в оригинале Kaspi).
+   - При нажатии на цифру срабатывает фирменный эффект Kaspi: кнопка заливается сочным красным кругом `#F14635`, а цифра окрашивается в белый цвет `#FFFFFF` со сжатием `scale(0.95)`.
+   - В правом нижнем углу динамически появляется кнопка удаления (`BackspaceIcon`), когда введено более 0 символов.
+   - Внизу экрана размещена фирменная ссылка *«Забыли код доступа?»* официального синего цвета Kaspi `#0089D0`.
+3. **Плавная анимация появления снизу (slide-up) и авторазблокировка**:
+   - Полноэкранный переход `translateY(100%)` → `translateY(0)` с нативной кривой ускорения `cubic-bezier(0.22, 1, 0.36, 1)` при переходе в защищённые разделы (например, при нажатии на ярлык «Госуслуги» на главной).
+   - При вводе 4-й цифры происходит моментальное заполнение последнего кружка и автоматический переход в выбранный раздел («Госуслуги»).
+   - Кнопка выхода сбрасывает статус аутентификации.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-25 23:28] — Опускание линии на 1px, увеличение стрелки без утяжеления и снижение насыщенности синего цвета кнопок
 
 ### 🎯 Запрос пользователя:
