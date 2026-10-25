@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// 1. Kaspi Logout Icon: 20 x 19, Left edge 16, Centre y 62
+// 1. Kaspi Logout Icon: 22.5 x 20.5, Left edge 15.5, Centre y 62.5
 const LogoutIcon = () => (
-  <svg width="20" height="19" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="22.5" height="20.5" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <path
       d="M5.5,20H12.5C13.605,20 14.5,19.105 14.5,18V16C14.5,15.448 14.948,15 15.5,15C16.052,15 16.5,15.448 16.5,16V18C16.5,20.209 14.709,22 12.5,22H5.5C3.291,22 1.5,20.209 1.5,18V6C1.5,3.791 3.291,2 5.5,2H12.5C14.709,2 16.5,3.791 16.5,6V8C16.5,8.552 16.052,9 15.5,9C14.948,9 14.5,8.552 14.5,8V6C14.5,4.895 13.605,4 12.5,4H5.5C4.395,4 3.5,4.895 3.5,6V18C3.5,19.105 4.395,20 5.5,20Z"
       fill="#212121"
@@ -14,17 +14,17 @@ const LogoutIcon = () => (
   </svg>
 );
 
-// 2. Kaspi Close Icon: 13 x 13, stroke 2, #212121, Right edge 20, Centre y 62
+// 2. Kaspi Close Icon: 16 x 16, stroke 2, #212121, Right edge 19, Centre y 62.5
 const CloseIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style={{ display: 'block' }}>
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ display: 'block' }}>
     <line x1="2" y1="2" x2="14" y2="14" stroke="#212121" strokeWidth="2" strokeLinecap="round" />
     <line x1="14" y1="2" x2="2" y2="14" stroke="#212121" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
 
-// 3. Kaspi User Avatar: Diameter 75, Top 84, Centre y 121.5, Ring stroke 0.45 (#C8C8C8), Silhouette fill #9B9B9B
+// 3. Kaspi User Avatar: Diameter 76.5, Centre y 122, Ring stroke 0.45 (#C8C8C8), Silhouette fill #9B9B9B
 const UserAvatarIcon = () => (
-  <svg width="75" height="75" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="76.5" height="76.5" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <defs>
       <clipPath id="avatar-clip">
         <circle cx="12" cy="12" r="11.4" />
@@ -39,18 +39,18 @@ const UserAvatarIcon = () => (
   </svg>
 );
 
-// 4. Backspace Icon: authentic Kaspi delete symbol
+// 4. Backspace Icon: authentic Kaspi outline delete tag shape 33 x 23.5, stroke 2, #212121, "x" 9 x 9
 const BackspaceIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="33" height="23.5" viewBox="0 0 33 23.5" fill="none" style={{ display: 'block' }}>
     <path
-      d="M21 4H8l-6 8 6 8h13a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z"
+      d="M9.5 1.25 L29.5 1.25 A 2.25 2.25 0 0 1 31.75 3.5 L31.75 20 A 2.25 2.25 0 0 1 29.5 22.25 L9.5 22.25 L1.7 12.55 A 1 1 0 0 1 1.7 10.95 Z"
       stroke="#212121"
-      strokeWidth="1.6"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <line x1="18" y1="9" x2="12" y2="15" stroke="#212121" strokeWidth="1.6" strokeLinecap="round" />
-    <line x1="12" y1="9" x2="18" y2="15" stroke="#212121" strokeWidth="1.6" strokeLinecap="round" />
+    <line x1="16.1" y1="7.25" x2="25.1" y2="16.25" stroke="#212121" strokeWidth="2" strokeLinecap="round" />
+    <line x1="25.1" y1="7.25" x2="16.1" y2="16.25" stroke="#212121" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
 
@@ -101,7 +101,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
   const handleDigitPress = (d) => {
     if (digits.length >= 4) return;
 
-    // Trigger red filled circle ripple animation on pressed number
+    // Trigger orange-red filled circle ripple animation on pressed number
     setActiveDigit(d);
     setTimeout(() => {
       setActiveDigit(null);
@@ -111,7 +111,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
     setDigits(next);
 
     if (next.length === 4) {
-      // All 4 dots filled with red: brief delay so user sees 4th dot, then unlock
+      // All 4 dots filled with orange-red: brief delay so user sees 4th dot, then unlock
       timeoutRef.current = setTimeout(() => {
         setIsDismissing(true);
         setTimeout(() => {
@@ -133,16 +133,15 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
     };
   }, []);
 
-  // Column pitch: 98.5px
-  // Col 0: -98.5px, Col 1: 0px, Col 2: +98.5px
-  const colOffsets = [-98.5, 0, 98.5];
+  // Column pitch: 100px. Column centres: 80 / 180 / 280 (screen centre - 100, centre, centre + 100)
+  const colOffsets = [-100, 0, 100];
 
-  // Keypad row bottom distances (measured on 770 screen):
-  // Row 0 (1,2,3): center 408.0 -> bottom 322.75px
-  // Row 1 (4,5,6): center 486.5 -> bottom 244.25px
-  // Row 2 (7,8,9): center 565.0 -> bottom 165.75px
-  // Row 3 (0):       center 643.5 -> bottom 87.25px
-  const rowBottomOffsets = [322.75, 244.25, 165.75, 87.25];
+  // Keypad row bottom distances (measured on 360 x 779 baseline):
+  // Row 0 (1,2,3): center 413.5 -> bottom 330.25px
+  // Row 1 (4,5,6): center 492.5 -> bottom 251.25px (pitch 79.0)
+  // Row 2 (7,8,9): center 571.5 -> bottom 172.25px (pitch 79.0)
+  // Row 3 (0):       center 652.0 -> bottom 91.75px  (pitch 80.5, average pitch 79.5)
+  const rowBottomOffsets = [330.25, 251.25, 172.25, 91.75];
 
   // Keypad layout definition
   const keypadKeys = [
@@ -158,8 +157,8 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
     { num: '0', row: 3, col: 1 },
   ];
 
-  // Dot offsets from card center: pitch 34.0px (-51, -17, 17, 51)
-  const dotOffsets = [-51, -17, 17, 51];
+  // Dot offsets from card center: pitch 34.5px (centres 128 / 162 / 196.5 / 231)
+  const dotOffsets = [-52, -18, 16.5, 51];
 
   return (
     <div
@@ -182,7 +181,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         overflow: 'hidden',
         overscrollBehavior: 'none',
         touchAction: 'none',
-        fontFamily: "'Roboto', sans-serif"
+        fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
       }}
     >
       <div
@@ -194,18 +193,18 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           touchAction: 'none'
         }}
       >
-        {/* Top Header Icons (positioned near top without awkward gap) */}
-        {/* Logout Button */}
+        {/* 1. TOP ICONS (Centre y = 62.5) */}
+        {/* Logout Button: 22.5 x 20.5, Left edge 15.5, Centre y 62.5 */}
         <button
           type="button"
           onClick={onLogout || handleDismiss}
           aria-label="Выйти"
           style={{
             position: 'absolute',
-            left: '16px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 16px)',
-            width: '20px',
-            height: '19px',
+            left: '15.5px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 12.5px)',
+            width: '22.5px',
+            height: '20.5px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -220,17 +219,17 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <LogoutIcon />
         </button>
 
-        {/* Close Button */}
+        {/* Close Button: 16 x 16, stroke 2, #212121, Right edge 19, Centre y 62.5 */}
         <button
           type="button"
           onClick={handleDismiss}
           aria-label="Закрыть"
           style={{
             position: 'absolute',
-            right: '20px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 19px)',
-            width: '13px',
-            height: '13px',
+            right: '19px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 14.75px)',
+            width: '16px',
+            height: '16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -245,15 +244,15 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <CloseIcon />
         </button>
 
-        {/* Avatar */}
+        {/* 2. AVATAR (Diameter 76.5, Centre y 122) */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 48px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 45.75px)',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: '75px',
-            height: '75px',
+            width: '76.5px',
+            height: '76.5px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
@@ -264,11 +263,11 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <UserAvatarIcon />
         </div>
 
-        {/* Name "Парасат Ж." */}
+        {/* NAME "Парасат Ж.": 13 Regular, #212121, Centre y 185.5 */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 138px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 142px)',
             left: 0,
             right: 0,
             textAlign: 'center',
@@ -277,17 +276,17 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             lineHeight: '14px',
             color: '#212121',
             letterSpacing: '0px',
-            fontFamily: "'Roboto', sans-serif"
+            fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
           }}
         >
           {profile?.shortName || 'Парасат Ж.'}
         </div>
 
-        {/* Title "Код доступа" */}
+        {/* TITLE "Код доступа": 13 Regular, #212121, Centre y 272 (Gap name->title: 86.5) */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 208px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 231px)',
             left: 0,
             right: 0,
             textAlign: 'center',
@@ -296,13 +295,13 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             lineHeight: '14px',
             color: '#212121',
             letterSpacing: '0px',
-            fontFamily: "'Roboto', sans-serif"
+            fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
           }}
         >
           Код доступа
         </div>
 
-        {/* PIN dots: diameter 10, pitch 34.0, colour #EFEFEF / #F14635 */}
+        {/* 3. PIN DOTS: Centre y 304.5 (32.5 below title), diameter 11.5, pitch 34.5, empty #EEEEEE, filled #F04926 */}
         {dotOffsets.map((offset, idx) => {
           const filled = digits.length > idx;
           return (
@@ -310,21 +309,20 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               key={idx}
               style={{
                 position: 'absolute',
-                top: 'calc(env(safe-area-inset-top, 0px) + 240px)',
-                left: `calc(50% + ${offset}px - 5px)`,
-                width: '10px',
-                height: '10px',
+                top: 'calc(env(safe-area-inset-top, 0px) + 266.75px)',
+                left: `calc(50% + ${offset}px - 5.75px)`,
+                width: '11.5px',
+                height: '11.5px',
                 borderRadius: '50%',
-                backgroundColor: filled ? '#F14635' : '#EFEFEF',
-                transform: filled ? 'scale(1.15)' : 'scale(1)',
-                transition: 'background-color 0.16s ease, transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                backgroundColor: filled ? '#F04926' : '#EEEEEE',
+                transition: 'background-color 0.16s ease'
               }}
             />
           );
         })}
 
-        {/* Keypad Digits: Roboto Regular 28, #212121, Tap area 98.5 x 78.5 */}
-        {/* Row centres: 408 / 486.5 / 565 / 643.5; Column centres: -98.5, 0, +98.5 */}
+        {/* 4. KEYPAD DIGITS: Roboto Regular 28, #212121, Tap area 100 x 79.5 */}
+        {/* Row centres: 413.5 / 492.5 / 571.5 / 652; Column centres: 80 / 180 / 280 (pitch 100) */}
         {keypadKeys.map(({ num, row, col }) => {
           const isActive = activeDigit === num;
           const bottomPos = rowBottomOffsets[row];
@@ -338,9 +336,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               style={{
                 position: 'absolute',
                 bottom: `${bottomPos}px`,
-                left: `calc(50% + ${leftOffset}px - 49.25px)`,
-                width: '98.5px',
-                height: '78.5px',
+                left: `calc(50% + ${leftOffset}px - 50px)`,
+                width: '100px',
+                height: '79.5px',
                 border: 'none',
                 outline: 'none',
                 display: 'flex',
@@ -352,7 +350,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                 padding: 0
               }}
             >
-              {/* Red touch ripple circle */}
+              {/* Orange-red touch ripple circle */}
               {isActive && (
                 <div
                   style={{
@@ -360,7 +358,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                     width: '56px',
                     height: '56px',
                     borderRadius: '50%',
-                    backgroundColor: '#F14635'
+                    backgroundColor: '#F04926'
                   }}
                 />
               )}
@@ -371,7 +369,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                   fontWeight: 400,
                   lineHeight: '28px',
                   color: isActive ? '#FFFFFF' : '#212121',
-                  fontFamily: "'Roboto', sans-serif",
+                  fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
                   letterSpacing: '0px'
                 }}
               >
@@ -381,7 +379,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           );
         })}
 
-        {/* Backspace Button: Row 3, Column 2 (Centre x +98.5) */}
+        {/* 5. BACKSPACE BUTTON: Row 3, Column 2 (Centre 280, 652), Icon 33 x 23.5 */}
         {digits.length > 0 && (
           <button
             type="button"
@@ -390,9 +388,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             style={{
               position: 'absolute',
               bottom: `${rowBottomOffsets[3]}px`,
-              left: 'calc(50% + 98.5px - 49.25px)',
-              width: '98.5px',
-              height: '78.5px',
+              left: 'calc(50% + 100px - 50px)',
+              width: '100px',
+              height: '79.5px',
               border: 'none',
               outline: 'none',
               display: 'flex',
@@ -408,11 +406,11 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           </button>
         )}
 
-        {/* Forgot Link "Забыли код доступа?": 13 Regular, color #0089D0, Centre y 59 above bottom (bottom: 52px) */}
+        {/* 6. FORGOT LINK "Забыли код доступа?": 13 Regular, color #0089D0, Centre y 719 */}
         <div
           style={{
             position: 'absolute',
-            bottom: '52px',
+            bottom: '56px',
             left: 0,
             right: 0,
             height: '14px',
@@ -432,7 +430,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               fontWeight: 400,
               lineHeight: '14px',
               color: '#0089D0',
-              fontFamily: "'Roboto', sans-serif",
+              fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
               cursor: 'pointer',
               outline: 'none'
             }}
