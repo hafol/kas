@@ -59,7 +59,6 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
   const [activeDigit, setActiveDigit] = useState(null);
   const [isSlidingIn, setIsSlidingIn] = useState(true);
   const [isDismissing, setIsDismissing] = useState(false);
-  const [scale, setScale] = useState(1);
   const timeoutRef = useRef(null);
 
   // Trigger smooth slide-up animation on mount
@@ -73,21 +72,8 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
   // Guarantee page is 100% STATIC: lock body/html scroll and block touchmove/wheel
   useEffect(() => {
     const preventScroll = (e) => {
-      // Prevent rubber-banding or page scrolling
       e.preventDefault();
     };
-
-    const updateScale = () => {
-      const h = window.innerHeight;
-      if (h < 750) {
-        setScale(Math.min(1, h / 760));
-      } else {
-        setScale(1);
-      }
-    };
-
-    updateScale();
-    window.addEventListener('resize', updateScale);
 
     const prevBodyOverflow = document.body.style.overflow;
     const prevHtmlOverflow = document.documentElement.style.overflow;
@@ -100,7 +86,6 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
     return () => {
       document.body.style.overflow = prevBodyOverflow;
       document.documentElement.style.overflow = prevHtmlOverflow;
-      window.removeEventListener('resize', updateScale);
       window.removeEventListener('touchmove', preventScroll);
       window.removeEventListener('wheel', preventScroll);
     };
@@ -204,16 +189,13 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         style={{
           position: 'relative',
           width: '100%',
-          height: scale < 1 ? '770px' : '100%',
-          maxHeight: '100%',
-          transform: scale < 1 ? `scale(${scale})` : 'none',
-          transformOrigin: 'top center',
+          height: '100%',
           overflow: 'hidden',
           touchAction: 'none'
         }}
       >
-        {/* Top Header Icons (Centre y 62.0) */}
-        {/* Logout Button (Left edge 16, 20 x 19, Centre y 62 -> top: 52.5px) */}
+        {/* Top Header Icons (positioned near top without awkward gap) */}
+        {/* Logout Button */}
         <button
           type="button"
           onClick={onLogout || handleDismiss}
@@ -221,7 +203,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           style={{
             position: 'absolute',
             left: '16px',
-            top: '52.5px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 16px)',
             width: '20px',
             height: '19px',
             display: 'flex',
@@ -238,7 +220,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <LogoutIcon />
         </button>
 
-        {/* Close Button (Right edge 20, 13x13, stroke 2, #212121, Centre y 62 -> top: 55.5px) */}
+        {/* Close Button */}
         <button
           type="button"
           onClick={handleDismiss}
@@ -246,7 +228,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           style={{
             position: 'absolute',
             right: '20px',
-            top: '55.5px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 19px)',
             width: '13px',
             height: '13px',
             display: 'flex',
@@ -263,11 +245,11 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <CloseIcon />
         </button>
 
-        {/* Avatar (Diameter 75, Top 84, Centre y 121.5, Ring stroke 0.45 #C8C8C8, Fill #9B9B9B) */}
+        {/* Avatar */}
         <div
           style={{
             position: 'absolute',
-            top: '84px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 48px)',
             left: '50%',
             transform: 'translateX(-50%)',
             width: '75px',
@@ -282,11 +264,11 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <UserAvatarIcon />
         </div>
 
-        {/* Name "Парасат Ж." (13 Regular, #212121, Centre y 183.5, Top 176.5) */}
+        {/* Name "Парасат Ж." */}
         <div
           style={{
             position: 'absolute',
-            top: '176.5px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 138px)',
             left: 0,
             right: 0,
             textAlign: 'center',
@@ -301,11 +283,11 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           {profile?.shortName || 'Парасат Ж.'}
         </div>
 
-        {/* Title "Код доступа" (13 Regular, #212121, Centre y 268.5, Top 261.5) */}
+        {/* Title "Код доступа" */}
         <div
           style={{
             position: 'absolute',
-            top: '261.5px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 208px)',
             left: 0,
             right: 0,
             textAlign: 'center',
@@ -320,7 +302,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           Код доступа
         </div>
 
-        {/* PIN dots: diameter 10, pitch 34.0, Centre y 300.0 (top: 295px), colour #EFEFEF / #F14635 */}
+        {/* PIN dots: diameter 10, pitch 34.0, colour #EFEFEF / #F14635 */}
         {dotOffsets.map((offset, idx) => {
           const filled = digits.length > idx;
           return (
@@ -328,7 +310,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               key={idx}
               style={{
                 position: 'absolute',
-                top: '295px',
+                top: 'calc(env(safe-area-inset-top, 0px) + 240px)',
                 left: `calc(50% + ${offset}px - 5px)`,
                 width: '10px',
                 height: '10px',

@@ -2,7 +2,33 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
-## [2026-10-26 04:18] — Полная блокировка скролла экрана «Код доступа» (100% статичный нативный экран)
+## [2026-10-26 04:31] — Устранение пустого зазора сверху («gap above») на экране «Код доступа»
+
+### 🎯 Запрос пользователя:
+> *«when i open it there is always gap above»*
+> *Выбор пользователя: «(Recommended) The empty space above the logout/close icons inside the white screen is too large (move icons and avatar higher up towards the top)»*
+
+### 🛠️ Что сделано:
+1. **Устранён избыточный отступ сверху (52.5px)**:
+   - Ранее верхние иконки находились на `top: 52.5px` (так как координаты снимались с макета с аппаратной строкой состояния Android/iOS 44px).
+   - Теперь верхние кнопки (Logout и Close X) перенесены на органичный нативный мобильный отступ: `top: calc(env(safe-area-inset-top, 0px) + 16px)`.
+   - На экранах без выреза (браузер, PWA, DevTools) иконка выхода находится ровно на `top = 16px`, а на устройствах с вырезом/Dynamic Island отступ автоматически учитывает безопасную зону.
+2. **Смещение верхнего блока вверх**:
+   - Аватар: `top: calc(env(safe-area-inset-top, 0px) + 48px)` (вместо 84px).
+   - Имя «Парасат Ж.»: `top: calc(env(safe-area-inset-top, 0px) + 138px)` (вместо 176.5px).
+   - Заголовок «Код доступа»: `top: calc(env(safe-area-inset-top, 0px) + 208px)` (вместо 261.5px).
+   - Точки PIN: `top: calc(env(safe-area-inset-top, 0px) + 240px)` (вместо 295px).
+3. **Удалён искусственный `scale`**:
+   - Теперь весь интерфейс естественно и без искажений помещается в компактные экраны (375×667), сохраняя пропорции, чёткость 1:1 и 100% статичность без скролла.
+4. **Верификация**:
+   - Проверено через браузерный субагент при разрешении 375×667: верхние кнопки Logout и Close находятся строго на `top = 16px`, пустой зазор сверху полностью устранён.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 
 ### 🎯 Запрос пользователя:
 > *«why i can scroll it this page has to be static»*
