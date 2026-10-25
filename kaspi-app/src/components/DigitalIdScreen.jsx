@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Camera, Check } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { ZoomIn, ZoomOut, Check, Loader2 } from 'lucide-react';
 import {
   saveDocumentCard,
   loadDocumentCard,
@@ -10,26 +10,22 @@ import {
   optimizeImage
 } from '../utils/idStorage';
 
-// Official Kaspi Colors
-const pageBg        = '#FFFFFF';
+// Color Tokens (from specification)
+const pageBg        = '#FFFFFF'; // the whole screen, header included
 const segTrack      = '#EEEEF0';
 const segPill       = '#FFFFFF';
 const hairline      = '#E5E5EA';
 const textPrimary   = '#1C1C1E';
 const textSecondary = '#8E8E93';
-const primaryBlue   = '#1446E0';
+const primaryBlue   = '#1446E0'; // main button fill (deep royal blue)
 const onPrimary     = '#FFFFFF';
-const outlineBorder = '#A9BCF5';
-const outlineText   = '#1446E0';
+const outlineBorder = '#A9BCF5'; // light blue (was lavender #B8B2DC, read as pink)
+const outlineText   = '#1446E0'; // royal blue like the main button, also the upload icon
 
-const fontFamily = "'Roboto Flex Kaspi', 'Roboto', system-ui, -apple-system, sans-serif";
-// Official Kazakhstan National Identity Document Font (Document Grotesque 88% width)
-const docFontFamily = "'KazakhstanIdFont', 'Arial', 'Helvetica Neue', sans-serif";
-// Official Serif font for Document Number on the back (e.g. 064142898)
-const docNumFontFamily = "'Times New Roman', 'Liberation Serif', Georgia, serif";
-const monoFontFamily = "'SF Mono', 'Roboto Mono', Consolas, monospace";
+const fontFamily = 'system-ui, -apple-system, Roboto, sans-serif';
 
-// Back Chevron Icon
+// 1. Back Chevron (<): APK ic_ds_chevron_left_400, glyph 8 x 14.2 in a 16 box.
+//    Rendered at 22.5 → glyph ≈ 11 x 20, stroke ≈ 2, tinted via currentColor.
 const BackChevronIcon = () => (
   <svg width="22.5" height="22.5" viewBox="0 0 16 16" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block' }}>
     <path
@@ -39,7 +35,7 @@ const BackChevronIcon = () => (
   </svg>
 );
 
-// QR Scan Icon
+// 2. QR-scan icon: APK ic_ds_scan_qr_500, 24 x 24, tinted via currentColor
 const QrScanIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M1.1,2.5C1.1,1.727 1.727,1.1 2.5,1.1H7C7.497,1.1 7.9,1.503 7.9,2C7.9,2.497 7.497,2.9 7,2.9H2.9V7C2.9,7.497 2.497,7.9 2,7.9C1.503,7.9 1.1,7.497 1.1,7V2.5Z" fill="currentColor" />
@@ -58,15 +54,15 @@ const QrScanIcon = () => (
   </svg>
 );
 
-// Share Icon
-const ShareIcon = () => (
+// 3. Upload icon (square tray + arrow up): APK ic_ds_share_ios_500, cropped to 22 x 24, tinted via currentColor
+const UploadIcon = () => (
   <svg width="22" height="24" viewBox="1 0 22 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M20,18V12C20,10.895 19.105,10 18,10H16C15.448,10 15,9.552 15,9C15,8.448 15.448,8 16,8H18C20.209,8 22,9.791 22,12V18C22,20.209 20.209,22 18,22H6C3.791,22 2,20.209 2,18L2,12C2,9.791 3.791,8 6,8H8C8.552,8 9,8.448 9,9C9,9.552 8.552,10 8,10H6C4.895,10 4,10.895 4,12L4,18C4,19.105 4.895,20 6,20H18C19.105,20 20,19.105 20,18Z" fill="currentColor" />
     <path d="M12,15.5C12.552,15.5 13,15.052 13,14.5L13,4.414L14.293,5.707C14.683,6.098 15.317,6.098 15.707,5.707C16.098,5.317 16.098,4.683 15.707,4.293L12.707,1.293C12.317,0.902 11.683,0.902 11.293,1.293L8.293,4.293C7.902,4.683 7.902,5.317 8.293,5.707C8.683,6.098 9.317,6.098 9.707,5.707L11,4.414L11,14.5C11,15.052 11.448,15.5 12,15.5Z" fill="currentColor" />
   </svg>
 );
 
-// Copy Icon
+// 4. Copy icon (two overlapping rounded squares): APK ic_ds_copy_500, 24 x 24, tinted via currentColor
 const CopyIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M12,2C10.067,2 8.5,3.567 8.5,5.5V6C8.5,6.552 8.948,7 9.5,7C10.052,7 10.5,6.552 10.5,6V5.5C10.5,4.672 11.172,4 12,4H18.5C19.328,4 20,4.672 20,5.5V12.5C20,13.052 19.552,13.5 19,13.5H18C17.448,13.5 17,13.948 17,14.5C17,15.052 17.448,15.5 18,15.5H19C20.657,15.5 22,14.157 22,12.5V5.5C22,3.567 20.433,2 18.5,2H12Z" fill="currentColor" />
@@ -74,6 +70,7 @@ const CopyIcon = () => (
   </svg>
 );
 
+// One page of the sliding track: half the track width, own scroll area + footer
 const paneStyle = {
   width: '50%',
   height: '100%',
@@ -111,6 +108,22 @@ const footerButtonBase = {
   boxSizing: 'border-box'
 };
 
+const editControlButton = {
+  width: '40px',
+  height: '40px',
+  borderRadius: '8px',
+  border: 'none',
+  backgroundColor: segTrack,
+  color: textPrimary,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 0,
+  cursor: 'pointer',
+  flexShrink: 0
+};
+
+// Requisites rows, in order. inputMode picks the phone keyboard (digits for ИИН and number).
 const requisiteFields = [
   { key: 'fullName', label: 'ФИО', inputMode: 'text' },
   { key: 'iin', label: 'ИИН', inputMode: 'numeric' },
@@ -123,206 +136,236 @@ const requisiteFields = [
 export const DigitalIdScreen = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState('doc'); // 'doc' | 'reqs'
   const fileInputRef = useRef(null);
+  const cardContainerRef = useRef(null);
 
-  // Synchronous initial restore from localStorage so data NEVER resets on page reload
-  const syncDoc = loadDocumentCardSync() || {};
-  const syncReqs = loadRequisitesSync() || {};
+  // Synchronous initial restore from localStorage so photo is NEVER reset on reload
+  const syncDoc = loadDocumentCardSync();
+  const syncReqs = loadRequisitesSync();
 
-  // 3x4 Portrait Photo
-  const [photoUrl, setPhotoUrl] = useState(() => syncDoc.photoUrl || null);
+  // Document photo state
+  const [photoUrl, setPhotoUrl] = useState(() => syncDoc?.photoUrl || null);
+  const [scale, setScale] = useState(() => syncDoc?.scale || 1);
+  const [offset, setOffset] = useState(() => ({ x: syncDoc?.offsetX || 0, y: syncDoc?.offsetY || 0 }));
+  const [isSaved, setIsSaved] = useState(() => Boolean(syncDoc?.isSaved));
+  const [isLoading, setIsLoading] = useState(() => !syncDoc);
 
-  // Card text values (starts empty unless user already entered and saved data)
-  const [cardValues, setCardValues] = useState(() => {
-    return {
-      lastName: syncDoc.lastName || '',
-      firstName: syncDoc.firstName || '',
-      middleName: syncDoc.middleName || '',
-      birthDate: syncDoc.birthDate || syncReqs.birthDate || '',
-      gender: syncDoc.gender || '',
-      iin: syncDoc.iin || syncReqs.iin || '',
-      docNumber: syncDoc.docNumber || syncReqs.docNumber || '',
-      validity: syncDoc.validity || '',
-      issueDate: syncDoc.issueDate || syncReqs.issueDate || '',
-      expiryDate: syncDoc.expiryDate || syncReqs.expiryDate || ''
+  // Dragging & gesture interaction state
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({ x: 0, y: 0, initialOffsetX: 0, initialOffsetY: 0 });
+  const touchStartDistRef = useRef(null);
+  const touchStartScaleRef = useRef(1);
+
+  // Requisites typed in by the user (start empty or from sync cache)
+  const [reqValues, setReqValues] = useState(() => syncReqs || {});
+  const reqEditedRef = useRef(false);
+
+  // Load cached requisites (IndexedDB fallback); never overwrite what the user already started typing
+  useEffect(() => {
+    let isMounted = true;
+    loadRequisites().then((saved) => {
+      if (isMounted && saved && !reqEditedRef.current) setReqValues((prev) => ({ ...saved, ...prev }));
+    });
+    return () => {
+      isMounted = false;
     };
-  });
+  }, []);
 
-  // Requisites values synced with card values
-  const [reqValues, setReqValues] = useState(() => {
-    const fn = [syncDoc.lastName, syncDoc.firstName, syncDoc.middleName].filter(Boolean).join(' ');
-    return {
-      fullName: syncReqs.fullName || fn || '',
-      iin: syncReqs.iin || syncDoc.iin || '',
-      birthDate: syncReqs.birthDate || syncDoc.birthDate || '',
-      docNumber: syncReqs.docNumber || syncDoc.docNumber || '',
-      issueDate: syncReqs.issueDate || syncDoc.issueDate || '',
-      expiryDate: syncReqs.expiryDate || syncDoc.expiryDate || '',
-      ...syncReqs
-    };
-  });
-
-  const [savedFeedback, setSavedFeedback] = useState('');
-
-  // Asynchronous backup restore from IndexedDB
+  // Load saved document from persistent cache (IndexedDB fallback)
   useEffect(() => {
     let isMounted = true;
     async function loadData() {
       try {
-        const savedDoc = await loadDocumentCard();
-        const savedReqs = await loadRequisites();
-        if (isMounted) {
-          if (savedDoc) {
-            if (savedDoc.photoUrl && !photoUrl) setPhotoUrl(savedDoc.photoUrl);
-            setCardValues((prev) => ({ ...prev, ...savedDoc }));
-          }
-          if (savedReqs) {
-            setReqValues((prev) => ({ ...prev, ...savedReqs }));
+        const saved = await loadDocumentCard();
+        if (isMounted && saved && saved.photoUrl) {
+          if (!photoUrl) {
+            setPhotoUrl(saved.photoUrl);
+            setScale(saved.scale || 1);
+            setOffset({ x: saved.offsetX || 0, y: saved.offsetY || 0 });
+            setIsSaved(Boolean(saved.isSaved));
           }
         }
       } catch (err) {
-        console.warn('Error restoring ID data from IndexedDB:', err);
+        console.warn('Error loading document card:', err);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
     }
     loadData();
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [photoUrl]);
 
-  // Save all changes immediately to localStorage + IndexedDB
-  const persistAll = async (nextPhoto, nextCard, nextReqs) => {
-    const photo = nextPhoto !== undefined ? nextPhoto : photoUrl;
-    const card = nextCard !== undefined ? nextCard : cardValues;
-    const reqs = nextReqs !== undefined ? nextReqs : reqValues;
-
-    const docPayload = {
-      ...card,
-      photoUrl: photo,
-      isSaved: true,
-      updatedAt: Date.now()
-    };
-
-    await saveDocumentCard(docPayload);
-    await saveRequisites(reqs);
-  };
-
-  // Upload 3x4 portrait photo
+  // Handle image upload with auto-optimization (ensures 100% reliable persistence)
   const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
+      setIsLoading(true);
       try {
         const optimized = await optimizeImage(file);
         if (optimized) {
           setPhotoUrl(optimized);
-          await persistAll(optimized, cardValues, reqValues);
-          triggerSaveFeedback('Фото 3×4 сохранено');
+          setScale(1);
+          setOffset({ x: 0, y: 0 });
+          setIsSaved(false); // Allow framing and show "Сохранить" button in top right corner
         }
       } catch (err) {
-        console.warn('Error uploading photo:', err);
+        console.warn('Error optimizing photo:', err);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
 
-  const triggerSaveFeedback = (msg = 'Сохранено') => {
-    setSavedFeedback(msg);
-    setTimeout(() => setSavedFeedback(''), 2000);
+  // Mouse pan handlers (when not saved)
+  const handleMouseDown = (e) => {
+    if (isSaved || !photoUrl) return;
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      initialOffsetX: offset.x,
+      initialOffsetY: offset.y
+    };
   };
 
-  // Update field and sync with requisites & auto-save
-  const handleCardFieldChange = (key, value) => {
-    const nextCard = { ...cardValues, [key]: value };
-    setCardValues(nextCard);
+  const handleMouseMove = useCallback((e) => {
+    if (!isDragging || isSaved || !photoUrl) return;
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    setOffset({
+      x: dragStartRef.current.initialOffsetX + dx,
+      y: dragStartRef.current.initialOffsetY + dy
+    });
+  }, [isDragging, isSaved, photoUrl]);
 
-    const nextReqs = { ...reqValues };
-    if (key === 'lastName' || key === 'firstName' || key === 'middleName') {
-      const parts = [
-        key === 'lastName' ? value : nextCard.lastName,
-        key === 'firstName' ? value : nextCard.firstName,
-        key === 'middleName' ? value : nextCard.middleName
-      ].filter(Boolean);
-      nextReqs.fullName = parts.join(' ');
-    } else if (key === 'iin') {
-      nextReqs.iin = value;
-    } else if (key === 'birthDate') {
-      nextReqs.birthDate = value;
-    } else if (key === 'docNumber') {
-      nextReqs.docNumber = value;
-    } else if (key === 'validity') {
-      const parts = value.split('-').map(s => s.trim());
-      if (parts[0]) nextReqs.issueDate = parts[0];
-      if (parts[1]) nextReqs.expiryDate = parts[1];
+  const handleMouseUp = useCallback(() => {
+    if (isDragging) {
+      setIsDragging(false);
     }
+  }, [isDragging]);
 
-    setReqValues(nextReqs);
-    persistAll(photoUrl, nextCard, nextReqs);
+  // Touch pan & pinch-zoom handlers for mobile
+  const handleTouchStart = (e) => {
+    if (isSaved || !photoUrl) return;
+    if (e.touches.length === 1) {
+      // Single finger pan
+      const touch = e.touches[0];
+      setIsDragging(true);
+      dragStartRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        initialOffsetX: offset.x,
+        initialOffsetY: offset.y
+      };
+    } else if (e.touches.length === 2) {
+      // Two finger pinch to zoom
+      setIsDragging(false);
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      touchStartDistRef.current = dist;
+      touchStartScaleRef.current = scale;
+    }
   };
 
-  // Update requisite row and sync with card
-  const handleRequisiteChange = (key, value) => {
-    const nextReqs = { ...reqValues, [key]: value };
-    setReqValues(nextReqs);
-
-    const nextCard = { ...cardValues };
-    if (key === 'fullName') {
-      const parts = value.trim().split(/\s+/);
-      nextCard.lastName = (parts[0] || '').toUpperCase();
-      nextCard.firstName = (parts[1] || '').toUpperCase();
-      nextCard.middleName = (parts.slice(2).join(' ') || '').toUpperCase();
-    } else if (key === 'iin') {
-      nextCard.iin = value;
-    } else if (key === 'birthDate') {
-      nextCard.birthDate = value;
-    } else if (key === 'docNumber') {
-      nextCard.docNumber = value;
-    } else if (key === 'issueDate' || key === 'expiryDate') {
-      const iDate = key === 'issueDate' ? value : nextReqs.issueDate;
-      const eDate = key === 'expiryDate' ? value : nextReqs.expiryDate;
-      if (iDate && eDate) nextCard.validity = `${iDate} - ${eDate}`;
+  const handleTouchMove = (e) => {
+    if (isSaved || !photoUrl) return;
+    if (e.touches.length === 1 && isDragging) {
+      // Prevent screen vertical scrolling during image alignment
+      e.preventDefault();
+      const touch = e.touches[0];
+      const dx = touch.clientX - dragStartRef.current.x;
+      const dy = touch.clientY - dragStartRef.current.y;
+      setOffset({
+        x: dragStartRef.current.initialOffsetX + dx,
+        y: dragStartRef.current.initialOffsetY + dy
+      });
+    } else if (e.touches.length === 2 && touchStartDistRef.current) {
+      // Pinch zoom
+      e.preventDefault();
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const currentDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      const factor = currentDist / touchStartDistRef.current;
+      const newScale = Math.min(3.5, Math.max(0.4, touchStartScaleRef.current * factor));
+      setScale(parseFloat(newScale.toFixed(2)));
     }
-
-    setCardValues(nextCard);
-    persistAll(photoUrl, nextCard, nextReqs);
   };
 
-  const copyToClipboard = (value) => {
-    if (value) {
-      navigator.clipboard?.writeText(value).catch(() => {});
-      triggerSaveFeedback('Скопировано');
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    touchStartDistRef.current = null;
+  };
+
+  useEffect(() => {
+    const onWindowMouseUp = () => setIsDragging(false);
+    const onWindowMouseMove = (e) => {
+      if (isDragging && !isSaved) {
+        handleMouseMove(e);
+      }
+    };
+    window.addEventListener('mouseup', onWindowMouseUp);
+    window.addEventListener('mousemove', onWindowMouseMove);
+    return () => {
+      window.removeEventListener('mouseup', onWindowMouseUp);
+      window.removeEventListener('mousemove', onWindowMouseMove);
+    };
+  }, [isDragging, isSaved, handleMouseMove]);
+
+  // Save document permanently
+  const handleSave = async () => {
+    if (!photoUrl) return;
+    const docData = {
+      photoUrl,
+      scale,
+      offsetX: offset.x,
+      offsetY: offset.y,
+      isSaved: true,
+      savedAt: Date.now()
+    };
+    await saveDocumentCard(docData);
+    if (reqValues && Object.keys(reqValues).length > 0) {
+      await saveRequisites(reqValues);
     }
+    setIsSaved(true);
+    setIsDragging(false);
   };
 
   const isDocTab = activeTab === 'doc';
+
+  // Requisites rows: empty until the user fills them in; values are cached in IndexedDB
   const requisites = requisiteFields.map((field) => ({ ...field, value: reqValues[field.key] ?? '' }));
 
-  // Authentic printed document text style matching official Kazakhstan National ID card
-  const cardInputStyle = {
-    fontFamily: docFontFamily,
-    fontWeight: 400,
-    textTransform: 'uppercase',
-    color: '#1C2220',
-    background: 'transparent',
-    border: 'none',
-    outline: 'none',
-    padding: 0,
-    margin: 0,
-    lineHeight: 1,
-    letterSpacing: '0.2px',
-    boxSizing: 'border-box'
+  const handleRequisiteChange = (key, value) => {
+    reqEditedRef.current = true;
+    const next = { ...reqValues, [key]: value };
+    setReqValues(next);
+    saveRequisites(next);
   };
 
-  // Pinned footer of each tab
+  const copyToClipboard = (value) => {
+    try {
+      navigator.clipboard?.writeText(value).catch(() => {});
+    } catch {
+      // Clipboard unavailable (insecure context): nothing to show
+    }
+  };
+
+  // Pinned footer of each page. Документ: hairline + two buttons; Реквизиты: one button, no hairline
   const renderFooter = (tab) => (
     <div style={{
       flexShrink: 0,
       position: 'relative',
       backgroundColor: pageBg,
-      padding: '12px 16px calc(12px + max(env(safe-area-inset-bottom, 0px), 20px)) 16px',
+      padding: '14px 18px calc(14px + max(env(safe-area-inset-bottom, 0px), 28px)) 18px',
       display: 'flex',
       flexDirection: 'column',
       gap: '10px'
     }}>
       {tab === 'doc' && (
         <>
+          {/* Hairline: full width, 0.5 pt on retina */}
           <div style={{
             position: 'absolute',
             top: 0,
@@ -335,7 +378,7 @@ export const DigitalIdScreen = ({ onBack }) => {
           {/* Primary: "Предъявить документ" */}
           <button
             type="button"
-            className="did-btn-primary touchable"
+            className="did-btn-primary"
             style={{
               ...footerButtonBase,
               backgroundColor: primaryBlue,
@@ -352,16 +395,17 @@ export const DigitalIdScreen = ({ onBack }) => {
       {/* Secondary: "Отправить документ" / "Отправить реквизиты" */}
       <button
         type="button"
-        className="did-btn-secondary touchable"
+        className="did-btn-secondary"
         style={{
           ...footerButtonBase,
           backgroundColor: pageBg,
+          // 1.5 border drawn as an inset ring: Chrome rounds 1.5px borders down to 1px
           border: 'none',
           boxShadow: `inset 0 0 0 1.5px ${outlineBorder}`,
           color: outlineText
         }}
       >
-        <ShareIcon />
+        <UploadIcon />
         {tab === 'doc' ? 'Отправить документ' : 'Отправить реквизиты'}
       </button>
     </div>
@@ -370,16 +414,14 @@ export const DigitalIdScreen = ({ onBack }) => {
   return (
     <div className="screen-fill" style={{
       width: '100%',
-      height: '100%',
       backgroundColor: pageBg,
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
       fontFamily,
-      letterSpacing: 0,
-      boxSizing: 'border-box'
+      letterSpacing: 0
     }}>
-      {/* Hidden file picker for 3x4 portrait photo */}
+      {/* Hidden file input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -388,10 +430,10 @@ export const DigitalIdScreen = ({ onBack }) => {
         onChange={handlePhotoUpload}
       />
 
-      {/* Safe Area Inset Top */}
+      {/* Safe Area Inset */}
       <div style={{ height: 'env(safe-area-inset-top, 0px)', flexShrink: 0 }} />
 
-      {/* 1. Header Nav Bar */}
+      {/* Nav Bar: height 52, white, no divider */}
       <div style={{
         height: '52px',
         flexShrink: 0,
@@ -400,14 +442,14 @@ export const DigitalIdScreen = ({ onBack }) => {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-        {/* Back button */}
+        {/* Back button: tap area 44 x 44, chevron glyph left edge at x 24, centred at y 74 */}
         <button
           type="button"
           onClick={onBack}
           aria-label="Назад"
           style={{
             position: 'absolute',
-            left: '7.6px',
+            left: '7.6px', // box centre 29.6 − glyph half-width 5.6 = glyph left edge 24
             top: '4px',
             width: '44px',
             height: '44px',
@@ -426,7 +468,7 @@ export const DigitalIdScreen = ({ onBack }) => {
           <BackChevronIcon />
         </button>
 
-        {/* Title */}
+        {/* Title: 17 Semibold, centred on the screen */}
         <h1 style={{
           margin: 0,
           fontSize: '17px',
@@ -439,31 +481,42 @@ export const DigitalIdScreen = ({ onBack }) => {
           Удостоверение личности
         </h1>
 
-        {/* Save feedback indicator */}
-        {savedFeedback && (
-          <div style={{
-            position: 'absolute',
-            right: '16px',
-            top: '4px',
-            height: '44px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            fontSize: '12.5px',
-            fontWeight: 500,
-            color: '#059669'
-          }}>
-            <Check size={14} />
-            {savedFeedback}
-          </div>
+        {/* Top-right Save button: appears after photo is loaded until saved */}
+        {photoUrl && !isSaved && (
+          <button
+            type="button"
+            onClick={handleSave}
+            className="touchable"
+            style={{
+              position: 'absolute',
+              right: '14px',
+              top: '4px',
+              height: '44px',
+              padding: '0 8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'none',
+              border: 'none',
+              fontFamily,
+              fontSize: '16px',
+              fontWeight: 600,
+              color: primaryBlue,
+              cursor: 'pointer',
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent'
+            }}
+          >
+            Сохранить
+          </button>
         )}
       </div>
 
-      {/* 2. Horizontal Segmented Control */}
+      {/* Segmented Control: top y 115, margins 18, height 40, radius 12 */}
       <div style={{
-        marginTop: '6px',
-        marginLeft: '16px',
-        marginRight: '16px',
+        marginTop: '15px',
+        marginLeft: '18px',
+        marginRight: '18px',
         height: '40px',
         flexShrink: 0,
         backgroundColor: segTrack,
@@ -471,6 +524,7 @@ export const DigitalIdScreen = ({ onBack }) => {
         position: 'relative',
         display: 'flex'
       }}>
+        {/* Sliding white pill: inset 2, height 36, radius 10 */}
         <div style={{
           position: 'absolute',
           top: '2px',
@@ -502,6 +556,7 @@ export const DigitalIdScreen = ({ onBack }) => {
               fontSize: '15px',
               fontWeight: 400,
               color: textPrimary,
+              letterSpacing: 0,
               cursor: 'pointer',
               outline: 'none',
               WebkitTapHighlightColor: 'transparent'
@@ -512,7 +567,8 @@ export const DigitalIdScreen = ({ onBack }) => {
         ))}
       </div>
 
-      {/* 3. Track Pages: Документ | Реквизиты */}
+      {/* Pages: Документ | Реквизиты side by side; the track slides over on tab change.
+          Each page carries its own scroll area and pinned footer. */}
       <div style={{ flex: 1, minHeight: 0, overflow: 'hidden', position: 'relative' }}>
         <div style={{
           display: 'flex',
@@ -522,255 +578,149 @@ export const DigitalIdScreen = ({ onBack }) => {
           transition: 'transform 320ms cubic-bezier(0.25, 0.8, 0.25, 1)',
           willChange: 'transform'
         }}>
-
-          {/* PAGE 1: Документ (Большое изображение без лишнего белого контейнера) */}
+          {/* Page 1: Документ */}
           <section aria-label="Документ" inert={!isDocTab} style={paneStyle}>
             <div className="hide-scrollbar" style={paneScrollStyle}>
-              <div style={{ padding: '12px 14px 20px 14px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
-                {/* Vertical Official Kazakhstan ID Template — без рамки-контейнера, крупно */}
+              {isLoading ? (
                 <div style={{
-                  width: '100%',
-                  aspectRatio: '1036 / 1322',
-                  position: 'relative',
-                  backgroundImage: "url('/kaspi_assets/documents/kz_id_clean.jpg')",
-                  backgroundSize: '100% 100%',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  borderRadius: '6px',
-                  userSelect: 'none'
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '60px 20px',
+                  gap: '12px'
                 }}>
-
-                  {/* 3x4 Portrait Photo Slot (на лицевой стороне слева) */}
+                  <Loader2 size={32} color={primaryBlue} className="animate-spin" />
+                  <span style={{ fontSize: '13px', color: textSecondary }}>Загрузка документа...</span>
+                </div>
+              ) : (
+                <div style={{ padding: '16px 16px 20px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {/* Document picture slot: no frame, no border, no shadow, radius 8 */}
                   <div
-                    onClick={() => fileInputRef.current?.click()}
-                    title="Нажмите, чтобы загрузить фото 3×4"
+                    ref={cardContainerRef}
+                    onMouseDown={handleMouseDown}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onClick={() => {
+                      if (!photoUrl && !isSaved) {
+                        fileInputRef.current?.click();
+                      }
+                    }}
                     style={{
-                      position: 'absolute',
-                      left: '4.8%',
-                      top: '7.6%',
-                      width: '28.5%',
-                      height: '30.4%',
-                      borderRadius: '3px',
+                      width: '100%',
+                      borderRadius: '8px',
                       overflow: 'hidden',
-                      cursor: 'pointer',
-                      backgroundColor: photoUrl ? 'transparent' : 'rgba(238, 244, 255, 0.7)',
-                      border: photoUrl ? 'none' : '1px dashed #2563EB',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      zIndex: 10,
-                      boxSizing: 'border-box'
+                      position: 'relative',
+                      cursor: isSaved ? 'default' : photoUrl ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
+                      touchAction: photoUrl && !isSaved ? 'none' : 'pan-y',
+                      userSelect: 'none'
                     }}
                   >
                     {photoUrl ? (
-                      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                        <img
-                          src={photoUrl}
-                          alt="Фото 3×4"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            display: 'block'
-                          }}
-                        />
-                        <div style={{
-                          position: 'absolute',
-                          bottom: '3px',
-                          right: '3px',
-                          backgroundColor: 'rgba(0,0,0,0.5)',
-                          borderRadius: '3px',
-                          padding: '2px 3px',
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}>
-                          <Camera size={9} color="#FFFFFF" />
-                        </div>
-                      </div>
+                      <img
+                        src={photoUrl}
+                        alt="Удостоверение личности"
+                        draggable={false}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          height: 'auto',
+                          objectFit: 'contain',
+                          objectPosition: 'center center',
+                          transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
+                          transformOrigin: 'center center',
+                          transition: isDragging ? 'none' : 'transform 0.05s ease-out',
+                          pointerEvents: 'none'
+                        }}
+                      />
                     ) : (
-                      <div style={{ textAlign: 'center', padding: '4px' }}>
-                        <Camera size={16} color="#1446E0" style={{ margin: '0 auto 2px' }} />
-                        <div style={{ fontSize: '9.5px', fontWeight: 700, color: '#1446E0', lineHeight: 1 }}>
-                          3×4
-                        </div>
+                      // Empty slot: tap to pick the document image
+                      <div style={{
+                        height: '456px',
+                        backgroundColor: segTrack,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        padding: '20px',
+                        textAlign: 'center',
+                        boxSizing: 'border-box'
+                      }}>
+                        <span style={{ fontSize: '15px', fontWeight: 500, color: textPrimary }}>
+                          Загрузить документ
+                        </span>
+                        <span style={{ fontSize: '13px', color: textSecondary }}>
+                          Нажмите, чтобы добавить фото удостоверения личности
+                        </span>
                       </div>
                     )}
                   </div>
 
-                  {/* ТЕГІ / ФАМИЛИЯ */}
-                  <input
-                    id="card-lastName"
-                    name="lastName"
-                    aria-label="Фамилия"
-                    type="text"
-                    value={cardValues.lastName || ''}
-                    onChange={(e) => handleCardFieldChange('lastName', e.target.value.toUpperCase())}
-                    style={{
-                      ...cardInputStyle,
-                      position: 'absolute',
-                      left: '39.0%',
-                      top: '18.8%',
-                      width: '55%',
-                      height: '3.8%',
-                      fontSize: 'clamp(11px, 3.4vw, 13.5px)'
-                    }}
-                  />
+                  {/* Adjustment controls — only before saving (first upload) */}
+                  {photoUrl && !isSaved && (
+                    <>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <button
+                          type="button"
+                          onClick={() => setScale((s) => Math.max(0.3, parseFloat((s - 0.1).toFixed(2))))}
+                          style={editControlButton}
+                          aria-label="Уменьшить"
+                        >
+                          <ZoomOut size={18} />
+                        </button>
+                        <input
+                          type="range"
+                          min="0.5"
+                          max="5.0"
+                          step="0.02"
+                          value={scale}
+                          onChange={(e) => setScale(parseFloat(e.target.value))}
+                          style={{ flex: 1, minWidth: 0, accentColor: primaryBlue, cursor: 'pointer' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setScale((s) => Math.min(5.0, parseFloat((s + 0.1).toFixed(2))))}
+                          style={editControlButton}
+                          aria-label="Увеличить"
+                        >
+                          <ZoomIn size={18} />
+                        </button>
+                      </div>
 
-                  {/* АТЫ / ИМЯ */}
-                  <input
-                    id="card-firstName"
-                    name="firstName"
-                    aria-label="Имя"
-                    type="text"
-                    value={cardValues.firstName || ''}
-                    onChange={(e) => handleCardFieldChange('firstName', e.target.value.toUpperCase())}
-                    style={{
-                      ...cardInputStyle,
-                      position: 'absolute',
-                      left: '39.0%',
-                      top: '25.3%',
-                      width: '55%',
-                      height: '3.8%',
-                      fontSize: 'clamp(11px, 3.4vw, 13.5px)'
-                    }}
-                  />
-
-                  {/* ӘКЕСІНІҢ АТЫ / ОТЧЕСТВО */}
-                  <input
-                    id="card-middleName"
-                    name="middleName"
-                    aria-label="Отчество"
-                    type="text"
-                    value={cardValues.middleName || ''}
-                    onChange={(e) => handleCardFieldChange('middleName', e.target.value.toUpperCase())}
-                    style={{
-                      ...cardInputStyle,
-                      position: 'absolute',
-                      left: '39.0%',
-                      top: '31.8%',
-                      width: '55%',
-                      height: '3.8%',
-                      fontSize: 'clamp(11px, 3.4vw, 13.5px)'
-                    }}
-                  />
-
-                  {/* ТУҒАН КҮНІ / ДАТА РОЖДЕНИЯ */}
-                  <input
-                    id="card-birthDate"
-                    name="birthDate"
-                    aria-label="Дата рождения"
-                    type="text"
-                    value={cardValues.birthDate || ''}
-                    onChange={(e) => handleCardFieldChange('birthDate', e.target.value)}
-                    style={{
-                      ...cardInputStyle,
-                      position: 'absolute',
-                      left: '39.0%',
-                      top: '38.4%',
-                      width: '28%',
-                      height: '3.8%',
-                      fontSize: 'clamp(10px, 3.0vw, 12px)'
-                    }}
-                  />
-
-                  {/* ЖЫНЫСЫ / ПОЛ (по центру под ЖЫНЫСЫ/ПОЛ) */}
-                  <input
-                    id="card-gender"
-                    name="gender"
-                    aria-label="Пол"
-                    type="text"
-                    value={cardValues.gender || ''}
-                    onChange={(e) => handleCardFieldChange('gender', e.target.value.toUpperCase())}
-                    style={{
-                      ...cardInputStyle,
-                      position: 'absolute',
-                      left: '69.5%',
-                      top: '38.4%',
-                      width: '18%',
-                      height: '3.8%',
-                      textAlign: 'center',
-                      fontSize: 'clamp(10px, 3.0vw, 12px)'
-                    }}
-                  />
-
-                  {/* ЖСН / ИИН (сразу после надписи ЖСН/ИИН) */}
-                  <input
-                    id="card-iin"
-                    name="iin"
-                    aria-label="ИИН"
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={12}
-                    value={cardValues.iin || ''}
-                    onChange={(e) => handleCardFieldChange('iin', e.target.value)}
-                    style={{
-                      ...cardInputStyle,
-                      position: 'absolute',
-                      left: '16.5%',
-                      top: '45.6%',
-                      width: '38%',
-                      height: '3.8%',
-                      fontSize: 'clamp(10px, 3.0vw, 12px)',
-                      letterSpacing: '0.4px'
-                    }}
-                  />
-
-                  {/* ОБОРОТНАЯ СТОРОНА: Номер документа (вверху справа, официальный Serif / Times New Roman) */}
-                  <input
-                    id="card-docNumber"
-                    name="docNumber"
-                    aria-label="Номер документа"
-                    type="text"
-                    value={cardValues.docNumber || ''}
-                    onChange={(e) => handleCardFieldChange('docNumber', e.target.value)}
-                    style={{
-                      ...cardInputStyle,
-                      fontFamily: docNumFontFamily,
-                      fontWeight: 400,
-                      letterSpacing: '0.6px',
-                      position: 'absolute',
-                      left: '61.0%',
-                      top: '53.8%',
-                      width: '34%',
-                      height: '3.8%',
-                      textAlign: 'center',
-                      fontSize: 'clamp(11px, 3.3vw, 13.5px)'
-                    }}
-                  />
-
-                  {/* ОБОРОТНАЯ СТОРОНА: Дата выдачи - срок действия */}
-                  <input
-                    id="card-validity"
-                    name="validity"
-                    aria-label="Срок действия"
-                    type="text"
-                    value={cardValues.validity || ''}
-                    onChange={(e) => handleCardFieldChange('validity', e.target.value)}
-                    style={{
-                      ...cardInputStyle,
-                      position: 'absolute',
-                      left: '27.5%',
-                      top: '76.8%',
-                      width: '45%',
-                      height: '3.8%',
-                      fontSize: 'clamp(9.5px, 2.9vw, 11.5px)'
-                    }}
-                  />
+                      <button
+                        type="button"
+                        onClick={handleSave}
+                        className="did-btn-primary touchable"
+                        style={{
+                          ...footerButtonBase,
+                          height: '44px',
+                          backgroundColor: primaryBlue,
+                          border: 'none',
+                          color: onPrimary,
+                          fontSize: '15.5px',
+                          fontWeight: 600
+                        }}
+                      >
+                        <Check size={19} strokeWidth={2.5} />
+                        Сохранить
+                      </button>
+                    </>
+                  )}
                 </div>
-              </div>
+              )}
             </div>
             {renderFooter('doc')}
           </section>
 
-          {/* PAGE 2: Реквизиты */}
+          {/* Page 2: Реквизиты — 6 rows from y 164 (9 below the segmented control), no card, no dividers */}
           <section aria-label="Реквизиты" inert={isDocTab} style={paneStyle}>
             <div className="hide-scrollbar" style={paneScrollStyle}>
               <div style={{ paddingTop: '9px' }}>
                 {requisites.map((row) => (
                   <div
-                    key={row.key}
+                    key={row.label}
                     style={{
                       height: '71px',
                       padding: '14px 18px 14px 30px',
@@ -792,12 +742,12 @@ export const DigitalIdScreen = ({ onBack }) => {
                       }}>
                         {row.label}
                       </div>
+                      {/* Value: filled in by the user, looks like plain text (no field chrome) */}
                       <input
                         type="text"
                         inputMode={row.inputMode}
                         value={row.value}
                         onChange={(e) => handleRequisiteChange(row.key, e.target.value)}
-                        placeholder="Не указано"
                         aria-label={row.label}
                         autoComplete="off"
                         spellCheck={false}
@@ -822,9 +772,10 @@ export const DigitalIdScreen = ({ onBack }) => {
                           borderRadius: 0
                         }}
                       />
+
                     </div>
 
-                    {/* Copy icon */}
+                    {/* Copy icon box 24 x 24, top at row top + 20, tap area 44 x 44 centred on it */}
                     <div style={{ width: '24px', height: '24px', marginTop: '6px', flexShrink: 0, position: 'relative' }}>
                       <button
                         type="button"
