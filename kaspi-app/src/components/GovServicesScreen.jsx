@@ -646,6 +646,9 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
           WebkitOverflowScrolling: 'touch',
+          touchAction: 'pan-x',
+          overscrollBehaviorX: 'contain',
+          overscrollBehaviorY: 'none',
           boxSizing: 'border-box'
         }}>
           {documents.map((doc) => {
@@ -785,6 +788,9 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
           WebkitOverflowScrolling: 'touch',
+          touchAction: 'pan-x',
+          overscrollBehaviorX: 'contain',
+          overscrollBehaviorY: 'none',
           boxSizing: 'border-box'
         }}>
           <div style={{

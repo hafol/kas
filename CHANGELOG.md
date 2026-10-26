@@ -2,6 +2,44 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 03:30] — Анимация перехода экранов (Slide-over справа), мягкий выход из Lock-экрана, статические карусели, скелетон-лоадеры Kaspi и eGov Splash свайп
+
+### 🎯 Запрос пользователя:
+> *«the animation after the lock screen is slide over from the right side it applies fro every single page except for lockscreen and the lockscreen one make it liitle smoother and slower not much, after that you know that blocks like carusels and excetera gotta be static like it cant be moved up ad down like rn and also when you click on the удостоверение личности the loader screen gotta slide over from the right side as well, moreover we need skeleton loading for pages according to their ui just like real kaspi app and i wanna know what yoiu can get from apk like abythinh in the app or what?»*
+
+### 🛠️ Что сделано:
+1. **Анимация перехода страниц (Slide-over справа)**:
+   - Добавлена нативная мобильная анимация свайпа справа налево (`.page-slide-in` с `@keyframes pageSlideInRight` 280ms `cubic-bezier(0.16, 1, 0.3, 1)`).
+   - Применяется ко всем экранам приложения при переходе (`my_bank`, `gold_detail`, `gov`, `digital_id`, `transfers`, `settings`, `qr_modal`), за исключением экрана блокировки.
+2. **Мягкий и плавный выход из экрана блокировки (PasscodeScreen)**:
+   - Анимация разблокировки сделана заметно мягче и чуть медленнее: тайминги увеличены со 120ms до **`260ms`**, кривая перехода обновлена на плавную `cubic-bezier(0.25, 1, 0.5, 1)`. Исчезновение пин-кода и переход к приложению теперь ощущаются благородно и естественно.
+3. **Фиксация каруселей по вертикали (Static Carousels)**:
+   - Устранено смещение и дребезг каруселей по вертикали при свайпе: для всех горизонтальных треков (баннеры, «Вы недавно смотрели», карточки документов, плашки категорий) установлены `touchAction: 'pan-x'`, `overscrollBehaviorX: 'contain'`, `overscrollBehaviorY: 'none'`.
+   - Для всех изображений внутри каруселей заблокировано случайное перетаскивание (`pointer-events: none; user-select: none; -webkit-user-drag: none;`). Карусели листаются исключительно строго по горизонтали.
+4. **Загрузочный экран eGov Splash (Удостоверение личности)**:
+   - При клике на «Удостоверение личности» экран загрузки (`.egov-splash`) теперь также плавно и аутентично выезжает справа налево (`egovSplashSlideInRight` 280ms `cubic-bezier(0.16, 1, 0.3, 1)`), после чего открывается удостоверение.
+5. **Аутентичный Kaspi Skeleton Loading под UI каждого экрана**:
+   - Создан компонент [`KaspiSkeleton.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiSkeleton.jsx) с переливающимся шиммером (`linear-gradient(90deg, #F0F0F0 25%, #F8F8F8 50%, #F0F0F0 75%)`):
+     - `GovServicesSkeleton`: скелетон шапки, сегментированного переключателя, поля поиска, карточек документов 168×115px, категорий и рядов услуг.
+     - `MyBankSkeleton`: скелетон карты Kaspi Gold, баланса, кнопок и депозитов.
+     - `TransfersSkeleton`: скелетон контактов перевода и поля ввода.
+     - `GenericPageSkeleton`: универсальный скелетон.
+   - Внедрена кратковременная загрузка скелетона (~360ms) при переходах, имитирующая нативную подгрузку данных приложения Kaspi.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`kaspi-app/src/components/KaspiSkeleton.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiSkeleton.jsx)
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`kaspi-app/src/components/GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx)
+- [`kaspi-app/src/index.css`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+### 🔍 Статус проверки:
+- Проверена сборка `npm run build` — собрана за 665ms без единой ошибки.
+- Проверены анимации в браузере: плавный выход из экрана блокировки, выезд страниц справа, eGov splash свайп справа, статические карусели и шиммер-скелетоны.
+
+
 ## [2026-10-27 03:15] — Тонкая юстировка типографики и интервалов экрана Госуслуг
 
 ### 🎯 Запрос пользователя:

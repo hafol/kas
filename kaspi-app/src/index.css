@@ -285,13 +285,41 @@ body {
   background-color: #EEF2FE !important;
 }
 
-/* eGov splash before «Удостоверение личности» (App.jsx) */
+/* Page slide-over animation from right side for all screens (iOS native style) */
+@keyframes pageSlideInRight {
+  0% {
+    transform: translate3d(100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.page-slide-in {
+  animation: pageSlideInRight 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform;
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+/* eGov splash before «Удостоверение личности» - slides over from right side */
+@keyframes egovSplashSlideInRight {
+  0% {
+    transform: translate3d(100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 .egov-splash {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
   width: 100%;
   max-width: 430px;
   z-index: 1000;
@@ -300,7 +328,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  animation: egov-splash-in 150ms ease-out;
+  animation: egovSplashSlideInRight 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transition: opacity 250ms ease;
 }
 .egov-splash--out {
@@ -315,7 +343,37 @@ body {
   -webkit-user-drag: none;
   pointer-events: none;
 }
-@keyframes egov-splash-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+
+/* Authentic Kaspi Skeleton Shimmer */
+@keyframes kaspiShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
+
+.kaspi-skeleton {
+  background: linear-gradient(90deg, #F0F0F0 25%, #F8F8F8 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: kaspiShimmer 1.5s infinite linear;
+}
+
+/* Horizontal Carousels strictly static on vertical axis (prevent vertical drag / jiggle) */
+.carousel,
+.hide-scrollbar[style*="overflow-x: auto"],
+.hide-scrollbar[style*="overflowX: auto"],
+[data-carousel="horizontal"] {
+  touch-action: pan-x !important;
+  overscroll-behavior-x: contain !important;
+  overscroll-behavior-y: none !important;
+}
+
+.carousel img,
+[data-carousel="horizontal"] img {
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+

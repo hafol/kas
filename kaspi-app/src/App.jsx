@@ -12,6 +12,12 @@ import { MessagesScreen } from './components/MessagesScreen';
 import { ServicesScreen } from './components/ServicesScreen';
 import { SettingsScreen } from './components/SettingsScreen';
 import { KaspiQrScreen } from './components/KaspiQrScreen';
+import {
+  GovServicesSkeleton,
+  MyBankSkeleton,
+  TransfersSkeleton,
+  GenericPageSkeleton
+} from './components/KaspiSkeleton';
 
 export default function App() {
   const [userData, setUserData] = useState(() => {
@@ -57,6 +63,7 @@ export default function App() {
   });
   const [pendingSecureScreen, setPendingSecureScreen] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loadingScreen, setLoadingScreen] = useState(null);
   // eGov splash shown for ~1.5 s before the ID card screen opens
   const [egovSplash, setEgovSplash] = useState(null); // null | 'in' | 'out'
 
@@ -66,15 +73,24 @@ export default function App() {
     img.src = '/kaspi_assets/egov_splash.png';
   }, []);
 
+  // Navigate to screen with Kaspi UI skeleton loading
+  const navigateToScreen = (screenName) => {
+    setLoadingScreen(screenName);
+    setCurrentScreen(screenName);
+    setTimeout(() => {
+      setLoadingScreen(null);
+    }, 360);
+  };
+
   const handleOpenGovDoc = (docId) => {
     if (docId !== 'id_card') {
-      setCurrentScreen('digital_id');
+      navigateToScreen('digital_id');
       return;
     }
     if (egovSplash) return;
     setEgovSplash('in');
     setTimeout(() => {
-      setCurrentScreen('digital_id');
+      navigateToScreen('digital_id');
       setEgovSplash('out');
     }, 1500);
     setTimeout(() => setEgovSplash(null), 1750);
@@ -86,7 +102,7 @@ export default function App() {
       setPendingSecureScreen('my_bank');
       setCurrentScreen('passcode');
     } else {
-      setCurrentScreen('my_bank');
+      navigateToScreen('my_bank');
     }
   };
 
@@ -95,25 +111,22 @@ export default function App() {
       setPendingSecureScreen('gov');
       setCurrentScreen('passcode');
     } else {
-      setCurrentScreen('gov');
+      navigateToScreen('gov');
     }
   };
 
   const handleUnlock = () => {
     setIsAuthenticated(true);
-    if (pendingSecureScreen) {
-      setCurrentScreen(pendingSecureScreen);
-      setPendingSecureScreen(null);
-    } else {
-      setCurrentScreen('my_bank');
-    }
+    const target = pendingSecureScreen || 'my_bank';
+    setPendingSecureScreen(null);
+    navigateToScreen(target);
   };
 
   const handleSelectService = (serviceId) => {
     if (serviceId === 'bank') {
       handleOpenMyBank();
     } else if (serviceId === 'transfers') {
-      setCurrentScreen('transfers');
+      navigateToScreen('transfers');
     } else if (serviceId === 'gov') {
       handleOpenGov();
     } else if (serviceId === 'shop') {
@@ -201,54 +214,86 @@ export default function App() {
           </>
         )}
 
-        {/* Subscreens */}
+        {/* Subscreens (all slide-over from the right with Kaspi skeleton loading) */}
         {currentScreen === 'my_bank' && (
-          <MyBankScreen
-            cards={userData.cards}
-            onSelectCard={() => setCurrentScreen('gold_detail')}
-            onBack={() => setCurrentScreen('tab')}
-          />
+          <div className="page-slide-in">
+            {loadingScreen === 'my_bank' ? (
+              <MyBankSkeleton />
+            ) : (
+              <MyBankScreen
+                cards={userData.cards}
+                onSelectCard={() => navigateToScreen('gold_detail')}
+                onBack={() => setCurrentScreen('tab')}
+              />
+            )}
+          </div>
         )}
 
         {currentScreen === 'gold_detail' && (
-          <KaspiGoldDetailScreen
-            card={userData.cards.gold}
-            statement={userData.statement}
-            onBack={() => setCurrentScreen('my_bank')}
-            onOpenQr={() => setCurrentScreen('qr_modal')}
-            onOpenTransfer={() => setCurrentScreen('transfers')}
-          />
+          <div className="page-slide-in">
+            {loadingScreen === 'gold_detail' ? (
+              <MyBankSkeleton />
+            ) : (
+              <KaspiGoldDetailScreen
+                card={userData.cards.gold}
+                statement={userData.statement}
+                onBack={() => navigateToScreen('my_bank')}
+                onOpenQr={() => setCurrentScreen('qr_modal')}
+                onOpenTransfer={() => navigateToScreen('transfers')}
+              />
+            )}
+          </div>
         )}
 
         {currentScreen === 'gov' && (
-          <GovServicesScreen
-            govData={userData.gov}
-            onOpenDoc={handleOpenGovDoc}
-            onBack={() => setCurrentScreen('tab')}
-          />
+          <div className="page-slide-in">
+            {loadingScreen === 'gov' ? (
+              <GovServicesSkeleton />
+            ) : (
+              <GovServicesScreen
+                govData={userData.gov}
+                onOpenDoc={handleOpenGovDoc}
+                onBack={() => setCurrentScreen('tab')}
+              />
+            )}
+          </div>
         )}
 
         {currentScreen === 'digital_id' && (
-          <DigitalIdScreen
-            profile={userData.profile}
-            onBack={() => setCurrentScreen('gov')}
-          />
+          <div className="page-slide-in">
+            <DigitalIdScreen
+              profile={userData.profile}
+              onBack={() => navigateToScreen('gov')}
+            />
+          </div>
         )}
 
         {currentScreen === 'transfers' && (
-          <TransfersScreen
-            card={userData.cards.gold}
-            onBack={() => setCurrentScreen('tab')}
-            onCompleteTransfer={handleCompleteTransfer}
-          />
+          <div className="page-slide-in">
+            {loadingScreen === 'transfers' ? (
+              <TransfersSkeleton />
+            ) : (
+              <TransfersScreen
+                card={userData.cards.gold}
+                onBack={() => setCurrentScreen('tab')}
+                onCompleteTransfer={handleCompleteTransfer}
+              />
+            )}
+          </div>
         )}
 
         {currentScreen === 'settings' && (
-          <SettingsScreen
-            profile={userData.profile}
-            onUpdateProfile={handleUpdateProfile}
-            onBack={() => setCurrentScreen('tab')}
-          />
+          <div className="page-slide-in">
+            {loadingScreen === 'settings' ? (
+              <GenericPageSkeleton title="Настройки" />
+            ) : (
+              <SettingsScreen
+                profile={userData.profile}
+                onUpdateProfile={handleUpdateProfile}
+                onBack={() => setCurrentScreen('tab')}
+              />
+            )}
+          </div>
         )}
       </div>
 

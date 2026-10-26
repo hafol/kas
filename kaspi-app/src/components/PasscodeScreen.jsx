@@ -144,7 +144,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
     setIsDismissing(true);
     setTimeout(() => {
       onBack();
-    }, 120);
+    }, 260);
   };
 
   const handleDigitPress = (d) => {
@@ -163,8 +163,8 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
         setIsDismissing(true);
         setTimeout(() => {
           onUnlock();
-        }, 120);
-      }, 70);
+        }, 260);
+      }, 100);
     }
   };
 
@@ -215,10 +215,10 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
         zIndex: 9999,
         width: '100%',
         opacity: isDismissing ? 0 : 1,
-        transform: isSlidingIn || isDismissing ? 'translateY(100%)' : 'translateY(0)',
+        transform: isSlidingIn || isDismissing ? 'translate3d(0, 100%, 0)' : 'translate3d(0, 0, 0)',
         transition: isDismissing
-          ? 'opacity 120ms ease-out, transform 120ms ease-out'
-          : 'transform 260ms cubic-bezier(0.22, 1, 0.36, 1)',
+          ? 'opacity 260ms cubic-bezier(0.25, 1, 0.5, 1), transform 260ms cubic-bezier(0.25, 1, 0.5, 1)'
+          : 'transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease',
         willChange: 'transform, opacity',
         userSelect: 'none',
         WebkitUserSelect: 'none',

@@ -485,7 +485,9 @@ export const HomeScreen = ({
               scrollBehavior: isDraggingBanner ? 'auto' : 'smooth',
               cursor: isDraggingBanner ? 'grabbing' : 'grab',
               WebkitOverflowScrolling: 'touch',
-              touchAction: 'pan-y'
+              touchAction: 'pan-x',
+              overscrollBehaviorX: 'contain',
+              overscrollBehaviorY: 'none'
             }}
           >
             {topBanners.map((banner) => (
@@ -909,7 +911,9 @@ export const HomeScreen = ({
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
             WebkitOverflowScrolling: 'touch',
-            touchAction: 'pan-y',
+            touchAction: 'pan-x',
+            overscrollBehaviorX: 'contain',
+            overscrollBehaviorY: 'none',
             alignItems: 'flex-start'
           }}
         >
