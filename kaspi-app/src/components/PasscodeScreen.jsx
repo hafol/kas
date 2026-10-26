@@ -353,13 +353,13 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                 padding: 0
               }}
             >
-              {/* Orange-red touch ripple circle */}
+              {/* Orange-red touch ripple circle: enlarged to 72 x 72 */}
               {isActive && (
                 <div
                   style={{
                     position: 'absolute',
-                    width: '56px',
-                    height: '56px',
+                    width: '72px',
+                    height: '72px',
                     borderRadius: '50%',
                     backgroundColor: '#F04926'
                   }}
