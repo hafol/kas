@@ -13,6 +13,32 @@
     <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-180x180.png?v=kaspi-official-2026" />
     <link rel="manifest" href="/manifest.json?v=kaspi-official-2026" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <script>
+      (function () {
+        // iOS Display Zoom reports a smaller screen. Map "zoomed" screen sizes to the real width.
+        // key: screenWidth x screenHeight @ devicePixelRatio  ->  real width in pt
+        var ZOOMED = {
+          '375x812@2': 414,  // iPhone XR, 11 with Display Zoom (real 414 x 896)
+          '375x667@3': 414,  // iPhone 6s/7/8 Plus with Display Zoom (real 414 x 736)
+          '320x693@3': 390,  // iPhone 12/13/14, 12/13 Pro, 14 Pro, 15, 16 with Display Zoom (real 390 or 393)
+          '320x568@2': 375   // iPhone SE 2/3, 6s/7/8 with Display Zoom (real 375 x 667)
+        };
+        var isIOS = /iPhone/.test(navigator.userAgent);
+        if (!isIOS) return;
+        var w = Math.min(screen.width, screen.height);
+        var h = Math.max(screen.width, screen.height);
+        var key = w + 'x' + h + '@' + Math.round(window.devicePixelRatio);
+        var realWidth = ZOOMED[key];
+        if (!realWidth) return;
+        var scale = w / realWidth; // e.g. 375 / 414 = 0.9058
+        var meta = document.querySelector('meta[name=viewport]');
+        meta.setAttribute('content',
+          'width=' + realWidth + ', initial-scale=' + scale.toFixed(4) +
+          ', minimum-scale=' + scale.toFixed(4) + ', maximum-scale=' + scale.toFixed(4) +
+          ', user-scalable=no, viewport-fit=cover');
+        document.documentElement.setAttribute('data-display-zoom', 'on');
+      })();
+    </script>
     <meta name="theme-color" content="#FFFFFF" />
     <meta name="color-scheme" content="light only" />
     <meta name="apple-mobile-web-app-capable" content="yes" />

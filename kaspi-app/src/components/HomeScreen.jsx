@@ -1401,7 +1401,8 @@ function DebugBox() {
     transforms: '',
     standaloneNav: typeof navigator !== 'undefined' ? String(navigator.standalone) : 'n/a',
     standaloneMedia: typeof window !== 'undefined' && window.matchMedia ? String(window.matchMedia('(display-mode: standalone)').matches) : 'n/a',
-    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'n/a'
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'n/a',
+    displayZoom: typeof document !== 'undefined' && document.documentElement ? (document.documentElement.getAttribute('data-display-zoom') || 'off') : 'off'
   });
 
   useEffect(() => {
@@ -1440,7 +1441,8 @@ function DebugBox() {
         transforms: transformsList.length > 0 ? transformsList.join('; ') : 'none',
         standaloneNav: typeof navigator !== 'undefined' ? String(navigator.standalone) : 'n/a',
         standaloneMedia: typeof window !== 'undefined' && window.matchMedia ? String(window.matchMedia('(display-mode: standalone)').matches) : 'n/a',
-        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'n/a'
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'n/a',
+        displayZoom: document.documentElement ? (document.documentElement.getAttribute('data-display-zoom') || 'off') : 'off'
       });
     };
 
@@ -1476,12 +1478,12 @@ function DebugBox() {
         pointerEvents: 'none'
       }}
     >
+      <div><strong>data-display-zoom:</strong> {info.displayZoom} | <strong>final viewport:</strong> {info.metaContent}</div>
       <div><strong>screen:</strong> {info.screenSize} | <strong>outerWidth:</strong> {info.outerWidth}</div>
       <div><strong>innerWidth:</strong> {info.innerWidth} | <strong>innerHeight:</strong> {info.innerHeight}</div>
       <div><strong>clientWidth:</strong> {info.clientWidth} | <strong>docRectWidth:</strong> {info.docRectWidth}</div>
       <div><strong>dpr:</strong> {info.dpr} | <strong>vv.scale:</strong> {info.vvScale}</div>
       <div><strong>nav.standalone:</strong> {info.standaloneNav} | <strong>media.standalone:</strong> {info.standaloneMedia}</div>
-      <div><strong>viewport:</strong> {info.metaContent}</div>
       <div><strong>zoom:</strong> html: {info.htmlZoom}, body: {info.bodyZoom}</div>
       <div><strong>search width:</strong> {info.searchWidth}</div>
       <div><strong>transforms:</strong> {info.transforms}</div>

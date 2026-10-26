@@ -2,6 +2,33 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 14:33] — Компенсация iOS Display Zoom (Larger Text) без изменения размеров компонентов
+
+### 🎯 Запрос пользователя:
+> *«Make the web app ignore iOS "Display Zoom" (Settings → Display & Brightness → Display Zoom → Larger Text), the same way the real Kaspi.kz app does. Do NOT change any sizes in HomeScreen.jsx or other components... The fix: when Display Zoom is detected, lay the page out at the real width and let iOS shrink it back. Add script in <head> of index.html... Add data-display-zoom (on/off) and final viewport content to debug box.»*
+
+### 🛠️ Что сделано:
+1. **`index.html`**:
+   - Первым скриптом в `<head>` сразу после `<meta name="viewport">` добавлен синхронный обработчик детектирования iOS Display Zoom.
+   - Таблица маппинга `ZOOMED`:
+     - `'375x812@2': 414` (iPhone XR, 11 с включенным Display Zoom -> реальный размер 414×896 pt).
+     - `'375x667@3': 414` (iPhone 6s/7/8 Plus с Display Zoom -> реальный размер 414×736 pt).
+     - `'320x693@3': 390` (iPhone 12/13/14, 12-16 Pro с Display Zoom -> реальный размер 390/393 pt).
+     - `'320x568@2': 375` (iPhone SE 2/3 с Display Zoom -> реальный размер 375×667 pt).
+   - При обнаружении экран принудительно верстается в реальной ширине (`width=414`), а `initial-scale`, `minimum-scale`, `maximum-scale` выставляются в масштаб `w / realWidth` (0.9058), что в связке с iOS Display Zoom (1.104x) дает ровно 1:1 отображение (`1 CSS px = 1 real pt`), как в нативном приложении Kaspi.kz.
+   - Выставляется атрибут `data-display-zoom="on"` на корневом теге `<html>`.
+2. **`HomeScreen.jsx`**:
+   - В блок отладки `DebugBox` добавлен вывод строки `data-display-zoom: on/off` и `final viewport: <content>`.
+   - Размеры компонентов, отступы и токены дизайна в `HomeScreen.jsx` **не изменялись**.
+3. Собрано и развернуто на проде Vercel (`kas-two-rho.vercel.app`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/index.html`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html)
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-26 14:24] — Расширение отладочного блока (Live Debug Box) детальной диагностикой окружения
 
 ### 🎯 Запрос пользователя:
