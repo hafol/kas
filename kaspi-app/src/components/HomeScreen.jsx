@@ -335,7 +335,7 @@ export const HomeScreen = ({
         top: 0,
         zIndex: 45,
         backgroundColor: '#FFFFFF',
-        paddingTop: '51.5px',
+        paddingTop: '3.5px',
         paddingBottom: '0px',
         paddingLeft: '17.5px',
         paddingRight: '20px',
