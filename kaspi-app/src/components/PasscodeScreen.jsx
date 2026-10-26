@@ -22,9 +22,9 @@ const CloseIcon = () => (
   </svg>
 );
 
-// 3. Kaspi User Avatar: Diameter 76.5, Centre y 122, Ring stroke 0.45 (#C8C8C8), Silhouette fill #9B9B9B
+// 3. Kaspi User Avatar: Diameter 80.3 (+5% larger than 76.5), Centre y 122, Ring stroke 0.45 (#C8C8C8), Silhouette fill #9B9B9B
 const UserAvatarIcon = () => (
-  <svg width="76.5" height="76.5" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="80.3" height="80.3" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <defs>
       <clipPath id="avatar-clip">
         <circle cx="12" cy="12" r="11.4" />
@@ -247,15 +247,15 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <CloseIcon />
         </button>
 
-        {/* 2. AVATAR (Diameter 76.5, Centre y 122) */}
+        {/* 2. AVATAR (Diameter 80.3, +5% larger, Centre y 122) */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 45.75px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 43.85px)',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: '76.5px',
-            height: '76.5px',
+            width: '80.3px',
+            height: '80.3px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
@@ -266,17 +266,17 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <UserAvatarIcon />
         </div>
 
-        {/* NAME "Парасат Ж.": 14.5px Regular, #212121, Centre y 185.5 */}
+        {/* NAME "Парасат Ж.": 15px Regular, #212121, Centre y 185.5 */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 141px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 140.5px)',
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '14.5px',
+            fontSize: '15px',
             fontWeight: 400,
-            lineHeight: '16px',
+            lineHeight: '17px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
