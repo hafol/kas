@@ -266,17 +266,17 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <UserAvatarIcon />
         </div>
 
-        {/* NAME "Парасат Ж.": 13 Regular, #212121, Centre y 185.5 */}
+        {/* NAME "Парасат Ж.": 14.5px Regular, #212121, Centre y 185.5 */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 142px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 141px)',
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '13px',
+            fontSize: '14.5px',
             fontWeight: 400,
-            lineHeight: '14px',
+            lineHeight: '16px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -285,17 +285,17 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           {profile?.shortName || 'Парасат Ж.'}
         </div>
 
-        {/* TITLE "Код доступа": 13 Regular, #212121, Centre y 272 (Gap name->title: 86.5) */}
+        {/* TITLE "Код доступа": 14.5px Regular, #212121, Centre y 272 (Gap name->title: 86.5) */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 231px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 230px)',
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '13px',
+            fontSize: '14.5px',
             fontWeight: 400,
-            lineHeight: '14px',
+            lineHeight: '16px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -409,14 +409,14 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           </button>
         )}
 
-        {/* 6. FORGOT LINK "Забыли код доступа?": 13 Regular, color #0089D0, Centre y 719 */}
+        {/* 6. FORGOT LINK "Забыли код доступа?": 14.5px Regular, color #0089D0, Centre y 719 */}
         <div
           style={{
             position: 'absolute',
-            bottom: '56px',
+            bottom: '55px',
             left: 0,
             right: 0,
-            height: '14px',
+            height: '16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -429,9 +429,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               background: 'none',
               border: 'none',
               padding: 0,
-              fontSize: '13px',
+              fontSize: '14.5px',
               fontWeight: 400,
-              lineHeight: '14px',
+              lineHeight: '16px',
               color: '#0089D0',
               fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
               cursor: 'pointer',
