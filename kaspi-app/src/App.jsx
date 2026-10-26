@@ -58,6 +58,9 @@ export default function App() {
       if (params.get('screen') === 'gov' || window.location.hash === '#gov') {
         return 'gov';
       }
+      if (params.get('screen') === 'digital_id' || window.location.hash === '#digital_id') {
+        return 'digital_id';
+      }
     }
     return 'tab';
   });

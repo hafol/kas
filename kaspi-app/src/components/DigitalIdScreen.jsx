@@ -10,30 +10,30 @@ import {
   optimizeImage
 } from '../utils/idStorage';
 
-// Color Tokens (from specification)
-const pageBg        = '#FFFFFF'; // the whole screen, header included
-const segTrack      = '#EEEEF0';
+// Color Tokens (from FIX LIST v2 specification)
+const pageBg        = '#FFFFFF';
+const segTrack      = '#F2F2F2'; // target: #F2F2F2
 const segPill       = '#FFFFFF';
-const hairline      = '#E5E5EA';
+const hairlineColor = '#EFEFEF'; // target: hairline at y 689, full width, 1 px, ≈ #EFEFEF
 const textPrimary   = '#1C1C1E';
 const textSecondary = '#8E8E93';
-const primaryBlue   = '#2155DB'; // less saturated, authentic iOS Kaspi blue (was #1446E0)
+const primaryBlue   = '#0175CC'; // target: clear medium blue (was #2155DC)
 const onPrimary     = '#FFFFFF';
-const outlineBorder = '#B4C5F0'; // softer, less saturated outline
-const outlineText   = '#2155DB'; // matching less saturated blue
+const outlineBorder = '#B2C8E7'; // target: border ≈ 2.5 px light blue #B2C8E7
+const outlineText   = '#1665A2'; // target: text colour #1665A2
 
 const fontFamily = "'Roboto Flex Kaspi', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif";
 
-// 1. Back Chevron (<): larger size (25x25) but clean and not bolder (strokeWidth 1.9)
+// 1. Back Chevron (<): 11.5 x 21 at x 25, top y 62.5, stroke ≈ 2 px
 const BackChevronIcon = () => (
-  <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
-    <polyline points="15 18 9 12 15 6" />
+  <svg width="11.5" height="21" viewBox="0 0 11.5 21" fill="none" style={{ display: 'block' }}>
+    <polyline points="10 1.5 1 10.5 10 19.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-// 2. QR-scan icon: APK ic_ds_scan_qr_500, 25.2 x 25.2 (+5%), tinted via currentColor
+// 2. QR-scan icon: icon ≈ 26 x 24.5
 const QrScanIcon = () => (
-  <svg width="25.2" height="25.2" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="26" height="24.5" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M1.1,2.5C1.1,1.727 1.727,1.1 2.5,1.1H7C7.497,1.1 7.9,1.503 7.9,2C7.9,2.497 7.497,2.9 7,2.9H2.9V7C2.9,7.497 2.497,7.9 2,7.9C1.503,7.9 1.1,7.497 1.1,7V2.5Z" fill="currentColor" />
     <path d="M16.1,2C16.1,1.503 16.503,1.1 17,1.1H21.5C22.273,1.1 22.9,1.727 22.9,2.5V7C22.9,7.497 22.497,7.9 22,7.9C21.503,7.9 21.1,7.497 21.1,7V2.9H17C16.503,2.9 16.1,2.497 16.1,2Z" fill="currentColor" />
     <path d="M7.35,8.65V7.35H8.65V8.65H7.35Z" fill="currentColor" />
@@ -50,15 +50,15 @@ const QrScanIcon = () => (
   </svg>
 );
 
-// 3. Upload icon (square tray + arrow up): APK ic_ds_share_ios_500, cropped to 23.1 x 25.2 (+5%), tinted via currentColor
+// 3. Upload/share icon: icon ≈ 23 wide, colour #1665A2
 const UploadIcon = () => (
-  <svg width="23.1" height="25.2" viewBox="1 0 22 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="23" height="25" viewBox="1 0 22 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M20,18V12C20,10.895 19.105,10 18,10H16C15.448,10 15,9.552 15,9C15,8.448 15.448,8 16,8H18C20.209,8 22,9.791 22,12V18C22,20.209 20.209,22 18,22H6C3.791,22 2,20.209 2,18L2,12C2,9.791 3.791,8 6,8H8C8.552,8 9,8.448 9,9C9,9.552 8.552,10 8,10H6C4.895,10 4,10.895 4,12L4,18C4,19.105 4.895,20 6,20H18C19.105,20 20,19.105 20,18Z" fill="currentColor" />
     <path d="M12,15.5C12.552,15.5 13,15.052 13,14.5L13,4.414L14.293,5.707C14.683,6.098 15.317,6.098 15.707,5.707C16.098,5.317 16.098,4.683 15.707,4.293L12.707,1.293C12.317,0.902 11.683,0.902 11.293,1.293L8.293,4.293C7.902,4.683 7.902,5.317 8.293,5.707C8.683,6.098 9.317,6.098 9.707,5.707L11,4.414L11,14.5C11,15.052 11.448,15.5 12,15.5Z" fill="currentColor" />
   </svg>
 );
 
-// 4. Copy icon (two overlapping rounded squares): APK ic_ds_copy_500, 24 x 24, tinted via currentColor
+// 4. Copy icon (two overlapping rounded squares)
 const CopyIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M12,2C10.067,2 8.5,3.567 8.5,5.5V6C8.5,6.552 8.948,7 9.5,7C10.052,7 10.5,6.552 10.5,6V5.5C10.5,4.672 11.172,4 12,4H18.5C19.328,4 20,4.672 20,5.5V12.5C20,13.052 19.552,13.5 19,13.5H18C17.448,13.5 17,13.948 17,14.5C17,15.052 17.448,15.5 18,15.5H19C20.657,15.5 22,14.157 22,12.5V5.5C22,3.567 20.433,2 18.5,2H12Z" fill="currentColor" />
@@ -66,47 +66,9 @@ const CopyIcon = () => (
   </svg>
 );
 
-// One page of the sliding track: half the track width, own scroll area + footer
-const paneStyle = {
-  width: '50%',
-  height: '100%',
-  flexShrink: 0,
-  display: 'flex',
-  flexDirection: 'column',
-  minWidth: 0
-};
-
-const paneScrollStyle = {
-  flex: 1,
-  minHeight: 0,
-  overflowY: 'auto',
-  overflowX: 'hidden',
-  WebkitOverflowScrolling: 'touch'
-};
-
-const footerButtonBase = {
-  width: '100%',
-  height: '57.5px', // +5px higher (was 52.5px)
-  borderRadius: '12px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '10px',
-  padding: 0,
-  fontFamily,
-  fontSize: '16.8px', // +5% larger (16px * 1.05 = 16.8px)
-  fontWeight: 500,
-  letterSpacing: 0,
-  whiteSpace: 'nowrap',
-  boxShadow: 'none',
-  cursor: 'pointer',
-  outline: 'none',
-  boxSizing: 'border-box'
-};
-
 const editControlButton = {
-  width: '40px',
-  height: '40px',
+  width: '38px',
+  height: '38px',
   borderRadius: '8px',
   border: 'none',
   backgroundColor: segTrack,
@@ -119,7 +81,7 @@ const editControlButton = {
   flexShrink: 0
 };
 
-// Requisites rows, in order. inputMode picks the phone keyboard (digits for ИИН and number).
+// Requisites rows
 const requisiteFields = [
   { key: 'fullName', label: 'ФИО', inputMode: 'text' },
   { key: 'iin', label: 'ИИН', inputMode: 'numeric' },
@@ -134,7 +96,7 @@ export const DigitalIdScreen = ({ onBack }) => {
   const fileInputRef = useRef(null);
   const cardContainerRef = useRef(null);
 
-  // Synchronous initial restore from localStorage so photo is NEVER reset on reload
+  // Synchronous initial restore from localStorage
   const syncDoc = loadDocumentCardSync();
   const syncReqs = loadRequisitesSync();
 
@@ -151,11 +113,10 @@ export const DigitalIdScreen = ({ onBack }) => {
   const touchStartDistRef = useRef(null);
   const touchStartScaleRef = useRef(1);
 
-  // Requisites typed in by the user (start empty or from sync cache)
+  // Requisites state
   const [reqValues, setReqValues] = useState(() => syncReqs || {});
   const reqEditedRef = useRef(false);
 
-  // Load cached requisites (IndexedDB fallback); never overwrite what the user already started typing
   useEffect(() => {
     let isMounted = true;
     loadRequisites().then((saved) => {
@@ -166,7 +127,6 @@ export const DigitalIdScreen = ({ onBack }) => {
     };
   }, []);
 
-  // Load saved document from persistent cache (IndexedDB fallback)
   useEffect(() => {
     let isMounted = true;
     async function loadData() {
@@ -192,7 +152,6 @@ export const DigitalIdScreen = ({ onBack }) => {
     };
   }, [photoUrl]);
 
-  // Handle image upload with auto-optimization (ensures 100% reliable persistence)
   const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -203,7 +162,7 @@ export const DigitalIdScreen = ({ onBack }) => {
           setPhotoUrl(optimized);
           setScale(1);
           setOffset({ x: 0, y: 0 });
-          setIsSaved(false); // Allow framing and show "Сохранить" button in top right corner
+          setIsSaved(false);
         }
       } catch (err) {
         console.warn('Error optimizing photo:', err);
@@ -213,7 +172,6 @@ export const DigitalIdScreen = ({ onBack }) => {
     }
   };
 
-  // Mouse pan handlers (when not saved)
   const handleMouseDown = (e) => {
     if (isSaved || !photoUrl) return;
     setIsDragging(true);
@@ -241,11 +199,9 @@ export const DigitalIdScreen = ({ onBack }) => {
     }
   }, [isDragging]);
 
-  // Touch pan & pinch-zoom handlers for mobile
   const handleTouchStart = (e) => {
     if (isSaved || !photoUrl) return;
     if (e.touches.length === 1) {
-      // Single finger pan
       const touch = e.touches[0];
       setIsDragging(true);
       dragStartRef.current = {
@@ -255,7 +211,6 @@ export const DigitalIdScreen = ({ onBack }) => {
         initialOffsetY: offset.y
       };
     } else if (e.touches.length === 2) {
-      // Two finger pinch to zoom
       setIsDragging(false);
       const t1 = e.touches[0];
       const t2 = e.touches[1];
@@ -268,7 +223,6 @@ export const DigitalIdScreen = ({ onBack }) => {
   const handleTouchMove = (e) => {
     if (isSaved || !photoUrl) return;
     if (e.touches.length === 1 && isDragging) {
-      // Prevent screen vertical scrolling during image alignment
       e.preventDefault();
       const touch = e.touches[0];
       const dx = touch.clientX - dragStartRef.current.x;
@@ -278,7 +232,6 @@ export const DigitalIdScreen = ({ onBack }) => {
         y: dragStartRef.current.initialOffsetY + dy
       });
     } else if (e.touches.length === 2 && touchStartDistRef.current) {
-      // Pinch zoom
       e.preventDefault();
       const t1 = e.touches[0];
       const t2 = e.touches[1];
@@ -309,7 +262,6 @@ export const DigitalIdScreen = ({ onBack }) => {
     };
   }, [isDragging, isSaved, handleMouseMove]);
 
-  // Save document permanently
   const handleSave = async () => {
     if (!photoUrl) return;
     const docData = {
@@ -330,7 +282,6 @@ export const DigitalIdScreen = ({ onBack }) => {
 
   const isDocTab = activeTab === 'doc';
 
-  // Requisites rows: empty until the user fills them in; values are cached in IndexedDB
   const requisites = requisiteFields.map((field) => ({ ...field, value: reqValues[field.key] ?? '' }));
 
   const handleRequisiteChange = (key, value) => {
@@ -343,77 +294,19 @@ export const DigitalIdScreen = ({ onBack }) => {
   const copyToClipboard = (value) => {
     try {
       navigator.clipboard?.writeText(value).catch(() => {});
-    } catch {
-      // Clipboard unavailable (insecure context): nothing to show
-    }
+    } catch {}
   };
-
-  // Pinned footer of each page. Документ: hairline + two buttons; Реквизиты: one button, no hairline
-  const renderFooter = (tab) => (
-    <div style={{
-      flexShrink: 0,
-      position: 'relative',
-      backgroundColor: pageBg,
-      padding: '14px 18px calc(14px + max(env(safe-area-inset-bottom, 0px), 28px)) 18px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '10px'
-    }}>
-      {tab === 'doc' && (
-        <>
-          {/* Hairline: full width, 0.5 pt on retina, lowered by 1px to -6px */}
-          <div style={{
-            position: 'absolute',
-            top: '-6px',
-            left: 0,
-            right: 0,
-            height: 0,
-            borderTop: `0.5px solid ${hairline}`
-          }} />
-
-          {/* Primary: "Предъявить документ" */}
-          <button
-            type="button"
-            className="did-btn-primary"
-            style={{
-              ...footerButtonBase,
-              backgroundColor: primaryBlue,
-              border: 'none',
-              color: onPrimary
-            }}
-          >
-            <QrScanIcon />
-            Предъявить документ
-          </button>
-        </>
-      )}
-
-      {/* Secondary: "Отправить документ" / "Отправить реквизиты" */}
-      <button
-        type="button"
-        className="did-btn-secondary"
-        style={{
-          ...footerButtonBase,
-          backgroundColor: pageBg,
-          // 1.5 border drawn as an inset ring: Chrome rounds 1.5px borders down to 1px
-          border: 'none',
-          boxShadow: `inset 0 0 0 1.5px ${outlineBorder}`,
-          color: outlineText
-        }}
-      >
-        <UploadIcon />
-        {tab === 'doc' ? 'Отправить документ' : 'Отправить реквизиты'}
-      </button>
-    </div>
-  );
 
   return (
     <div className="screen-fill" style={{
       width: '100%',
+      minHeight: '860px',
+      height: '100%',
+      position: 'relative',
       backgroundColor: pageBg,
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden',
+      overflowY: 'auto',
+      overflowX: 'hidden',
+      WebkitOverflowScrolling: 'touch',
       fontFamily,
       letterSpacing: 0
     }}>
@@ -426,106 +319,108 @@ export const DigitalIdScreen = ({ onBack }) => {
         onChange={handlePhotoUpload}
       />
 
-      {/* Safe Area Inset */}
-      <div style={{ height: 'env(safe-area-inset-top, 0px)', flexShrink: 0 }} />
+      {/* =====================================================================
+          1. NAV BAR
+          - back chevron: 11.5 x 21 at x 25, top y 62.5, stroke ≈ 2 px
+          - title: 218 wide (font ≈ 18.5 px Semibold), text top y 65.5, centred on screen
+          ===================================================================== */}
+      {/* Back button */}
+      <button
+        type="button"
+        onClick={onBack}
+        aria-label="Назад"
+        style={{
+          position: 'absolute',
+          left: '25px',
+          top: '62.5px',
+          width: '11.5px',
+          height: '21px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'none',
+          border: 'none',
+          padding: 0,
+          color: textPrimary,
+          cursor: 'pointer',
+          outline: 'none',
+          zIndex: 20,
+          WebkitTapHighlightColor: 'transparent'
+        }}
+      >
+        <BackChevronIcon />
+      </button>
 
-      {/* Nav Bar: height 52, white, no divider */}
-      <div style={{
-        height: '52px',
-        flexShrink: 0,
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
+      {/* Title "Удостоверение личности": 218 wide, text top y 65.5, centred */}
+      <h1 style={{
+        position: 'absolute',
+        top: '65.5px',
+        left: 'calc(50% - 109px)',
+        width: '218px',
+        margin: 0,
+        padding: 0,
+        fontFamily,
+        fontSize: '18.5px',
+        fontWeight: 600,
+        color: textPrimary,
+        lineHeight: 1.15,
+        whiteSpace: 'nowrap',
+        textAlign: 'center',
+        letterSpacing: '-0.2px',
+        zIndex: 10
       }}>
-        {/* Back button: tap area 44 x 44, chevron glyph left edge at x 24, centred at y 74 */}
+        Удостоверение личности
+      </h1>
+
+      {/* Save checkmark button if photo uploaded and not saved */}
+      {photoUrl && !isSaved && (
         <button
           type="button"
-          onClick={onBack}
-          aria-label="Назад"
+          onClick={handleSave}
+          aria-label="Сохранить"
+          className="touchable"
           style={{
             position: 'absolute',
-            left: '7.6px', // box centre 29.6 − glyph half-width 5.6 = glyph left edge 24
-            top: '4px',
-            width: '44px',
-            height: '44px',
+            right: '16px',
+            top: '56px',
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            backgroundColor: '#0175CC',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'none',
             border: 'none',
-            padding: 0,
-            color: textPrimary,
+            color: '#FFFFFF',
             cursor: 'pointer',
-            outline: 'none',
-            WebkitTapHighlightColor: 'transparent'
+            zIndex: 20
           }}
         >
-          <BackChevronIcon />
+          <Check size={20} strokeWidth={2.4} />
         </button>
+      )}
 
-        {/* Title: reduced font size, slightly bolder */}
-        <h1 style={{
-          margin: 0,
-          fontFamily,
-          fontSize: '15.5px',
-          fontWeight: 700,
-          color: textPrimary,
-          lineHeight: '52px',
-          whiteSpace: 'nowrap',
-          textAlign: 'center',
-          maxWidth: 'calc(100% - 100px)',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          letterSpacing: '-0.1px'
-        }}>
-          Удостоверение личности
-        </h1>
-
-        {/* Top-right one-time checkmark button: appears after photo is loaded until saved */}
-        {photoUrl && !isSaved && (
-          <button
-            type="button"
-            onClick={handleSave}
-            aria-label="Сохранить"
-            className="touchable"
-            style={{
-              position: 'absolute',
-              right: '10px',
-              top: '4px',
-              width: '44px',
-              height: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              color: primaryBlue,
-              cursor: 'pointer',
-              outline: 'none',
-              WebkitTapHighlightColor: 'transparent'
-            }}
-          >
-            <Check size={24} strokeWidth={2.4} />
-          </button>
-        )}
-      </div>
-
-      {/* Segmented Control: height 36px, pill 32px, font 14px, shifted up by another 2px (total 6px up) */}
+      {/* =====================================================================
+          2. SEGMENTED CONTROL (Документ / Реквизиты)
+          - track: y 115 → 156 (41 tall), x 17.5 → 396.5
+          - track colour: #F2F2F2
+          - selected pill: white, inset 2 px
+          - label text top: y 128.5 (13.5px from track top)
+          - "Документ" width ≈ 75.5, "Реквизиты" width ≈ 82
+          - label font: ≈ 17.5 px (both labels same size and weight)
+          ===================================================================== */}
       <div style={{
-        marginTop: '9px',
-        marginBottom: '6px',
-        marginLeft: '18px',
-        marginRight: '18px',
-        height: '36px',
-        flexShrink: 0,
+        position: 'absolute',
+        top: '115px',
+        left: '17.5px',
+        right: '17.5px',
+        height: '41px',
         backgroundColor: segTrack,
-        borderRadius: '12px',
-        position: 'relative',
+        borderRadius: '10px',
+        zIndex: 15,
         display: 'flex'
       }}>
-        {/* Sliding white pill: inset 2, height 32px, radius 10px */}
+        {/* Selected white pill */}
         <div style={{
           position: 'absolute',
           top: '2px',
@@ -533,11 +428,12 @@ export const DigitalIdScreen = ({ onBack }) => {
           left: '2px',
           width: 'calc(50% - 4px)',
           backgroundColor: segPill,
-          borderRadius: '10px',
-          boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
+          borderRadius: '8px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
           transform: isDocTab ? 'translateX(0)' : 'translateX(calc(100% + 4px))',
           transition: 'transform 200ms ease'
         }} />
+
         {[
           { id: 'doc', label: 'Документ' },
           { id: 'reqs', label: 'Реквизиты' }
@@ -548,20 +444,27 @@ export const DigitalIdScreen = ({ onBack }) => {
             onClick={() => setActiveTab(tab.id)}
             style={{
               flex: 1,
+              height: '41px',
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
               position: 'relative',
               zIndex: 1,
               background: 'none',
               border: 'none',
               padding: 0,
+              paddingTop: '13.5px', // track top 115 + 13.5 = y 128.5 text top
               fontFamily,
-              fontSize: '14px',
-              fontWeight: activeTab === tab.id ? 500 : 400,
+              fontSize: '17.5px',
+              fontWeight: 500,
               color: textPrimary,
+              lineHeight: 1,
               letterSpacing: 0,
               cursor: 'pointer',
               outline: 'none',
               WebkitTapHighlightColor: 'transparent',
-              userSelect: 'none'
+              userSelect: 'none',
+              textAlign: 'center'
             }}
           >
             {tab.label}
@@ -569,229 +472,331 @@ export const DigitalIdScreen = ({ onBack }) => {
         ))}
       </div>
 
-      {/* Pages: Документ | Реквизиты side by side; the track slides over on tab change.
-          Each page carries its own scroll area and pinned footer. */}
-      <div style={{ flex: 1, minHeight: 0, overflow: 'hidden', position: 'relative' }}>
-        <div style={{
-          display: 'flex',
-          width: '200%',
-          height: '100%',
-          transform: isDocTab ? 'translateX(0)' : 'translateX(-50%)',
-          transition: 'transform 320ms cubic-bezier(0.25, 0.8, 0.25, 1)',
-          willChange: 'transform'
-        }}>
-          {/* Page 1: Документ */}
-          <section aria-label="Документ" inert={!isDocTab} style={paneStyle}>
-            <div className="hide-scrollbar" style={paneScrollStyle}>
-              {isLoading ? (
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '60px 20px',
-                  gap: '12px'
-                }}>
-                  <Loader2 size={32} color={primaryBlue} className="animate-spin" />
-                  <span style={{ fontSize: '13px', color: textSecondary }}>Загрузка документа...</span>
-                </div>
-              ) : (
-                <div style={{ padding: '16px 16px 14px 16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {/* Document picture slot: no frame, no border, no shadow, radius 8 */}
-                  <div
-                    ref={cardContainerRef}
-                    onMouseDown={handleMouseDown}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    onClick={() => {
-                      if (!photoUrl && !isSaved) {
-                        fileInputRef.current?.click();
-                      }
-                    }}
-                    style={{
-                      width: '100%',
-                      borderRadius: '8px',
+      {/* =====================================================================
+          TAB 1: ДОКУМЕНТ
+          ===================================================================== */}
+      {isDocTab && (
+        <>
+          {/* =====================================================================
+              3. DOCUMENT PICTURE (front + back of the card)
+              - left / right edge: x 29.5 / 386.5 (357 wide, side margins ≈ 29)
+              - front side: y 196 → 428.5
+              - back side: y 431.5 → 655.5 (gap between the two sides 3 px)
+              - Scale down to 357 wide keeping its proportions; do not stretch it.
+              ===================================================================== */}
+          <div
+            ref={cardContainerRef}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onClick={() => {
+              if (!photoUrl && !isSaved) {
+                fileInputRef.current?.click();
+              }
+            }}
+            style={{
+              position: 'absolute',
+              top: '196px',
+              left: '28.5px', // x 28.5 → 385.5 (357 wide, side margins ≈ 29 on 414px page)
+              width: '357px',
+              height: '459.5px',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              cursor: isSaved ? 'default' : photoUrl ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
+              touchAction: photoUrl && !isSaved ? 'none' : 'pan-y',
+              userSelect: 'none',
+              zIndex: 5
+            }}
+          >
+            <img
+              src={photoUrl || '/kaspi_assets/documents/kz_id_clean.jpg'}
+              alt="Удостоверение личности"
+              draggable={false}
+              style={{
+                display: 'block',
+                width: '357px',
+                height: '459.5px',
+                objectFit: 'contain',
+                objectPosition: 'center center',
+                transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
+                transformOrigin: 'center center',
+                transition: isDragging ? 'none' : 'transform 0.05s ease-out',
+                pointerEvents: 'none'
+              }}
+            />
+          </div>
+
+          {/* Adjustment controls when editing upload */}
+          {photoUrl && !isSaved && (
+            <div style={{
+              position: 'absolute',
+              top: '658px',
+              left: '28.5px',
+              width: '357px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              zIndex: 15
+            }}>
+              <button
+                type="button"
+                onClick={() => setScale((s) => Math.max(0.3, parseFloat((s - 0.1).toFixed(2))))}
+                style={editControlButton}
+                aria-label="Уменьшить"
+              >
+                <ZoomOut size={18} />
+              </button>
+              <input
+                type="range"
+                min="0.5"
+                max="5.0"
+                step="0.02"
+                value={scale}
+                onChange={(e) => setScale(parseFloat(e.target.value))}
+                style={{ flex: 1, minWidth: 0, accentColor: primaryBlue, cursor: 'pointer' }}
+              />
+              <button
+                type="button"
+                onClick={() => setScale((s) => Math.min(5.0, parseFloat((s + 0.1).toFixed(2))))}
+                style={editControlButton}
+                aria-label="Увеличить"
+              >
+                <ZoomIn size={18} />
+              </button>
+            </div>
+          )}
+
+          {/* =====================================================================
+              4. FOOTER (pinned to the bottom)
+              - hairline: y 689, full width, 1 px, ≈ #EFEFEF
+              - button 1: y 706.5 → 770.5 (64 tall), x 17 → 397, colour #0175CC
+              - button 1 text: 193 wide (font +2 px, white), icon ≈ 26 x 24.5
+              - gap: 11.5
+              - button 2: y 782 → 844.5 (62.5 tall), x 17 → 397, white, border ≈ 2.5 px #B2C8E7
+              - button 2 text: 175 wide, colour #1665A2 (font +1.5 px)
+              - button 2 share icon: ≈ 23 wide, colour #1665A2
+              ===================================================================== */}
+          {/* Hairline: y 689, full width, 1 px, ≈ #EFEFEF */}
+          <div style={{
+            position: 'absolute',
+            top: '689px',
+            left: 0,
+            right: 0,
+            height: '1px',
+            backgroundColor: hairlineColor,
+            zIndex: 10
+          }} />
+
+          {/* Button 1 "Предъявить документ" */}
+          <button
+            type="button"
+            className="did-btn-primary touchable"
+            style={{
+              position: 'absolute',
+              top: '706.5px',
+              left: '17px',
+              right: '17px',
+              height: '64px',
+              backgroundColor: primaryBlue, // #0175CC
+              borderRadius: '12px',
+              border: 'none',
+              color: onPrimary,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              fontFamily,
+              fontSize: '18px', // +2 px
+              fontWeight: 500,
+              letterSpacing: 0,
+              whiteSpace: 'nowrap',
+              cursor: 'pointer',
+              outline: 'none',
+              boxSizing: 'border-box',
+              zIndex: 10
+            }}
+          >
+            <QrScanIcon />
+            Предъявить документ
+          </button>
+
+          {/* Button 2 "Отправить документ" */}
+          <button
+            type="button"
+            className="did-btn-secondary touchable"
+            style={{
+              position: 'absolute',
+              top: '782px',
+              left: '17px',
+              right: '17px',
+              height: '62.5px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '12px',
+              border: 'none',
+              boxShadow: `inset 0 0 0 2.5px ${outlineBorder}`, // 2.5 px light blue #B2C8E7
+              color: outlineText, // #1665A2
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              fontFamily,
+              fontSize: '17.5px', // +1.5 px
+              fontWeight: 500,
+              letterSpacing: 0,
+              whiteSpace: 'nowrap',
+              cursor: 'pointer',
+              outline: 'none',
+              boxSizing: 'border-box',
+              zIndex: 10
+            }}
+          >
+            <UploadIcon />
+            Отправить документ
+          </button>
+        </>
+      )}
+
+      {/* =====================================================================
+          TAB 2: РЕКВИЗИТЫ
+          ===================================================================== */}
+      {!isDocTab && (
+        <>
+          <div
+            className="hide-scrollbar"
+            style={{
+              position: 'absolute',
+              top: '164px',
+              bottom: '124px',
+              left: 0,
+              right: 0,
+              overflowY: 'auto',
+              WebkitOverflowScrolling: 'touch',
+              zIndex: 5
+            }}
+          >
+            <div style={{ paddingTop: '8px' }}>
+              {requisites.map((row) => (
+                <div
+                  key={row.label}
+                  style={{
+                    height: '71px',
+                    padding: '14px 18px 14px 30px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontSize: '13px',
+                      fontWeight: 400,
+                      lineHeight: '16px',
+                      color: textSecondary,
+                      whiteSpace: 'nowrap',
                       overflow: 'hidden',
-                      position: 'relative',
-                      cursor: isSaved ? 'default' : photoUrl ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
-                      touchAction: photoUrl && !isSaved ? 'none' : 'pan-y',
-                      userSelect: 'none'
-                    }}
-                  >
-                    {photoUrl ? (
-                      <img
-                        src={photoUrl}
-                        alt="Удостоверение личности"
-                        draggable={false}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          height: 'auto',
-                          objectFit: 'contain',
-                          objectPosition: 'center center',
-                          transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
-                          transformOrigin: 'center center',
-                          transition: isDragging ? 'none' : 'transform 0.05s ease-out',
-                          pointerEvents: 'none'
-                        }}
-                      />
-                    ) : (
-                      // Empty slot: tap to pick the document image
-                      <div style={{
-                        height: '456px',
-                        backgroundColor: segTrack,
+                      textOverflow: 'ellipsis'
+                    }}>
+                      {row.label}
+                    </div>
+                    <input
+                      type="text"
+                      inputMode={row.inputMode}
+                      value={row.value}
+                      onChange={(e) => handleRequisiteChange(row.key, e.target.value)}
+                      aria-label={row.label}
+                      autoComplete="off"
+                      spellCheck={false}
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        height: '22px',
+                        marginTop: '5px',
+                        padding: 0,
+                        border: 'none',
+                        outline: 'none',
+                        background: 'transparent',
+                        fontFamily,
+                        fontSize: '17px',
+                        fontWeight: 400,
+                        lineHeight: '22px',
+                        letterSpacing: 0,
+                        color: textPrimary,
+                        textOverflow: 'ellipsis',
+                        boxSizing: 'border-box',
+                        WebkitAppearance: 'none',
+                        borderRadius: 0
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ width: '24px', height: '24px', marginTop: '6px', flexShrink: 0, position: 'relative' }}>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard(row.value)}
+                      aria-label={`Скопировать: ${row.label}`}
+                      style={{
+                        position: 'absolute',
+                        top: '-10px',
+                        left: '-10px',
+                        width: '44px',
+                        height: '44px',
                         display: 'flex',
-                        flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '6px',
-                        padding: '20px',
-                        textAlign: 'center',
-                        boxSizing: 'border-box'
-                      }}>
-                        <span style={{ fontSize: '15px', fontWeight: 500, color: textPrimary }}>
-                          Загрузить документ
-                        </span>
-                        <span style={{ fontSize: '13px', color: textSecondary }}>
-                          Нажмите, чтобы добавить фото удостоверения личности
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Adjustment controls — only before saving (first upload) */}
-                  {photoUrl && !isSaved && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <button
-                        type="button"
-                        onClick={() => setScale((s) => Math.max(0.3, parseFloat((s - 0.1).toFixed(2))))}
-                        style={editControlButton}
-                        aria-label="Уменьшить"
-                      >
-                        <ZoomOut size={18} />
-                      </button>
-                      <input
-                        type="range"
-                        min="0.5"
-                        max="5.0"
-                        step="0.02"
-                        value={scale}
-                        onChange={(e) => setScale(parseFloat(e.target.value))}
-                        style={{ flex: 1, minWidth: 0, accentColor: primaryBlue, cursor: 'pointer' }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setScale((s) => Math.min(5.0, parseFloat((s + 0.1).toFixed(2))))}
-                        style={editControlButton}
-                        aria-label="Увеличить"
-                      >
-                        <ZoomIn size={18} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-            {renderFooter('doc')}
-          </section>
-
-          {/* Page 2: Реквизиты — 6 rows from y 164 (9 below the segmented control), no card, no dividers */}
-          <section aria-label="Реквизиты" inert={isDocTab} style={paneStyle}>
-            <div className="hide-scrollbar" style={paneScrollStyle}>
-              <div style={{ paddingTop: '9px' }}>
-                {requisites.map((row) => (
-                  <div
-                    key={row.label}
-                    style={{
-                      height: '71px',
-                      padding: '14px 18px 14px 30px',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '12px',
-                      boxSizing: 'border-box'
-                    }}
-                  >
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{
-                        fontSize: '13px',
-                        fontWeight: 400,
-                        lineHeight: '16px',
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
                         color: textSecondary,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis'
-                      }}>
-                        {row.label}
-                      </div>
-                      {/* Value: filled in by the user, looks like plain text (no field chrome) */}
-                      <input
-                        type="text"
-                        inputMode={row.inputMode}
-                        value={row.value}
-                        onChange={(e) => handleRequisiteChange(row.key, e.target.value)}
-                        aria-label={row.label}
-                        autoComplete="off"
-                        spellCheck={false}
-                        style={{
-                          display: 'block',
-                          width: '100%',
-                          height: '22px',
-                          marginTop: '5px',
-                          padding: 0,
-                          border: 'none',
-                          outline: 'none',
-                          background: 'transparent',
-                          fontFamily,
-                          fontSize: '17px',
-                          fontWeight: 400,
-                          lineHeight: '22px',
-                          letterSpacing: 0,
-                          color: textPrimary,
-                          textOverflow: 'ellipsis',
-                          boxSizing: 'border-box',
-                          WebkitAppearance: 'none',
-                          borderRadius: 0
-                        }}
-                      />
-
-                    </div>
-
-                    {/* Copy icon box 24 x 24, top at row top + 20, tap area 44 x 44 centred on it */}
-                    <div style={{ width: '24px', height: '24px', marginTop: '6px', flexShrink: 0, position: 'relative' }}>
-                      <button
-                        type="button"
-                        onClick={() => copyToClipboard(row.value)}
-                        aria-label={`Скопировать: ${row.label}`}
-                        style={{
-                          position: 'absolute',
-                          top: '-10px',
-                          left: '-10px',
-                          width: '44px',
-                          height: '44px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          background: 'none',
-                          border: 'none',
-                          padding: 0,
-                          color: textSecondary,
-                          cursor: 'pointer',
-                          outline: 'none',
-                          WebkitTapHighlightColor: 'transparent'
-                        }}
-                      >
-                        <CopyIcon />
-                      </button>
-                    </div>
+                        cursor: 'pointer',
+                        outline: 'none',
+                        WebkitTapHighlightColor: 'transparent'
+                      }}
+                    >
+                      <CopyIcon />
+                    </button>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-            {renderFooter('reqs')}
-          </section>
-        </div>
-      </div>
+          </div>
+
+          {/* Button 2 "Отправить реквизиты" */}
+          <button
+            type="button"
+            className="did-btn-secondary touchable"
+            style={{
+              position: 'absolute',
+              top: '782px',
+              left: '17px',
+              right: '17px',
+              height: '62.5px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '12px',
+              border: 'none',
+              boxShadow: `inset 0 0 0 2.5px ${outlineBorder}`,
+              color: outlineText,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              fontFamily,
+              fontSize: '17.5px',
+              fontWeight: 500,
+              letterSpacing: 0,
+              whiteSpace: 'nowrap',
+              cursor: 'pointer',
+              outline: 'none',
+              boxSizing: 'border-box',
+              zIndex: 10
+            }}
+          >
+            <UploadIcon />
+            Отправить реквизиты
+          </button>
+        </>
+      )}
     </div>
   );
 };
