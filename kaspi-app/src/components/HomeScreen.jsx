@@ -18,14 +18,14 @@ import {
   KaspiHeartIcon
 } from './KaspiServiceIcons';
 
-// Filled vector star icon, 13 pt, color #F14635
-const KaspiRatingStar = ({ size = 13, color = "#F14635" }) => (
+// Filled vector star icon, 9 pt, color #F14635
+const KaspiRatingStar = ({ size = 9, color = "#F14635" }) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="1.5 1.5 21 20"
     fill={color}
-    style={{ display: 'inline-block', verticalAlign: '-1px', flexShrink: 0 }}
+    style={{ display: 'inline-block', verticalAlign: '-0.5px', flexShrink: 0 }}
   >
     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
   </svg>
@@ -322,19 +322,22 @@ export const HomeScreen = ({
     }}>
       {/* =====================================================================
           1. HEADER (search + cart) — STICKY WITH SCROLL
-          Search field top: 51.5 (item 1). Height: 42.5 (item 2).
-          Search field right edge: x 350, left edge: 17.5, width: 332.5 on 414 (item 3).
-          Magnifier: 19 x 19 at x 30.5 (left edge 13 inside field) (item 4).
-          Placeholder "Поиск по Kaspi.kz": 17 Regular, starts x 60.5 (item 5).
-          Camera icon: 24 x 20.5, right edge 13.5 inside field (item 6).
-          Cart icon: 29.5 x 25, centred vertically on search field, left edge x 364.5 (item 7).
-          Cart badge: 15 x 15 circle, 11 Semibold (item 8).
+          F1: No grey line under header.
+          F2: Magnifier 18.5 x 18.5 at x 30.5, y 63.5.
+          F3: Placeholder "Поиск по Kaspi.kz": 144.5 wide, starts x 60, top y 66.5.
+          F4: Camera icon: 24 x 20 at x 312.5, y 62.5.
+          F5: Cart icon: 21.5 x 20.5 at x 365, y 63.
+          F6: Cart badge: 15.5 x 15 at x 378.5, y 59 (cart left + 13.5, cart top - 4).
       ===================================================================== */}
       <div style={{
         position: 'sticky',
         top: 0,
         zIndex: 45,
         backgroundColor: '#FFFFFF',
+        border: 'none',
+        borderBottom: 'none',
+        boxShadow: 'none',
+        outline: 'none',
         paddingTop: '3.5px',
         paddingBottom: '0px',
         paddingLeft: '17.5px',
@@ -355,6 +358,8 @@ export const HomeScreen = ({
             backgroundColor: '#F2F2F2',
             borderRadius: '10px',
             border: 'none',
+            outline: 'none',
+            boxShadow: 'none',
             display: 'flex',
             alignItems: 'center',
             paddingLeft: '13px',
@@ -363,19 +368,19 @@ export const HomeScreen = ({
             boxSizing: 'border-box'
           }}
         >
-          {/* Magnifier: exactly 19 x 19 at x 30.5 (left edge 13 inside field) */}
-          <svg width="19" height="19" viewBox="0 0 19 19" fill="none" style={{ flexShrink: 0, display: 'block' }}>
-            <circle cx="8" cy="8" r="6.75" stroke="#8E8E8E" strokeWidth="2.1" />
-            <path d="M13 13L17.75 17.75" stroke="#8E8E8E" strokeWidth="2.1" strokeLinecap="round" />
+          {/* F2: Magnifier 18.5 x 18.5 at x 30.5, y 63.5 */}
+          <svg width="18.5" height="18.5" viewBox="0 0 18.5 18.5" fill="none" style={{ flexShrink: 0, display: 'block' }}>
+            <circle cx="7.75" cy="7.75" r="6.5" stroke="#8E8E8E" strokeWidth="2.1" />
+            <path d="M12.5 12.5L17.25 17.25" stroke="#8E8E8E" strokeWidth="2.1" strokeLinecap="round" />
           </svg>
 
-          {/* Placeholder: 17 Regular, 144.5 wide, starts at x 60 */}
+          {/* F3: Placeholder "Поиск по Kaspi.kz": 144.5 wide, starts at x 60, top y 66.5 */}
           <span style={{
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
             fontSize: '17px',
             fontWeight: '400',
             color: '#8E8E8E',
-            marginLeft: '10.5px',
+            marginLeft: '11px',
             flex: 1,
             userSelect: 'none',
             whiteSpace: 'nowrap',
@@ -387,27 +392,27 @@ export const HomeScreen = ({
             Поиск по Kaspi.kz
           </span>
 
-          {/* Camera icon box: 24 x 20.5, left edge x 312.5 */}
+          {/* F4: Camera icon box: 24 x 20 at x 312.5, y 62.5 */}
           <div style={{
             width: '24px',
-            height: '20.5px',
+            height: '20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0
           }}>
-            <CameraSparkleIcon width={24} height={20.5} color="#555555" />
+            <CameraSparkleIcon width={24} height={20} color="#555555" />
           </div>
         </div>
 
-        {/* Cart icon box: 29.5 x 25, centred vertically on search field, left edge x 364.5 */}
+        {/* F5: Cart icon box: 21.5 x 20.5 at x 365, y 63 */}
         <div
           onClick={() => onOpenService('cart')}
           className="touchable"
           style={{
-            marginLeft: '11px',
-            width: '29.5px',
-            height: '25px',
+            marginLeft: '15px',
+            width: '21.5px',
+            height: '20.5px',
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
@@ -416,15 +421,15 @@ export const HomeScreen = ({
             flexShrink: 0
           }}
         >
-          <TopBarCartIcon width={29.5} height={25} color="#9E9E9E" />
-          {/* Cart badge: 15 x 15 circle, number 11 Semibold */}
+          <TopBarCartIcon width={21.5} height={20.5} color="#9E9E9E" />
+          {/* F6: Cart badge "3": 15.5 x 15 at x 378.5, y 59 (cart left + 13.5, cart top - 4) */}
           <div style={{
             position: 'absolute',
-            top: '-5px',
-            right: '-5px',
-            width: '15px',
+            top: '-4px',
+            left: '13.5px',
+            width: '15.5px',
             height: '15px',
-            borderRadius: '50%',
+            borderRadius: '7.5px',
             backgroundColor: '#F14635',
             color: '#FFFFFF',
             fontSize: '11px',
@@ -547,14 +552,17 @@ export const HomeScreen = ({
       {/* =====================================================================
           3. SHORTCUT GRID (2 x 4)
           Gap from banner bottom to first icon row top: 20 (item 10; row 1 top y 237).
-          Gap from icon bottom to label text top: 13.5 (item 11; label marginTop 7.5).
-          Icon row pitch: 78.5 (item 12; row 2 top y 315.5; rowGap 18.5).
-          Grid labels: font 15 Regular (item 13).
-          Magnum tile: 34.5 x 35, radius 8 (item 14).
-          Gap from row 2 labels to divider: 14 (item 15; divider y 388.5).
+      {/* =====================================================================
+          3. SHORTCUT GRID (2 x 4)
+          E1. Row 1 icons move up 3 px (tops y 236.5–238.5).
+          E2. Row 1 labels move up 2 px (top y 280).
+          E3. Row 2 icons move up 2.5 px (tops y 313 Magnum / 315–316).
+          E4. Row 2 labels move up 0.5–1 px (top y 359.5).
+          E5. Grid label font: 15 px Regular, letter-spacing 0.
+          Magnum tile: 34.5 x 35, radius 8 (NOT changed).
       ===================================================================== */}
       <div style={{
-        marginTop: '20px',
+        marginTop: '17px',
         paddingLeft: '14px',
         paddingRight: '12px',
         width: '100%',
@@ -563,7 +571,7 @@ export const HomeScreen = ({
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          rowGap: '18.5px',
+          rowGap: '16px',
           width: '100%'
         }}>
           {/* Row 1 */}
@@ -576,7 +584,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconShop size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Магазин
             </span>
           </div>
@@ -590,7 +598,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconMyBank size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Мой Банк
             </span>
           </div>
@@ -604,7 +612,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconPayments size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Платежи
             </span>
           </div>
@@ -618,7 +626,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconTransfers size={34.5} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Переводы
             </span>
           </div>
@@ -633,7 +641,7 @@ export const HomeScreen = ({
             <div style={{ width: '34.5px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconMagnum width={34.5} height={35} />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '6.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Magnum
             </span>
           </div>
@@ -647,7 +655,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconTravel size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Travel
             </span>
           </div>
@@ -661,7 +669,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconGov size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Госуслуги
             </span>
           </div>
@@ -675,14 +683,14 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconJobs size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Работа
             </span>
           </div>
         </div>
       </div>
 
-      {/* Divider 1: full width, 0.5 pt, #EBEBEB, 14 below row 2 labels (y 388.5) (item 15) */}
+      {/* Divider 1: full width, 0.5 pt, #EBEBEB, 14 below row 2 labels (y 388.5) */}
       <div style={{
         marginTop: '14px',
         height: '0.5px',
@@ -694,16 +702,16 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           4. DEPOSIT ROWS
-          Gap from divider to tile 1: 23.5 (item 16; tile 1 top y 412).
-          Deposit tiles: 56.5 x 44, radius 6 (item 17).
-          Gap between two tiles: 9.5 (row pitch 53.5) (item 18; tile 2 top y 465).
-          Deposit text x: 95 (20 after tile) (item 19).
-          Deposit text font: 18 Regular (item 20).
-          Line 1 "Накопительный" text top: level with tile top (item 21).
-          Pill: 39 x 22.5, radius 11.25, 5 after "Депозит", "18%" 15.5 Semibold (item 22).
+          D1. Tile 1 top y 411.5, Tile 2 top y 465. Size 56.5 x 44, gap 9.5 px.
+          D2. Coin glyph (tile 1): 21.5 w x 23 h, stroke 2.35 px, offset x 17.5, y 10.5.
+          D3. "₸$" glyph (tile 2): 28.5 w x 19 h, stroke 2.7 px, offset x 14.5, y 12.5.
+          D4. Text starts at x 88.5 (marginLeft: 13.5px). 18 px Regular, colour #000.
+              "Накопительный" capital top y 411.5, "Депозит" top y 435.5, line pitch 24 px.
+              "Kaspi Депозит 15%" top y 479 (14 px below tile 2 top).
+          D5. "18%" yellow pill: 40 x 23 at x 166.5, y 432.5, 6.5 px after "Депозит".
       ===================================================================== */}
       <div style={{
-        marginTop: '23.5px',
+        marginTop: '23px',
         paddingLeft: '18.5px',
         paddingRight: '18.5px',
         display: 'flex',
@@ -720,64 +728,69 @@ export const HomeScreen = ({
             height: '44px',
             borderRadius: '6px',
             backgroundColor: '#FFD302',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            position: 'relative',
             flexShrink: 0,
             overflow: 'hidden'
           }}>
-            <svg viewBox="26 20 243 188" width="56.5" height="44">
-              <g transform="translate(148, 115) scale(1.10) translate(-148, -115)" fill="none" stroke="#FFFFFF" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round">
-                <ellipse cx="148" cy="91.75" rx="43" ry="22.75" />
-                <path d="M105 92Q110.5 103.5 106 115Q110.5 127 105 139" />
-                <path d="M191 92Q188 103.5 190.5 115Q188 127 191 139" />
-                <path d="M106 115a42 22.5 0 0 0 84 0" />
-                <path d="M105 139a43 22.5 0 0 0 86 0" />
+            {/* D2: Coin glyph 21.5 w x 23 h, stroke 2.35 px, offset x 17.5, y 10.5, pure white #FFFFFF */}
+            <svg
+              width="21.5"
+              height="23"
+              viewBox="0 0 21.5 23"
+              fill="none"
+              style={{ position: 'absolute', left: '17.5px', top: '10.5px' }}
+            >
+              <g fill="none" stroke="#FFFFFF" strokeWidth="2.35" strokeLinecap="round" strokeLinejoin="round">
+                <ellipse cx="10.75" cy="5.5" rx="8.5" ry="3.75" />
+                <path d="M2.25 5.5v5.5c0 2.1 3.8 3.75 8.5 3.75s8.5-1.65 8.5-3.75V5.5" />
+                <path d="M2.25 11v5.5c0 2.1 3.8 3.75 8.5 3.75s8.5-1.65 8.5-3.75V11" />
               </g>
             </svg>
           </div>
 
-          {/* Text: starts 20 after tile (x 95), line 1 text top level with tile top */}
+          {/* D4: Text starts at x 88.5 (marginLeft: 13.5px), capital top y 411.5 */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            marginLeft: '20px',
-            marginTop: '-2.5px'
+            marginLeft: '13.5px',
+            marginTop: '-2px'
           }}>
             <div style={{
+              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
               fontSize: '18px',
               fontWeight: '400',
               color: '#000000',
-              lineHeight: '23px',
+              lineHeight: '24px',
               letterSpacing: 0
             }}>
               Накопительный
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', lineHeight: '23px', marginTop: '1px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', lineHeight: '24px' }}>
               <span style={{
+                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
                 fontSize: '18px',
                 fontWeight: '400',
                 color: '#000000',
-                lineHeight: '23px',
+                lineHeight: '24px',
                 letterSpacing: 0
               }}>
                 Депозит
               </span>
-              {/* Rate pill: 39 x 22.5, radius 11.25, 5 after "Депозит", "18%" 15.5 Semibold */}
+              {/* D5: Rate pill: 40 x 23 at x 166.5, y 432.5, 6.5 px after "Депозит" */}
               <div style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: '#FFD302',
-                borderRadius: '11.25px',
-                width: '39px',
-                height: '22.5px',
-                marginLeft: '5px',
+                borderRadius: '11.5px',
+                width: '40px',
+                height: '23px',
+                marginLeft: '6.5px',
                 flexShrink: 0
               }}>
                 <span style={{
-                  fontSize: '15.5px',
-                  fontWeight: '600',
+                  fontSize: '15px',
+                  fontWeight: '700',
                   color: '#000000',
                   lineHeight: 1
                 }}>
@@ -789,42 +802,42 @@ export const HomeScreen = ({
         </div>
 
         {/* Row 2: Kaspi Депозит 15% */}
-        <div className="touchable" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+        <div className="touchable" style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer' }}>
           {/* Yellow tile: 56.5 x 44, radius 6, #FFD302 */}
           <div style={{
             width: '56.5px',
             height: '44px',
             borderRadius: '6px',
             backgroundColor: '#FFD302',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            position: 'relative',
             flexShrink: 0,
             overflow: 'hidden'
           }}>
-            <svg viewBox="17 15 243 189" width="56.5" height="44">
-              <g transform="translate(138, 109) scale(1.05) translate(-138, -109)">
-                <g fill="#FFFFFF">
-                  <rect x="76" y="74" width="63" height="9.5" />
-                  <rect x="76" y="91.5" width="63" height="9.5" />
-                  <rect x="101" y="96" width="11" height="51" />
-                </g>
-                <g fill="none" stroke="#FFFFFF" strokeLinecap="butt" strokeLinejoin="miter">
-                  <path d="M197.5 99C197.5 89.5 190 84 180.5 84C169 84 160.5 88.5 160.5 97C160.5 106 170 109.5 180.5 113C191 116.5 198.5 120 198.5 128.5C198.5 137.5 190 142 180 142C169 142 159 137.5 159 125" strokeWidth="10" />
-                  <path d="M180.5 68v14M180 144v9" strokeWidth="9" />
-                </g>
-              </g>
+            {/* D3: "₸$" glyph 28.5 w x 19 h, stroke 2.7 px, offset x 14.5, y 12.5, colour #FFFFFF */}
+            <svg
+              width="28.5"
+              height="19"
+              viewBox="0 0 28.5 19"
+              fill="none"
+              style={{ position: 'absolute', left: '14.5px', top: '12.5px' }}
+            >
+              <path d="M2 3.5h11" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
+              <path d="M2 7.5h11" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
+              <path d="M7.5 7.5v9" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
+              <path d="M21 2v15" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
+              <path d="M25 6.5c-0.8-1.5-2.2-2.2-4-2.2-2.3 0-4 1.4-4 3.2 0 3.8 7.5 2.2 7.5 6 0 1.9-1.8 3.5-4.2 3.5-2 0-3.6-1-4.3-2.5" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
             </svg>
           </div>
 
-          {/* Text — Row 2: 20 after tile (x 95), vertically centred on tile */}
+          {/* D4: Kaspi Депозит 15%: starts at x 88.5, top y 479 (14 px below tile 2 top at 465) */}
           <div style={{
             display: 'flex',
-            alignItems: 'center',
-            marginLeft: '20px',
-            height: '44px'
+            alignItems: 'flex-start',
+            marginLeft: '13.5px',
+            marginTop: '14px'
           }}>
             <span style={{
+              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
               fontSize: '18px',
               fontWeight: '400',
               color: '#000000',
@@ -839,28 +852,29 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           5. "ВЫ НЕДАВНО СМОТРЕЛИ" CAROUSEL
-          Gap from tile 2 bottom to title text top: 26 (item 6; y 535.5).
-          Section title: 18 Bold #000, 189 wide (item 7).
-          Gap from title text bottom to images: 15 (item 8; images y 567.5).
-          Product image tile: 110 x 110, radius 10, 1 pt border #EFEFEF.
-          Gap from image bottom to price text top: 6 (item 9; price y 683.5).
-          Price: 15 Bold #000, old price 12 Regular #8E8E8E.
-          Bonus box: 110 x 38, radius 8, top 22.5 below price text top (box top y 706) (item 10).
-          Name: 13 Regular, text top 5 below box (y 749) (item 11).
-          Rating: 13 Semibold/Regular, text top 19 below name text top (y 768) (item 11).
-          Divider: 0.5 #EBEBEB at y 799, full width (item 12).
+          C1. Title top y 535.5, width 189.5 px (17.5 px Bold 700, letter-spacing 0).
+          C2. Tile top y 567 (tile bottom y 677). Gap from title text bottom = 14.5 px.
+          A1. hide-scrollbar removes any faint line at y 775.
+          C3. Price text top y 685 (7.5 px under tile bottom).
+          C4. Green bonus box: box top y 705.5 (20.5 px under price top). 111 x 39, #E5F5D2.
+              padding-left 5 px, green price 5.5 px under box top, "с учетом Бонусов" 24 px under box top (font 11.5 px, width 99.5 px).
+          C5. Product name: text top 44 px under box top (y 749.5).
+          C6. Rating row: text top 18.5 px under name top (y 768). Star 9 x 9.
+          C7. Cards without bonus box: name 21.5 px under price top.
+          A2. Divider at y 799 (18.5 px under rating bottom, marginTop 23.5 px, #F3F3F3, 0.5 px).
+          A3. Next section starts at y 813+, hidden behind opaque white tab bar.
       ===================================================================== */}
       <div style={{
         marginTop: '20.5px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        {/* Section Title: 18 Bold #000, 189 wide, x 18.5 */}
+        {/* C1. Section Title: 17.5 Bold #000, 189.5 wide, x 18.5 */}
         <div style={{
           paddingLeft: '18.5px',
           paddingRight: '18.5px',
           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif',
-          fontSize: '18px',
+          fontSize: '17.5px',
           fontWeight: '700',
           color: '#000000',
           lineHeight: '22px',
@@ -869,19 +883,23 @@ export const HomeScreen = ({
           Вы недавно смотрели
         </div>
 
-        {/* Horizontal Carousel: images start 15 below title text bottom (y 567.5) */}
-        <div style={{
-          marginTop: '10px',
-          display: 'flex',
-          gap: '9.5px',
-          overflowX: 'auto',
-          paddingLeft: '17.5px',
-          paddingRight: '17.5px',
-          scrollbarWidth: 'none',
-          WebkitOverflowScrolling: 'touch',
-          touchAction: 'pan-y',
-          alignItems: 'flex-start'
-        }}>
+        {/* C2 & A1: Horizontal Carousel: tile top y 567, hide-scrollbar removes horizontal scrollbar line */}
+        <div
+          className="hide-scrollbar"
+          style={{
+            marginTop: '13.5px',
+            display: 'flex',
+            gap: '9.5px',
+            overflowX: 'auto',
+            paddingLeft: '17.5px',
+            paddingRight: '17.5px',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-y',
+            alignItems: 'flex-start'
+          }}
+        >
           {viewedProducts.map((item) => (
             <div
               key={item.id}
@@ -922,7 +940,7 @@ export const HomeScreen = ({
                   }}
                 />
 
-                {/* Image chip: height 19.5, radius 6, text 13 Bold white, pinned bottom-left, 1 pt inset */}
+                {/* C8: Image chip: height 19.5, radius 6, text 13 Bold white, pinned bottom-left, 1 pt inset */}
                 {(item.discountChip || item.bonusChip) && (
                   <div style={{
                     position: 'absolute',
@@ -973,9 +991,9 @@ export const HomeScreen = ({
                 )}
               </div>
 
-              {/* Price: 6 below image bottom (y 683.5), 15 Bold #000 */}
+              {/* C3: Price: 7.5 px under tile bottom (y 685), 15 Bold */}
               <div style={{
-                marginTop: '3px',
+                marginTop: '7.5px',
                 display: 'flex',
                 alignItems: 'baseline',
                 whiteSpace: 'nowrap',
@@ -1008,24 +1026,25 @@ export const HomeScreen = ({
                 )}
               </div>
 
-              {/* Bonus box: 110 x 38, radius 8, #E6F8D0, top 22.5 below price text top (box top y 706) */}
+              {/* C4: Green bonus box: 111 x 39, radius 8, #E5F5D2, top 20.5 below price text top (box top y 705.5) */}
               {item.bonusBox && (
                 <div style={{
-                  marginTop: '4.5px',
-                  width: '110px',
-                  height: '38px',
+                  marginTop: '2.5px',
+                  width: '111px',
+                  height: '39px',
                   borderRadius: '8px',
-                  backgroundColor: '#E6F8D0',
-                  padding: '4px 6px',
+                  backgroundColor: '#E5F5D2',
+                  paddingLeft: '5px',
+                  paddingRight: '5px',
+                  paddingTop: '5.5px',
                   boxSizing: 'border-box',
                   display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center'
+                  flexDirection: 'column'
                 }}>
                   <div style={{
                     fontSize: '13px',
                     fontWeight: '700',
-                    color: '#54A000',
+                    color: '#64A022',
                     lineHeight: '15px',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden'
@@ -1033,10 +1052,11 @@ export const HomeScreen = ({
                     {item.bonusBox.price}
                   </div>
                   <div style={{
-                    fontSize: '12px',
+                    fontSize: '11.5px',
                     fontWeight: '400',
                     color: '#000000',
-                    lineHeight: '14px',
+                    lineHeight: '13px',
+                    marginTop: '3.5px',
                     whiteSpace: 'nowrap'
                   }}>
                     {item.bonusBox.caption}
@@ -1044,9 +1064,9 @@ export const HomeScreen = ({
                 </div>
               )}
 
-              {/* Product name: 13 Regular #000, 1 line, tail ellipsis, text top 5 below box (y 749) */}
+              {/* C5 & C7: Product name: text top 44 px under box top (y 749.5) */}
               <div style={{
-                marginTop: item.bonusBox ? '5px' : '7px',
+                marginTop: item.bonusBox ? '5px' : '3.5px',
                 fontSize: '13px',
                 fontWeight: '400',
                 color: '#000000',
@@ -1059,9 +1079,9 @@ export const HomeScreen = ({
                 {item.title}
               </div>
 
-              {/* Rating row: text top 19 below name text top (y 768). Value 13 Semibold, star 12 #F14635, count 13 Regular #8E8E8E */}
+              {/* C6: Rating row: text top 18.5 below name text top (y 768). Value 13 Semibold, star 9x9 #F14635, count 13 Regular #8E8E8E */}
               <div style={{
-                marginTop: '3px',
+                marginTop: '2.5px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '3px'
@@ -1074,7 +1094,7 @@ export const HomeScreen = ({
                 }}>
                   {item.rating}
                 </span>
-                <KaspiRatingStar size={12} color="#F14635" />
+                <KaspiRatingStar size={9} color="#F14635" />
                 <span style={{
                   fontSize: '13px',
                   fontWeight: '400',
@@ -1089,11 +1109,11 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* Divider 2: full width, 0.5 pt, #EBEBEB at y 799 (item 12) */}
+      {/* A2: Divider 2: full width, 0.5 pt, #F3F3F3 at y 799 (18.5 px under rating bottom) */}
       <div style={{
-        marginTop: '13.5px',
+        marginTop: '23.5px',
         height: '0.5px',
-        backgroundColor: '#EBEBEB',
+        backgroundColor: '#F3F3F3',
         width: '100%',
         display: 'block',
         flexShrink: 0

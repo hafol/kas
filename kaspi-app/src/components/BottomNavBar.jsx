@@ -1,11 +1,24 @@
 import React from 'react';
 
-// Exact vector paths extracted from Kaspi APK:
-// ic_nav_tab_1 (Главная: 24.5 x 24)
-const NavIconHome = ({ color }) => (
+// B2. Главная (active) icon – house (19.5 w x 21.5 h, stroke 2.2 px, darker red #C0382C)
+const NavIconHome = ({ color = "#C0382C" }) => (
+  <svg width="19.5" height="21.5" viewBox="0 0 19.5 21.5" fill="none">
+    <path
+      d="M2.3 8.8L9.75 2.2L17.2 8.8V19.4C17.2 19.95 16.75 20.4 16.2 20.4H12.2V14.8H7.3V20.4H3.3C2.75 20.4 2.3 19.95 2.3 19.4V8.8Z"
+      stroke={color}
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path d="M7.3 10.4H12.2" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+  </svg>
+);
+
+// B3. Kaspi QR icon (24.5 x 24, stroke 2 px, #535353)
+const NavIconQR = ({ color = "#535353" }) => (
   <svg width="24.5" height="24" viewBox="0 0 24 24" fill="none">
     <path
-      d="M11.1,2.425L3.6,8.05C3.2223,8.3333 3,8.7779 3,9.25V20.5C3,21.3284 3.6716,22 4.5,22H8.5L8.6445,21.9931C9.4051,21.9204 10,21.2797 10,20.5V16H14V20.5C14,21.3284 14.6716,22 15.5,22H19.5C20.3284,22 21,21.3284 21,20.5V9.25C21,8.7779 20.7777,8.3333 20.4,8.05L12.9,2.425C12.3667,2.025 11.6333,2.025 11.1,2.425ZM11.999,4.249L19,9.5V20H16V15.5C16,14.6716 15.3284,14 14.5,14H9.5L9.3555,14.0069C8.5949,14.0796 8,14.7203 8,15.5V20H5V9.499L11.999,4.249ZM9,11H15C15.5523,11 16,11.4477 16,12C16,12.5523 15.5523,13 15,13H9C8.4477,13 8,12.5523 8,12C8,11.4477 8.4477,11 9,11Z"
+      d="M1.2 2.5C1.2 1.8 1.8 1.2 2.5 1.2H7C7.6 1.2 8 1.6 8 2.2C8 2.8 7.6 3.2 7 3.2H3.2V7C3.2 7.6 2.8 8 2.2 8C1.6 8 1.2 7.6 1.2 7V2.5ZM16 2.2C16 1.6 16.4 1.2 17 1.2H21.5C22.2 1.2 22.8 1.8 22.8 2.5V7C22.8 7.6 22.4 8 21.8 8C21.2 8 20.8 7.6 20.8 7V3.2H17C16.4 3.2 16 2.8 16 2.2ZM2.2 16C2.8 16 3.2 16.4 3.2 17V20.8H7C7.6 20.8 8 21.2 8 21.8C8 22.4 7.6 22.8 7 22.8H2.5C1.8 22.8 1.2 22.2 1.2 21.5V17C1.2 16.4 1.6 16 2.2 16ZM22.8 16C22.8 16.6 22.4 17 21.8 17H20.8V20.8H17C16.4 20.8 16 21.2 16 21.8C16 22.4 16.4 22.8 17 22.8H21.5C22.2 22.8 22.8 22.2 22.8 21.5V17C22.8 16.4 22.8 16 22.8 16ZM5.5 4.5C4.9 4.5 4.5 4.9 4.5 5.5V10.5C4.5 11.1 4.9 11.5 5.5 11.5H10.5C11.1 11.5 11.5 11.1 11.5 10.5V5.5C11.5 4.9 11.1 4.5 10.5 4.5H5.5ZM12.5 5.5C12.5 4.9 12.9 4.5 13.5 4.5H18.5C19.1 4.5 19.5 4.9 19.5 5.5V10.5C19.5 11.1 19.1 11.5 18.5 11.5H13.5C12.9 11.5 12.5 11.1 12.5 10.5V5.5ZM5.5 12.5C4.9 12.5 4.5 12.9 4.5 13.5V18.5C4.5 19.1 4.9 19.5 5.5 19.5H10.5C11.1 19.5 11.5 19.1 11.5 18.5V13.5C11.5 12.9 11.1 12.5 10.5 12.5H5.5ZM13.5 12.5H17.2V14.5H14.5V17.2H12.5V13.5C12.5 12.9 12.9 12.5 13.5 12.5ZM14.5 9.5V6.5H17.5V9.5H14.5ZM17.5 14.8V17.5H14.8V19.5H18.5C19.1 19.5 19.5 19.1 19.5 18.5V14.8H17.5ZM6.5 14.5V17.5H9.5V14.5H6.5ZM16.8 7.2H15.2V8.8H16.8V7.2ZM15.2 15.2H16.8V16.8H15.2V15.2ZM8.8 15.2H7.2V16.8H8.8V15.2ZM6.5 6.5V9.5H9.5V6.5H6.5ZM7.2 7.2H8.8V8.8H7.2V7.2Z"
       fill={color}
       fillRule="evenodd"
       clipRule="evenodd"
@@ -13,48 +26,38 @@ const NavIconHome = ({ color }) => (
   </svg>
 );
 
-// ic_nav_tab_2 (Kaspi QR: 24.5 x 24)
-const NavIconQR = ({ color }) => (
-  <svg width="24.5" height="24" viewBox="0 0 24 24" fill="none">
+// B4. Сообщения icon (speech bubble with three small dots: 26 x 24, stroke 2 px, #535353)
+const NavIconMessages = ({ color = "#535353" }) => (
+  <svg width="26" height="24" viewBox="0 0 26 24" fill="none">
     <path
-      d="M1,2.5C1,1.6716 1.6716,1 2.5,1H7C7.5523,1 8,1.4477 8,2C8,2.5523 7.5523,3 7,3H3V7C3,7.5523 2.5523,8 2,8C1.4477,8 1,7.5523 1,7V2.5ZM16,2C16,1.4477 16.4477,1 17,1H21.5C22.3284,1 23,1.6716 23,2.5V7C23,7.5523 22.5523,8 22,8C21.4477,8 21,7.5523 21,7V3H17C16.4477,3 16,2.5523 16,2ZM2,16C2.5523,16 3,16.4477 3,17V21H7C7.5523,21 8,21.4477 8,22C8,22.5523 7.5523,23 7,23H2.5C1.6716,23 1,22.3284 1,21.5V17C1,16.4477 1.4477,16 2,16ZM22,16C22.5523,16 23,16.4477 23,17V21.5C23,22.3284 22.3284,23 21.5,23H17C16.4477,23 16,22.5523 16,22C16,21.4477 16.4477,21 17,21H21V17C21,16.4477 21.4477,16 22,16ZM5.5,4.5C4.9477,4.5 4.5,4.9477 4.5,5.5V10.5C4.5,11.0523 4.9477,11.5 5.5,11.5H10.5C11.0523,11.5 11.5,11.0523 11.5,10.5V5.5C11.0523,4.9477 11.0523,4.5 10.5,4.5H5.5ZM12.5,5.5C12.5,4.9477 12.9477,4.5 13.5,4.5H18.5C19.0523,4.5 19.5,4.9477 19.5,5.5V10.5C19.5,11.0523 19.0523,11.5 18.5,11.5H13.5C12.9477,11.5 12.5,11.0523 12.5,10.5V5.5ZM5.5,12.5C4.9477,12.5 4.5,12.9477 4.5,13.5V18.5C4.5,19.0523 4.9477,19.5 5.5,19.5H10.5C11.0523,19.5 11.5,19.0523 11.5,18.5V13.5C11.0523,12.9477 11.0523,12.5 10.5,12.5H5.5ZM13.5,12.5H17.1667V14.5H14.5V17.167H12.5V13.5C12.5,12.9477 12.9477,12.5 13.5,12.5ZM14.5,9.5V6.5H17.5V9.5H14.5ZM17.5,14.8337V17.5H14.8334V19.5H18.5C19.0523,19.5 19.5,19.0523 19.5,18.5V14.8337H17.5ZM6.5,14.5V17.5H9.5V14.5H6.5ZM16.75,7.25H15.25V8.75H16.75V7.25ZM15.25,15.25H16.75V16.75H15.25V15.25ZM8.75,15.25H7.25V16.75H8.75V15.25ZM6.5,6.5V9.5H9.5V6.5H6.5ZM7.25,7.25H8.75V8.75H7.25V7.25Z"
-      fill={color}
-      fillRule="evenodd"
-      clipRule="evenodd"
+      d="M2.5 6.5C2.5 4.3 4.3 2.5 6.5 2.5H19.5C21.7 2.5 23.5 4.3 23.5 6.5V14.5C23.5 16.7 21.7 18.5 19.5 18.5H11.5L6.5 22V18.5H6.5C4.3 18.5 2.5 16.7 2.5 14.5V6.5Z"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
+    {/* Three small non-bold dots: ~2px each, gap ~2.5px */}
+    <circle cx="9" cy="10.5" r="1.1" fill={color} />
+    <circle cx="13" cy="10.5" r="1.1" fill={color} />
+    <circle cx="17" cy="10.5" r="1.1" fill={color} />
   </svg>
 );
 
-// ic_nav_tab_3 (Сообщения: 24.5 x 25, badge 21 x 16 at top -6, left 12 -> total 33 x 31)
-const NavIconMessages = ({ color }) => (
-  <svg width="24.5" height="25" viewBox="0 0 24 24" fill="none">
-    <path
-      d="M6.0741,2C3.8229,2 2,3.824 2,6.0741V14.2222C2,16.3475 3.6262,18.0925 5.7037,18.2797V20.2223C5.7037,21.26 6.8871,21.8523 7.7176,21.2296L11.6296,18.2963H17.9259C20.1771,18.2963 22,16.4723 22,14.2222V6.0741C22,3.824 20.1771,2 17.9259,2H6.0741ZM4.2222,6.0741C4.2222,5.0514 5.0527,4.2222 6.0741,4.2222H17.9259C18.9473,4.2222 19.7778,5.0514 19.7778,6.0741V14.2222C19.7778,15.2449 18.9473,16.0741 17.9259,16.0741H11.3084C11.0365,16.0741 10.7703,16.1625 10.5532,16.326L7.9259,18.2963V17.3333C7.9259,16.6379 7.3617,16.0741 6.6673,16.0741H6.0741C5.0527,16.0741 4.2222,15.2449 4.2222,14.2222V6.0741ZM12,12C12.8189,12 13.4815,11.3367 13.4815,10.5185C13.4815,9.7004 12.8189,9.037 12,9.037C11.1811,9.037 10.5185,9.7004 10.5185,10.5185C10.5185,11.3367 11.1811,12 12,12ZM17.5382,11.5184C17.2662,11.8145 16.8785,12 16.4444,12C15.6256,12 14.963,11.3367 14.963,10.5185C14.963,9.7004 15.6256,9.037 16.4444,9.037C16.8756,9.037 17.2662,9.2219 17.5353,9.5168C17.7784,9.7805 17.9259,10.1322 17.9259,10.5185C17.9259,10.9039 17.7784,11.2549 17.5382,11.5184ZM7.5556,12C8.3744,12 9.037,11.3367 9.037,10.5185C9.037,9.7004 8.3744,9.037 7.5556,9.037C6.7367,9.037 6.0741,9.7004 6.0741,10.5185C6.0741,11.3367 6.7367,12 7.5556,12Z"
-      fill={color}
-      fillRule="evenodd"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
-// ic_nav_tab_4 (Сервисы: 22 x 17)
-const NavIconServices = ({ color }) => (
-  <svg width="22" height="17" viewBox="0 0 24 24" fill="none">
-    <path
-      d="M2.0586,4H21.9986V6H2.0586V4ZM2.0586,11H21.9986V13H2.0586V11ZM21.9986,18H2.0586V20H21.9986V18Z"
-      fill={color}
-      fillRule="evenodd"
-      clipRule="evenodd"
-    />
+// B5. Сервисы icon (three horizontal bars: 22 w x 17 h, 2.2 px thick with round caps, tops at 820, 827, 834.5)
+const NavIconServices = ({ color = "#535353" }) => (
+  <svg width="22" height="17" viewBox="0 0 22 17" fill="none">
+    <line x1="1.1" y1="1.6" x2="20.9" y2="1.6" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+    <line x1="1.1" y1="8.5" x2="20.9" y2="8.5" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+    <line x1="1.1" y1="15.4" x2="20.9" y2="15.4" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
   </svg>
 );
 
 export const BottomNavBar = ({ activeTab, onTabChange }) => {
   const tabs = [
-    { id: 'home', label: 'Главная', IconComponent: NavIconHome },
-    { id: 'qr', label: 'Kaspi QR', IconComponent: NavIconQR },
-    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, badge: 29 },
-    { id: 'services', label: 'Сервисы', IconComponent: NavIconServices }
+    { id: 'home', label: 'Главная', IconComponent: NavIconHome, iconColor: '#C0382C', labelColor: '#E0402F' },
+    { id: 'qr', label: 'Kaspi QR', IconComponent: NavIconQR, iconColor: '#535353', labelColor: '#8A8A8E' },
+    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, iconColor: '#535353', labelColor: '#8A8A8E', badge: 29 },
+    { id: 'services', label: 'Сервисы', IconComponent: NavIconServices, iconColor: '#535353', labelColor: '#8A8A8E' }
   ];
 
   return (
@@ -67,7 +70,11 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
       maxWidth: '430px',
       margin: '0 auto',
       backgroundColor: '#FFFFFF',
-      borderTop: '0.5px solid #EBEBEB',
+      opacity: 1,
+      backdropFilter: 'none',
+      WebkitBackdropFilter: 'none',
+      borderTop: '0.5px solid #EEEEEE',
+      borderBottom: 'none',
       boxShadow: 'none',
       zIndex: 60,
       height: 'calc(54px + max(env(safe-area-inset-bottom, 34px), 34px))',
@@ -84,8 +91,9 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           const { IconComponent } = tab;
-          const iconColor = isActive ? '#F14635' : '#5A5A5A';
-          const labelColor = isActive ? '#F14635' : '#8E8E8E';
+          // B1 & B2: Inactive label #8A8A8E, active label #E0402F, active house icon #C0382C, others #535353
+          const iconColor = isActive ? (tab.id === 'home' ? '#C0382C' : '#E0402F') : '#535353';
+          const labelColor = isActive ? '#E0402F' : '#8A8A8E';
 
           return (
             <div
@@ -99,14 +107,14 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 flex: 1,
                 position: 'relative',
                 height: '100%',
-                paddingTop: '8px', // Icon centre is at y 828
+                paddingTop: '8.5px', // B6: Icon vertical centre at y 828.5 (808 + 20.5)
                 cursor: 'pointer',
                 fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
               }}
             >
               <div style={{
                 position: 'relative',
-                width: '24.5px',
+                width: '26px',
                 height: '24px',
                 display: 'flex',
                 alignItems: 'center',
@@ -114,15 +122,15 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
               }}>
                 <IconComponent color={iconColor} />
 
-                {/* Messages badge: pill 21 x 16, radius 8, #F14635, 11 Semibold white, total icon 33 x 31 */}
+                {/* B4: Red badge 20.5 x 15 at x 258.5, y 809 (top: -7px, left: 12.5px relative to 26x24 bubble) */}
                 {tab.badge && (
                   <div style={{
                     position: 'absolute',
-                    top: '-6px',
-                    left: '12px',
-                    width: '21px',
-                    height: '16px',
-                    borderRadius: '8px',
+                    top: '-7px',
+                    left: '12.5px',
+                    width: '20.5px',
+                    height: '15px',
+                    borderRadius: '7.5px',
                     backgroundColor: '#F14635',
                     color: '#FFFFFF',
                     fontSize: '11px',
@@ -139,12 +147,12 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 )}
               </div>
 
-              {/* Label: 12 Regular, text top at y 848.5 */}
+              {/* B1: Label text top at y 848.5 (808 + 40.5) */}
               <span style={{
                 fontSize: '12px',
                 fontWeight: '400',
                 color: labelColor,
-                marginTop: '8.5px',
+                marginTop: '8px',
                 lineHeight: '14px',
                 letterSpacing: 0
               }}>

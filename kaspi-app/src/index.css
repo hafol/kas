@@ -91,7 +91,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--ds-text-main);
-  background-color: #E5E5E5;
+  background-color: #FFFFFF;
 }
 
 * {
@@ -99,6 +99,14 @@
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 html {
@@ -108,6 +116,7 @@ html {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background-color: #FFFFFF;
   overscroll-behavior: none;
   overscroll-behavior-y: none;
   -webkit-text-size-adjust: 100%;
@@ -120,7 +129,7 @@ body {
   width: 100%;
   height: 100%;
   height: 100dvh;
-  background-color: #EBECEE;
+  background-color: #FFFFFF;
   overflow: hidden;
   overscroll-behavior: none;
   overscroll-behavior-y: none;
@@ -140,6 +149,8 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
   overscroll-behavior-y: none;
+  border: none;
+  outline: none;
 }
 
 /* App container - looks native mobile on desktop, 100% full screen on mobile */
@@ -157,6 +168,9 @@ body {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
   overscroll-behavior-y: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .app-viewport--lock {
@@ -168,7 +182,7 @@ body {
 
 @media (min-width: 601px) {
   body {
-    background-color: #EBECEE;
+    background-color: #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -202,9 +216,10 @@ body {
 
 /* Scrollbar styles */
 ::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
-  background: transparent;
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
 }
 
 /* Touch interaction classes */
