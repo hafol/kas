@@ -88,8 +88,8 @@ export const IconTransfers = ({ size = 30.5, color = "#DF4E3E" }) => (
   </svg>
 );
 
-// 5. Magnum (Official squircle + APK vector "m" with authentic #EF1063 raspberry-pink color: 34.5 x 35, radius 8)
-export const IconMagnum = ({ width = 34.5, height = 35 }) => (
+// 5. Magnum (Official squircle + APK vector "m" with authentic #EF1063 raspberry-pink color: 35.5 x 36, radius 8)
+export const IconMagnum = ({ width = 35.5, height = 36 }) => (
   <div style={{
     width: `${width}px`,
     height: `${height}px`,

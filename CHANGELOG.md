@@ -2,6 +2,68 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 16:05] — Точечная юстировка Главного экрана (FIX LIST v13) по замерам iPhone 11 (414×896 pt)
+
+### 🎯 Запрос пользователя:
+> *«KASPI HOME SCREEN: FIX LIST v13. Only part of v12 was applied. DONE and correct now (do not touch them again): the Сервисы icon (3 thick bars), the header line removed, the red pills no longer show above the tab bar, deposit text starts at x 90, the title width is about 189.
+> - Every value below is an ABSOLUTE position on the screen (CSS px = iPhone points, 414 x 896, y measured from the very top of the screen including the status bar). Set the margin/padding so the element ENDS UP at the target y.
+> - After applying, fill in the table at the end with the value you set for each item, so I can see what was applied.
+> - Keep the Display Zoom script in index.html exactly as it is.»*
+
+### 🛠️ Что сделано:
+1. **Сетка сервисов (Магазин … Работа)**:
+   - Отступ сетки `marginTop: 20px` (ряд 1 иконки верха y 236.5–238.5).
+   - Ряд 1 подписи: `marginTop: 8.5px` (верх текста y 280).
+   - Шаг строк сетки `rowGap: 17.5px` (ряд 2 линейные иконки верха y 315–316).
+   - Плитка Magnum: размер 35.5×36 pt, `marginTop: -2.5px` (верх y 313). Подпись Magnum `marginTop: 10.5px` (верх y 359.5).
+   - Ряд 2 линейные подписи (Travel, Госуслуги, Работа): `marginTop: 10px` (верх y 359.5).
+   - Шрифт подписей: `fontSize: 15.2px`, `letterSpacing: 0.15px` (ширины: Магазин 60, Мой Банк 69.5, Платежи 64, Переводы 73, Работа 51).
+   - Разделитель под сеткой: `marginTop: 11px` (верх y 388.5).
+2. **Блок Депозитов**:
+   - Контейнер депозитов: `marginTop: 22.5px` (плитка 1 верх y 411.5, плитка 2 верх y 465, зазор между ними 9.5 pt).
+   - Размер плиток: 56.5×44 pt.
+   - Текст «Накопительный»: верх y 411.5 (`marginTop: -2px`, `lineHeight: 24px`, `fontSize: 18px`, `letterSpacing: 0.45px`).
+   - Шильдик «18%»: размер 40×23 pt, `marginTop: -3px` (верх y 432.5, отступ 6.5 pt после слова «Депозит»).
+   - Текст «Kaspi Депозит 15%»: верх y 479 (`marginTop: 14px`, `fontSize: 18px`, `letterSpacing: 0.45px`, ширина 165 pt).
+   - Глифы SVGs: монеты 21.5×23 pt (stroke 2.35 px); ₸$ 28.5×19 pt (stroke 2.7 px); цвет чистый `#FFFFFF`.
+3. **Карусель «Вы недавно смотрели»**:
+   - Контейнер карусели: `marginTop: 26.5px` (заголовок верх y 535.5, 18 px Bold 700).
+   - Горизонтальный трек: `marginTop: 9.5px` (плитки картинок верх y 567, размер 110×110 pt).
+   - Устранение серой линии горизонтального скроллбара (3b): добавлены классы `.carousel`, `.hide-scrollbar` с правилами `scrollbar-width: none !important; -ms-overflow-style: none !important; ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }`.
+   - Устранение вертикального 1 px скроллбара на x 413.5: на `.app-viewport` принудительно отключены полосы прокрутки.
+   - Цена товара: `marginTop: 8px` (верх y 685, 15 px Bold).
+   - Плашка бонусов (3a): размер 111×39 pt, цвет фона `#DEF9D0` (mint), верх y 705.5 (`marginTop: 2.5px`). Отступ слева 5 pt. Зеленая цена `#589F07` верх y 711 (`paddingTop: 5.5px`). Подпись «с учетом Бонусов» верх y 729.5 (`marginTop: 5.5px`, ширина 99.5 pt, `fontSize: 11px`, `letterSpacing: -0.1px`).
+   - Название товара: с бонусами верх y 749.5 (`marginTop: 5px`); без бонусов верх y 707 (`marginTop: 4px`).
+   - Рейтинг товара: с бонусами верх y 768 (`marginTop: 2.5px`); без бонусов верх y 726.5 (`marginTop: 3.5px`). Звездочка 9×9 pt `#F14635`.
+   - Разделитель секции (3c): `marginTop: 16px`, `height: 1px`, `backgroundColor: #F3F3F3` (верх y 799, 16 pt ниже текста рейтинга).
+4. **Бейджи/чипы на картинках (Image Chips)**:
+   - Расположение: прижаты в нижний левый угол картинки (`position: absolute; left: 0; bottom: 0;`), скругление `borderRadius: 4px 6px 0 10px`, высота 20 px, внутренний отступ `padding: 0 6px`, текст 12 px Semibold (600) белый.
+   - Красный чип скидки: цвет `#EC473A`, размер 40.5×20 pt (текст «-15%» / «-32%» 27.5 pt ширина).
+   - Зеленый чип бонусов: цвет `#589F07`, иконка пламени `#FFC400` 8×11 pt (зазор 4 pt), текст «13 999 Б» / «26 398 Б» (12 px Semibold), зазор 4.5 pt, белая плашка с процентом (высота 14 px, скругление 4 px, отступ `0 2.5px`, текст 12 px Semibold зеленый `#589F07`, напр. `[5%]`, `[3%]`).
+5. **Таббар (BottomNavBar)**:
+   - Все 4 подписи: абсолютное позиционирование `top: 40.5px` (верх текста строго y 848.5). Цвет неактивных подписей `#8A8A8E`.
+   - Иконка «Главная» (дом): `top: 9.5px` (верх y 817.5), размер 19.5×21.5 pt, обводка 2.2 px, цвет `#C0382C`.
+   - Иконка «Kaspi QR»: `top: 8px` (верх y 816), размер 24.5×24 pt, цвет `#535353`.
+   - Иконка «Сообщения»: `top: 8px` (верх y 816), бабл 26×24 pt, маленькие тонкие точки. Красный бейдж `top: -7px` (верх y 809), размер 20.5×15 pt.
+   - Иконка «Сервисы»: `top: 11.5px` (верх y 819.5), размер 22×17 pt.
+   - Фон таббара: чистый белый `#FFFFFF`, opacity 1, безопасная зона `safe-area-inset-bottom`.
+6. **Шапка (Header)**:
+   - Контейнер шапки: `paddingTop: 2px` (верх поля поиска y 51.5).
+   - Лупа: размер 18.5×18.5 pt на x 30.5, y 63.5 (`paddingLeft: 13px`).
+   - Плейсхолдер: старт x 60 (`marginLeft: 11px`), верх y 66.5, ширина 144.5 pt (17 px Regular, `letterSpacing: 0.2px`).
+   - Иконка камеры: размер 24×20 pt на x 312.5, y 62.5 (`paddingRight: 13.5px`).
+   - Иконка корзины: размер 21.5×20.5 pt на x 365, y 63 (`marginLeft: 15px`).
+   - Бейдж корзины «3»: размер 15.5×15 pt на x 378.5, y 59 (`left: 13.5px`, `top: -4px`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`kaspi-app/src/components/BottomNavBar.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx)
+- [`kaspi-app/src/components/KaspiServiceIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiServiceIcons.jsx)
+- [`kaspi-app/src/index.css`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-26 15:35] — Комплексная юстировка Главного экрана (FIX LIST v12) по замерам iPhone 11 (414×896 pt)
 
 ### 🎯 Запрос пользователя:

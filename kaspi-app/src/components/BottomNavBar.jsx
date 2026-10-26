@@ -54,10 +54,10 @@ const NavIconServices = ({ color = "#535353" }) => (
 
 export const BottomNavBar = ({ activeTab, onTabChange }) => {
   const tabs = [
-    { id: 'home', label: 'Главная', IconComponent: NavIconHome, iconColor: '#C0382C', labelColor: '#E0402F' },
-    { id: 'qr', label: 'Kaspi QR', IconComponent: NavIconQR, iconColor: '#535353', labelColor: '#8A8A8E' },
-    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, iconColor: '#535353', labelColor: '#8A8A8E', badge: 29 },
-    { id: 'services', label: 'Сервисы', IconComponent: NavIconServices, iconColor: '#535353', labelColor: '#8A8A8E' }
+    { id: 'home', label: 'Главная', IconComponent: NavIconHome, iconColor: '#C0382C', labelColor: '#E0402F', iconTop: '9.5px' },
+    { id: 'qr', label: 'Kaspi QR', IconComponent: NavIconQR, iconColor: '#535353', labelColor: '#8A8A8E', iconTop: '8px' },
+    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, iconColor: '#535353', labelColor: '#8A8A8E', badge: 29, iconTop: '8px' },
+    { id: 'services', label: 'Сервисы', IconComponent: NavIconServices, iconColor: '#535353', labelColor: '#8A8A8E', iconTop: '11.5px' }
   ];
 
   return (
@@ -86,12 +86,12 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
         display: 'flex',
         height: '54px',
         width: '100%',
-        alignItems: 'stretch'
+        alignItems: 'stretch',
+        position: 'relative'
       }}>
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           const { IconComponent } = tab;
-          // B1 & B2: Inactive label #8A8A8E, active label #E0402F, active house icon #C0382C, others #535353
           const iconColor = isActive ? (tab.id === 'home' ? '#C0382C' : '#E0402F') : '#535353';
           const labelColor = isActive ? '#E0402F' : '#8A8A8E';
 
@@ -107,13 +107,14 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 flex: 1,
                 position: 'relative',
                 height: '100%',
-                paddingTop: '8.5px', // B6: Icon vertical centre at y 828.5 (808 + 20.5)
                 cursor: 'pointer',
                 fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
               }}
             >
+              {/* Icon wrapper positioned with exact top offset */}
               <div style={{
-                position: 'relative',
+                position: 'absolute',
+                top: tab.iconTop,
                 width: '26px',
                 height: '24px',
                 display: 'flex',
@@ -149,12 +150,15 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
 
               {/* B1: Label text top at y 848.5 (808 + 40.5) */}
               <span style={{
+                position: 'absolute',
+                top: '40.5px',
                 fontSize: '12px',
                 fontWeight: '400',
                 color: labelColor,
-                marginTop: '8px',
                 lineHeight: '14px',
-                letterSpacing: 0
+                letterSpacing: 0,
+                textAlign: 'center',
+                whiteSpace: 'nowrap'
               }}>
                 {tab.label}
               </span>

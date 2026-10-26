@@ -149,6 +149,7 @@ export const HomeScreen = ({
       oldPrice: null,
       discountChip: null,
       bonusChip: '13 999 Б',
+      bonusPercent: '5%',
       hasFlame: true,
       bonusBox: {
         price: '265 991 ₸',
@@ -177,6 +178,7 @@ export const HomeScreen = ({
       oldPrice: null,
       discountChip: null,
       bonusChip: '26 398 Б',
+      bonusPercent: '3%',
       hasFlame: true,
       bonusBox: {
         price: '853 559 ₸',
@@ -338,7 +340,7 @@ export const HomeScreen = ({
         borderBottom: 'none',
         boxShadow: 'none',
         outline: 'none',
-        paddingTop: '3.5px',
+        paddingTop: '2px',
         paddingBottom: '0px',
         paddingLeft: '17.5px',
         paddingRight: '20px',
@@ -386,7 +388,7 @@ export const HomeScreen = ({
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            letterSpacing: 0,
+            letterSpacing: '0.2px',
             lineHeight: '22px'
           }}>
             Поиск по Kaspi.kz
@@ -551,18 +553,15 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           3. SHORTCUT GRID (2 x 4)
-          Gap from banner bottom to first icon row top: 20 (item 10; row 1 top y 237).
-      {/* =====================================================================
-          3. SHORTCUT GRID (2 x 4)
-          E1. Row 1 icons move up 3 px (tops y 236.5–238.5).
-          E2. Row 1 labels move up 2 px (top y 280).
-          E3. Row 2 icons move up 2.5 px (tops y 313 Magnum / 315–316).
-          E4. Row 2 labels move up 0.5–1 px (top y 359.5).
-          E5. Grid label font: 15 px Regular, letter-spacing 0.
-          Magnum tile: 34.5 x 35, radius 8 (NOT changed).
+          Row 1 icons: tops y 236.5–238.5.
+          Row 1 labels: top y 280.
+          Row 2 icons: line icons tops y 315–316; Magnum tile top y 313 (size 35.5 x 36).
+          Row 2 labels: top y 359.5.
+          Grid divider: top y 388.5.
+          Label font: 15.2 px Regular, letter-spacing 0.15px.
       ===================================================================== */}
       <div style={{
-        marginTop: '17px',
+        marginTop: '20px',
         paddingLeft: '14px',
         paddingRight: '12px',
         width: '100%',
@@ -571,7 +570,7 @@ export const HomeScreen = ({
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          rowGap: '16px',
+          rowGap: '17.5px',
           width: '100%'
         }}>
           {/* Row 1 */}
@@ -584,7 +583,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconShop size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Магазин
             </span>
           </div>
@@ -598,7 +597,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconMyBank size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Мой Банк
             </span>
           </div>
@@ -612,7 +611,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconPayments size={34} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Платежи
             </span>
           </div>
@@ -626,22 +625,22 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconTransfers size={34.5} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Переводы
             </span>
           </div>
 
           {/* Row 2 */}
-          {/* 5. Magnum: tile 34.5 x 35, radius 8 (NOT changed) */}
+          {/* 5. Magnum: tile 35.5 x 36, radius 8, top y 313 */}
           <div
             onClick={() => onOpenService('magnum')}
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '34.5px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconMagnum width={34.5} height={35} />
+            <div style={{ width: '35.5px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-2.5px' }}>
+              <IconMagnum width={35.5} height={36} />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '10.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Magnum
             </span>
           </div>
@@ -655,7 +654,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconTravel size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '10px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Travel
             </span>
           </div>
@@ -669,7 +668,7 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconGov size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '10px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Госуслуги
             </span>
           </div>
@@ -683,16 +682,16 @@ export const HomeScreen = ({
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconJobs size={37.5} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '5.5px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '10px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Работа
             </span>
           </div>
         </div>
       </div>
 
-      {/* Divider 1: full width, 0.5 pt, #EBEBEB, 14 below row 2 labels (y 388.5) */}
+      {/* Divider 1: full width, 0.5 pt, #EBEBEB at y 388.5 */}
       <div style={{
-        marginTop: '14px',
+        marginTop: '11px',
         height: '0.5px',
         backgroundColor: '#EBEBEB',
         width: '100%',
@@ -711,7 +710,7 @@ export const HomeScreen = ({
           D5. "18%" yellow pill: 40 x 23 at x 166.5, y 432.5, 6.5 px after "Депозит".
       ===================================================================== */}
       <div style={{
-        marginTop: '23px',
+        marginTop: '22.5px',
         paddingLeft: '18.5px',
         paddingRight: '18.5px',
         display: 'flex',
@@ -761,7 +760,7 @@ export const HomeScreen = ({
               fontWeight: '400',
               color: '#000000',
               lineHeight: '24px',
-              letterSpacing: 0
+              letterSpacing: '0.45px'
             }}>
               Накопительный
             </div>
@@ -772,7 +771,7 @@ export const HomeScreen = ({
                 fontWeight: '400',
                 color: '#000000',
                 lineHeight: '24px',
-                letterSpacing: 0
+                letterSpacing: '0.45px'
               }}>
                 Депозит
               </span>
@@ -786,6 +785,7 @@ export const HomeScreen = ({
                 width: '40px',
                 height: '23px',
                 marginLeft: '6.5px',
+                marginTop: '-3px',
                 flexShrink: 0
               }}>
                 <span style={{
@@ -842,7 +842,7 @@ export const HomeScreen = ({
               fontWeight: '400',
               color: '#000000',
               lineHeight: '24px',
-              letterSpacing: 0
+              letterSpacing: '0.45px'
             }}>
               Kaspi Депозит 15%
             </span>
@@ -864,17 +864,32 @@ export const HomeScreen = ({
           A2. Divider at y 799 (18.5 px under rating bottom, marginTop 23.5 px, #F3F3F3, 0.5 px).
           A3. Next section starts at y 813+, hidden behind opaque white tab bar.
       ===================================================================== */}
+      {/* =====================================================================
+          5. "ВЫ НЕДАВНО СМОТРЕЛИ" CAROUSEL
+          Title: top y 535.5 (18 px Bold 700).
+          Image tiles: top y 567 (110 x 110).
+          Price: top y 685 (8 px under tile bottom).
+          Bonus box: top y 705.5 (111 x 39, #DEF9D0 mint, padding-left 5 px).
+            Green price: top y 711 (padding-top 5.5 px).
+            "с учетом Бонусов": top y 729.5 (width 99.5 px).
+          Product name: top y 749.5 (with bonus) / 707 (without bonus).
+          Rating: top y 768 (with bonus) / 726.5 (without bonus). Star 9 x 9 #F14635.
+          Chips: pinned bottom-left (0 gap), radius 4px 6px 0 10px, height 20 px, 12 px Semibold.
+            Red chip "-32%": #EC473A.
+            Green chip: #589F07, flame 8x11 #FFC400, white percent pill [3%] / [5%].
+          Divider 2: y 799, 1 px, #F3F3F3, full width.
+      ===================================================================== */}
       <div style={{
-        marginTop: '20.5px',
+        marginTop: '26.5px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        {/* C1. Section Title: 17.5 Bold #000, 189.5 wide, x 18.5 */}
+        {/* Section Title: 18 Bold #000, top y 535.5 */}
         <div style={{
           paddingLeft: '18.5px',
           paddingRight: '18.5px',
           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif',
-          fontSize: '17.5px',
+          fontSize: '18px',
           fontWeight: '700',
           color: '#000000',
           lineHeight: '22px',
@@ -883,11 +898,11 @@ export const HomeScreen = ({
           Вы недавно смотрели
         </div>
 
-        {/* C2 & A1: Horizontal Carousel: tile top y 567, hide-scrollbar removes horizontal scrollbar line */}
+        {/* Horizontal Carousel: tile top y 567, hide-scrollbar & carousel class removes horizontal scrollbar line */}
         <div
-          className="hide-scrollbar"
+          className="hide-scrollbar carousel"
           style={{
-            marginTop: '13.5px',
+            marginTop: '9.5px',
             display: 'flex',
             gap: '9.5px',
             overflowX: 'auto',
@@ -940,60 +955,94 @@ export const HomeScreen = ({
                   }}
                 />
 
-                {/* C8: Image chip: height 19.5, radius 6, text 13 Bold white, pinned bottom-left, 1 pt inset */}
+                {/* Section 4: Image chip (pinned to bottom-left with zero gap, radius: 4px 6px 0 10px, height 20 px) */}
                 {(item.discountChip || item.bonusChip) && (
-                  <div style={{
-                    position: 'absolute',
-                    left: '1px',
-                    bottom: '1px',
-                    height: '19.5px',
-                    borderRadius: '6px',
-                    padding: '0 5px',
-                    backgroundColor: item.discountChip ? '#F14635' : '#54A000',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 2
-                  }}>
-                    {item.bonusChip ? (
-                      <div style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '2px'
-                      }}>
-                        {item.hasFlame && (
-                          <KaspiYellowFlame size={10} style={{ marginRight: '1px' }} />
-                        )}
-                        <span style={{
-                          fontSize: '13px',
-                          fontWeight: '700',
-                          color: '#FFFFFF',
-                          lineHeight: '19.5px',
-                          display: 'inline-flex',
-                          alignItems: 'baseline',
-                          gap: '2px'
-                        }}>
-                          <span>{item.bonusChip.replace(/\s*[БB]$/i, '').trim()}</span>
-                          <KaspiBonusSymbol height={8} color="#FFFFFF" />
-                        </span>
-                      </div>
-                    ) : (
+                  item.discountChip ? (
+                    <div style={{
+                      position: 'absolute',
+                      left: 0,
+                      bottom: 0,
+                      height: '20px',
+                      borderRadius: '4px 6px 0 10px',
+                      backgroundColor: '#EC473A',
+                      padding: '0 6px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 2,
+                      boxSizing: 'border-box'
+                    }}>
                       <span style={{
-                        fontSize: '13px',
-                        fontWeight: '700',
+                        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
+                        fontSize: '12px',
+                        fontWeight: '600',
                         color: '#FFFFFF',
-                        lineHeight: '19.5px'
+                        lineHeight: 1,
+                        whiteSpace: 'nowrap'
                       }}>
                         {item.discountChip}
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <div style={{
+                      position: 'absolute',
+                      left: 0,
+                      bottom: 0,
+                      height: '20px',
+                      borderRadius: '4px 6px 0 10px',
+                      backgroundColor: '#589F07',
+                      padding: '0 6px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      zIndex: 2,
+                      boxSizing: 'border-box'
+                    }}>
+                      {item.hasFlame && (
+                        <svg width="8" height="11" viewBox="14 1 71 82" fill="none" style={{ marginRight: '4px', flexShrink: 0 }}>
+                          <path
+                            fill="#FFC400"
+                            d="M27 20.5C31 22 35 28 38 34C39.5 28 42 17 45 11.5C47 7.5 49 5.5 51 4.5C54 7 56.5 14 58.5 21C60.5 28 62 35 63 41C64 37 66 33 68.5 30.5C73 32.5 77 40 79.5 47C81.5 54 80.5 62 77 68C74 73 69.5 77 64.5 79.5C62 77 61.5 73 61.5 70.5C61.5 68 60 65.5 58 64C56 66.5 53.5 68.5 50.5 69.5C46.5 67.5 42 61 40.5 55C38 59 36 65 35.5 70C35.2 73.5 34.5 76.5 32 79C26 77 21 70 19 62C17.5 55 19 48 21.5 41C23.5 34 24.5 27 27 20.5Z"
+                          />
+                        </svg>
+                      )}
+                      <span style={{
+                        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        color: '#FFFFFF',
+                        lineHeight: 1,
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {item.bonusChip}
+                      </span>
+                      {item.bonusPercent && (
+                        <span style={{
+                          marginLeft: '4.5px',
+                          backgroundColor: '#FFFFFF',
+                          height: '14px',
+                          borderRadius: '4px',
+                          padding: '0 2.5px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
+                          fontSize: '12px',
+                          fontWeight: '600',
+                          color: '#589F07',
+                          lineHeight: 1,
+                          whiteSpace: 'nowrap'
+                        }}>
+                          {item.bonusPercent}
+                        </span>
+                      )}
+                    </div>
+                  )
                 )}
               </div>
 
-              {/* C3: Price: 7.5 px under tile bottom (y 685), 15 Bold */}
+              {/* Price: 8 px under tile bottom (y 685), 15 Bold */}
               <div style={{
-                marginTop: '7.5px',
+                marginTop: '8px',
                 display: 'flex',
                 alignItems: 'baseline',
                 whiteSpace: 'nowrap',
@@ -1026,14 +1075,14 @@ export const HomeScreen = ({
                 )}
               </div>
 
-              {/* C4: Green bonus box: 111 x 39, radius 8, #E5F5D2, top 20.5 below price text top (box top y 705.5) */}
+              {/* Green bonus box: 111 x 39, radius 8, #DEF9D0 mint, top 20.5 below price text top (box top y 705.5) */}
               {item.bonusBox && (
                 <div style={{
                   marginTop: '2.5px',
                   width: '111px',
                   height: '39px',
                   borderRadius: '8px',
-                  backgroundColor: '#E5F5D2',
+                  backgroundColor: '#DEF9D0',
                   paddingLeft: '5px',
                   paddingRight: '5px',
                   paddingTop: '5.5px',
@@ -1044,19 +1093,20 @@ export const HomeScreen = ({
                   <div style={{
                     fontSize: '13px',
                     fontWeight: '700',
-                    color: '#64A022',
-                    lineHeight: '15px',
+                    color: '#589F07',
+                    lineHeight: '13px',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden'
                   }}>
                     {item.bonusBox.price}
                   </div>
                   <div style={{
-                    fontSize: '11.5px',
+                    fontSize: '11px',
                     fontWeight: '400',
                     color: '#000000',
                     lineHeight: '13px',
-                    marginTop: '3.5px',
+                    marginTop: '5.5px',
+                    letterSpacing: '-0.1px',
                     whiteSpace: 'nowrap'
                   }}>
                     {item.bonusBox.caption}
@@ -1064,9 +1114,9 @@ export const HomeScreen = ({
                 </div>
               )}
 
-              {/* C5 & C7: Product name: text top 44 px under box top (y 749.5) */}
+              {/* Product name: text top 44 px under box top (y 749.5) / 707 without box */}
               <div style={{
-                marginTop: item.bonusBox ? '5px' : '3.5px',
+                marginTop: item.bonusBox ? '5px' : '4px',
                 fontSize: '13px',
                 fontWeight: '400',
                 color: '#000000',
@@ -1079,9 +1129,9 @@ export const HomeScreen = ({
                 {item.title}
               </div>
 
-              {/* C6: Rating row: text top 18.5 below name text top (y 768). Value 13 Semibold, star 9x9 #F14635, count 13 Regular #8E8E8E */}
+              {/* Rating row: text top 18.5 below name text top (y 768 / 726.5 without box). Value 13 Semibold, star 9x9 #F14635, count 13 Regular #8E8E8E */}
               <div style={{
-                marginTop: '2.5px',
+                marginTop: item.bonusBox ? '2.5px' : '3.5px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '3px'
@@ -1109,10 +1159,10 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* A2: Divider 2: full width, 0.5 pt, #F3F3F3 at y 799 (18.5 px under rating bottom) */}
+      {/* 3c: Divider 2: full width, 1 px, #F3F3F3 at y 799 (16 px under rating bottom at 783) */}
       <div style={{
-        marginTop: '23.5px',
-        height: '0.5px',
+        marginTop: '16px',
+        height: '1px',
         backgroundColor: '#F3F3F3',
         width: '100%',
         display: 'block',
