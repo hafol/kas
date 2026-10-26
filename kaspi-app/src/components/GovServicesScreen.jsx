@@ -1,3 +1,8 @@
+/**
+ * 🔒 LOCKED SCREEN: GovServicesScreen.jsx
+ * STATUS: 100% FINALIZED & CALIBRATED (Fix List v3)
+ * DO NOT MODIFY THIS SCREEN OR ITS METRICS. FURTHER CHANGES ARE NOT NEEDED.
+ */
 import React, { useState } from 'react';
 
 // Color Tokens (from specification)
@@ -848,16 +853,17 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           </div>
         </div>
 
-        {/* 5. SECTION TITLE "Популярные и новые": text top y 576.5, width 195, height 18.5 (19px Bold) */}
+        {/* 5. SECTION TITLE "Популярные и новые": strictly in ONE line, 19px Bold */}
         <div style={{
           marginTop: '22px',
           paddingLeft: '16px',
+          paddingRight: '16px',
           fontSize: '19px',
           fontWeight: '700',
           color: textPrimary,
           lineHeight: '22px',
           letterSpacing: 0,
-          width: '195px'
+          whiteSpace: 'nowrap'
         }}>
           {sectionTitle}
         </div>

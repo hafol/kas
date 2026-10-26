@@ -2,7 +2,32 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
-## [2026-10-27 01:45] — ГОСУСЛУГИ SCREEN: FIX LIST v3 (100% юстировка по нативному iPhone 11)
+## [2026-10-27 02:00] — Заголовок «Популярные и новые» в одну строку, блокировка экрана Госуслуг (LOCKED) и создание CONTEXT.md
+
+### 🎯 Запрос пользователя:
+> *«популярыне и новые gotta be in the one line after chnaging that lock that page further changes dont needed create context md and write it down and what we have done so far»*
+
+### 🛠️ Что сделано:
+1. **Заголовок «Популярные и новые» (GovServicesScreen)**:
+   - Устранено разбиение заголовка на две строки: удалена жёсткая ширина `width: 195px`, добавлены `whiteSpace: 'nowrap'` и симметричный отступ справа `paddingRight: '16px'`.
+   - Заголовок отображается строго в одну строку, сохраняя шрифт `19px Bold` и точную вертикальную привязку `y = 576.5`.
+2. **Блокировка экрана «Госуслуги» (LOCKED)**:
+   - В начале файла `GovServicesScreen.jsx` установлен защитный баннер `🔒 LOCKED SCREEN`.
+   - Экран официально помечен как полностью завершённый, откалиброванный и защищённый от любых будущих изменений.
+3. **Создание и фиксация файла контекста ([`CONTEXT.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CONTEXT.md))**:
+   - Зафиксирован реестр заблокированных экранов (Госуслуги, Экран блокировки, Главный экран, Display Zoom, Удостоверение личности).
+   - Подробно описано всё, что сделано по каждому экрану (метрики, координаты, шрифты, отклики, хранилище, иконки).
+   - Задокументированы архитектура, технический стек и ссылки на рабочий продакшн Vercel.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx)
+- [`CONTEXT.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CONTEXT.md)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+### 🔍 Статус проверки:
+- Проверена сборка `npm run build` — успешно собрана без ошибок.
+- Заголовок «Популярные и новые» отображается строго в одну непрерывную строку.
+- Продакшн Vercel развёрнут и готов.
 
 ### 🎯 Запрос пользователя:
 > *«ГОСУСЛУГИ SCREEN: FIX LIST v3
