@@ -300,7 +300,6 @@ export const DigitalIdScreen = ({ onBack }) => {
   return (
     <div className="screen-fill" style={{
       width: '100%',
-      minHeight: '860px',
       height: '100%',
       position: 'relative',
       backgroundColor: pageBg,
@@ -320,9 +319,9 @@ export const DigitalIdScreen = ({ onBack }) => {
       />
 
       {/* =====================================================================
-          1. NAV BAR
-          - back chevron: 11.5 x 21 at x 25, top y 62.5, stroke ≈ 2 px
-          - title: 218 wide (font ≈ 18.5 px Semibold), text top y 65.5, centred on screen
+          1. NAV BAR (starts right at the top of the page, no status bar gap)
+          - back chevron: top 14.5px, x 25px, size 11.5 x 21, stroke ≈ 2 px
+          - title: top 17.5px, 218 wide (font ≈ 18.5 px Semibold), centred on screen
           ===================================================================== */}
       {/* Back button */}
       <button
@@ -332,7 +331,7 @@ export const DigitalIdScreen = ({ onBack }) => {
         style={{
           position: 'absolute',
           left: '25px',
-          top: '62.5px',
+          top: '14.5px', // 62.5 - 48 = 14.5px
           width: '11.5px',
           height: '21px',
           display: 'flex',
@@ -351,10 +350,10 @@ export const DigitalIdScreen = ({ onBack }) => {
         <BackChevronIcon />
       </button>
 
-      {/* Title "Удостоверение личности": 218 wide, text top y 65.5, centred */}
+      {/* Title "Удостоверение личности": 218 wide, text top 17.5px, centred */}
       <h1 style={{
         position: 'absolute',
-        top: '65.5px',
+        top: '17.5px', // 65.5 - 48 = 17.5px
         left: 'calc(50% - 109px)',
         width: '218px',
         margin: 0,
@@ -382,7 +381,7 @@ export const DigitalIdScreen = ({ onBack }) => {
           style={{
             position: 'absolute',
             right: '16px',
-            top: '56px',
+            top: '8px', // 56 - 48 = 8px
             width: '36px',
             height: '36px',
             borderRadius: '50%',
@@ -402,16 +401,16 @@ export const DigitalIdScreen = ({ onBack }) => {
 
       {/* =====================================================================
           2. SEGMENTED CONTROL (Документ / Реквизиты)
-          - track: y 115 → 156 (41 tall), x 17.5 → 396.5
+          - track: y 67 → 108 (41 tall, 115 - 48 = 67), x 17.5 → 396.5
           - track colour: #F2F2F2
           - selected pill: white, inset 2 px
-          - label text top: y 128.5 (13.5px from track top)
+          - label text top: y 80.5 (13.5px from track top)
           - "Документ" width ≈ 75.5, "Реквизиты" width ≈ 82
-          - label font: ≈ 17.5 px (both labels same size and weight)
+          - label font: ≈ 17.5 px
           ===================================================================== */}
       <div style={{
         position: 'absolute',
-        top: '115px',
+        top: '67px', // 115 - 48 = 67px
         left: '17.5px',
         right: '17.5px',
         height: '41px',
@@ -497,7 +496,7 @@ export const DigitalIdScreen = ({ onBack }) => {
             }}
             style={{
               position: 'absolute',
-              top: '196px',
+              top: '148px', // 196 - 48 = 148px
               left: '28.5px', // x 28.5 → 385.5 (357 wide, side margins ≈ 29 on 414px page)
               width: '357px',
               height: '459.5px',
@@ -531,7 +530,7 @@ export const DigitalIdScreen = ({ onBack }) => {
           {photoUrl && !isSaved && (
             <div style={{
               position: 'absolute',
-              top: '658px',
+              top: '610px', // 658 - 48 = 610px
               left: '28.5px',
               width: '357px',
               display: 'flex',
@@ -577,10 +576,10 @@ export const DigitalIdScreen = ({ onBack }) => {
               - button 2 text: 175 wide, colour #1665A2 (font +1.5 px)
               - button 2 share icon: ≈ 23 wide, colour #1665A2
               ===================================================================== */}
-          {/* Hairline: y 689, full width, 1 px, ≈ #EFEFEF */}
+          {/* Hairline: y 641 (689 - 48), full width, 1 px, ≈ #EFEFEF */}
           <div style={{
             position: 'absolute',
-            top: '689px',
+            top: '641px',
             left: 0,
             right: 0,
             height: '1px',
@@ -594,7 +593,7 @@ export const DigitalIdScreen = ({ onBack }) => {
             className="did-btn-primary touchable"
             style={{
               position: 'absolute',
-              top: '706.5px',
+              top: '658.5px', // 706.5 - 48 = 658.5px
               left: '17px',
               right: '17px',
               height: '64px',
@@ -627,7 +626,7 @@ export const DigitalIdScreen = ({ onBack }) => {
             className="did-btn-secondary touchable"
             style={{
               position: 'absolute',
-              top: '782px',
+              top: '734px', // 782 - 48 = 734px
               left: '17px',
               right: '17px',
               height: '62.5px',
@@ -666,8 +665,8 @@ export const DigitalIdScreen = ({ onBack }) => {
             className="hide-scrollbar"
             style={{
               position: 'absolute',
-              top: '164px',
-              bottom: '124px',
+              top: '116px', // 164 - 48 = 116px
+              bottom: '80px',
               left: 0,
               right: 0,
               overflowY: 'auto',
@@ -768,7 +767,7 @@ export const DigitalIdScreen = ({ onBack }) => {
             className="did-btn-secondary touchable"
             style={{
               position: 'absolute',
-              top: '782px',
+              top: '734px', // 782 - 48 = 734px
               left: '17px',
               right: '17px',
               height: '62.5px',

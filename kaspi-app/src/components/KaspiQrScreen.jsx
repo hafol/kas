@@ -97,8 +97,7 @@ export const KaspiQrScreen = ({ onClose }) => {
         }}
       />
 
-      {/* Safe-area offset so the overlay sits below the status bar */}
-      <div style={{ position: 'absolute', inset: 0, top: 'env(safe-area-inset-top, 0px)' }}>
+      <div style={{ position: 'absolute', inset: 0 }}>
         {/* Clear viewfinder window; everything around it is dimmed */}
         <div style={{
           position: 'absolute',

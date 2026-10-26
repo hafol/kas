@@ -396,12 +396,6 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
         flexDirection: 'column',
         boxSizing: 'border-box'
       }}>
-        {/* Safe Area Inset */}
-        <div style={{
-          height: 'env(safe-area-inset-top, 0px)',
-          width: '100%',
-          flexShrink: 0
-        }} />
 
         {/* Nav Bar (height 44, no divider under it) */}
         <div style={{

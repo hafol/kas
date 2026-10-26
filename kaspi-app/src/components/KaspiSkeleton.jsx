@@ -30,7 +30,7 @@ export const GovServicesSkeleton = () => (
       backgroundColor: '#FFFFFF',
       borderBottomLeftRadius: '16px',
       borderBottomRightRadius: '16px',
-      paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)',
+      paddingTop: '12px',
       paddingBottom: '20px',
       paddingLeft: '16px',
       paddingRight: '16px',
@@ -153,7 +153,7 @@ export const MyBankSkeleton = () => (
     <div style={{
       width: '100%',
       backgroundColor: '#FFFFFF',
-      paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)',
+      paddingTop: '12px',
       paddingBottom: '12px',
       paddingLeft: '16px',
       paddingRight: '16px',
@@ -206,7 +206,7 @@ export const TransfersSkeleton = () => (
     <div style={{
       width: '100%',
       backgroundColor: '#FFFFFF',
-      paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)',
+      paddingTop: '12px',
       paddingBottom: '12px',
       paddingLeft: '16px',
       display: 'flex',
@@ -245,7 +245,7 @@ export const GenericPageSkeleton = ({ title = '' }) => (
     <div style={{
       width: '100%',
       backgroundColor: '#FFFFFF',
-      paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)',
+      paddingTop: '12px',
       paddingBottom: '12px',
       paddingLeft: '16px',
       display: 'flex',

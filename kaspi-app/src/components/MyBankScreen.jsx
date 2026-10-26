@@ -11,8 +11,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
     }}>
       {/* Top Header */}
       <div style={{
-        height: 'calc(48px + env(safe-area-inset-top, 0px))',
-        paddingTop: 'env(safe-area-inset-top, 0px)',
+        height: '48px',
         backgroundColor: '#FFFFFF',
         borderBottom: '1px solid #EBEBEB',
         display: 'flex',

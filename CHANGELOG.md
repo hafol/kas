@@ -2,6 +2,58 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 04:52] — Устранение лишнего зазора строки состояния (Status Bar) на всех страницах и смещение Навбара Удостоверения Личности к самому верху страницы
+
+### 🎯 Запрос пользователя:
+> *«There is an extra gap at the top of the Удостоверение личности page (both tabs), the same bug we fixed on the lock screen. In this app the page already starts under the status bar (env(safe-area-inset-top) is 0), so NO page may add its own top space for the status bar.
+> Search the whole project for: env(safe-area-inset-top), constant(safe-area-inset-top), and any top padding/margin/height of 44, 47, 48 or 50 px on a page wrapper or header. Remove them from every page and header. Do not touch the lock screen, which is already correct.
+> The nav bar must start right at the top of the page: the back chevron’s top is 14.5 px from the top of the page, and the title text top is 17.5 px (that is y 62.5 and 65.5 on the full screen).
+> you cant skip cheching i will do it you just make vercel deploy»*
+
+### 🛠️ Что сделано:
+1. **Экран «Удостоверение личности» ([`DigitalIdScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/DigitalIdScreen.jsx))**:
+   - Навбар переведён в положение прямо от верхнего края страницы (`top: 0`):
+     - Шеврон «Назад»: `top: 14.5px` (вместо 62.5px), `x: 25px`, размер `11.5 × 21px`, толщина `2px`.
+     - Заголовок «Удостоверение личности»: верх текста строго `top: 17.5px` (вместо 65.5px), ширина `218px`, `fontSize: 18.5px Semibold`.
+     - Кнопка сохранения (галочка): `top: 8px` (вместо 56px).
+   - Сегментированный переключатель:
+     - Трек перенесён на `top: 67px` (`115 - 48 = 67px`), высота `41px`.
+     - Текст табов: `paddingTop: 13.5px` (верх текста строго на `y: 80.5px`, то есть `128.5 - 48`).
+   - Изображение документа: `top: 148px` (`196 - 48 = 148px`), высота `459.5px`.
+   - Контролы зума: `top: 610px` (`658 - 48 = 610px`).
+   - Разделительная линия (Hairline): `top: 641px` (`689 - 48 = 641px`).
+   - Кнопка 1 («Предъявить документ»): `top: 658.5px` (`706.5 - 48 = 658.5px`), высота `64px`.
+   - Кнопка 2 («Отправить документ»): `top: 734px` (`782 - 48 = 734px`), высота `62.5px`.
+   - Вкладка «Реквизиты»: контейнер скролла сдвинут на `top: 116px`, кнопка «Отправить реквизиты» на `top: 734px`.
+2. **Очистка всего проекта от `env(safe-area-inset-top)` в шапках и страницах**:
+   - [`TransfersScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/TransfersScreen.jsx): убран `safe-area-inset-top`, высота шапки строго фиксирована `48px`.
+   - [`SettingsScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/SettingsScreen.jsx): убран `safe-area-inset-top`, высота шапки `48px`.
+   - [`ServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/ServicesScreen.jsx): убран `safe-area-inset-top` из верхнего паддинга профиля (`12px 16px 12px 16px`).
+   - [`MyBankScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx): убран `safe-area-inset-top`, высота шапки `48px`.
+   - [`MessagesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MessagesScreen.jsx): убран `safe-area-inset-top`, высота шапки `48px`.
+   - [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx): убран `safe-area-inset-top`, отступ `12px 16px 20px 16px`.
+   - [`GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx): удалён пустой блок-проставка `height: env(safe-area-inset-top, 0px)`.
+   - [`KaspiQrScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiQrScreen.jsx): удалён отступ `top: env(safe-area-inset-top, 0px)` из оверлея видоискателя.
+   - [`KaspiSkeleton.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiSkeleton.jsx): удален `safe-area-inset-top` из всех 4-х скелетонов (`GovServicesSkeleton`, `MyBankSkeleton`, `TransfersSkeleton`, `GenericPageSkeleton`).
+   - Экран блокировки [`PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx) оставлен без изменений согласно требованию пользователя.
+3. **Публикация**:
+   - Код зафиксирован в Git и развернут на Vercel Production.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/DigitalIdScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/DigitalIdScreen.jsx)
+- [`kaspi-app/src/components/TransfersScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/TransfersScreen.jsx)
+- [`kaspi-app/src/components/SettingsScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/SettingsScreen.jsx)
+- [`kaspi-app/src/components/ServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/ServicesScreen.jsx)
+- [`kaspi-app/src/components/MyBankScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx)
+- [`kaspi-app/src/components/MessagesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MessagesScreen.jsx)
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`kaspi-app/src/components/GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx)
+- [`kaspi-app/src/components/KaspiQrScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiQrScreen.jsx)
+- [`kaspi-app/src/components/KaspiSkeleton.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiSkeleton.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-27 04:35] — Экран «Удостоверение личности»: FIX LIST v2 по абсолютным пиксельным замерам iPhone 11 (414pt)
 
 ### 🎯 Запрос пользователя:

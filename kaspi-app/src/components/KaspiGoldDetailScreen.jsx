@@ -46,7 +46,7 @@ export const KaspiGoldDetailScreen = ({ card, statement, onBack, onOpenQr, onOpe
       {/* Top Gold Card Banner Header */}
       <div style={{
         background: 'linear-gradient(135deg, #E6C280 0%, #D5AE6C 50%, #C49B4B 100%)',
-        padding: 'max(env(safe-area-inset-top), 12px) 16px 20px 16px',
+        padding: '12px 16px 20px 16px',
         color: '#FFFFFF',
         position: 'relative',
         boxShadow: '0 4px 12px rgba(196, 155, 75, 0.25)'
