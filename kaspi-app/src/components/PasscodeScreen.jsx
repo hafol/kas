@@ -85,10 +85,14 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
     };
 
     updateDebug();
-    const timer = setTimeout(updateDebug, 100);
+    const t1 = setTimeout(updateDebug, 100);
+    const t2 = setTimeout(updateDebug, 350);
+    const t3 = setTimeout(updateDebug, 600);
     window.addEventListener('resize', updateDebug);
     return () => {
-      clearTimeout(timer);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
       window.removeEventListener('resize', updateDebug);
     };
   }, []);
