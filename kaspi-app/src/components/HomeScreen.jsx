@@ -346,6 +346,7 @@ export const HomeScreen = ({
       }}>
         {/* Search Field: height 42.5, width = screen - 81.5 (332.5 on 414) */}
         <div
+          id="kaspi-search-field"
           onClick={onOpenSearch}
           className="touchable"
           style={{
@@ -1375,6 +1376,96 @@ export const HomeScreen = ({
           })}
         </div>
       </div>
+
+      {/* Temporary Debug Box */}
+      <DebugBox />
     </div>
   );
 };
+
+// Temporary debug box component showing live viewport, dpr, zoom, transform, and search field metrics
+function DebugBox() {
+  const [info, setInfo] = useState({
+    innerWidth: typeof window !== 'undefined' ? window.innerWidth : 0,
+    clientWidth: typeof document !== 'undefined' && document.documentElement ? document.documentElement.clientWidth : 0,
+    dpr: typeof window !== 'undefined' ? window.devicePixelRatio : 1,
+    vvScale: typeof window !== 'undefined' && window.visualViewport ? window.visualViewport.scale : 1,
+    metaContent: '',
+    htmlZoom: '',
+    bodyZoom: '',
+    searchWidth: '',
+    transforms: ''
+  });
+
+  useEffect(() => {
+    const update = () => {
+      const meta = document.querySelector('meta[name="viewport"]');
+      const searchEl = document.getElementById('kaspi-search-field');
+      let sWidth = 'not found';
+      let transformsList = [];
+
+      if (searchEl) {
+        const r = searchEl.getBoundingClientRect();
+        sWidth = `${r.width.toFixed(1)}px (left: ${r.left.toFixed(1)}px, h: ${r.height.toFixed(1)}px)`;
+        let curr = searchEl.parentElement;
+        while (curr && curr !== document.documentElement) {
+          const t = window.getComputedStyle(curr).transform;
+          if (t && t !== 'none') {
+            transformsList.push(`${curr.tagName.toLowerCase()}${curr.className ? '.' + curr.className : ''}: ${t}`);
+          }
+          curr = curr.parentElement;
+        }
+      }
+
+      setInfo({
+        innerWidth: window.innerWidth,
+        clientWidth: document.documentElement ? document.documentElement.clientWidth : 'n/a',
+        dpr: window.devicePixelRatio,
+        vvScale: window.visualViewport ? window.visualViewport.scale : 'n/a',
+        metaContent: meta ? meta.content : 'none',
+        htmlZoom: document.documentElement ? (window.getComputedStyle(document.documentElement).zoom || 'normal') : 'n/a',
+        bodyZoom: document.body ? (window.getComputedStyle(document.body).zoom || 'normal') : 'n/a',
+        searchWidth: sWidth,
+        transforms: transformsList.length > 0 ? transformsList.join('; ') : 'none'
+      });
+    };
+
+    update();
+    const interval = setInterval(update, 500);
+    window.addEventListener('resize', update);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        left: '8px',
+        bottom: 'calc(65px + env(safe-area-inset-bottom, 0px))',
+        backgroundColor: '#FFE600',
+        color: '#000000',
+        fontSize: '12px',
+        fontFamily: 'monospace',
+        lineHeight: '1.4',
+        padding: '6px 8px',
+        borderRadius: '6px',
+        border: '1px solid #000000',
+        zIndex: 99999,
+        maxWidth: 'calc(100% - 16px)',
+        wordBreak: 'break-word',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+        pointerEvents: 'none'
+      }}
+    >
+      <div><strong>innerWidth:</strong> {info.innerWidth} | <strong>clientWidth:</strong> {info.clientWidth}</div>
+      <div><strong>dpr:</strong> {info.dpr} | <strong>vv.scale:</strong> {info.vvScale}</div>
+      <div><strong>viewport:</strong> {info.metaContent}</div>
+      <div><strong>zoom:</strong> html: {info.htmlZoom}, body: {info.bodyZoom}</div>
+      <div><strong>search width:</strong> {info.searchWidth}</div>
+      <div><strong>transforms:</strong> {info.transforms}</div>
+    </div>
+  );
+}
