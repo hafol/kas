@@ -153,7 +153,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
     setActiveDigit(d);
     setTimeout(() => {
       setActiveDigit(null);
-    }, 120);
+    }, 70);
 
     const next = digits + d;
     setDigits(next);
@@ -457,15 +457,16 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
                 padding: 0
               }}
             >
-              {/* Active ripple circle */}
+              {/* Active ripple circle: 15% bigger (74px) and faster */}
               {isActive && (
                 <div
                   style={{
                     position: 'absolute',
-                    width: '64px',
-                    height: '64px',
+                    width: '74px',
+                    height: '74px',
                     borderRadius: '50%',
-                    backgroundColor: '#F04926'
+                    backgroundColor: '#F04926',
+                    pointerEvents: 'none'
                   }}
                 />
               )}
