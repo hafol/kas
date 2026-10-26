@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// 1. Kaspi Logout Icon: 27 x 24.5 (20% larger than 22.5 x 20.5), Left edge 15.5, Centre y 62.5
+// 1. Kaspi Logout Icon: 22.5 x 20.5, Left edge 15.5, Centre y 62.5
 const LogoutIcon = () => (
-  <svg width="27" height="24.5" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="22.5" height="20.5" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <path
       d="M5.5,20H12.5C13.605,20 14.5,19.105 14.5,18V16C14.5,15.448 14.948,15 15.5,15C16.052,15 16.5,15.448 16.5,16V18C16.5,20.209 14.709,22 12.5,22H5.5C3.291,22 1.5,20.209 1.5,18V6C1.5,3.791 3.291,2 5.5,2H12.5C14.709,2 16.5,3.791 16.5,6V8C16.5,8.552 16.052,9 15.5,9C14.948,9 14.5,8.552 14.5,8V6C14.5,4.895 13.605,4 12.5,4H5.5C4.395,4 3.5,4.895 3.5,6V18C3.5,19.105 4.395,20 5.5,20Z"
       fill="#212121"
@@ -22,9 +22,9 @@ const CloseIcon = () => (
   </svg>
 );
 
-// 3. Kaspi User Avatar: Diameter 80.3 (+5% larger than 76.5), Centre y 122, Ring stroke 0.45 (#C8C8C8), Silhouette fill #9B9B9B
+// 3. Kaspi User Avatar: Diameter 76.5, Centre y 122, Ring stroke 0.45 (#C8C8C8), Silhouette fill #9B9B9B
 const UserAvatarIcon = () => (
-  <svg width="80.3" height="80.3" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="76.5" height="76.5" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <defs>
       <clipPath id="avatar-clip">
         <circle cx="12" cy="12" r="11.4" />
@@ -95,29 +95,29 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
     setIsDismissing(true);
     setTimeout(() => {
       onBack();
-    }, 120);
+    }, 280);
   };
 
   const handleDigitPress = (d) => {
     if (digits.length >= 4) return;
 
-    // Trigger fast 120ms orange-red touch ripple animation on pressed number
+    // Trigger orange-red filled circle ripple animation on pressed number
     setActiveDigit(d);
     setTimeout(() => {
       setActiveDigit(null);
-    }, 120);
+    }, 180);
 
     const next = digits + d;
     setDigits(next);
 
     if (next.length === 4) {
-      // Snappy fade/unlock ~120ms
+      // All 4 dots filled with orange-red: brief delay so user sees 4th dot, then unlock
       timeoutRef.current = setTimeout(() => {
         setIsDismissing(true);
         setTimeout(() => {
           onUnlock();
-        }, 120);
-      }, 70);
+        }, 220);
+      }, 140);
     }
   };
 
@@ -172,12 +172,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         zIndex: 9999,
         maxWidth: '430px',
         margin: '0 auto',
-        opacity: isDismissing ? 0 : 1,
         transform: isSlidingIn || isDismissing ? 'translateY(100%)' : 'translateY(0)',
-        transition: isDismissing
-          ? 'opacity 120ms ease-out, transform 120ms ease-out'
-          : 'transform 260ms cubic-bezier(0.22, 1, 0.36, 1)',
-        willChange: 'transform, opacity',
+        transition: 'transform 300ms cubic-bezier(0.22, 1, 0.36, 1)',
+        willChange: 'transform',
         userSelect: 'none',
         WebkitUserSelect: 'none',
         boxSizing: 'border-box',
@@ -197,7 +194,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         }}
       >
         {/* 1. TOP ICONS (Centre y = 62.5) */}
-        {/* Logout Button: 27 x 24.5 (+20% larger), Left edge 15.5, Centre y 62.5 */}
+        {/* Logout Button: 22.5 x 20.5, Left edge 15.5, Centre y 62.5 */}
         <button
           type="button"
           onClick={onLogout || handleDismiss}
@@ -205,9 +202,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           style={{
             position: 'absolute',
             left: '15.5px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 10.5px)',
-            width: '27px',
-            height: '24.5px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 12.5px)',
+            width: '22.5px',
+            height: '20.5px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -247,15 +244,15 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <CloseIcon />
         </button>
 
-        {/* 2. AVATAR (Diameter 80.3, +5% larger, Centre y 122) */}
+        {/* 2. AVATAR (Diameter 76.5, Centre y 122) */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 43.85px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 45.75px)',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: '80.3px',
-            height: '80.3px',
+            width: '76.5px',
+            height: '76.5px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
@@ -266,17 +263,17 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <UserAvatarIcon />
         </div>
 
-        {/* NAME "Парасат Ж.": 15px Regular, #212121, Centre y 185.5 */}
+        {/* NAME "Парасат Ж.": 13 Regular, #212121, Centre y 185.5 */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 140.5px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 142px)',
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '15px',
+            fontSize: '13px',
             fontWeight: 400,
-            lineHeight: '17px',
+            lineHeight: '14px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -285,17 +282,17 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           {profile?.shortName || 'Парасат Ж.'}
         </div>
 
-        {/* TITLE "Код доступа": 14.5px Regular, #212121, Centre y 272 (Gap name->title: 86.5) */}
+        {/* TITLE "Код доступа": 13 Regular, #212121, Centre y 272 (Gap name->title: 86.5) */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 230px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 231px)',
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '14.5px',
+            fontSize: '13px',
             fontWeight: 400,
-            lineHeight: '16px',
+            lineHeight: '14px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -318,7 +315,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                 height: '11.5px',
                 borderRadius: '50%',
                 backgroundColor: filled ? '#F04926' : '#EEEEEE',
-                transition: 'background-color 0.08s ease'
+                transition: 'background-color 0.16s ease'
               }}
             />
           );
@@ -353,13 +350,13 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                 padding: 0
               }}
             >
-              {/* Orange-red touch ripple circle: enlarged to 72 x 72 */}
+              {/* Orange-red touch ripple circle */}
               {isActive && (
                 <div
                   style={{
                     position: 'absolute',
-                    width: '72px',
-                    height: '72px',
+                    width: '56px',
+                    height: '56px',
                     borderRadius: '50%',
                     backgroundColor: '#F04926'
                   }}
@@ -409,14 +406,14 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           </button>
         )}
 
-        {/* 6. FORGOT LINK "Забыли код доступа?": 14.5px Regular, color #0089D0, Centre y 719 */}
+        {/* 6. FORGOT LINK "Забыли код доступа?": 13 Regular, color #0089D0, Centre y 719 */}
         <div
           style={{
             position: 'absolute',
-            bottom: '55px',
+            bottom: '56px',
             left: 0,
             right: 0,
-            height: '16px',
+            height: '14px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -429,9 +426,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               background: 'none',
               border: 'none',
               padding: 0,
-              fontSize: '14.5px',
+              fontSize: '13px',
               fontWeight: 400,
-              lineHeight: '16px',
+              lineHeight: '14px',
               color: '#0089D0',
               fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
               cursor: 'pointer',
