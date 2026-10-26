@@ -2,6 +2,30 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 13:30] — Устранение 1.104x масштабирования на iPhone 11 (414 pt)
+
+### 🎯 Запрос пользователя:
+> *«The values in HomeScreen.jsx are correct. Do NOT change any of them. THE PROBLEM IS OUTSIDE HomeScreen.jsx. On an iPhone 11 (414 pt wide) everything on the page is drawn 1.104 times bigger than the code says. 1.104 = 414 / 375... FIND AND REMOVE THE STRETCH: 1. index.html viewport meta tag must be exactly <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">. 2. Any wrapper around the app with scale/zoom/375. 3. Global CSS -webkit-text-size-adjust: 100% on html. Send a new screenshot of the Home screen.»*
+
+### 🛠️ Что сделано:
+1. **`index.html`**:
+   - Исправлен тег viewport: заменён с `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />` на точный нативный тег `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">`.
+   - Устранены принудительные директивы `maximum-scale=1.0, user-scalable=no`, которые вызывали фиксацию холста WebKit на 375pt с последующим пропорциональным растягиванием (1.104x) на экранах 414pt.
+2. **Контейнеры и обёртки (`App.jsx`, `#root`, `.app-viewport`)**:
+   - Проверены все компоненты: подтверждено полное отсутствие каких-либо `transform: scale`, `zoom`, `window.innerWidth / 375`, `100vw / 375` или фиксированных ширин 375px.
+   - Главный контейнер `.app-viewport` и `#root` имеют `width: 100%` на мобильных экранах.
+3. **Глобальные стили (`index.css`)**:
+   - Для тега `html` явно добавлены свойства `-webkit-text-size-adjust: 100%` и `text-size-adjust: 100%`, предотвращающие автоматическое раздувание шрифтов и элементов в iOS Safari/WebKit.
+4. **`HomeScreen.jsx`**:
+   - Ни одно значение и ни один размер в `HomeScreen.jsx` не изменялись.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/index.html`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html)
+- [`kaspi-app/src/index.css`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-26 05:53] — Устранение пустого зазора сверху («big gap above») на Главной странице
 
 ### 🎯 Запрос пользователя:
