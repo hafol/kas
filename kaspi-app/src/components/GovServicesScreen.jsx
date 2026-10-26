@@ -1,18 +1,18 @@
 /**
  * 🔒 LOCKED SCREEN: GovServicesScreen.jsx
- * STATUS: 100% FINALIZED & CALIBRATED (Fix List v3)
- * DO NOT MODIFY THIS SCREEN OR ITS METRICS. FURTHER CHANGES ARE NOT NEEDED.
+ * STATUS: 100% FINALIZED & CALIBRATED (Fix List v4)
+ * DO NOT MODIFY THIS SCREEN OR ITS METRICS.
  */
 import React, { useState } from 'react';
 
-// Color Tokens (from specification)
-const pageBg        = '#EDEDED'; // grey behind the white blocks, visible as 10 pt gaps
+// Color Tokens (from specification Fix List v4)
+const pageBg        = '#F2F2F2'; // page grey between white blocks: now #F2F2F2 (lighter)
 const surface       = '#FFFFFF'; // the three white blocks
 const fill          = '#F2F2F2'; // segmented track, search field, document cards, category tiles
 const iconCircle    = '#F7F7F7'; // circle behind the row icons
-const divider       = '#EBEBEB';
+const divider       = '#F0F0F0'; // 1 px, #F0F0F0, directly under the underline
 const accentRed     = '#F14635'; // selected category label + underline, NEW badge
-const linkBlue      = '#2F49B5'; // "Все документы" link and its chevron
+const linkBlue      = '#1666A1'; // "Все документы" link and its chevron: #1666A1 (clear medium blue)
 const textPrimary   = '#1E1E1E';
 const textSecondary = '#8C8C8C'; // row subtitle
 const placeholder   = '#A0A0A0'; // search placeholder and magnifier
@@ -22,19 +22,22 @@ const chevronGrey   = '#BDBDBD';
 // with a no-break space, so titles wrap as "Прикрепление / к медорганизации".
 const glueShortWords = (text) => text.replace(/(?<=^|[\s ])([а-яё]{1,2}) /gi, '$1 ');
 
-// 1. Back Chevron (<) SVG: glyph ≈ 8 x 16 (measured from the original), centered
-const BackChevronIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+// 1. Back Chevron (<) SVG: 11.5 x 21 at x 25, top y 62.5. Stroke ≈ 2 px (2.1 px)
+const BackChevronIcon = ({ width = 11.5, height = 21 }) => (
+  <svg width={width} height={height} viewBox="0 0 12 21" fill="none" style={{ display: 'block' }}>
     <path
-      d="M16.707,2.793C17.098,3.183 17.098,3.817 16.707,4.207L8.914,12L16.707,19.793C17.098,20.183 17.098,20.817 16.707,21.207C16.317,21.598 15.683,21.598 15.293,21.207L7.5,13.414C6.719,12.633 6.719,11.367 7.5,10.586L15.293,2.793C15.683,2.402 16.317,2.402 16.707,2.793Z"
-      fill={textPrimary}
+      d="M10.5 1.5L1.5 10.5L10.5 19.5"
+      stroke={textPrimary}
+      strokeWidth="2.1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
 
-// 2. Search Magnifier SVG: 22.5 x 22, color placeholder
-const SearchMagnifierIcon = () => (
-  <svg width="22.5" height="22" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+// 2. Search Magnifier SVG: 21 x 20.5 at x 37.5, top y 180
+const SearchMagnifierIcon = ({ width = 21, height = 20.5 }) => (
+  <svg width={width} height={height} viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <path
       d="M4,10C4,6.686 6.686,4 10,4C13.314,4 16,6.686 16,10C16,13.314 13.314,16 10,16C6.686,16 4,13.314 4,10ZM10,2C5.582,2 2,5.582 2,10C2,14.418 5.582,18 10,18C11.849,18 13.552,17.372 14.907,16.319C14.919,16.332 14.931,16.344 14.943,16.357L19.293,20.707C19.684,21.097 20.317,21.097 20.708,20.707C21.098,20.316 21.098,19.683 20.708,19.293L16.358,14.943C16.345,14.93 16.332,14.918 16.319,14.906C17.373,13.552 18,11.849 18,10C18,5.582 14.418,2 10,2Z"
       fill={placeholder}
@@ -42,7 +45,7 @@ const SearchMagnifierIcon = () => (
   </svg>
 );
 
-// 3. Link Chevron SVG ("Все документы"): visible glyph 9 x 15, color linkBlue
+// 3. Link Chevron SVG ("Все документы"): visible glyph 9 x 15, color linkBlue (#1666A1)
 const LinkChevronIcon = () => (
   <svg width="18" height="18" viewBox="0 0 16 16" fill="none" style={{ display: 'block' }}>
     <path
@@ -197,14 +200,15 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
     }
   ];
 
-  // Category Row in Block C with exact horizontal centers x: 71.5 / 180 / 267.5 / 351.5
+  // Category Row in Block C: tile size 56.5 x 56.5, tile x: 43.5 / 151.5 / 239.5 / 323.5
+  // label widths: 96.5, 63.5, 35.5, 49
   const categories = [
-    { id: 'popular', label: 'Популярные', icon: '/kaspi_assets/category_icons/category-popular-megaphone.svg', cx: 71.5, w: 98 },
-    { id: 'certs', label: 'Справки', icon: '/kaspi_assets/category_icons/category-certs-documents.svg', cx: 180, w: 76 },
-    { id: 'auto', label: 'Авто', icon: '/kaspi_assets/category_icons/category-auto-car.svg', cx: 267.5, w: 56 },
-    { id: 'home', label: 'Жилье', icon: '/kaspi_assets/category_icons/category-home-house.svg', cx: 351.5, w: 56 },
-    { id: 'family', label: 'Семья', icon: '/kaspi_assets/category_icons/category-family-stroller.svg', cx: 435.5, w: 60 },
-    { id: 'health', label: 'Здоровье', icon: '/kaspi_assets/category_icons/category-health-heart.svg', cx: 520, w: 72 }
+    { id: 'popular', label: 'Популярные', icon: '/kaspi_assets/category_icons/category-popular-megaphone.svg', x: 43.5, labelW: 96.5 },
+    { id: 'certs', label: 'Справки', icon: '/kaspi_assets/category_icons/category-certs-documents.svg', x: 151.5, labelW: 63.5 },
+    { id: 'auto', label: 'Авто', icon: '/kaspi_assets/category_icons/category-auto-car.svg', x: 239.5, labelW: 35.5 },
+    { id: 'home', label: 'Жилье', icon: '/kaspi_assets/category_icons/category-home-house.svg', x: 323.5, labelW: 49 },
+    { id: 'family', label: 'Семья', icon: '/kaspi_assets/category_icons/category-family-stroller.svg', x: 407.5, labelW: 55 },
+    { id: 'health', label: 'Здоровье', icon: '/kaspi_assets/category_icons/category-health-heart.svg', x: 491.5, labelW: 70 }
   ];
 
   // Services list grouped by category
@@ -406,10 +410,9 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
           boxSizing: 'border-box'
         }}>
-          {/* Back button: chevron "<", tap area 44x44, center at x 29 */}
+          {/* Back button: 11.5 x 21 at x 25, top y 62.5 (safeArea 48 + 14.5) */}
           <button
             type="button"
             onClick={onBack}
@@ -417,10 +420,10 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             className="touchable"
             style={{
               position: 'absolute',
-              left: '5.5px',
-              top: 0,
-              width: '44px',
-              height: '44px',
+              left: '25px',
+              top: '14.5px',
+              width: '11.5px',
+              height: '21px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -435,14 +438,18 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             <BackChevronIcon />
           </button>
 
-          {/* Title "Госуслуги": width 86, centered */}
+          {/* Title "Госуслуги": text top y 65.5 (48 + 17.5 = 65.5), width 86, centered */}
           <h1 style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: '17.5px',
             margin: 0,
             fontSize: '18px',
             fontWeight: '600',
             color: textPrimary,
             letterSpacing: 0,
-            lineHeight: '44px',
+            lineHeight: '18px',
             textAlign: 'center',
             whiteSpace: 'nowrap'
           }}>
@@ -450,12 +457,12 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           </h1>
         </div>
 
-        {/* 1. SEGMENTED CONTROL: moved down 7.5px (marginTop 14.5px, label text top y 120.5) */}
+        {/* 1. SEGMENTED CONTROL: top y 106 (marginTop 14px), track height 43px, labels text top y 120.5 */}
         <div style={{
-          marginTop: '14.5px',
+          marginTop: '14px',
           marginRight: '16px',
           marginLeft: '16px',
-          height: '40px',
+          height: '43px',
           backgroundColor: fill,
           borderRadius: '12px',
           position: 'relative',
@@ -478,7 +485,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             pointerEvents: 'none'
           }} />
 
-          {/* Tab 1: "Все услуги" (width ~80) */}
+          {/* Tab 1: "Все услуги" (width 80.5, 16px Regular, NOT bolder than "Мои заявки") */}
           <button
             type="button"
             onClick={() => setActiveTab('all')}
@@ -489,26 +496,29 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
               border: 'none',
               cursor: 'pointer',
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               justifyContent: 'center',
+              paddingTop: '12.5px', // 106 + 2 + 12.5 = 120.5
               zIndex: 1,
-              padding: 0,
+              paddingLeft: 0,
+              paddingRight: 0,
+              paddingBottom: 0,
               outline: 'none'
             }}
           >
             <span style={{
               fontSize: '16px',
-              fontWeight: '500',
+              fontWeight: '400',
               color: textPrimary,
               letterSpacing: 0,
-              lineHeight: '36px',
+              lineHeight: '16px',
               whiteSpace: 'nowrap'
             }}>
               Все услуги
             </span>
           </button>
 
-          {/* Tab 2: "Мои заявки" (width ~91) */}
+          {/* Tab 2: "Мои заявки" (width 90, 16px Regular) */}
           <button
             type="button"
             onClick={() => setActiveTab('requests')}
@@ -519,19 +529,22 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
               border: 'none',
               cursor: 'pointer',
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               justifyContent: 'center',
+              paddingTop: '12.5px',
               zIndex: 1,
-              padding: 0,
+              paddingLeft: 0,
+              paddingRight: 0,
+              paddingBottom: 0,
               outline: 'none'
             }}
           >
             <span style={{
               fontSize: '16px',
-              fontWeight: '500',
+              fontWeight: '400',
               color: textPrimary,
               letterSpacing: 0,
-              lineHeight: '36px',
+              lineHeight: '16px',
               whiteSpace: 'nowrap'
             }}>
               Мои заявки
@@ -539,9 +552,9 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           </button>
         </div>
 
-        {/* 2. SEARCH FIELD: field top ≈ y 164 (gap under segmented control 18, height 48) */}
+        {/* 2. SEARCH FIELD: field top ≈ y 164 (106 + 43 + 15 = 164, height 48) */}
         <div style={{
-          marginTop: '18px',
+          marginTop: '15px',
           marginLeft: '16px',
           marginRight: '16px',
           height: '48px',
@@ -552,13 +565,13 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           alignItems: 'center',
           boxSizing: 'border-box'
         }}>
-          {/* Magnifier icon: 22.5 x 22 at x 37 (16 + 21 = 37) */}
+          {/* Magnifier icon: 21 x 20.5 at x 37.5 (16 + 21.5 = 37.5), top y 180 (164 + 16 = 180) */}
           <div style={{
             position: 'absolute',
-            left: '21px',
-            top: '13px',
-            width: '22.5px',
-            height: '22px',
+            left: '21.5px',
+            top: '16px',
+            width: '21px',
+            height: '20.5px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -567,24 +580,30 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             <SearchMagnifierIcon />
           </div>
 
-          {/* Placeholder: start x 77 (16 + 61 = 77), width 180.5, font 17px, text top y 180.5 */}
+          {/* Placeholder: start x 76.5 (16 + 60.5 = 76.5), width 180.5, font 17px, text top y 184 (164 + 20) */}
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по Госуслугам"
             style={{
-              width: '100%',
-              height: '100%',
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              height: '48px',
               backgroundColor: 'transparent',
               border: 'none',
               outline: 'none',
-              paddingLeft: '61px',
+              paddingLeft: '60.5px',
               paddingRight: '16px',
+              paddingTop: '20px',
+              paddingBottom: '11px',
               fontSize: '17px',
               fontWeight: '400',
               color: textPrimary,
               letterSpacing: 0,
+              lineHeight: '17px',
               boxSizing: 'border-box',
               fontFamily: 'inherit'
             }}
@@ -599,103 +618,110 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
       <div style={{ height: '12px', flexShrink: 0 }} />
 
       {/* =====================================================================
-          3. DOCUMENTS BLOCK: picture top y 273.5, label line 1/2 at 328.5/353, link at 392.5
+          4. DOCUMENTS BLOCK: Block top y 244, card top y 259.5, bottom y 421.5
           ===================================================================== */}
       <div style={{
         width: '100%',
         backgroundColor: surface,
         borderRadius: '16px',
-        paddingTop: '17px',
+        paddingTop: '15.5px', // 244 + 15.5 = 259.5 (card top y 259.5)
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box'
       }}>
-        {/* Horizontal scroll row of document cards: gap 12 */}
+        {/* Horizontal scroll row: gap 13.5, paddingLeft 17.5 (card x: 17.5 / 199 / 380) */}
         <div style={{
           display: 'flex',
-          gap: '12px',
-          paddingLeft: '16px',
-          paddingRight: '16px',
+          gap: '13.5px',
+          paddingLeft: '17.5px',
+          paddingRight: '17.5px',
           overflowX: 'auto',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
           WebkitOverflowScrolling: 'touch',
           boxSizing: 'border-box'
         }}>
-          {documents.map((doc) => (
-            <div
-              key={doc.id}
-              onClick={() => onOpenDoc && onOpenDoc(doc.id)}
-              className="touchable"
-              style={{
-                width: '158px',
-                height: '116px',
-                backgroundColor: fill,
-                borderRadius: '16px',
-                flexShrink: 0,
-                position: 'relative',
-                cursor: 'pointer',
-                boxSizing: 'border-box'
-              }}
-            >
-              {/* Card picture: 57 x 36 at top 12 (screen top y 273.5) */}
-              <div style={{
-                position: 'absolute',
-                top: '12px',
-                left: '14px',
-                width: '57px',
-                height: '36px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                overflow: 'hidden'
-              }}>
-                {doc.icon && (
-                  <img
-                    src={doc.icon}
-                    alt={doc.label}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      objectPosition: 'left center',
-                      display: 'block'
-                    }}
-                  />
-                )}
-              </div>
+          {documents.map((doc) => {
+            const isPassport = doc.id === 'passport';
+            const picW = isPassport ? '61.5px' : '58px';
+            const picH = isPassport ? '43.5px' : '37.5px';
+            const picTop = isPassport ? '9.5px' : '15px'; // 259.5 + 15 = 274.5, 259.5 + 9.5 = 269
 
-              {/* Label: 16px tall (+1px), line pitch 24.5px, top 67px (screen tops 328.5 / 353) */}
-              <div style={{
-                position: 'absolute',
-                top: '67px',
-                left: '14px',
-                right: '12px',
-                fontSize: '16px',
-                fontWeight: '400',
-                color: textPrimary,
-                lineHeight: '24.5px',
-                letterSpacing: 0,
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden'
-              }}>
-                {doc.label}
+            return (
+              <div
+                key={doc.id}
+                onClick={() => onOpenDoc && onOpenDoc(doc.id)}
+                className="touchable"
+                style={{
+                  width: '168px', // target 168
+                  height: '115.5px', // target 115.5
+                  backgroundColor: fill,
+                  borderRadius: '16px',
+                  flexShrink: 0,
+                  position: 'relative',
+                  cursor: 'pointer',
+                  boxSizing: 'border-box'
+                }}
+              >
+                {/* Card picture: card 1 at x 33, y 274.5; card 2 at y 269 */}
+                <div style={{
+                  position: 'absolute',
+                  top: picTop,
+                  left: '15.5px', // 17.5 + 15.5 = 33
+                  width: picW,
+                  height: picH,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  overflow: 'hidden'
+                }}>
+                  {doc.icon && (
+                    <img
+                      src={doc.icon}
+                      alt={doc.label}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        objectPosition: 'left center',
+                        display: 'block'
+                      }}
+                    />
+                  )}
+                </div>
+
+                {/* Label: line 1 top y 328.5 (259.5 + 69 = 328.5), x 32 (14.5 inside card) */}
+                <div style={{
+                  position: 'absolute',
+                  top: '69px',
+                  left: '14.5px', // 17.5 + 14.5 = 32
+                  right: '12px',
+                  fontSize: '16.5px', // font +0.5px (width "Удостоверение" = 116)
+                  fontWeight: '400',
+                  color: textPrimary,
+                  lineHeight: '24.5px',
+                  letterSpacing: 0,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden'
+                }}>
+                  {doc.label}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Row with link "Все документы" (text top y 392.5, width 132.5, chevron top y 392) */}
+        {/* Link row: "Все документы" text top y 392.5, width 131.5, Medium, #1666A1, chevron top y 392 */}
         <div
           onClick={() => onOpenDoc && onOpenDoc('all')}
           className="touchable"
           style={{
-            marginTop: '8px',
-            height: '44px',
-            paddingLeft: '16px',
-            paddingRight: '16.5px',
+            marginTop: '3.5px',
+            height: '38px',
+            paddingLeft: '17.5px',
+            paddingRight: '17px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -703,33 +729,33 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             boxSizing: 'border-box'
           }}
         >
-          {/* "Все документы": width 132.5, font 18px Regular */}
+          {/* "Все документы": width 131.5, 17px Medium, color #1666A1 */}
           <span style={{
-            fontSize: '18px',
-            fontWeight: '400',
-            color: linkBlue,
+            fontSize: '17px',
+            fontWeight: '500', // Medium
+            color: linkBlue, // #1666A1
             letterSpacing: 0,
-            lineHeight: '44px',
-            width: '132.5px'
+            lineHeight: '38px',
+            width: '131.5px'
           }}>
             Все документы
           </span>
 
-          {/* Chevron SVG */}
+          {/* Chevron SVG: color #1666A1, top y 392 */}
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <LinkChevronIcon />
           </div>
         </div>
 
-        {/* Block B bottom padding (Block B bottom ≈ y 428) */}
-        <div style={{ height: '4px' }} />
+        {/* White block bottom: y 421.5 (244 + 15.5 + 115.5 + 3.5 + 38 + 5 = 421.5) */}
+        <div style={{ height: '5px' }} />
       </div>
 
-      {/* 12pt Grey Gap between Block B and Block C (y 428 to 440) */}
-      <div style={{ height: '12px', flexShrink: 0 }} />
+      {/* Grey gap between Block B and Block C: 446.5 - 421.5 = 25px */}
+      <div style={{ height: '25px', flexShrink: 0 }} />
 
       {/* =====================================================================
-          4. CATEGORIES + 5. SECTION TITLE + 6. SERVICE ROWS (Block C starts y 440)
+          5. CATEGORIES + 6. SECTION TITLE + SERVICE ROWS (Block C starts y 446.5)
           ===================================================================== */}
       <div style={{
         width: '100%',
@@ -738,16 +764,16 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
         borderTopRightRadius: '16px',
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        paddingTop: '17px',
+        paddingTop: '9.5px', // 446.5 + 9.5 = 456 (tile top y 456)
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box'
       }}>
-        {/* 4. CATEGORIES ROW: tiles top y 457 (56x56), labels top y 521.5, centres 71.5 / 180 / 267.5 / 351.5 */}
+        {/* Categories Row: tile top y 456, size 56.5x56.5, tile x: 43.5 / 151.5 / 239.5 / 323.5 */}
         <div style={{
           position: 'relative',
           width: '100%',
-          height: '112.5px',
+          height: '97px', // 553 - 456 = 97
           overflowX: 'auto',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -768,19 +794,19 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                   className="touchable"
                   style={{
                     position: 'absolute',
-                    left: `${cat.cx - cat.w / 2}px`,
+                    left: `${cat.x}px`,
                     top: 0,
-                    width: `${cat.w}px`,
+                    width: '56.5px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     cursor: 'pointer'
                   }}
                 >
-                  {/* Category Tile: 56 x 56 at y 457, background fill, radius 16 */}
+                  {/* Category Tile: 56.5 x 56.5, radius 16 */}
                   <div style={{
-                    width: '56px',
-                    height: '56px',
+                    width: '56.5px',
+                    height: '56.5px',
                     backgroundColor: fill,
                     borderRadius: '16px',
                     display: 'flex',
@@ -810,11 +836,14 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     </div>
                   </div>
 
-                  {/* Label: top y 521.5 (marginTop 8.5px), 16px font */}
+                  {/* Label: top y 521.5 (inside row: 521.5 - 456 = 65.5), font 16.5px */}
                   <span style={{
-                    marginTop: '8.5px',
+                    position: 'absolute',
+                    top: '65.5px',
+                    left: `${(56.5 - cat.labelW) / 2}px`,
+                    width: `${cat.labelW}px`,
                     lineHeight: '20px',
-                    fontSize: '16px',
+                    fontSize: '16.5px',
                     fontWeight: isSelected ? '500' : '400',
                     color: isSelected ? accentRed : textPrimary,
                     letterSpacing: 0,
@@ -827,35 +856,35 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
               );
             })}
 
-            {/* Red underline: y 552.5, 2 px, solid #F14635, x 22 → 120 (as wide as "Популярные") */}
+            {/* Red underline: y 552 (inside row: 552 - 456 = 96px), 2 px, x 22.5 → 118.5 (width 96px) */}
             {selectedCat === 'popular' && (
               <div style={{
                 position: 'absolute',
-                top: '95.5px', // 440 + 17 + 95.5 = 552.5px
-                left: '22px',
-                width: '98px',
+                top: '96px',
+                left: '22.5px',
+                width: '96px',
                 height: '2px',
                 backgroundColor: accentRed,
                 zIndex: 2
               }} />
             )}
 
-            {/* 1 pt full-width divider in divider colour (#EBEBEB) directly under categories at y 554.5 */}
+            {/* ONE line only, y 553 (inside row: 553 - 456 = 97px), 1 px, #F0F0F0, directly under underline */}
             <div style={{
               position: 'absolute',
-              top: '97.5px', // 440 + 17 + 97.5 = 554.5px
+              top: '97px',
               left: 0,
               right: 0,
               height: '1px',
-              backgroundColor: divider,
+              backgroundColor: '#F0F0F0',
               zIndex: 1
             }} />
           </div>
         </div>
 
-        {/* 5. SECTION TITLE "Популярные и новые": strictly in ONE line, 19px Bold */}
+        {/* 5. SECTION TITLE "Популярные и новые": text top y 576, width 193, strictly in ONE line, 19px Bold */}
         <div style={{
-          marginTop: '22px',
+          marginTop: '22px', // 554 + 22 = 576
           paddingLeft: '16px',
           paddingRight: '16px',
           fontSize: '19px',
@@ -868,11 +897,11 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           {sectionTitle}
         </div>
 
-        {/* 6. SERVICE ROWS: row 1 top y 630, row 2 top y 708.5, row 3 top y 785 (row pitch 78.5) */}
+        {/* 6. SERVICE ROWS: row 1 top y 630, row 2 top y 707, row 3 top y 784 (row pitch 77) */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          marginTop: '31.5px' // 576.5 + 22 = 598.5 -> 598.5 + 31.5 = y 630
+          marginTop: '32px' // 576 + 22 = 598 -> 598 + 32 = y 630
         }}>
           {activeTab === 'requests' ? (
             <div style={{
@@ -899,7 +928,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                   className="touchable"
                   aria-label={`${service.title}${service.hasBadge ? ', new' : ''}`}
                   style={{
-                    height: '78.5px', // Exact 78.5px row pitch
+                    height: '77px', // Exact 77px row pitch
                     position: 'relative',
                     width: '100%',
                     display: 'flex',
@@ -910,11 +939,11 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     boxSizing: 'border-box'
                   }}
                 >
-                  {/* Line icon circle: 44 x 44, centre (39, 655) -> left 17, top 3 */}
+                  {/* Line icon circle: 44 x 44, top y 630 / 707 / 784 -> top 0 inside row */}
                   <div style={{
                     position: 'absolute',
                     left: '17px',
-                    top: '3px',
+                    top: 0,
                     width: '44px',
                     height: '44px',
                     borderRadius: '50%',
@@ -931,7 +960,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     )}
                   </div>
 
-                  {/* Title & subtitle text: starts at x 81, width up to 232 (313 - 81) */}
+                  {/* Title & subtitle text: starts at x 81, line-height 26.5px, top 0 */}
                   <div style={{
                     position: 'absolute',
                     left: '81px',
@@ -940,19 +969,19 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     display: 'flex',
                     flexDirection: 'column'
                   }}>
-                    {/* Title: 18px Regular, line pitch 27.5px, short words glued */}
+                    {/* Title: 18px Regular, line pitch 26.5px, short words glued */}
                     <div style={{
                       fontSize: '18px',
                       fontWeight: '400',
                       color: textPrimary,
-                      lineHeight: '27.5px',
+                      lineHeight: '26.5px',
                       letterSpacing: 0,
                       whiteSpace: 'pre-line'
                     }}>
                       {glueShortWords(service.title)}
                     </div>
 
-                    {/* Subtitle (row 3 sits right above tab bar, grey subtitle tucked under tab bar) */}
+                    {/* Subtitle: row 3 "Стать самозанятым" visible at text top y 784, just above tab bar */}
                     {service.subtitle && (
                       <div style={{
                         marginTop: '2px',
@@ -970,15 +999,15 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     )}
                   </div>
 
-                  {/* NEW Badge: 48.5 x 22 at x 313, vertically centred on 2-line title (top 11px) */}
+                  {/* NEW Badge: 48.5 x 23 at x 313, top y 640.5 / 718 -> top 10.5 inside row */}
                   {service.hasBadge && (
                     <div style={{
                       position: 'absolute',
                       left: '313px',
-                      top: '11px',
+                      top: '10.5px',
                       width: '48.5px',
-                      height: '22px',
-                      borderRadius: '11px',
+                      height: '23px',
+                      borderRadius: '11.5px',
                       backgroundColor: accentRed,
                       display: 'flex',
                       alignItems: 'center',
@@ -990,7 +1019,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                         fontWeight: '600',
                         color: '#FFFFFF',
                         letterSpacing: 0,
-                        lineHeight: '22px',
+                        lineHeight: '23px',
                         textTransform: 'uppercase'
                       }}>
                         NEW
@@ -998,11 +1027,11 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     </div>
                   )}
 
-                  {/* Chevron: x 383, vertically centered at top 16 */}
+                  {/* Chevron: x 383, vertically centered at top 14 */}
                   <div style={{
                     position: 'absolute',
                     left: '383px',
-                    top: '16px',
+                    top: '14px',
                     flexShrink: 0
                   }}>
                     <RowChevronIcon />

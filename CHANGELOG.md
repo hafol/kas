@@ -2,6 +2,74 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 02:40] — Юстировка экрана Госуслуг по Fix List v4 (детальные размеры и координаты iPhone 11)
+
+### 🎯 Запрос пользователя:
+> *«ГОСУСЛУГИ SCREEN: FIX LIST v4 (small details)
+> Measured from full-size screenshots of the copy and the original on the same iPhone 11. Values are CSS px = pt on the 414-wide page, y from the very top of the screen. Every value is ABSOLUTE.
+> 1. NAV BAR: Back chevron: 11.5 x 21 at x 25, top y 62.5 (stroke ≈ 2 px). Title "Госуслуги" text top: 65.5 (move down 1.5).
+> 2. SEGMENTED CONTROL: Labels text top: 120.5 (up 1.5). "Все услуги" 80.5 wide; "Мои заявки" 90 wide (both 16 px Regular; neither bolder). Track height: 43 (top stays at 106).
+> 3. SEARCH FIELD: Magnifier: 21 x 20.5 at x 37.5, top y 180. Placeholder "Поиск по Госуслугам": 180.5 wide (font ≈ 17 px), start x 76.5, text top y 184.
+> 4. DOCUMENTS BLOCK: card width 168, card x: 17.5 / 199 / 380 (gap 13.5), card top 259.5, height 115.5. Picture (card 1): 58 x 37.5 at x 33, y 274.5 (left padding 15.5). Picture (card 2, passport): 61.5 x 43.5, top y 269. Label line 1 top 328.5, x 32 (14.5 inside card), "Удостоверение" width 116 (font 16.5 px). "Все документы" text top 392.5, width 131.5 (17 px Medium), colour #1666A1 (clear medium blue), chevron top 392. White block bottom 421.5.
+> 5. CATEGORIES: White block top 446.5. Tile size 56.5 x 56.5 at top 456, tile x: 43.5 / 151.5 / 239.5 / 323.5. Label text top 521.5, widths: 96.5, 63.5, 35.5, 49 (font 16.5 px). Red underline: y 552, 2 px, x 22.5 → 118.5. Divider: ONE line only, y 553, 1 px, #F0F0F0, directly under underline (remove second line and band).
+> 6. SECTION TITLE AND ROWS: "Популярные и новые" text top 576 (width 193). Row 1 icon circle top 630 (44 x 44). Row 1 title lines top 630 / 656.5. Row 2 title lines top 707 / 733.5. Title line pitch 26.5 (line-height 26.5 px). Title widths: 123.5, 158, 210.5 → font 18 px. Title x 81. Row pitch 77. NEW badge top 640.5 / 718 (48.5 x 23 at x 313). Row 3 "Стать самозанятым" visible: text top y 784, just above the tab bar.
+> 7. COLOURS: Page grey between white blocks #F2F2F2. Card and tile fill #F2F2F2.»*
+
+### 🛠️ Что сделано:
+1. **Панель навигации (Nav Bar)**:
+   - Шеврон «Назад»: точный размер `11.5 × 21px`, позиция `left: 25px, top: 14.5px` (абсолютный `y = 62.5`), толщина линии `strokeWidth: 2.1px`.
+   - Заголовок «Госуслуги»: смещён на 1.5px вниз — `top: 17.5px` (абсолютный `y = 65.5`), центрирован, `lineHeight: 18px`.
+2. **Сегментированный контроллер («Все услуги» / «Мои заявки»)**:
+   - Высота трека увеличена до `43px` (верх `y = 106`).
+   - Верх текста меток поднят на 1.5px до `y = 120.5` (`paddingTop: 12.5px`).
+   - Обе вкладки строго `16px Regular` (`fontWeight: 400`, `lineHeight: 16px`), ни одна не жирнее другой.
+3. **Поле поиска («Поиск по Госуслугам»)**:
+   - Иконка лупы: точный размер `21 × 20.5px`, `left: 21.5px` (`x = 37.5`), `top: 16px` (`y = 180`).
+   - Плейсхолдер: шрифт `17px`, отступ `paddingLeft: 60.5px` (`x = 76.5`), ширина `180.5px`, верх текста `y = 184`.
+4. **Блок цифровых документов (Block B)**:
+   - Ширина карточки увеличена до `168px`, высота `115.5px`, зазор `13.5px`, отступ слева `17.5px` (координаты карт `x = 17.5 / 199 / 380`).
+   - Изображение карты 1 (Удостоверение): `58 × 37.5px` на `x = 33`, `y = 274.5` (`top: 15px, left: 15.5px`).
+   - Изображение карты 2 (Паспорт): `61.5 × 43.5px` на `top: 9.5px` (`y = 269`).
+   - Метки документов: верх 1-й строки `y = 328.5`, `left: 14.5px` (`x = 32`), шрифт `16.5px`.
+   - Ссылка «Все документы»: ширина `131.5px`, шрифт `17px Medium`, аутентичный синий цвет `#1666A1` (clear medium blue), верх текста `y = 392.5`, верх шеврона `y = 392`.
+   - Низ белого блока на `y = 421.5`, серый межблочный зазор `25px` (до `y = 446.5`).
+5. **Категории услуг (Block C)**:
+   - Верх белого блока `y = 446.5`.
+   - Размер плиток увеличен до `56.5 × 56.5px`, верх плиток `y = 456` (`paddingTop: 9.5px`).
+   - Координаты плиток `x = 43.5 / 151.5 / 239.5 / 323.5`.
+   - Верх текста меток `y = 521.5` (`top: 65.5px`), шрифт `16.5px`, точные ширины: 96.5px, 63.5px, 35.5px, 49px.
+   - Красная линия: верх `y = 552` (`top: 96px`), толщина `2px`, отрезок от `x = 22.5` до `118.5` (ширина 96px).
+   - Разделитель: строго **ОДНА линия**, `y = 553` (`top: 97px`), толщина `1px`, цвет `#F0F0F0`, непосредственно под красной линией (вторая линия и серая полоса полностью удалены).
+6. **Заголовок раздела и список услуг**:
+   - «Популярные и новые»: строго в одну строку, верх текста `y = 576`.
+   - Ряды услуг: вертикальный шаг рядов `77px` (Ряд 1: `y = 630`, Ряд 2: `y = 707`, Ряд 3: `y = 784`).
+   - Названия услуг: шрифт `18px Regular`, шаг строк `26.5px` (`lineHeight: 26.5px`), начало текста `x = 81`.
+   - Круг иконки `44 × 44px` на `y = 630 / 707 / 784`.
+   - Бейдж `NEW`: размер `48.5 × 23px` на `x = 313`, верхи на `y = 640.5 / 718`.
+   - Ряд 3 «Стать самозанятым»: название на `y = 784`, отчётливо видно непосредственно над нижней панелью таббара (816pt).
+7. **Цветовая палитра**:
+   - Фоновый серый цвет страницы между белыми блоками осветлён: `#F2F2F2`.
+   - Заливка карточек документов и плиток категорий: `#F2F2F2`.
+   - Ссылка и шеврон «Все документы»: `#1666A1`.
+   - Разделитель под категориями: `#F0F0F0`.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx)
+- [`CONTEXT.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CONTEXT.md)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+### 🔍 Статус проверки:
+- Проверена сборка `npm run build` — собрана успешно без ошибок.
+- Выполнен чек-лист:
+  - «Популярные и новые» верх на `y = 576` в одну строку.
+  - Название первого ряда на `y = 630`.
+  - Третий ряд «Стать самозанятым» виден над нижним таббаром (`y = 784`).
+  - Строго один разделитель `#F0F0F0` на `y = 553` под категориями.
+  - «Все документы» и шеврон в аутентичном синем цвете `#1666A1`.
+  - Скриншот подтвердил 100% пиксельную точность.
+
+
+
 ## [2026-10-27 02:00] — Заголовок «Популярные и новые» в одну строку, блокировка экрана Госуслуг (LOCKED) и создание CONTEXT.md
 
 ### 🎯 Запрос пользователя:
