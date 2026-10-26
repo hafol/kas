@@ -14,7 +14,21 @@ import { SettingsScreen } from './components/SettingsScreen';
 import { KaspiQrScreen } from './components/KaspiQrScreen';
 
 export default function App() {
-  const [userData, setUserData] = useState(initialUserData);
+  const [userData, setUserData] = useState(() => {
+    try {
+      const savedProfile = localStorage.getItem('kaspi_user_profile');
+      if (savedProfile) {
+        return {
+          ...initialUserData,
+          profile: {
+            ...initialUserData.profile,
+            ...JSON.parse(savedProfile)
+          }
+        };
+      }
+    } catch (e) {}
+    return initialUserData;
+  });
   const [activeTab, setActiveTab] = useState('home'); // 'home' | 'qr' | 'messages' | 'services'
   
   // Smoothly dismiss the instant native Kaspi splash screen
@@ -114,13 +128,19 @@ export default function App() {
   };
 
   const handleUpdateProfile = (updatedFields) => {
-    setUserData(prev => ({
-      ...prev,
-      profile: {
+    setUserData(prev => {
+      const nextProfile = {
         ...prev.profile,
         ...updatedFields
-      }
-    }));
+      };
+      try {
+        localStorage.setItem('kaspi_user_profile', JSON.stringify(nextProfile));
+      } catch (err) {}
+      return {
+        ...prev,
+        profile: nextProfile
+      };
+    });
   };
 
   const handleCompleteTransfer = (newTx) => {
@@ -251,6 +271,7 @@ export default function App() {
       {currentScreen === 'passcode' && (
         <PasscodeScreen
           profile={userData.profile}
+          onUpdateProfile={handleUpdateProfile}
           onUnlock={handleUnlock}
           onBack={() => {
             setPendingSecureScreen(null);

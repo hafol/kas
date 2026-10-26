@@ -2,6 +2,25 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 01:09] — Уменьшение шрифта имени и заголовка на 1px, функция редактирования имени и загрузки фото аватара
+
+### 🎯 Запрос пользователя:
+> *«make the Парасат Ж and Код дсотупа smaller for 1 px and the feature just like as uploading picture i can change the name»*
+
+### 🛠️ Что сделано:
+1. **Шрифты экрана блокировки (PasscodeScreen)**:
+   - Имя пользователя: уменьшено на 1px — с 18px до **`17px`** (`lineHeight: 17px`, `height: 17px`).
+   - Заголовок «Код доступа»: уменьшен на 1px — с 17px до **`16px`** (`lineHeight: 16px`, `height: 16px`).
+2. **Интерактивное редактирование имени**:
+   - Имя на экране блокировки теперь является интерактивным полем ввода без системных рамок и фона, визуально неотличимым от нативного текста, с мгновенным сохранением в `localStorage` (`kaspi_user_shortname`, `kaspi_user_profile`) и обновлением `profile` в `userData`.
+3. **Загрузка фотографии аватара**:
+   - При нажатии на круг аватара открывается системный диалог выбора изображения (`<input type="file" accept="image/*">`). Загруженное фото оптимизируется, отображается в круглом аватаре с аутентичной рамкой и сохраняется в `localStorage`.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
 ## [2026-10-27 01:01] — Юстировка экрана блокировки: тонкие цифры (не жирные), увеличение иконки выхода на 20%, соосность верхних иконок, увеличение аватара на 5% и масштабирование текстов
 
 ### 🎯 Запрос пользователя:

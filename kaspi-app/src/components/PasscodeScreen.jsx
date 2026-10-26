@@ -55,12 +55,60 @@ const BackspaceIcon = () => (
   </svg>
 );
 
-export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
+export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdateProfile }) => {
   const [digits, setDigits] = useState('');
   const [activeDigit, setActiveDigit] = useState(null);
   const [isSlidingIn, setIsSlidingIn] = useState(true);
   const [isDismissing, setIsDismissing] = useState(false);
   const timeoutRef = useRef(null);
+
+  // Editable Name & Avatar upload feature
+  const [shortName, setShortName] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kaspi_user_shortname');
+      if (saved) return saved;
+    } catch (e) {}
+    return profile?.shortName || 'Парасат Ж.';
+  });
+  const [avatarUrl, setAvatarUrl] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kaspi_user_avatar');
+      if (saved) return saved;
+    } catch (e) {}
+    return profile?.avatar || null;
+  });
+  const avatarInputRef = useRef(null);
+
+  const handleNameChange = (e) => {
+    const val = e.target.value;
+    setShortName(val);
+    try {
+      localStorage.setItem('kaspi_user_shortname', val);
+    } catch (err) {}
+    if (onUpdateProfile) {
+      onUpdateProfile({ shortName: val });
+    }
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        const dataUrl = uploadEvent.target?.result;
+        if (dataUrl) {
+          setAvatarUrl(dataUrl);
+          try {
+            localStorage.setItem('kaspi_user_avatar', dataUrl);
+          } catch (err) {}
+          if (onUpdateProfile) {
+            onUpdateProfile({ avatar: dataUrl });
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   // Trigger smooth slide-up animation on mount
   useEffect(() => {
@@ -254,8 +302,19 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <CloseIcon />
         </button>
 
-        {/* 3. AVATAR: Diameter 93px (5% bigger), centre x 207, top N = 49 */}
+        {/* Hidden file input for uploading avatar photo */}
+        <input
+          type="file"
+          ref={avatarInputRef}
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={handleAvatarChange}
+        />
+
+        {/* 3. AVATAR: Diameter 93px (5% bigger), centre x 207, top N = 49 (tap to upload picture) */}
         <div
+          onClick={() => avatarInputRef.current?.click()}
+          title="Нажмите, чтобы загрузить фото"
           style={{
             position: 'absolute',
             left: 'calc(50% - 46.5px)',
@@ -266,33 +325,72 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#FFFFFF'
+            backgroundColor: '#FFFFFF',
+            cursor: 'pointer',
+            overflow: 'hidden'
           }}
         >
-          <UserAvatarIcon />
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt="Аватар"
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '2.5px solid #CCCCCC',
+                boxSizing: 'border-box'
+              }}
+            />
+          ) : (
+            <UserAvatarIcon />
+          )}
         </div>
 
-        {/* 4. NAME "Парасат Ж.": 18 px Regular (+3px bigger), #212121, text top N = 158.5 */}
+        {/* 4. NAME: 17 px Regular (1px smaller), #212121, editable just like uploading picture, text top N = 158.5 */}
         <div
           style={{
             position: 'absolute',
             top: 'calc(env(safe-area-inset-top, 0px) + 155px)',
             left: 0,
             right: 0,
-            textAlign: 'center',
-            fontSize: '18px',
-            fontWeight: 400,
-            lineHeight: '18px',
-            height: '18px',
-            color: '#212121',
-            letterSpacing: '0px',
-            fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '17px'
           }}
         >
-          {profile?.shortName || 'Парасат Ж.'}
+          <input
+            type="text"
+            value={shortName}
+            onChange={handleNameChange}
+            aria-label="Имя пользователя"
+            autoComplete="off"
+            spellCheck={false}
+            style={{
+              width: '100%',
+              maxWidth: '340px',
+              textAlign: 'center',
+              fontSize: '17px',
+              fontWeight: 400,
+              lineHeight: '17px',
+              height: '17px',
+              color: '#212121',
+              letterSpacing: '0px',
+              fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
+              border: 'none',
+              outline: 'none',
+              background: 'transparent',
+              padding: 0,
+              margin: 0,
+              cursor: 'text',
+              WebkitAppearance: 'none'
+            }}
+          />
         </div>
 
-        {/* 5. TITLE "Код доступа": 17 px Regular (+2px bigger), #212121, text top N = 257 */}
+        {/* 5. TITLE "Код доступа": 16 px Regular (1px smaller), #212121, text top N = 257 */}
         <div
           style={{
             position: 'absolute',
@@ -300,10 +398,10 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '17px',
+            fontSize: '16px',
             fontWeight: 400,
-            lineHeight: '17px',
-            height: '17px',
+            lineHeight: '16px',
+            height: '16px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
