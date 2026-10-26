@@ -2,6 +2,25 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 14:42] — Удаление временного жёлтого блока отладки
+
+### 🎯 Запрос пользователя:
+> *«remove the yellow debug box but keep the Display Zoom script in index.html»*
+
+### 🛠️ Что сделано:
+1. **`HomeScreen.jsx`**:
+   - Полностью удален вызов и компонент `<DebugBox />`.
+   - Вёрстка и размеры компонентов в `HomeScreen.jsx` остались в чистом нативном виде без вспомогательных элементов.
+2. **`index.html`**:
+   - Синхронный скрипт компенсации iOS Display Zoom сохранен и активен.
+3. Собрано и развернуто на проде Vercel (`kas-two-rho.vercel.app`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-26 14:33] — Компенсация iOS Display Zoom (Larger Text) без изменения размеров компонентов
 
 ### 🎯 Запрос пользователя:
