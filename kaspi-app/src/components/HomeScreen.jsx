@@ -339,20 +339,21 @@ export const HomeScreen = ({
           Cart icon box 30 x 25.5, x 364.5, centre exactly on field's vertical centre.
       {/* =====================================================================
           1. HEADER (search + cart) — STICKY WITH SCROLL
-          Search field top: 51.5 (item 1). Height: 42.5 (item 2).
-          Search field right edge: x 350, left edge: 17.5, width: 332.5 on 414 (item 3).
-          Magnifier: 19 x 19 at x 30.5 (left edge 13 inside field) (item 4).
-          Placeholder "Поиск по Kaspi.kz": 17 Regular, starts x 60.5 (item 5).
-          Camera icon: 24 x 20, right edge 13 inside field (item 6).
-          Cart icon: 29.5 x 25, centred vertically on search field (item 7).
-          Cart badge: 15 x 15 circle, 11 Semibold (item 8).
+          Search field top: 7.5 below safe-area (y = 51.5 on iPhone with 44px status bar; 7.5 in browser).
+          Search field height: 42.5.
+          Search field right edge: x 350, left edge: 17.5, width: 332.5 on 414.
+          Magnifier: 19 x 19 at x 30.5 (left edge 13 inside field).
+          Placeholder "Поиск по Kaspi.kz": 17 Regular, starts x 60.5.
+          Camera icon: 24 x 20, right edge 13 inside field.
+          Cart icon: 29.5 x 25, centred vertically on search field.
+          Cart badge: 15 x 15 circle, 11 Semibold.
       ===================================================================== */}
       <div style={{
         position: 'sticky',
         top: 0,
         zIndex: 45,
         backgroundColor: '#FFFFFF',
-        paddingTop: '51.5px',
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 7.5px)',
         paddingBottom: '0px',
         paddingLeft: '17.5px',
         paddingRight: '20px',
