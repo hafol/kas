@@ -88,19 +88,19 @@ export const IconTransfers = ({ size = 30.5, color = "#DF4E3E" }) => (
   </svg>
 );
 
-// 5. Magnum (Official squircle + APK vector "m" with authentic #EF1063 raspberry-pink color)
-export const IconMagnum = ({ size = 36 }) => (
+// 5. Magnum (Official squircle + APK vector "m" with authentic #EF1063 raspberry-pink color: 34.5 x 35, radius 8)
+export const IconMagnum = ({ width = 34.5, height = 35 }) => (
   <div style={{
-    width: `${size}px`,
-    height: `${size}px`,
-    borderRadius: `${size * 0.25}px`,
+    width: `${width}px`,
+    height: `${height}px`,
+    borderRadius: '8px',
     backgroundColor: '#EF1063',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0
   }}>
-    <svg width={size * 0.70} height={size * 0.40} viewBox="0 2.8 14.22 8.2" fill="none">
+    <svg width={width * 0.70} height={height * 0.40} viewBox="0 2.8 14.22 8.2" fill="none">
       <path
         d="M5.098 2.97L5.183 4.147H5.217C5.712 3.227 6.411 2.8 7.298 2.8C8.423 2.8 9.023 3.26 9.412 4.147H9.446C10.145 3.073 10.963 2.8 11.68 2.8C13.806 2.8 14.22 4.267 14.22 5.783V10.983H11.492V6.414C11.492 5.681 11.526 4.965 10.742 4.965C9.923 4.965 9.787 5.612 9.787 6.362V10.983H7.058V6.414C7.058 5.681 7.093 4.965 6.308 4.965C5.49 4.965 5.353 5.612 5.353 6.362V10.983H2.66V6.175C1.978 6.192 1.245 5.8 1.279 4.777C0.512 4.727 0 4.198 0 3.21V2.97H5.098Z"
         fill="#FFFFFF"
