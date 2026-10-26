@@ -1387,14 +1387,21 @@ export const HomeScreen = ({
 function DebugBox() {
   const [info, setInfo] = useState({
     innerWidth: typeof window !== 'undefined' ? window.innerWidth : 0,
+    innerHeight: typeof window !== 'undefined' ? window.innerHeight : 0,
+    outerWidth: typeof window !== 'undefined' ? window.outerWidth : 0,
     clientWidth: typeof document !== 'undefined' && document.documentElement ? document.documentElement.clientWidth : 0,
+    docRectWidth: typeof document !== 'undefined' && document.documentElement ? document.documentElement.getBoundingClientRect().width.toFixed(1) : 'n/a',
+    screenSize: typeof screen !== 'undefined' ? `${screen.width}x${screen.height}` : 'n/a',
     dpr: typeof window !== 'undefined' ? window.devicePixelRatio : 1,
-    vvScale: typeof window !== 'undefined' && window.visualViewport ? window.visualViewport.scale : 1,
+    vvScale: typeof window !== 'undefined' && window.visualViewport ? window.visualViewport.scale : 'n/a',
     metaContent: '',
     htmlZoom: '',
     bodyZoom: '',
     searchWidth: '',
-    transforms: ''
+    transforms: '',
+    standaloneNav: typeof navigator !== 'undefined' ? String(navigator.standalone) : 'n/a',
+    standaloneMedia: typeof window !== 'undefined' && window.matchMedia ? String(window.matchMedia('(display-mode: standalone)').matches) : 'n/a',
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'n/a'
   });
 
   useEffect(() => {
@@ -1419,14 +1426,21 @@ function DebugBox() {
 
       setInfo({
         innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight,
+        outerWidth: window.outerWidth,
         clientWidth: document.documentElement ? document.documentElement.clientWidth : 'n/a',
+        docRectWidth: document.documentElement ? document.documentElement.getBoundingClientRect().width.toFixed(1) : 'n/a',
+        screenSize: typeof screen !== 'undefined' ? `${screen.width}x${screen.height}` : 'n/a',
         dpr: window.devicePixelRatio,
         vvScale: window.visualViewport ? window.visualViewport.scale : 'n/a',
         metaContent: meta ? meta.content : 'none',
         htmlZoom: document.documentElement ? (window.getComputedStyle(document.documentElement).zoom || 'normal') : 'n/a',
         bodyZoom: document.body ? (window.getComputedStyle(document.body).zoom || 'normal') : 'n/a',
         searchWidth: sWidth,
-        transforms: transformsList.length > 0 ? transformsList.join('; ') : 'none'
+        transforms: transformsList.length > 0 ? transformsList.join('; ') : 'none',
+        standaloneNav: typeof navigator !== 'undefined' ? String(navigator.standalone) : 'n/a',
+        standaloneMedia: typeof window !== 'undefined' && window.matchMedia ? String(window.matchMedia('(display-mode: standalone)').matches) : 'n/a',
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'n/a'
       });
     };
 
@@ -1444,28 +1458,34 @@ function DebugBox() {
       style={{
         position: 'fixed',
         left: '8px',
-        bottom: 'calc(65px + env(safe-area-inset-bottom, 0px))',
+        bottom: 'calc(62px + env(safe-area-inset-bottom, 0px))',
         backgroundColor: '#FFE600',
         color: '#000000',
-        fontSize: '12px',
+        fontSize: '11px',
         fontFamily: 'monospace',
-        lineHeight: '1.4',
+        lineHeight: '1.35',
         padding: '6px 8px',
         borderRadius: '6px',
         border: '1px solid #000000',
         zIndex: 99999,
         maxWidth: 'calc(100% - 16px)',
+        maxHeight: '45vh',
+        overflowY: 'auto',
         wordBreak: 'break-word',
         boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
         pointerEvents: 'none'
       }}
     >
-      <div><strong>innerWidth:</strong> {info.innerWidth} | <strong>clientWidth:</strong> {info.clientWidth}</div>
+      <div><strong>screen:</strong> {info.screenSize} | <strong>outerWidth:</strong> {info.outerWidth}</div>
+      <div><strong>innerWidth:</strong> {info.innerWidth} | <strong>innerHeight:</strong> {info.innerHeight}</div>
+      <div><strong>clientWidth:</strong> {info.clientWidth} | <strong>docRectWidth:</strong> {info.docRectWidth}</div>
       <div><strong>dpr:</strong> {info.dpr} | <strong>vv.scale:</strong> {info.vvScale}</div>
+      <div><strong>nav.standalone:</strong> {info.standaloneNav} | <strong>media.standalone:</strong> {info.standaloneMedia}</div>
       <div><strong>viewport:</strong> {info.metaContent}</div>
       <div><strong>zoom:</strong> html: {info.htmlZoom}, body: {info.bodyZoom}</div>
       <div><strong>search width:</strong> {info.searchWidth}</div>
       <div><strong>transforms:</strong> {info.transforms}</div>
+      <div><strong>userAgent:</strong> {info.userAgent}</div>
     </div>
   );
 }
