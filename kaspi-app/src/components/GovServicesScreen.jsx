@@ -35,8 +35,8 @@ const BackChevronIcon = ({ width = 11.5, height = 21 }) => (
   </svg>
 );
 
-// 2. Search Magnifier SVG: 21 x 20.5 at x 37.5, top y 180
-const SearchMagnifierIcon = ({ width = 21, height = 20.5 }) => (
+// 2. Search Magnifier SVG: 22 x 21.5 at x 37.5 (+5% size)
+const SearchMagnifierIcon = ({ width = 22, height = 21.5 }) => (
   <svg width={width} height={height} viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <path
       d="M4,10C4,6.686 6.686,4 10,4C13.314,4 16,6.686 16,10C16,13.314 13.314,16 10,16C6.686,16 4,13.314 4,10ZM10,2C5.582,2 2,5.582 2,10C2,14.418 5.582,18 10,18C11.849,18 13.552,17.372 14.907,16.319C14.919,16.332 14.931,16.344 14.943,16.357L19.293,20.707C19.684,21.097 20.317,21.097 20.708,20.707C21.098,20.316 21.098,19.683 20.708,19.293L16.358,14.943C16.345,14.93 16.332,14.918 16.319,14.906C17.373,13.552 18,11.849 18,10C18,5.582 14.418,2 10,2Z"
@@ -438,7 +438,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             <BackChevronIcon />
           </button>
 
-          {/* Title "Госуслуги": text top y 65.5 (48 + 17.5 = 65.5), width 86, centered */}
+          {/* Title "Госуслуги": text top y 65.5 (48 + 17.5 = 65.5), width 86, centered, slightly bolder (fontWeight 700) */}
           <h1 style={{
             position: 'absolute',
             left: 0,
@@ -446,7 +446,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             top: '17.5px',
             margin: 0,
             fontSize: '18px',
-            fontWeight: '600',
+            fontWeight: '700',
             color: textPrimary,
             letterSpacing: 0,
             lineHeight: '18px',
@@ -485,7 +485,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             pointerEvents: 'none'
           }} />
 
-          {/* Tab 1: "Все услуги" (width 80.5, 16px Regular, NOT bolder than "Мои заявки") */}
+          {/* Tab 1: "Все услуги" (16.5px Regular, +0.5px bigger) */}
           <button
             type="button"
             onClick={() => setActiveTab('all')}
@@ -498,7 +498,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'center',
-              paddingTop: '12.5px', // 106 + 2 + 12.5 = 120.5
+              paddingTop: '12px', // perfectly anchors text top
               zIndex: 1,
               paddingLeft: 0,
               paddingRight: 0,
@@ -507,18 +507,18 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             }}
           >
             <span style={{
-              fontSize: '16px',
+              fontSize: '16.5px',
               fontWeight: '400',
               color: textPrimary,
               letterSpacing: 0,
-              lineHeight: '16px',
+              lineHeight: '16.5px',
               whiteSpace: 'nowrap'
             }}>
               Все услуги
             </span>
           </button>
 
-          {/* Tab 2: "Мои заявки" (width 90, 16px Regular) */}
+          {/* Tab 2: "Мои заявки" (16.5px Regular, +0.5px bigger) */}
           <button
             type="button"
             onClick={() => setActiveTab('requests')}
@@ -531,7 +531,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'center',
-              paddingTop: '12.5px',
+              paddingTop: '12px',
               zIndex: 1,
               paddingLeft: 0,
               paddingRight: 0,
@@ -540,11 +540,11 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             }}
           >
             <span style={{
-              fontSize: '16px',
+              fontSize: '16.5px',
               fontWeight: '400',
               color: textPrimary,
               letterSpacing: 0,
-              lineHeight: '16px',
+              lineHeight: '16.5px',
               whiteSpace: 'nowrap'
             }}>
               Мои заявки
@@ -552,7 +552,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           </button>
         </div>
 
-        {/* 2. SEARCH FIELD: field top ≈ y 164 (106 + 43 + 15 = 164, height 48) */}
+        {/* 2. SEARCH FIELD: field top ≈ y 164 (height 48) */}
         <div style={{
           marginTop: '15px',
           marginLeft: '16px',
@@ -565,13 +565,13 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           alignItems: 'center',
           boxSizing: 'border-box'
         }}>
-          {/* Magnifier icon: 21 x 20.5 at x 37.5 (16 + 21.5 = 37.5), top y 180 (164 + 16 = 180) */}
+          {/* Magnifier icon: 22 x 21.5 at x 37.5 (+5% size), vertically centered */}
           <div style={{
             position: 'absolute',
             left: '21.5px',
-            top: '16px',
-            width: '21px',
-            height: '20.5px',
+            top: '13.25px',
+            width: '22px',
+            height: '21.5px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -580,9 +580,16 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             <SearchMagnifierIcon />
           </div>
 
-          {/* Placeholder: start x 76.5 (16 + 60.5 = 76.5), width 180.5, font 17px, text top y 184 (164 + 20) */}
+          <style>{`
+            .gov-search-input::placeholder {
+              color: #9E9E9E;
+              opacity: 0.72;
+            }
+          `}</style>
+          {/* Placeholder "Поиск по Госуслугам": 2px bigger (19px), vertically centered inside the 48px box */}
           <input
             type="text"
+            className="gov-search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Поиск по Госуслугам"
@@ -597,13 +604,13 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
               outline: 'none',
               paddingLeft: '60.5px',
               paddingRight: '16px',
-              paddingTop: '20px',
-              paddingBottom: '11px',
-              fontSize: '17px',
+              paddingTop: 0,
+              paddingBottom: 0,
+              fontSize: '19px',
               fontWeight: '400',
               color: textPrimary,
               letterSpacing: 0,
-              lineHeight: '17px',
+              lineHeight: '48px',
               boxSizing: 'border-box',
               fontFamily: 'inherit'
             }}
@@ -729,14 +736,14 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             boxSizing: 'border-box'
           }}
         >
-          {/* "Все документы": width 131.5, 17px Medium, color #1666A1 */}
+          {/* "Все документы": font 18px (+1px), Medium, color #1666A1 */}
           <span style={{
-            fontSize: '17px',
+            fontSize: '18px',
             fontWeight: '500', // Medium
             color: linkBlue, // #1666A1
             letterSpacing: 0,
             lineHeight: '38px',
-            width: '131.5px'
+            width: '142px'
           }}>
             Все документы
           </span>
@@ -969,12 +976,12 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     display: 'flex',
                     flexDirection: 'column'
                   }}>
-                    {/* Title: 18px Regular, line pitch 26.5px, short words glued */}
+                    {/* Title: 18px Regular, tighter line pitch (23.5px instead of 26.5px) */}
                     <div style={{
                       fontSize: '18px',
                       fontWeight: '400',
                       color: textPrimary,
-                      lineHeight: '26.5px',
+                      lineHeight: '23.5px',
                       letterSpacing: 0,
                       whiteSpace: 'pre-line'
                     }}>
@@ -999,12 +1006,12 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
                     )}
                   </div>
 
-                  {/* NEW Badge: 48.5 x 23 at x 313, top y 640.5 / 718 -> top 10.5 inside row */}
+                  {/* NEW Badge: 48.5 x 23 at x 313, vertically aligned with tighter 2-line title (top 9px) */}
                   {service.hasBadge && (
                     <div style={{
                       position: 'absolute',
                       left: '313px',
-                      top: '10.5px',
+                      top: '9px',
                       width: '48.5px',
                       height: '23px',
                       borderRadius: '11.5px',

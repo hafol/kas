@@ -2,6 +2,39 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 03:15] — Тонкая юстировка типографики и интервалов экрана Госуслуг
+
+### 🎯 Запрос пользователя:
+> *«alright as i can see the word госуслуги gotta be a liitle bit bolder not much and text поиск по госуслгам gotta be 2px bigger a little bit more transparent and inerval between the up and down have to much its too low rn. the search icon next to it make it bigger 5%, text Все докуметы bigger 1px and in the block популярные и новые interval of прикрпеление в медорагниазции and the other ones interval of two lines gotta be smaller l=not much as well and one more texts все услги and мои заявки make them bigger 0,5px»*
+
+### 🛠️ Что сделано:
+1. **Заголовок «Госуслуги»**:
+   - Вес шрифта сделан чуть более жирным: с `600` до **`700`** (Bold в Roboto Flex Kaspi).
+2. **Поле поиска («Поиск по Госуслугам»)**:
+   - Шрифт плейсхолдера увеличен на +2px: с 17px до **`19px`**.
+   - Добавлена прозрачность плейсхолдера: `opacity: 0.72`, цвет `#9E9E9E`.
+   - Исправлена вертикальная посадка текста: убран дисбаланс отступов (ранее `paddingTop: 20px`, из-за чего текст сидел слишком низко), установлен центрированный `lineHeight: 48px` при `paddingTop: 0, paddingBottom: 0`. Текст теперь идеально сбалансирован по вертикали внутри 48px поля.
+3. **Иконка лупы**:
+   - Размер увеличен на 5%: с `21 × 20.5px` до **`22 × 21.5px`**, выровнена по вертикали (`top: 13.25px`).
+4. **Ссылка «Все документы»**:
+   - Шрифт увеличен на +1px: с 17px до **`18px`** (`fontWeight: 500`).
+5. **Интервал между двумя строками названий услуг («Популярные и новые»)**:
+   - Межстрочный интервал уменьшен с 26.5px до **`23.5px`** (`lineHeight: 23.5px`). Две строки «Прикрепление к медорганизации» и других услуг стали более компактными, аккуратными и органичными.
+   - Бейдж `NEW` соосно выровнен по центру двух строк (`top: 9px`).
+6. **Метки переключателя «Все услуги» и «Мои заявки»**:
+   - Шрифт увеличен на +0.5px: с 16px до **`16.5px`** (`lineHeight: 16.5px`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx)
+- [`CONTEXT.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CONTEXT.md)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+### 🔍 Статус проверки:
+- Сборка `npm run build` прошла успешно.
+- В браузере проверены: жирность «Госуслуги» (700), размер и вертикальное центрирование плейсхолдера поиска (19px, opacity 0.72), увеличенная лупа (+5%), «Все документы» (18px), уменьшенный интервал строк (23.5px) и размер вкладок (16.5px).
+
+
+
 ## [2026-10-27 02:40] — Юстировка экрана Госуслуг по Fix List v4 (детальные размеры и координаты iPhone 11)
 
 ### 🎯 Запрос пользователя:
