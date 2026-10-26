@@ -1,48 +1,61 @@
 import React, { useState } from 'react';
+import { ChevronRight, User } from 'lucide-react';
 import {
-  ChevronRight, User, ShoppingBag, Landmark, Wallet, ArrowRightLeft,
-  Percent, Luggage, Building2, Megaphone, HelpCircle, MapPin, Award, Briefcase
-} from 'lucide-react';
+  ServiceShopIcon,
+  ServiceMyBankIcon,
+  ServicePaymentsIcon,
+  ServiceTransfersIcon,
+  ServicePromosIcon,
+  ServiceTravelIcon,
+  ServiceGovIcon,
+  ServiceAdsIcon,
+  ServiceMapsIcon,
+  ServiceGuideIcon,
+  ServiceCertsIcon,
+  ServiceJobsIcon,
+  ServiceMagnumIcon,
+  ServiceGlovoIcon,
+  ServiceAlipayIcon
+} from './ServiceIcons';
 
 export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => {
   const [lang, setLang] = useState('ru'); // 'kz' | 'ru'
 
+  // The authentic 12 core Kaspi services in exact order
   const allServices = [
-    { id: 'shop', title: 'Магазин', icon: ShoppingBag },
-    { id: 'bank', title: 'Мой Банк', icon: Landmark },
-    { id: 'payments', title: 'Платежи', icon: Wallet },
-    { id: 'transfers', title: 'Переводы', icon: ArrowRightLeft },
-    { id: 'promos', title: 'Акции', icon: Percent },
-    { id: 'travel', title: 'Travel', icon: Luggage },
-    { id: 'gov', title: 'Госуслуги', icon: Building2 },
-    { id: 'ads', title: 'Объявления', icon: Megaphone },
-    { id: 'guide', title: 'Гид', icon: HelpCircle },
-    { id: 'maps', title: 'Kaspi Maps', icon: MapPin },
-    { id: 'certificates', title: 'Сертификаты', icon: Award },
-    { id: 'jobs', title: 'Работа', icon: Briefcase }
+    { id: 'shop', title: 'Магазин', icon: ServiceShopIcon },
+    { id: 'bank', title: 'Мой Банк', icon: ServiceMyBankIcon },
+    { id: 'payments', title: 'Платежи', icon: ServicePaymentsIcon },
+    { id: 'transfers', title: 'Переводы', icon: ServiceTransfersIcon },
+    { id: 'promos', title: 'Акции', icon: ServicePromosIcon },
+    { id: 'travel', title: 'Travel', icon: ServiceTravelIcon },
+    { id: 'gov', title: 'Госуслуги', icon: ServiceGovIcon },
+    { id: 'ads', title: 'Объявления', icon: ServiceAdsIcon },
+    { id: 'maps', title: 'Kaspi Maps', icon: ServiceMapsIcon },
+    { id: 'guide', title: 'Гид', icon: ServiceGuideIcon },
+    { id: 'certificates', title: 'Сертификаты', icon: ServiceCertsIcon },
+    { id: 'jobs', title: 'Работа', icon: ServiceJobsIcon }
   ];
 
+  // Authentic Partner Services
   const partnerServices = [
     {
       id: 'magnum',
       title: 'Magnum',
       subtitle: 'Продукты с бесплатной доставкой',
-      color: '#F50F64',
-      badge: 'M'
+      icon: ServiceMagnumIcon
     },
     {
       id: 'glovo',
       title: 'Glovo',
       subtitle: 'Сервис доставки еды',
-      color: '#FEC436',
-      badge: 'G'
+      icon: ServiceGlovoIcon
     },
     {
       id: 'alipay',
       title: 'Alipay+',
       subtitle: 'Оплата за границей через QR',
-      color: '#1677FF',
-      badge: 'A'
+      icon: ServiceAlipayIcon
     }
   ];
 
@@ -52,9 +65,10 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
       backgroundColor: '#F2F2F2',
       display: 'flex',
       flexDirection: 'column',
-      paddingBottom: '40px'
+      paddingBottom: '80px',
+      WebkitFontSmoothing: 'antialiased'
     }}>
-      {/* Top Profile & Language Header */}
+      {/* Top Profile & Language Header (Kaspi Ds.Back.Layer1) */}
       <div style={{
         backgroundColor: '#FFFFFF',
         padding: 'calc(12px + env(safe-area-inset-top, 0px)) 16px 12px 16px',
@@ -67,28 +81,41 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
         <div
           onClick={onOpenSettings}
           className="touchable"
-          style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
         >
           <div style={{
-            width: '36px',
-            height: '36px',
+            width: '38px',
+            height: '38px',
             borderRadius: '50%',
-            backgroundColor: '#EAEAEA',
+            backgroundColor: '#F2F2F2',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#757575'
+            color: '#8A8A8E'
           }}>
-            <User size={20} />
+            <User size={22} />
           </div>
 
           <div>
-            <div style={{ fontSize: '15px', fontWeight: '700', color: '#1F1F1F' }}>
-              {profile.shortName}
+            <div style={{
+              fontSize: '16px',
+              fontWeight: '700',
+              color: '#1F1F1F',
+              fontFamily: 'Roboto Flex Kaspi, Roboto, sans-serif',
+              letterSpacing: '-0.2px'
+            }}>
+              {profile?.shortName || 'Пользователь'}
             </div>
-            <div style={{ fontSize: '12px', color: '#757575', display: 'flex', alignItems: 'center' }}>
+            <div style={{
+              fontSize: '12px',
+              color: '#8A8A8E',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2px',
+              marginTop: '1px'
+            }}>
               <span>Настройки</span>
-              <ChevronRight size={14} />
+              <ChevronRight size={13} strokeWidth={2.2} />
             </div>
           </div>
         </div>
@@ -105,12 +132,13 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
             onClick={() => setLang('kz')}
             className="touchable"
             style={{
-              padding: '4px 8px',
+              padding: '4px 10px',
               borderRadius: '14px',
               backgroundColor: lang === 'kz' ? '#F14635' : 'transparent',
               color: lang === 'kz' ? '#FFFFFF' : '#757575',
               fontSize: '12px',
-              fontWeight: '600'
+              fontWeight: '600',
+              transition: 'all 0.15s ease'
             }}
           >
             Қаз
@@ -119,12 +147,13 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
             onClick={() => setLang('ru')}
             className="touchable"
             style={{
-              padding: '4px 8px',
+              padding: '4px 10px',
               borderRadius: '14px',
               backgroundColor: lang === 'ru' ? '#F14635' : 'transparent',
               color: lang === 'ru' ? '#FFFFFF' : '#757575',
               fontSize: '12px',
-              fontWeight: '600'
+              fontWeight: '600',
+              transition: 'all 0.15s ease'
             }}
           >
             Рус
@@ -132,41 +161,41 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
         </div>
       </div>
 
-      {/* Grid of 12 Services (Red outline icons on white background) */}
+      {/* Grid of 12 Services (Authentic Red Outline Vector Icons on White Background) */}
       <div style={{
         backgroundColor: '#FFFFFF',
-        padding: '16px 8px',
+        padding: '16px 8px 18px 8px',
         borderBottom: '1px solid #EBEBEB'
       }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          rowGap: '18px',
+          rowGap: '20px',
           columnGap: '4px'
         }}>
           {allServices.map((s) => {
-            const Icon = s.icon;
+            const IconComponent = s.icon;
             return (
               <div
                 key={s.id}
-                onClick={() => onSelectService(s.id)}
+                onClick={() => onSelectService && onSelectService(s.id)}
                 className="touchable"
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  cursor: 'pointer'
                 }}
               >
                 <div style={{
-                  width: '42px',
-                  height: '42px',
+                  width: '44px',
+                  height: '44px',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#F14635'
+                  justifyContent: 'center'
                 }}>
-                  <Icon size={30} strokeWidth={1.75} />
+                  <IconComponent size={38} color="#F14635" />
                 </div>
                 <span style={{
                   fontSize: '12px',
@@ -174,7 +203,8 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
                   color: '#1F1F1F',
                   marginTop: '4px',
                   maxWidth: '75px',
-                  lineHeight: '14px'
+                  lineHeight: '14px',
+                  fontFamily: 'Roboto Flex Kaspi, Roboto, sans-serif'
                 }}>
                   {s.title}
                 </span>
@@ -184,13 +214,15 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
         </div>
       </div>
 
-      {/* Partner Services Section */}
+      {/* Partner Services Section (service_page_list_item2_redesign) */}
       <div style={{ marginTop: '16px' }}>
         <div style={{
           padding: '0 16px 8px 16px',
           fontSize: '14px',
           fontWeight: '700',
-          color: '#1F1F1F'
+          color: '#1F1F1F',
+          fontFamily: 'Roboto Flex Kaspi, Roboto, sans-serif',
+          letterSpacing: '-0.2px'
         }}>
           Партнерские сервисы
         </div>
@@ -200,47 +232,49 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
           borderTop: '1px solid #EBEBEB',
           borderBottom: '1px solid #EBEBEB'
         }}>
-          {partnerServices.map((p, idx) => (
-            <div
-              key={p.id}
-              className="touchable"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '14px 16px',
-                borderTop: idx > 0 ? '1px solid #F4F4F4' : 'none'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '8px',
-                  backgroundColor: p.color,
+          {partnerServices.map((p, idx) => {
+            const PartnerIcon = p.icon;
+            return (
+              <div
+                key={p.id}
+                onClick={() => onSelectService && onSelectService(p.id)}
+                className="touchable"
+                style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#FFFFFF',
-                  fontWeight: '900',
-                  fontSize: '16px'
-                }}>
-                  {p.badge}
+                  justifyContent: 'space-between',
+                  padding: '12px 16px',
+                  borderTop: idx > 0 ? '1px solid #F4F4F4' : 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <PartnerIcon size={38} />
+
+                  <div>
+                    <div style={{
+                      fontSize: '15px',
+                      fontWeight: '600',
+                      color: '#1F1F1F',
+                      fontFamily: 'Roboto Flex Kaspi, Roboto, sans-serif'
+                    }}>
+                      {p.title}
+                    </div>
+                    <div style={{
+                      fontSize: '12px',
+                      color: '#757575',
+                      marginTop: '2px',
+                      fontFamily: 'Roboto Flex Kaspi, Roboto, sans-serif'
+                    }}>
+                      {p.subtitle}
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#1F1F1F' }}>
-                    {p.title}
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#757575', marginTop: '2px' }}>
-                    {p.subtitle}
-                  </div>
-                </div>
+                <ChevronRight size={18} color="#C2C2C2" strokeWidth={2} />
               </div>
-
-              <ChevronRight size={18} color="#C2C2C2" />
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

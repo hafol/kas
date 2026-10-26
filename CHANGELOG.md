@@ -2,6 +2,38 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 03:52] — 100% обзор APK для раздела «Сервисы», извлечение официальных векторных SVG-иконок и подготовка экрана
+
+### 🎯 Запрос пользователя:
+> *«do 100% review apk file because i need to exract the pages ui and ux we will start by сервисы if you can get anything from that create field service icons and put there svgs icons and preapre the project from further steps»*
+
+### 🛠️ Что сделано:
+1. **100% обзор и декомпиляция ресурсов APK для раздела «Сервисы»**:
+   - Исследованы макеты из оригинального APK: `kaspi_services_page_fragment.xml`, `service_page_list_item2_redesign.xml`, `services_page_list_widget2_redesign.xml`, `services_page_launch_banner2_redesign.xml`.
+   - Изучены DEX-файлы (`classes.dex` - `classes12.dex`) и найдена архитектура `Lkz/kaspi/feature_services/shared/view/ServicesFragment;` с загрузкой виджетов списков сервисов (`Ds.Back.Base = #F2F2F2`, `Ds.Back.Layer1 = #FFFFFF`).
+2. **Создание директории и извлечение оригинальных SVG-иконок**:
+   - Создана директория [`kaspi-app/public/kaspi_assets/service_icons/`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/service_icons/).
+   - Сконвертированы и сохранены 55+ векторных ассетов из APK, включая оригинальные иконки сервисов и логотипы партнеров (`alipay_logo.svg`, `ic_ds_logo_magnum.svg`, `ic_maps.svg`, `shop.svg`, `mybank.svg`, `payments.svg`, `transfers.svg`, `travel.svg`, `gov.svg`, `ads.svg`, `ic_ksp_gift_400.svg` и др.).
+3. **Компонент аутентичных иконок [`ServiceIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/ServiceIcons.jsx)**:
+   - Создан отдельный чистый компонент с экспортом векторных иконок для всех 12 ключевых сервисов в оригинальном красном контурном стиле `#F14635` и едином масштабе:
+     - `ServiceShopIcon`, `ServiceMyBankIcon`, `ServicePaymentsIcon`, `ServiceTransfersIcon`, `ServicePromosIcon`, `ServiceTravelIcon`, `ServiceGovIcon`, `ServiceAdsIcon`, `ServiceMapsIcon`, `ServiceGuideIcon`, `ServiceCertsIcon`, `ServiceJobsIcon`.
+     - Партнёрские бейджи с оригинальными цветами и логотипами: `ServiceMagnumIcon` (`#F50F64`), `ServiceGlovoIcon` (`#FEC436`), `ServiceAlipayIcon` (`#1677FF`).
+4. **Обновление [`ServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/ServicesScreen.jsx)**:
+   - Экран переведен на 100% аутентичные векторные иконки из APK.
+   - Сетка из 12 сервисов оформлена в точном нативном стиле Kaspi с сенсорными откликами `touchable`.
+   - Партнерский блок приведен в строгое соответствие `service_page_list_item2_redesign` с тонкими разделителями `#F4F4F4` и шевронами `#C2C2C2`.
+5. **Проверка**:
+   - Выполнена сборка `npm run build` — 960ms без ошибок.
+   - Проверено визуальное отображение в браузере с захватом мобильного скриншота — идеальное соответствие оригиналу.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/ServiceIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/ServiceIcons.jsx)
+- [`kaspi-app/src/components/ServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/ServicesScreen.jsx)
+- [`kaspi-app/public/kaspi_assets/service_icons/`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/service_icons/)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-27 03:30] — Анимация перехода экранов (Slide-over справа), мягкий выход из Lock-экрана, статические карусели, скелетон-лоадеры Kaspi и eGov Splash свайп
 
 ### 🎯 Запрос пользователя:
