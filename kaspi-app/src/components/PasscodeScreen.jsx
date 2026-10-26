@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// 1. Kaspi Logout Icon: 23.5 x 22.5, stroke ~2, #212121
+// 1. Kaspi Logout Icon: 20% bigger (28.2 x 27, viewBox 24x24)
 const LogoutIcon = () => (
-  <svg width="23.5" height="22.5" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="28.2" height="27" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <path
       d="M5.5,20H12.5C13.605,20 14.5,19.105 14.5,18V16C14.5,15.448 14.948,15 15.5,15C16.052,15 16.5,15.448 16.5,16V18C16.5,20.209 14.709,22 12.5,22H5.5C3.291,22 1.5,20.209 1.5,18V6C1.5,3.791 3.291,2 5.5,2H12.5C14.709,2 16.5,3.791 16.5,6V8C16.5,8.552 16.052,9 15.5,9C14.948,9 14.5,8.552 14.5,8V6C14.5,4.895 13.605,4 12.5,4H5.5C4.395,4 3.5,4.895 3.5,6V18C3.5,19.105 4.395,20 5.5,20Z"
       fill="#212121"
@@ -22,9 +22,9 @@ const CloseIcon = () => (
   </svg>
 );
 
-// 3. Kaspi User Avatar: Diameter 88.5, Ring ~2.5px #CCCCCC, silhouette #9B9B9B
+// 3. Kaspi User Avatar: 5% bigger (Diameter 93px, viewBox 88.5), Ring ~2.5px #CCCCCC, silhouette #9B9B9B
 const UserAvatarIcon = () => (
-  <svg width="88.5" height="88.5" viewBox="0 0 88.5 88.5" fill="none" style={{ display: 'block' }}>
+  <svg width="93" height="93" viewBox="0 0 88.5 88.5" fill="none" style={{ display: 'block' }}>
     <defs>
       <clipPath id="avatar-clip">
         <circle cx="44.25" cy="44.25" r="43" />
@@ -204,7 +204,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           msOverflowStyle: 'none'
         }}
       >
-        {/* 1. TOP LEFT: Logout Icon (23.5 x 22.5, left x 19.5, top N = 13.5) */}
+        {/* 1. TOP LEFT: Logout Icon (28.2 x 27, left x 19.5, top N = 13.5, 20% bigger) */}
         <button
           type="button"
           onClick={onLogout || handleDismiss}
@@ -213,8 +213,8 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             position: 'absolute',
             left: '19.5px',
             top: 'calc(env(safe-area-inset-top, 0px) + 13.5px)',
-            width: '23.5px',
-            height: '22.5px',
+            width: '28.2px',
+            height: '27px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -229,17 +229,17 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <LogoutIcon />
         </button>
 
-        {/* 2. TOP RIGHT: Close X (15.5 x 15.5, left x 375.5, top N = 13.5) */}
+        {/* 2. TOP RIGHT: Close X (15.5 x 15.5, opposite to logout: right x 19.5, on same horizontal line: height 27px, top N = 13.5) */}
         <button
           type="button"
           onClick={handleDismiss}
           aria-label="Закрыть"
           style={{
             position: 'absolute',
-            left: '375.5px',
+            right: '19.5px',
             top: 'calc(env(safe-area-inset-top, 0px) + 13.5px)',
-            width: '15.5px',
-            height: '15.5px',
+            width: '28.2px',
+            height: '27px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -254,14 +254,14 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <CloseIcon />
         </button>
 
-        {/* 3. AVATAR: Diameter 88.5, centre x 207, top N = 49 */}
+        {/* 3. AVATAR: Diameter 93px (5% bigger), centre x 207, top N = 49 */}
         <div
           style={{
             position: 'absolute',
-            left: '162.75px',
+            left: 'calc(50% - 46.5px)',
             top: 'calc(env(safe-area-inset-top, 0px) + 49px)',
-            width: '88.5px',
-            height: '88.5px',
+            width: '93px',
+            height: '93px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
@@ -272,7 +272,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <UserAvatarIcon />
         </div>
 
-        {/* 4. NAME "Парасат Ж.": 15 px Regular, #212121, text top N = 158.5 (nudged up 3.5px with lineHeight 15px), width 89 */}
+        {/* 4. NAME "Парасат Ж.": 18 px Regular (+3px bigger), #212121, text top N = 158.5 */}
         <div
           style={{
             position: 'absolute',
@@ -280,10 +280,10 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '15px',
+            fontSize: '18px',
             fontWeight: 400,
-            lineHeight: '15px',
-            height: '15px',
+            lineHeight: '18px',
+            height: '18px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -292,7 +292,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           {profile?.shortName || 'Парасат Ж.'}
         </div>
 
-        {/* 5. TITLE "Код доступа": 15 px Regular, #212121, text top N = 257 (nudged up 3.5px with lineHeight 15px), width 96 */}
+        {/* 5. TITLE "Код доступа": 17 px Regular (+2px bigger), #212121, text top N = 257 */}
         <div
           style={{
             position: 'absolute',
@@ -300,10 +300,10 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '15px',
+            fontSize: '17px',
             fontWeight: 400,
-            lineHeight: '15px',
-            height: '15px',
+            lineHeight: '17px',
+            height: '17px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -332,7 +332,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           );
         })}
 
-        {/* 7. KEYPAD DIGITS: Roboto Regular, digit height 24.5 (≈ 34 px font), #212121 */}
+        {/* 7. KEYPAD DIGITS: Not bold (300 weight), digit height 24.5 (≈ 34 px font), #212121 */}
         {/* Row centre N: 427.5 / 518.5 / 609.5 / 701.5 (moved down 1.5 px) */}
         {keypadKeys.map(({ num, cx, topOffset }) => {
           const isActive = activeDigit === num;
@@ -375,10 +375,10 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                 style={{
                   position: 'relative',
                   fontSize: '34px',
-                  fontWeight: 400,
+                  fontWeight: 300,
                   lineHeight: '34px',
                   color: isActive ? '#FFFFFF' : '#212121',
-                  fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
+                  fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
                   letterSpacing: '0px'
                 }}
               >
@@ -415,14 +415,14 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           </button>
         )}
 
-        {/* 9. FORGOT LINK "Забыли код доступа?": 15.5 px Regular (+0.5px for 153px width), text top N = 767.5 (up 2px), centred. Colour #1F6FA3 */}
+        {/* 9. FORGOT LINK "Забыли код доступа?": 17.5 px (+2px bigger), text top N = 767.5, centred. Colour #1F6FA3 */}
         <div
           style={{
             position: 'absolute',
             top: 'calc(env(safe-area-inset-top, 0px) + 767.5px)',
             left: 0,
             right: 0,
-            height: '16px',
+            height: '18px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -435,9 +435,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               background: 'none',
               border: 'none',
               padding: 0,
-              fontSize: '15.5px',
+              fontSize: '17.5px',
               fontWeight: 400,
-              lineHeight: '16px',
+              lineHeight: '18px',
               color: '#1F6FA3',
               textDecoration: 'none',
               WebkitTextDecoration: 'none',

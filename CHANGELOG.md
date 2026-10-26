@@ -2,6 +2,30 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 01:01] — Юстировка экрана блокировки: тонкие цифры (не жирные), увеличение иконки выхода на 20%, соосность верхних иконок, увеличение аватара на 5% и масштабирование текстов
+
+### 🎯 Запрос пользователя:
+> *«the numbers dont gotta be bold the icon at the left top corner gotta be bigger 20% more over the two icon at the top gotta meet the same line located just oppasite to each other the next is the Texts Парасат Ж make it bigger for like 3px while just below it код доступа 2px bigger забыли код досутпа 2px bigger the avatar icon bigger 5%»*
+
+### 🛠️ Что сделано:
+1. **Цифры клавиатуры (0–9)**:
+   - Установлен вес `fontWeight: 300` (Light) в шрифте `Roboto Flex Kaspi` вместо 400 — цифры больше не выглядят жирными, стали изящными и тонкими в точности как в оригинале.
+2. **Верхняя левая иконка выхода (LogoutIcon)**:
+   - Размер увеличен на 20%: с `23.5×22.5` до `28.2×27px`.
+3. **Соосность и расположение верхних иконок**:
+   - Обе иконки (выход слева и крестик справа) выровнены по одной горизонтальной оси: контейнеры с высотой `27px`, центрированием по вертикали и привязкой `top: calc(env(safe-area-inset-top, 0px) + 13.5px)`.
+   - Расположены строго симметрично друг напротив друга: левая на `left: 19.5px`, правая на `right: 19.5px`.
+4. **Аватар пользователя (UserAvatarIcon)**:
+   - Увеличен на 5%: диаметр с `88.5px` до `93px` (`left: calc(50% - 46.5px)`), центрирован.
+5. **Текстовые элементы**:
+   - «Парасат Ж.»: увеличен на 3px — с 15px до `18px` (`lineHeight: 18px`, `height: 18px`).
+   - «Код доступа»: увеличен на 2px — с 15px до `17px` (`lineHeight: 17px`, `height: 17px`).
+   - «Забыли код доступа?»: увеличен на 2px — с 15.5px до `17.5px` (`lineHeight: 18px`, `height: 18px`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
 ## [2026-10-27 00:46] — Финальная юстировка экрана «Код доступа»: удаление debug-строки, сдвиг рядов клавиатуры на 1.5px, 15px шрифты и устранение вертикальной линии
 
 ### 🎯 Запрос пользователя:
