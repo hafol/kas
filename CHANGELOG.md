@@ -2,6 +2,36 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 14:24] — Расширение отладочного блока (Live Debug Box) детальной диагностикой окружения
+
+### 🎯 Запрос пользователя:
+> *«Add these lines to the same yellow debug box, deploy, and keep everything else as it is:
+- screen.width x screen.height
+- window.innerHeight
+- window.outerWidth
+- navigator.standalone (true when opened from a Home Screen icon)
+- window.matchMedia('(display-mode: standalone)').matches
+- navigator.userAgent (full string, can wrap onto several lines)
+- document.documentElement.getBoundingClientRect().width»*
+
+### 🛠️ Что сделано:
+1. В компонент `DebugBox` внутри [`HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx) добавлены вывод и динамическое отслеживание следующих параметров:
+   - `screen.width x screen.height`
+   - `window.innerHeight`
+   - `window.outerWidth`
+   - `navigator.standalone`
+   - `window.matchMedia('(display-mode: standalone)').matches`
+   - `navigator.userAgent`
+   - `document.documentElement.getBoundingClientRect().width`
+2. Никакие стили, размеры или значения компонентов в `HomeScreen.jsx` не изменялись.
+3. Собрано и развернуто на проде Vercel (`kas-two-rho.vercel.app`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-26 13:30] — Устранение 1.104x масштабирования на iPhone 11 (414 pt)
 
 ### 🎯 Запрос пользователя:
