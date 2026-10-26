@@ -183,21 +183,21 @@ export const IconJobs = ({ size = 34.5, color = "#DF4E3E" }) => (
 
 export const IconAds = IconJobs;
 
-// Search Bar Camera with Sparkle (Exact vector from camera-sparkle-icon-grey.svg: 24 x 20)
-export const CameraSparkleIcon = ({ width = 24, height = 20, size, color = "#555555" }) => {
+// Search Bar Camera with Sparkle (Exact vector from camera-sparkle-icon-grey.svg: 24 x 20.5)
+export const CameraSparkleIcon = ({ width = 24, height = 20.5, size, color = "#555555" }) => {
   const w = size || width;
-  const h = height || (size ? size * (190 / 220) : 20);
+  const h = height || (size ? size * (175 / 204) : 20.5);
   return (
     <svg
       width={w}
       height={h}
-      viewBox="4 22 220 190"
+      viewBox="12 28 204 175"
       fill="none"
       stroke={color}
       strokeWidth="17"
       strokeLinecap="round"
       strokeLinejoin="round"
-      style={{ flexShrink: 0, cursor: 'pointer' }}
+      style={{ flexShrink: 0, cursor: 'pointer', display: 'block' }}
     >
       {/* Camera body (open at the top right, where the sparkle sits) */}
       <path d="M118 44.5H89C75 44.5 73 63 57 63H49.500A28 28 0 0 0 21.500 91V166.500A28 28 0 0 0 49.500 194.500H168.500A24 24 0 0 0 192.500 170.500V131" />

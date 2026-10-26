@@ -2,6 +2,40 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 15:05] — Точечные визуальные корректировки (15 пунктов) по замерам на iPhone 11 (414×896 pt)
+
+### 🎯 Запрос пользователя:
+> *«The Home screen now matches the original almost everywhere (search field, banner, grid columns and labels, deposit rows, pill, card widths and spacing, all text sizes). Keep the Display Zoom script in index.html and do not touch anything that is not listed here. Only these small fixes are left (values in pt on a 414 x 896 screen, measured on the iPhone 11)... After each item, write one line saying which file and which value you changed (old value → new value). Do not change anything that is not in the list. Do not redesign.»*
+
+### 🛠️ Что сделано:
+1. **HEADER ICONS**:
+   - Пункт 1: Лупа увеличена до 19×19 pt с позицией левого края x 30.5 pt (`HomeScreen.jsx`).
+   - Пункт 2: Плейсхолдер "Поиск по Kaspi.kz" расширен до 144.5 pt (17 Regular, старт x 60 pt) (`HomeScreen.jsx`).
+   - Пункт 3: Иконка камеры скорректирована до 24×20.5 pt, левый край x 312.5 pt (`KaspiServiceIcons.jsx`, `HomeScreen.jsx`).
+   - Пункт 4: Иконка корзины сдвинута на 3.5 pt влево (левый край x 364.5 pt) (`HomeScreen.jsx`).
+2. **GRID LINE ICONS**:
+   - Пункт 5: Контейнеры 7 красных линейных иконок увеличены на 10% (38×34 pt, `alignItems: 'flex-start'`), иконки отрисованы на 10% крупнее (Мой Банк 32×29 pt, Переводы 29 pt), нижний край сохранен, ряд 1 начинается на y 237 pt, ряд 2 на y 315 pt (`HomeScreen.jsx`). Плитка Magnum не тронута (34.5×35 pt).
+3. **CAROUSEL SECTION**:
+   - Пункт 6: Отступ от низа плитки депозита 2 до заголовка уменьшен до 26 pt (заголовок y 535.5 pt, `marginTop: '20.5px'`) (`HomeScreen.jsx`).
+   - Пункт 7: Ширина заголовка "Вы недавно смотрели" зафиксирована на 189 pt (18 Bold 700, letter spacing 0) (`HomeScreen.jsx`).
+   - Пункт 8: Отступ от низа заголовка до картинок скорректирован до 15 pt (картинки y 567.5 pt, `marginTop: '10px'`) (`HomeScreen.jsx`).
+   - Пункт 9: Отступ от низа картинки до верха цены уменьшен до 6 pt (верх цены y 683.5 pt, `marginTop: '3px'`) (`HomeScreen.jsx`).
+   - Пункт 10: Верх плашки бонусов расположен на 22.5 pt ниже верха цены (верх плашки y 706 pt, `marginTop: '4.5px'`) (`HomeScreen.jsx`).
+   - Пункт 11: Верх названия на 5 pt ниже плашки (y 749 pt, `marginTop: '5px'`); верх рейтинга на 19 pt ниже названия (y 768 pt, `marginTop: '3px'`) (`HomeScreen.jsx`).
+   - Пункт 12: Разделитель под каруселью установлен на y 799 pt (`marginTop: '13.5px'`) (`HomeScreen.jsx`).
+4. **TAB BAR**:
+   - Пункт 13: Верхняя линия таббара на y 808 pt (`height: 88px`) (`BottomNavBar.jsx`).
+   - Пункт 14: Центр иконок на y 828 pt (`paddingTop: '8px'`). Размеры: Главная/Kaspi QR 24.5×24 pt, Сервисы 22×17 pt, Сообщения 33×31 pt включая бейдж (`BottomNavBar.jsx`).
+   - Пункт 15: Верх подписей на y 848.5 pt (`marginTop: '8.5px'`) (`BottomNavBar.jsx`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`kaspi-app/src/components/BottomNavBar.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx)
+- [`kaspi-app/src/components/KaspiServiceIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiServiceIcons.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-26 14:42] — Удаление временного жёлтого блока отладки
 
 ### 🎯 Запрос пользователя:

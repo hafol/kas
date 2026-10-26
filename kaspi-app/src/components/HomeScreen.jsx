@@ -326,8 +326,8 @@ export const HomeScreen = ({
           Search field right edge: x 350, left edge: 17.5, width: 332.5 on 414 (item 3).
           Magnifier: 19 x 19 at x 30.5 (left edge 13 inside field) (item 4).
           Placeholder "Поиск по Kaspi.kz": 17 Regular, starts x 60.5 (item 5).
-          Camera icon: 24 x 20, right edge 13 inside field (item 6).
-          Cart icon: 29.5 x 25, centred vertically on search field (item 7).
+          Camera icon: 24 x 20.5, right edge 13.5 inside field (item 6).
+          Cart icon: 29.5 x 25, centred vertically on search field, left edge x 364.5 (item 7).
           Cart badge: 15 x 15 circle, 11 Semibold (item 8).
       ===================================================================== */}
       <div style={{
@@ -358,20 +358,24 @@ export const HomeScreen = ({
             display: 'flex',
             alignItems: 'center',
             paddingLeft: '13px',
-            paddingRight: '13px',
+            paddingRight: '13.5px',
             cursor: 'pointer',
             boxSizing: 'border-box'
           }}
         >
-          {/* Magnifier 19 x 19 at x 30.5 (left edge 13 inside field) */}
-          <Search size={19} color="#8E8E8E" strokeWidth={2.2} style={{ flexShrink: 0 }} />
+          {/* Magnifier: exactly 19 x 19 at x 30.5 (left edge 13 inside field) */}
+          <svg width="19" height="19" viewBox="0 0 19 19" fill="none" style={{ flexShrink: 0, display: 'block' }}>
+            <circle cx="8" cy="8" r="6.75" stroke="#8E8E8E" strokeWidth="2.1" />
+            <path d="M13 13L17.75 17.75" stroke="#8E8E8E" strokeWidth="2.1" strokeLinecap="round" />
+          </svg>
 
-          {/* Placeholder: 17 Regular, starts x 60.5 (11 after magnifier) */}
+          {/* Placeholder: 17 Regular, 144.5 wide, starts at x 60 */}
           <span style={{
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
             fontSize: '17px',
             fontWeight: '400',
             color: '#8E8E8E',
-            marginLeft: '11px',
+            marginLeft: '10.5px',
             flex: 1,
             userSelect: 'none',
             whiteSpace: 'nowrap',
@@ -383,25 +387,25 @@ export const HomeScreen = ({
             Поиск по Kaspi.kz
           </span>
 
-          {/* Camera icon box: 24 x 20, right edge 13 inside field */}
+          {/* Camera icon box: 24 x 20.5, left edge x 312.5 */}
           <div style={{
             width: '24px',
-            height: '20px',
+            height: '20.5px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0
           }}>
-            <CameraSparkleIcon width={24} height={20} color="#555555" />
+            <CameraSparkleIcon width={24} height={20.5} color="#555555" />
           </div>
         </div>
 
-        {/* Cart icon box: 29.5 x 25, centred vertically on search field, starts x 364.5 */}
+        {/* Cart icon box: 29.5 x 25, centred vertically on search field, left edge x 364.5 */}
         <div
           onClick={() => onOpenService('cart')}
           className="touchable"
           style={{
-            marginLeft: '14.5px',
+            marginLeft: '11px',
             width: '29.5px',
             height: '25px',
             position: 'relative',
@@ -569,8 +573,8 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconShop size={34} color="#F14635" />
+            <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+              <IconShop size={37.5} color="#F14635" />
             </div>
             <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Магазин
@@ -583,8 +587,8 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconMyBank size={34} color="#F14635" />
+            <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+              <IconMyBank size={37.5} color="#F14635" />
             </div>
             <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Мой Банк
@@ -597,8 +601,8 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconPayments size={30.5} color="#F14635" />
+            <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+              <IconPayments size={34} color="#F14635" />
             </div>
             <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Платежи
@@ -611,8 +615,8 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconTransfers size={30.5} color="#F14635" />
+            <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+              <IconTransfers size={34.5} color="#F14635" />
             </div>
             <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Переводы
@@ -620,7 +624,7 @@ export const HomeScreen = ({
           </div>
 
           {/* Row 2 */}
-          {/* 5. Magnum: tile 34.5 x 35, radius 8 */}
+          {/* 5. Magnum: tile 34.5 x 35, radius 8 (NOT changed) */}
           <div
             onClick={() => onOpenService('magnum')}
             className="touchable"
@@ -640,8 +644,8 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconTravel size={34} color="#F14635" />
+            <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+              <IconTravel size={37.5} color="#F14635" />
             </div>
             <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Travel
@@ -654,8 +658,8 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconGov size={34} color="#F14635" />
+            <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+              <IconGov size={37.5} color="#F14635" />
             </div>
             <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Госуслуги
@@ -668,8 +672,8 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IconJobs size={34} color="#F14635" />
+            <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+              <IconJobs size={37.5} color="#F14635" />
             </div>
             <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Работа
@@ -835,39 +839,39 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           5. "ВЫ НЕДАВНО СМОТРЕЛИ" CAROUSEL
-          Gap from tile 2 bottom to title text top: 26 (item 23; y 535).
-          Section title: 18 Bold #000 (item 24; 189 wide).
-          Gap from title text bottom to images: 14.5 (item 25; images y 566.5).
-          Product image tile: 110 x 110, radius 10, 1 pt border #EFEFEF (item 26).
-          Card pitch: 119.5 (gap 9.5), first card x 17.5 (item 27).
-          Image chip: height 19.5, text 13 Bold, radius 6, pinned bottom-left 1 inside (item 28).
-          Gap from image bottom to price text top: 7 (item 29; price y 684).
-          Price: 15 Bold #000, old price 12 Regular #8E8E8E (item 30).
-          Bonus box: 110 x 38, radius 8, top 21 below price text top (y 705 to 743) (item 31).
-          Name: 13 Regular, text top 5 below box (y 748) (item 32).
-          Rating: 13 Semibold/Regular, text top 19 below name text top (y 767) (item 32).
-          Divider: 0.5 #EBEBEB at y 798, full width (item 33).
+          Gap from tile 2 bottom to title text top: 26 (item 6; y 535.5).
+          Section title: 18 Bold #000, 189 wide (item 7).
+          Gap from title text bottom to images: 15 (item 8; images y 567.5).
+          Product image tile: 110 x 110, radius 10, 1 pt border #EFEFEF.
+          Gap from image bottom to price text top: 6 (item 9; price y 683.5).
+          Price: 15 Bold #000, old price 12 Regular #8E8E8E.
+          Bonus box: 110 x 38, radius 8, top 22.5 below price text top (box top y 706) (item 10).
+          Name: 13 Regular, text top 5 below box (y 749) (item 11).
+          Rating: 13 Semibold/Regular, text top 19 below name text top (y 768) (item 11).
+          Divider: 0.5 #EBEBEB at y 799, full width (item 12).
       ===================================================================== */}
       <div style={{
-        marginTop: '26px',
+        marginTop: '20.5px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        {/* Section Title: 18 Bold #000, x 18.5 */}
+        {/* Section Title: 18 Bold #000, 189 wide, x 18.5 */}
         <div style={{
           paddingLeft: '18.5px',
           paddingRight: '18.5px',
+          fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif',
           fontSize: '18px',
           fontWeight: '700',
           color: '#000000',
-          lineHeight: '22px'
+          lineHeight: '22px',
+          letterSpacing: 0
         }}>
           Вы недавно смотрели
         </div>
 
-        {/* Horizontal Carousel: images start 14.5 below title text bottom (y 566.5) */}
+        {/* Horizontal Carousel: images start 15 below title text bottom (y 567.5) */}
         <div style={{
-          marginTop: '14.5px',
+          marginTop: '10px',
           display: 'flex',
           gap: '9.5px',
           overflowX: 'auto',
@@ -969,9 +973,9 @@ export const HomeScreen = ({
                 )}
               </div>
 
-              {/* Price: 7 below image bottom (y 684), 15 Bold #000 */}
+              {/* Price: 6 below image bottom (y 683.5), 15 Bold #000 */}
               <div style={{
-                marginTop: '5.5px',
+                marginTop: '3px',
                 display: 'flex',
                 alignItems: 'baseline',
                 whiteSpace: 'nowrap',
@@ -1004,10 +1008,10 @@ export const HomeScreen = ({
                 )}
               </div>
 
-              {/* Bonus box: 110 x 38, radius 8, #E6F8D0, top 21 below price text top (y 705) */}
+              {/* Bonus box: 110 x 38, radius 8, #E6F8D0, top 22.5 below price text top (box top y 706) */}
               {item.bonusBox && (
                 <div style={{
-                  marginTop: '3px',
+                  marginTop: '4.5px',
                   width: '110px',
                   height: '38px',
                   borderRadius: '8px',
@@ -1040,9 +1044,9 @@ export const HomeScreen = ({
                 </div>
               )}
 
-              {/* Product name: 13 Regular #000, 1 line, tail ellipsis, text top 5 below box (y 748) */}
+              {/* Product name: 13 Regular #000, 1 line, tail ellipsis, text top 5 below box (y 749) */}
               <div style={{
-                marginTop: item.bonusBox ? '4px' : '6px',
+                marginTop: item.bonusBox ? '5px' : '7px',
                 fontSize: '13px',
                 fontWeight: '400',
                 color: '#000000',
@@ -1055,7 +1059,7 @@ export const HomeScreen = ({
                 {item.title}
               </div>
 
-              {/* Rating row: text top 19 below name text top (y 767). Value 13 Semibold, star 12 #F14635, count 13 Regular #8E8E8E */}
+              {/* Rating row: text top 19 below name text top (y 768). Value 13 Semibold, star 12 #F14635, count 13 Regular #8E8E8E */}
               <div style={{
                 marginTop: '3px',
                 display: 'flex',
@@ -1085,9 +1089,9 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* Divider 2: full width, 0.5 pt, #EBEBEB at y 798 (item 33) */}
+      {/* Divider 2: full width, 0.5 pt, #EBEBEB at y 799 (item 12) */}
       <div style={{
-        marginTop: '16px',
+        marginTop: '13.5px',
         height: '0.5px',
         backgroundColor: '#EBEBEB',
         width: '100%',
