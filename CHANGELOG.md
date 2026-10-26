@@ -2,6 +2,30 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 00:46] — Финальная юстировка экрана «Код доступа»: удаление debug-строки, сдвиг рядов клавиатуры на 1.5px, 15px шрифты и устранение вертикальной линии
+
+### 🎯 Запрос пользователя:
+> *«Lock screen is almost right. Keep the position: fixed root and the absolute top values (the N values) exactly as they are, except where listed. Only:
+> Remove the yellow debug line. Do not add any safe-area or top padding anywhere (safeAreaTop is 0 here, the page already starts under the status bar).
+> Name "Парасат Ж." and "Код доступа": font 15 px (now 13). Widths must be 89 and 96 px (now 77.5 and 85.5). Their text tops must stay at N 158.5 and 257 (now they render 3.5 px lower because of line-height, so set line-height to the font size or nudge them up 3.5 px).
+> Keypad: move all 4 rows down 1.5 px (row centres N 427.5 / 518.5 / 609.5 / 701.5).
+> "Забыли код доступа?": 153 px wide (now 149.5, so +0.5 px font). Move it up 2 px (text top N 769.5).
+> Remove the thin dark vertical line at the right edge of the screen (x 413.5, full height). It’s a scrollbar or border on the root: add overflow: hidden to the lock screen root and hide scrollbars (scrollbar-width: none; ::-webkit-scrollbar { display: none })»*
+
+### 🛠️ Что сделано:
+1. **Экран блокировки (PasscodeScreen)**:
+   - **Желтая debug-строка**: полностью удалена вместе со вспомогательными элементами.
+   - **Имя («Парасат Ж.»)**: шрифт `15px Regular`, высота строки `15px`, позиция сдвинута на 3.5px вверх (`top: calc(env(safe-area-inset-top, 0px) + 155px)`), чтобы верх видимого текста находился строго на `N = 158.5px` (ширина 89px).
+   - **Заголовок («Код доступа»)**: шрифт `15px Regular`, высота строки `15px`, позиция сдвинута на 3.5px вверх (`top: calc(env(safe-area-inset-top, 0px) + 253.5px)`), верх текста строго на `N = 257px` (ширина 96px).
+   - **Клавиатура (цифры 0–9 и Backspace)**: все 4 ряда смещены вниз на `1.5px` (центры рядов N: `427.5 / 518.5 / 609.5 / 701.5`).
+   - **Ссылка «Забыли код доступа?»**: шрифт `15.5px Regular` (+0.5px для достижения ширины 153px), поднята на 2px (`top: calc(env(...) + 767.5px)`), без подчеркивания.
+   - **Тонкая вертикальная линия справа (x 413.5)**: полностью устранена за счёт `overflow: hidden`, `scrollbar-width: none`, `-ms-overflow-style: none`, `border: none` и селектора `.passcode-screen::-webkit-scrollbar { display: none !important; width: 0 !important; }`.
+2. **Главный экран**: Сохранён без изменений.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+- [`kaspi-app/src/index.css`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css)
+
 ## [2026-10-27 00:33] — Точная привязка элементов экрана «Код доступа» через calc(env(safe-area-inset-top) + Npx)
 
 ### 🎯 Запрос пользователя:

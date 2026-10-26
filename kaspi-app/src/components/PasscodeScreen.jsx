@@ -60,10 +60,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
   const [activeDigit, setActiveDigit] = useState(null);
   const [isSlidingIn, setIsSlidingIn] = useState(true);
   const [isDismissing, setIsDismissing] = useState(false);
-  const [debugInfo, setDebugInfo] = useState('');
   const timeoutRef = useRef(null);
-  const rootRef = useRef(null);
-  const testDivRef = useRef(null);
 
   // Trigger smooth slide-up animation on mount
   useEffect(() => {
@@ -71,30 +68,6 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
       setIsSlidingIn(false);
     });
     return () => cancelAnimationFrame(frame);
-  }, []);
-
-  // Update yellow debug info
-  useEffect(() => {
-    const updateDebug = () => {
-      let safeAreaTop = 0;
-      if (testDivRef.current) {
-        safeAreaTop = parseFloat(window.getComputedStyle(testDivRef.current).paddingTop) || 0;
-      }
-      const rootTop = rootRef.current ? Math.round(rootRef.current.getBoundingClientRect().top) : 0;
-      setDebugInfo(`safeAreaTop: ${safeAreaTop}px | innerWidth: ${window.innerWidth}px | root.top: ${rootTop}px`);
-    };
-
-    updateDebug();
-    const t1 = setTimeout(updateDebug, 100);
-    const t2 = setTimeout(updateDebug, 350);
-    const t3 = setTimeout(updateDebug, 600);
-    window.addEventListener('resize', updateDebug);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      window.removeEventListener('resize', updateDebug);
-    };
   }, []);
 
   // Lock scroll
@@ -161,19 +134,19 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
 
   // Keypad specifications on 414 x 896 screen:
   // Columns (centres): x = 92.5 / 207 / 321
-  // Rows (centres N-offsets): N = 426 / 517 / 608 / 700
+  // Rows (centres N-offsets): N = 427.5 / 518.5 / 609.5 / 701.5 (moved down 1.5 px)
   // Each button area: 100 x 80 (topOffset = cy - 40)
   const keypadKeys = [
-    { num: '1', cx: 92.5, topOffset: 426 - 40 },
-    { num: '2', cx: 207, topOffset: 426 - 40 },
-    { num: '3', cx: 321, topOffset: 426 - 40 },
-    { num: '4', cx: 92.5, topOffset: 517 - 40 },
-    { num: '5', cx: 207, topOffset: 517 - 40 },
-    { num: '6', cx: 321, topOffset: 517 - 40 },
-    { num: '7', cx: 92.5, topOffset: 608 - 40 },
-    { num: '8', cx: 207, topOffset: 608 - 40 },
-    { num: '9', cx: 321, topOffset: 608 - 40 },
-    { num: '0', cx: 207, topOffset: 700 - 40 },
+    { num: '1', cx: 92.5, topOffset: 427.5 - 40 },
+    { num: '2', cx: 207, topOffset: 427.5 - 40 },
+    { num: '3', cx: 321, topOffset: 427.5 - 40 },
+    { num: '4', cx: 92.5, topOffset: 518.5 - 40 },
+    { num: '5', cx: 207, topOffset: 518.5 - 40 },
+    { num: '6', cx: 321, topOffset: 518.5 - 40 },
+    { num: '7', cx: 92.5, topOffset: 609.5 - 40 },
+    { num: '8', cx: 207, topOffset: 609.5 - 40 },
+    { num: '9', cx: 321, topOffset: 609.5 - 40 },
+    { num: '0', cx: 207, topOffset: 701.5 - 40 },
   ];
 
   // 4 PIN dots: diameter 13, centre N = 303 (topOffset = 303 - 6.5 = 296.5), centres x = 147.5 / 187 / 226.75 / 266.5
@@ -181,7 +154,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
 
   return (
     <div
-      ref={rootRef}
+      className="passcode-screen hide-scrollbar"
       style={{
         position: 'fixed',
         top: 0,
@@ -205,25 +178,16 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         overflow: 'hidden',
         overscrollBehavior: 'none',
         touchAction: 'none',
+        border: 'none',
+        outline: 'none',
+        boxShadow: 'none',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
         fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
       }}
     >
-      {/* Hidden test div to read env(safe-area-inset-top) in px */}
       <div
-        ref={testDivRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: 0,
-          height: 0,
-          paddingTop: 'env(safe-area-inset-top, 0px)',
-          visibility: 'hidden',
-          pointerEvents: 'none'
-        }}
-      />
-
-      <div
+        className="hide-scrollbar"
         style={{
           position: 'relative',
           width: '100%',
@@ -232,7 +196,12 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           margin: '0 auto',
           overflow: 'hidden',
           touchAction: 'none',
-          padding: 0
+          padding: 0,
+          border: 'none',
+          outline: 'none',
+          boxShadow: 'none',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
         }}
       >
         {/* 1. TOP LEFT: Logout Icon (23.5 x 22.5, left x 19.5, top N = 13.5) */}
@@ -303,17 +272,18 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           <UserAvatarIcon />
         </div>
 
-        {/* 4. NAME "Парасат Ж.": 15 px Regular, #212121, text top N = 158.5, width 89 */}
+        {/* 4. NAME "Парасат Ж.": 15 px Regular, #212121, text top N = 158.5 (nudged up 3.5px with lineHeight 15px), width 89 */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 158.5px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 155px)',
             left: 0,
             right: 0,
             textAlign: 'center',
             fontSize: '15px',
             fontWeight: 400,
-            lineHeight: '18px',
+            lineHeight: '15px',
+            height: '15px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -322,17 +292,18 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           {profile?.shortName || 'Парасат Ж.'}
         </div>
 
-        {/* 5. TITLE "Код доступа": 15 px Regular, #212121, text top N = 257, width 96 */}
+        {/* 5. TITLE "Код доступа": 15 px Regular, #212121, text top N = 257 (nudged up 3.5px with lineHeight 15px), width 96 */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 257px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 253.5px)',
             left: 0,
             right: 0,
             textAlign: 'center',
             fontSize: '15px',
             fontWeight: 400,
-            lineHeight: '18px',
+            lineHeight: '15px',
+            height: '15px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -362,7 +333,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         })}
 
         {/* 7. KEYPAD DIGITS: Roboto Regular, digit height 24.5 (≈ 34 px font), #212121 */}
-        {/* Row centre N: 426 / 517 / 608 / 700 */}
+        {/* Row centre N: 427.5 / 518.5 / 609.5 / 701.5 (moved down 1.5 px) */}
         {keypadKeys.map(({ num, cx, topOffset }) => {
           const isActive = activeDigit === num;
 
@@ -417,7 +388,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           );
         })}
 
-        {/* 8. BACKSPACE BUTTON: centre (321, row centre N = 700 -> topOffset = 660px) */}
+        {/* 8. BACKSPACE BUTTON: centre (321, row centre N = 701.5 -> topOffset = 661.5px) */}
         {digits.length > 0 && (
           <button
             type="button"
@@ -426,7 +397,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             style={{
               position: 'absolute',
               left: `${321 - 50}px`,
-              top: 'calc(env(safe-area-inset-top, 0px) + 660px)',
+              top: 'calc(env(safe-area-inset-top, 0px) + 661.5px)',
               width: '100px',
               height: '80px',
               border: 'none',
@@ -444,14 +415,14 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           </button>
         )}
 
-        {/* 9. FORGOT LINK "Забыли код доступа?": 15 px Regular, text top N = 769.5, width 153, centred. Colour #1F6FA3 */}
+        {/* 9. FORGOT LINK "Забыли код доступа?": 15.5 px Regular (+0.5px for 153px width), text top N = 767.5 (up 2px), centred. Colour #1F6FA3 */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 769.5px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 767.5px)',
             left: 0,
             right: 0,
-            height: '18px',
+            height: '16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -464,9 +435,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               background: 'none',
               border: 'none',
               padding: 0,
-              fontSize: '15px',
+              fontSize: '15.5px',
               fontWeight: 400,
-              lineHeight: '18px',
+              lineHeight: '16px',
               color: '#1F6FA3',
               textDecoration: 'none',
               WebkitTextDecoration: 'none',
@@ -478,29 +449,6 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
             Забыли код доступа?
           </button>
         </div>
-
-        {/* Debug Line (for screenshot inspection) */}
-        {debugInfo && (
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '10px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              backgroundColor: '#FFE600',
-              color: '#000000',
-              fontSize: '11px',
-              padding: '3px 8px',
-              borderRadius: '4px',
-              fontWeight: 'bold',
-              zIndex: 10000,
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none'
-            }}
-          >
-            {debugInfo}
-          </div>
-        )}
       </div>
     </div>
   );
