@@ -49,6 +49,9 @@ export default function App() {
       if (params.get('screen') === 'passcode' || window.location.hash === '#passcode') {
         return 'passcode';
       }
+      if (params.get('screen') === 'gov' || window.location.hash === '#gov') {
+        return 'gov';
+      }
     }
     return 'tab';
   });
@@ -262,7 +265,7 @@ export default function App() {
       {/* Bottom Navigation (visible on main tabs and inside services) */}
       {(currentScreen === 'tab' || currentScreen === 'my_bank' || currentScreen === 'gov') && (
         <BottomNavBar
-          activeTab={currentScreen === 'gov' ? 'services' : activeTab} // Госуслуги lives under «Сервисы»
+          activeTab={activeTab}
           onTabChange={handleTabChange}
         />
       )}
