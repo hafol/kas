@@ -407,14 +407,14 @@ export const HomeScreen = ({
           </div>
         </div>
 
-        {/* F5: Cart icon box: 21.5 x 20.5 at x 365, y 63 */}
+        {/* F5: Cart icon box: ~10% bigger (24 x 23) */}
         <div
           onClick={() => onOpenService('cart')}
           className="touchable"
           style={{
-            marginLeft: '15px',
-            width: '21.5px',
-            height: '20.5px',
+            marginLeft: '14px',
+            width: '24px',
+            height: '23px',
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
@@ -423,12 +423,12 @@ export const HomeScreen = ({
             flexShrink: 0
           }}
         >
-          <TopBarCartIcon width={21.5} height={20.5} color="#9E9E9E" />
-          {/* F6: Cart badge "3": 15.5 x 15 at x 378.5, y 59 (cart left + 13.5, cart top - 4) */}
+          <TopBarCartIcon width={24} height={23} color="#9E9E9E" />
+          {/* F6: Cart badge "3": 15.5 x 15 at cart left + 14.5, cart top - 4 */}
           <div style={{
             position: 'absolute',
             top: '-4px',
-            left: '13.5px',
+            left: '14.5px',
             width: '15.5px',
             height: '15px',
             borderRadius: '7.5px',
@@ -727,22 +727,19 @@ export const HomeScreen = ({
             height: '44px',
             borderRadius: '6px',
             backgroundColor: '#FFD302',
-            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             flexShrink: 0,
             overflow: 'hidden'
           }}>
-            {/* D2: Coin glyph 21.5 w x 23 h, stroke 2.35 px, offset x 17.5, y 10.5, pure white #FFFFFF */}
-            <svg
-              width="21.5"
-              height="23"
-              viewBox="0 0 21.5 23"
-              fill="none"
-              style={{ position: 'absolute', left: '17.5px', top: '10.5px' }}
-            >
-              <g fill="none" stroke="#FFFFFF" strokeWidth="2.35" strokeLinecap="round" strokeLinejoin="round">
-                <ellipse cx="10.75" cy="5.5" rx="8.5" ry="3.75" />
-                <path d="M2.25 5.5v5.5c0 2.1 3.8 3.75 8.5 3.75s8.5-1.65 8.5-3.75V5.5" />
-                <path d="M2.25 11v5.5c0 2.1 3.8 3.75 8.5 3.75s8.5-1.65 8.5-3.75V11" />
+            <svg viewBox="26 20 243 188" width="53" height="42">
+              <g transform="translate(148, 115) scale(1.10) translate(-148, -115)" fill="none" stroke="#FFFFFF" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round">
+                <ellipse cx="148" cy="91.75" rx="43" ry="22.75" />
+                <path d="M105 92Q110.5 103.5 106 115Q110.5 127 105 139" />
+                <path d="M191 92Q188 103.5 190.5 115Q188 127 191 139" />
+                <path d="M106 115a42 22.5 0 0 0 84 0" />
+                <path d="M105 139a43 22.5 0 0 0 86 0" />
               </g>
             </svg>
           </div>
@@ -809,23 +806,24 @@ export const HomeScreen = ({
             height: '44px',
             borderRadius: '6px',
             backgroundColor: '#FFD302',
-            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             flexShrink: 0,
             overflow: 'hidden'
           }}>
-            {/* D3: "₸$" glyph 28.5 w x 19 h, stroke 2.7 px, offset x 14.5, y 12.5, colour #FFFFFF */}
-            <svg
-              width="28.5"
-              height="19"
-              viewBox="0 0 28.5 19"
-              fill="none"
-              style={{ position: 'absolute', left: '14.5px', top: '12.5px' }}
-            >
-              <path d="M2 3.5h11" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
-              <path d="M2 7.5h11" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
-              <path d="M7.5 7.5v9" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
-              <path d="M21 2v15" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
-              <path d="M25 6.5c-0.8-1.5-2.2-2.2-4-2.2-2.3 0-4 1.4-4 3.2 0 3.8 7.5 2.2 7.5 6 0 1.9-1.8 3.5-4.2 3.5-2 0-3.6-1-4.3-2.5" stroke="#FFFFFF" strokeWidth="2.7" strokeLinecap="round" />
+            <svg viewBox="17 15 243 189" width="53" height="42">
+              <g transform="translate(138, 109) scale(1.05) translate(-138, -109)">
+                <g fill="#FFFFFF">
+                  <rect x="76" y="74" width="63" height="9.5" />
+                  <rect x="76" y="91.5" width="63" height="9.5" />
+                  <rect x="101" y="96" width="11" height="51" />
+                </g>
+                <g fill="none" stroke="#FFFFFF" strokeLinecap="butt" strokeLinejoin="miter">
+                  <path d="M197.5 99C197.5 89.5 190 84 180.5 84C169 84 160.5 88.5 160.5 97C160.5 106 170 109.5 180.5 113C191 116.5 198.5 120 198.5 128.5C198.5 137.5 190 142 180 142C169 142 159 137.5 159 125" strokeWidth="10" />
+                  <path d="M180.5 68v14M180 144v9" strokeWidth="9" />
+                </g>
+              </g>
             </svg>
           </div>
 

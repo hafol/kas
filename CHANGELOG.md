@@ -2,6 +2,28 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 18:36] — Увеличение иконки корзины, возврат аутентичных SVG депозитов и увеличение иконки Главная на 10%
+
+### 🎯 Запрос пользователя:
+> *«now the task is can you see the first picture and the icon in it make it bigger for like 10% the second image with two svg do you remember in those was other svg put them into it then the third icon home page make it bigger for like 10% as well»*
+
+### 🛠️ Что сделано:
+1. **Иконка корзины в шапке (Image 1)**:
+   - Увеличена на ~10%: с 21.5×20.5 pt до 24×23 pt (`TopBarCartIcon width={24} height={23}`).
+   - Контейнер иконки обновлен до 24×23 pt, `marginLeft: 14px` для идеальной центровки.
+   - Красный бейдж «3» смещен на `left: 14.5px, top: -4px`.
+2. **SVG в желтых плашках депозитов (Image 2)**:
+   - Возвращены аутентичные оригинальные векторные изображения из коммита `45f9c89`:
+     - Плашка 1 («Накопительный Депозит 18%»): оригинальный трехслойный стек монет с белой обводкой `stroke="#FFFFFF" strokeWidth="8.5"` в `viewBox="26 20 243 188" width="53" height="42"`.
+     - Плашка 2 («Kaspi Депозит 15%»): аутентичный символ двух валют «₸$» с белыми прямоугольниками `₸` и контурным знаком доллара `$` в `viewBox="17 15 243 189" width="53" height="42"`.
+3. **Иконка «Главная» (домик) в таббаре (Image 3)**:
+   - Увеличена на ~10%: с 19.5×21.5 pt до 21.5×23.7 pt (`NavIconHome width="21.5" height="23.7"` со `strokeWidth="2.3"`).
+   - Вертикальный отступ иконки в таббаре скорректирован на `iconTop: 8.5px` для сохранения точного вертикального центра.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`kaspi-app/src/components/BottomNavBar.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx)
+
 ## [2026-10-26 16:05] — Точечная юстировка Главного экрана (FIX LIST v13) по замерам iPhone 11 (414×896 pt)
 
 ### 🎯 Запрос пользователя:

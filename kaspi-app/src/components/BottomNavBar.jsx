@@ -1,16 +1,16 @@
 import React from 'react';
 
-// B2. Главная (active) icon – house (19.5 w x 21.5 h, stroke 2.2 px, darker red #C0382C)
+// B2. Главная (active) icon – house (enlarged by ~10%: 21.5 w x 23.7 h, stroke 2.3 px, darker red #C0382C)
 const NavIconHome = ({ color = "#C0382C" }) => (
-  <svg width="19.5" height="21.5" viewBox="0 0 19.5 21.5" fill="none">
+  <svg width="21.5" height="23.7" viewBox="0 0 19.5 21.5" fill="none">
     <path
       d="M2.3 8.8L9.75 2.2L17.2 8.8V19.4C17.2 19.95 16.75 20.4 16.2 20.4H12.2V14.8H7.3V20.4H3.3C2.75 20.4 2.3 19.95 2.3 19.4V8.8Z"
       stroke={color}
-      strokeWidth="2.2"
+      strokeWidth="2.3"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <path d="M7.3 10.4H12.2" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+    <path d="M7.3 10.4H12.2" stroke={color} strokeWidth="2.3" strokeLinecap="round" />
   </svg>
 );
 
@@ -54,7 +54,7 @@ const NavIconServices = ({ color = "#535353" }) => (
 
 export const BottomNavBar = ({ activeTab, onTabChange }) => {
   const tabs = [
-    { id: 'home', label: 'Главная', IconComponent: NavIconHome, iconColor: '#C0382C', labelColor: '#E0402F', iconTop: '9.5px' },
+    { id: 'home', label: 'Главная', IconComponent: NavIconHome, iconColor: '#C0382C', labelColor: '#E0402F', iconTop: '8.5px' },
     { id: 'qr', label: 'Kaspi QR', IconComponent: NavIconQR, iconColor: '#535353', labelColor: '#8A8A8E', iconTop: '8px' },
     { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, iconColor: '#535353', labelColor: '#8A8A8E', badge: 29, iconTop: '8px' },
     { id: 'services', label: 'Сервисы', IconComponent: NavIconServices, iconColor: '#535353', labelColor: '#8A8A8E', iconTop: '11.5px' }
