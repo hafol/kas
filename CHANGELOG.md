@@ -2,6 +2,39 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 00:33] — Точная привязка элементов экрана «Код доступа» через calc(env(safe-area-inset-top) + Npx)
+
+### 🎯 Запрос пользователя:
+> *«The lock screen is still about 48 px too low. Stop changing paddings in other components. Do this instead:
+> Make the lock screen root position: fixed; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; background: #fff; so no parent padding, margin or safe-area can push it down.
+> Inside it, place every block with position: absolute and top: calc(env(safe-area-inset-top, 0px) + Npx), where N is:
+> top icons (logout and X): 13.5
+> avatar circle top: 49
+> name text top: 158.5
+> "Код доступа" text top: 257
+> PIN dots centre: 303
+> keypad row centres: 426 / 517 / 608 / 700
+> "Забыли код доступа?" text top: 769.5
+> For one screenshot, add a small yellow debug line at the bottom showing: env(safe-area-inset-top) in px (read it from a test div with padding-top: env(safe-area-inset-top)), window.innerWidth, and the lock screen root’s getBoundingClientRect().top.
+> Do not change sizes or the home screen.»*
+
+### 🛠️ Что сделано:
+1. **Экран блокировки (PasscodeScreen)**:
+   - Корневой контейнер: `position: fixed; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; background: #fff;`. Никакие родительские отступы или safe-area не сдвигают экран.
+   - Все блоки позиционированы абсолютно с точным смещением `top: calc(env(safe-area-inset-top, 0px) + Npx)`:
+     - Верхние иконки (Logout и X): `N = 13.5px`.
+     - Верх круга аватара: `N = 49px` (диаметр 88.5px).
+     - Верх текста «Парасат Ж.»: `N = 158.5px` (шрифт 15px Regular).
+     - Верх текста «Код доступа»: `N = 257px` (шрифт 15px Regular).
+     - Центр точек PIN: `N = 303px` (`top: calc(env(...) + 296.5px)`, диаметр 13px).
+     - Центры рядов клавиатуры: `N = 426 / 517 / 608 / 700` (кнопки `100 × 80`, `topOffset = cy - 40`: `386 / 477 / 568 / 660`).
+     - Верх текста «Забыли код доступа?»: `N = 769.5px` (шрифт 15px Regular, цвет `#1F6FA3`, `textDecoration: 'none'`).
+   - Добавлена желтая диагностическая строка внизу экрана: выводит значение `safeAreaTop` в px, `innerWidth` и `root.top`.
+2. **Главный экран и размеры элементов**: Сохранены без изменений.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+
 ## [2026-10-27 00:25] — Устранение повторного смещения safe-area (48px) на экране блокировки и отключение подчеркивания ссылки
 
 ### 🎯 Запрос пользователя:
