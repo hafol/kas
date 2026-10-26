@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// 1. Kaspi Logout Icon: 22.5 x 20.5, Left edge 15.5, Centre y 62.5
+// 1. Kaspi Logout Icon: 27 x 24.5 (20% larger than 22.5 x 20.5), Left edge 15.5, Centre y 62.5
 const LogoutIcon = () => (
-  <svg width="22.5" height="20.5" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
+  <svg width="27" height="24.5" viewBox="0 0 24 24" fill="none" style={{ display: 'block' }}>
     <path
       d="M5.5,20H12.5C13.605,20 14.5,19.105 14.5,18V16C14.5,15.448 14.948,15 15.5,15C16.052,15 16.5,15.448 16.5,16V18C16.5,20.209 14.709,22 12.5,22H5.5C3.291,22 1.5,20.209 1.5,18V6C1.5,3.791 3.291,2 5.5,2H12.5C14.709,2 16.5,3.791 16.5,6V8C16.5,8.552 16.052,9 15.5,9C14.948,9 14.5,8.552 14.5,8V6C14.5,4.895 13.605,4 12.5,4H5.5C4.395,4 3.5,4.895 3.5,6V18C3.5,19.105 4.395,20 5.5,20Z"
       fill="#212121"
@@ -95,29 +95,29 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
     setIsDismissing(true);
     setTimeout(() => {
       onBack();
-    }, 280);
+    }, 120);
   };
 
   const handleDigitPress = (d) => {
     if (digits.length >= 4) return;
 
-    // Trigger orange-red filled circle ripple animation on pressed number
+    // Trigger fast 120ms orange-red touch ripple animation on pressed number
     setActiveDigit(d);
     setTimeout(() => {
       setActiveDigit(null);
-    }, 180);
+    }, 120);
 
     const next = digits + d;
     setDigits(next);
 
     if (next.length === 4) {
-      // All 4 dots filled with orange-red: brief delay so user sees 4th dot, then unlock
+      // Snappy fade/unlock ~120ms
       timeoutRef.current = setTimeout(() => {
         setIsDismissing(true);
         setTimeout(() => {
           onUnlock();
-        }, 220);
-      }, 140);
+        }, 120);
+      }, 70);
     }
   };
 
@@ -172,9 +172,12 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         zIndex: 9999,
         maxWidth: '430px',
         margin: '0 auto',
+        opacity: isDismissing ? 0 : 1,
         transform: isSlidingIn || isDismissing ? 'translateY(100%)' : 'translateY(0)',
-        transition: 'transform 300ms cubic-bezier(0.22, 1, 0.36, 1)',
-        willChange: 'transform',
+        transition: isDismissing
+          ? 'opacity 120ms ease-out, transform 120ms ease-out'
+          : 'transform 260ms cubic-bezier(0.22, 1, 0.36, 1)',
+        willChange: 'transform, opacity',
         userSelect: 'none',
         WebkitUserSelect: 'none',
         boxSizing: 'border-box',
@@ -194,7 +197,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
         }}
       >
         {/* 1. TOP ICONS (Centre y = 62.5) */}
-        {/* Logout Button: 22.5 x 20.5, Left edge 15.5, Centre y 62.5 */}
+        {/* Logout Button: 27 x 24.5 (+20% larger), Left edge 15.5, Centre y 62.5 */}
         <button
           type="button"
           onClick={onLogout || handleDismiss}
@@ -202,9 +205,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
           style={{
             position: 'absolute',
             left: '15.5px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 12.5px)',
-            width: '22.5px',
-            height: '20.5px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 10.5px)',
+            width: '27px',
+            height: '24.5px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -315,7 +318,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
                 height: '11.5px',
                 borderRadius: '50%',
                 backgroundColor: filled ? '#F04926' : '#EEEEEE',
-                transition: 'background-color 0.16s ease'
+                transition: 'background-color 0.08s ease'
               }}
             />
           );
