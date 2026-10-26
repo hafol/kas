@@ -2,6 +2,34 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 00:25] — Устранение повторного смещения safe-area (48px) на экране блокировки и отключение подчеркивания ссылки
+
+### 🎯 Запрос пользователя:
+> *«Lock screen: the whole screen is 48 px too low because the status-bar safe area is added twice. Keep env(safe-area-inset-top) on ONE outer container only, and remove the second one (or any fixed 44/47/48 px top padding/margin) from the lock screen. Do not change sizes. After the fix, the tops must be:
+> top icons (logout and X): y 61.5 (now 112)
+> avatar circle top: y 97 (now 146)
+> name "Парасат Ж." text top: y 206.5 (now 258)
+> "Код доступа" text top: y 305 (now 356)
+> keypad row centres: 474 / 565 / 656 / 748 (now about 521 / 612 / 703 / 795)
+> "Забыли код доступа?" text top: y 817.5 (now 867.5, it touches the home bar)
+> Two more small fixes:
+> name and "Код доступа" font 15 px (now 13): "Парасат Ж." must be 89 px wide (now 77.5), "Код доступа" 96 px wide (now 85.5).
+> remove the underline from "Забыли код доступа?" (the original has none).»*
+
+### 🛠️ Что сделано:
+1. **Экран блокировки (PasscodeScreen)**:
+   - Гарантировано отсутствие двойного применения `env(safe-area-inset-top)` или любых фиксированных отступов (44/47/48px): все элементы позиционируются абсолютно от верхнего края viewport экрана (`y = 0`):
+     - Иконки верхнего ряда (Logout и X): `top: 61.5px` и `top: 65px`.
+     - Верх круга аватара: `top: 96.75px` (центр y 141, диаметр 88.5).
+     - Текст «Парасат Ж.»: `top: 206.5px`, размер шрифта `15px Regular` (ширина 89px).
+     - Текст «Код доступа»: `top: 305px`, размер шрифта `15px Regular` (ширина 96px).
+     - Точки PIN: центр `y: 351` (`top: 344.5px`, диаметр 13px).
+     - Центры рядов клавиатуры: строго `474 / 565 / 656 / 748`.
+     - Кнопка «Забыли код доступа?»: верх текста `top: 817.5px`, размер шрифта `15px Regular`, цвет `#1F6FA3`, явно задано `textDecoration: 'none'` (устранено подчёркивание).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+
 ## [2026-10-27 00:12] — Калибровка экрана «Код доступа» (KASPI COPY v14) под реальный iPhone 11 (414 × 896 pt)
 
 ### 🎯 Запрос пользователя:

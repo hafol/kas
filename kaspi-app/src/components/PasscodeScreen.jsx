@@ -421,6 +421,8 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout }) => {
               fontWeight: 400,
               lineHeight: '18px',
               color: '#1F6FA3',
+              textDecoration: 'none',
+              WebkitTextDecoration: 'none',
               fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
               cursor: 'pointer',
               outline: 'none'
