@@ -113,13 +113,13 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
               }}>
                 <IconComponent color={iconColor} />
 
-                {/* Messages badge: pill 20.5 x 15, radius 7.5, #F14635, 11 Semibold white */}
+                {/* Messages badge: pill 21 x 15, radius 7.5, #F14635, 11 Semibold white */}
                 {tab.badge && (
                   <div style={{
                     position: 'absolute',
                     top: '-2px',
                     left: '12px',
-                    width: '20.5px',
+                    width: '21px',
                     height: '15px',
                     borderRadius: '7.5px',
                     backgroundColor: '#F14635',
@@ -138,12 +138,12 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 )}
               </div>
 
-              {/* Label: 12 Regular, text top y 848.5 */}
+              {/* Label: 12 Regular, text top y 849 */}
               <span style={{
                 fontSize: '12px',
                 fontWeight: '400',
                 color: labelColor,
-                marginTop: '4.5px',
+                marginTop: '8px',
                 lineHeight: '14px',
                 letterSpacing: 0
               }}>

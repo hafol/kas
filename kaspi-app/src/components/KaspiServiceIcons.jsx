@@ -183,37 +183,41 @@ export const IconJobs = ({ size = 34.5, color = "#DF4E3E" }) => (
 
 export const IconAds = IconJobs;
 
-// Search Bar Camera with Sparkle (Exact vector from camera-sparkle-icon-grey.svg)
-export const CameraSparkleIcon = ({ size = 26.5, color = "#555555" }) => (
-  <svg
-    width={size}
-    height={size * (190 / 220)}
-    viewBox="4 22 220 190"
-    fill="none"
-    stroke={color}
-    strokeWidth="17"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    style={{ flexShrink: 0, cursor: 'pointer' }}
-  >
-    {/* Camera body (open at the top right, where the sparkle sits) */}
-    <path d="M118 44.5H89C75 44.5 73 63 57 63H49.500A28 28 0 0 0 21.500 91V166.500A28 28 0 0 0 49.500 194.500H168.500A24 24 0 0 0 192.500 170.500V131" />
-    {/* Lens */}
-    <circle cx="107" cy="127.5" r="34.5" />
-    {/* Flash dot */}
-    <circle cx="52" cy="93.5" r="7.5" fill={color} stroke="none" />
-    {/* Sparkle */}
-    <path
-      d="M183 32.500Q192 55 214.500 64Q192 73 183 95.500Q174 73 151.500 64Q174 55 183 32.500Z"
-      fill={color}
-      strokeWidth="3"
-    />
-  </svg>
-);
+// Search Bar Camera with Sparkle (Exact vector from camera-sparkle-icon-grey.svg: 24 x 20)
+export const CameraSparkleIcon = ({ width = 24, height = 20, size, color = "#555555" }) => {
+  const w = size || width;
+  const h = height || (size ? size * (190 / 220) : 20);
+  return (
+    <svg
+      width={w}
+      height={h}
+      viewBox="4 22 220 190"
+      fill="none"
+      stroke={color}
+      strokeWidth="17"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ flexShrink: 0, cursor: 'pointer' }}
+    >
+      {/* Camera body (open at the top right, where the sparkle sits) */}
+      <path d="M118 44.5H89C75 44.5 73 63 57 63H49.500A28 28 0 0 0 21.500 91V166.500A28 28 0 0 0 49.500 194.500H168.500A24 24 0 0 0 192.500 170.500V131" />
+      {/* Lens */}
+      <circle cx="107" cy="127.5" r="34.5" />
+      {/* Flash dot */}
+      <circle cx="52" cy="93.5" r="7.5" fill={color} stroke="none" />
+      {/* Sparkle */}
+      <path
+        d="M183 32.500Q192 55 214.500 64Q192 73 183 95.500Q174 73 151.500 64Q174 55 183 32.500Z"
+        fill={color}
+        strokeWidth="3"
+      />
+    </svg>
+  );
+};
 
-// Top Bar Cart (Exact vector from ic_ds_cart_500.xml in APK, lower contrast #9E9E9E)
-export const TopBarCartIcon = ({ color = "#9E9E9E" }) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+// Top Bar Cart (Exact vector from ic_ds_cart_500.xml in APK: 29.5 x 25)
+export const TopBarCartIcon = ({ width = 29.5, height = 25, color = "#9E9E9E" }) => (
+  <svg width={width} height={height} viewBox="0 0 24 24" fill="none">
     <path
       d="M1,4C1,3.448 1.448,3 2,3H3.875C4.986,3 5.964,3.733 6.275,4.8L6.625,6H20.558C22.196,6 23.353,7.605 22.834,9.159L21.018,14.607C20.542,16.036 19.205,17 17.698,17H10.375C8.819,17 7.451,15.973 7.015,14.48L4.355,5.36C4.293,5.147 4.097,5 3.875,5H2C1.448,5 1,4.552 1,4ZM7.208,8L8.935,13.92C9.122,14.56 9.708,15 10.375,15H17.698C18.344,15 18.917,14.587 19.121,13.974L20.937,8.526C21.023,8.267 20.831,8 20.558,8H7.208Z"
       fill={color}

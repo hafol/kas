@@ -2,6 +2,58 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 05:45] — Юстировка главной страницы (Round 4 Checklist: 37 пунктов) по замерам iPhone 11 (414 × 896 pt)
+
+### 🎯 Запрос пользователя:
+> *«Apply EVERY change in the list below to the Home screen. Last time most of these changes were skipped, so work through the list one item at a time. After each item, write one line saying which file and which value you changed (old value → new value). Do not change anything that is not in the list. Do not redesign. All numbers are pt (iOS) / dp (Android) / CSS px at 1x on a 414 x 896 screen.»*
+
+### 🛠️ Что сделано (полный список 37 пунктов):
+1. **Search field top**: 57 → 51.5 (`HomeScreen.jsx`, paddingTop: 51.5px).
+2. **Search field height**: 46 → 42.5 (`HomeScreen.jsx`, height: 42.5px).
+3. **Search field right edge**: x 343.5 → x 350. Left edge 17.5, width = 332.5 на 414 (`HomeScreen.jsx`).
+4. **Magnifier**: 17 × 17 at x 36 → 19 × 19 at x 30.5 (`HomeScreen.jsx`, paddingLeft: 13px, Search size 19).
+5. **Placeholder «Поиск по Kaspi.kz»**: font 18 → 17 Regular. Text x 68 → 60.5 (`HomeScreen.jsx`, fontSize: 17px, marginLeft: 11px).
+6. **Camera icon**: 20.5 × 18 → 24 × 20, right edge 13 inside field (`HomeScreen.jsx`, `KaspiServiceIcons.jsx`).
+7. **Cart icon**: 33 × 31 → 29.5 × 25, centred vertically on search field (`HomeScreen.jsx`, `KaspiServiceIcons.jsx`).
+8. **Cart badge**: 17 × 14 → 15 × 15 circle, number 11 Semibold (`HomeScreen.jsx`).
+9. **Banner**: 380 × 112 (top 105, marginTop: 11px) (`HomeScreen.jsx`).
+10. **Gap banner bottom to first icon row top**: 26 → 20 (`HomeScreen.jsx`, marginTop: 20px).
+11. **Gap icon bottom to label text top**: 17 → 13.5 (`HomeScreen.jsx`, label marginTop: 7.5px).
+12. **Icon row pitch**: 84.5 → 78.5 (`HomeScreen.jsx`, rowGap: 18.5px).
+13. **Grid labels**: font 16 → 15 Regular (`HomeScreen.jsx`, fontSize: 15px, fontWeight: 400).
+14. **Magnum tile**: 37.5 × 38 → 34.5 × 35, radius 8 (`HomeScreen.jsx`, `KaspiServiceIcons.jsx`).
+15. **Gap row 2 labels to divider**: 16.5 → 14 (`HomeScreen.jsx`, divider marginTop: 14px).
+16. **Gap divider to deposit tile 1**: 26 → 23.5 (`HomeScreen.jsx`, deposits marginTop: 23.5px).
+17. **Deposit tiles**: 62 × 48 → 56.5 × 44, radius 6 (`HomeScreen.jsx`, width: 56.5px, height: 44px).
+18. **Gap between two deposit tiles**: 13 → 9.5 (row pitch 53.5) (`HomeScreen.jsx`, gap: 9.5px).
+19. **Deposit text x**: 106.5 → 95 (20 after tile) (`HomeScreen.jsx`, marginLeft: 20px).
+20. **Deposit text font**: 19.5 → 18 Regular (`HomeScreen.jsx`, fontSize: 18px).
+21. **Line 1 «Накопительный» text top**: 3 below tile top → level with tile top (`HomeScreen.jsx`, marginTop: -2.5px).
+22. **Pill**: 43.5 × 25 → 39 × 22.5, radius 11.25. Pill text «18%»: font 17.5 → 15.5 Semibold, starts 5 after «Депозит» (`HomeScreen.jsx`).
+23. **Gap tile 2 bottom to title text top**: 34 → 26 (`HomeScreen.jsx`, marginTop: 26px).
+24. **Section title «Вы недавно смотрели»**: font 20.5 → 18 Bold (`HomeScreen.jsx`, fontSize: 18px, fontWeight: 700).
+25. **Gap title text bottom to images**: 18.5 → 14.5 (`HomeScreen.jsx`, marginTop: 14.5px).
+26. **Product image tile**: 120 × 121 → 110 × 110, radius 10, 1 pt border #EFEFEF (`HomeScreen.jsx`).
+27. **Card pitch**: 131 → 119.5 (gap 9.5). First card x 17.5 (`HomeScreen.jsx`, paddingLeft: 17.5px, gap: 9.5px).
+28. **Image chip**: height 23 → 19.5, text → 13 Bold, radius 6, pinned bottom-left 1 inside (`HomeScreen.jsx`).
+29. **Gap image bottom to price text top**: 11.5 → 7 (`HomeScreen.jsx`, marginTop: 5.5px).
+30. **Price**: font 18 → 15 Bold, old price 12 Regular #8E8E8E struck through (`HomeScreen.jsx`).
+31. **Bonus box**: 110 × 38, radius 8, top 21 below price text top, line 1 13 Bold #54A000, line 2 12 Regular #000 (`HomeScreen.jsx`).
+32. **Product name & rating**: name 13 Regular, top 5 below box; rating 13, top 19 below name (`HomeScreen.jsx`).
+33. **Divider 2**: 0.5 #EBEBEB at y 798, full width (`HomeScreen.jsx`, marginTop: 16px).
+34. **Tab bar top hairline**: y 802.5 → y 808. Bar height 54 + bottom safe area (`BottomNavBar.jsx`).
+35. **Tab labels**: font 13.5 → 12 Regular, text top y 849 (`BottomNavBar.jsx`, marginTop: 8px).
+36. **Tab icons**: keep size, move down 2.5 (icon centre y 828) (`BottomNavBar.jsx`, paddingTop: 8px).
+37. **Messages badge**: 22 × 16.5 → 21 × 15 pill, radius 7.5 (`BottomNavBar.jsx`, width: 21px, height: 15px).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`kaspi-app/src/components/BottomNavBar.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx)
+- [`kaspi-app/src/components/KaspiServiceIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiServiceIcons.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-26 05:25] — Юстировка главной страницы (Round 3) по замерам iPhone 11 (414 × 896 pt)
 
 ### 🎯 Запрос пользователя:

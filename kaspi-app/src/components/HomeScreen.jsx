@@ -337,29 +337,37 @@ export const HomeScreen = ({
           Placeholder "Поиск по Kaspi.kz": 17 Regular #8E8E8E, starts x 60.
           Camera icon box 24 x 20.5, right edge 13 inside field.
           Cart icon box 30 x 25.5, x 364.5, centre exactly on field's vertical centre.
-          Cart badge: circle 15.5, #F14635, 11 Semibold white.
+      {/* =====================================================================
+          1. HEADER (search + cart) — STICKY WITH SCROLL
+          Search field top: 51.5 (item 1). Height: 42.5 (item 2).
+          Search field right edge: x 350, left edge: 17.5, width: 332.5 on 414 (item 3).
+          Magnifier: 19 x 19 at x 30.5 (left edge 13 inside field) (item 4).
+          Placeholder "Поиск по Kaspi.kz": 17 Regular, starts x 60.5 (item 5).
+          Camera icon: 24 x 20, right edge 13 inside field (item 6).
+          Cart icon: 29.5 x 25, centred vertically on search field (item 7).
+          Cart badge: 15 x 15 circle, 11 Semibold (item 8).
       ===================================================================== */}
       <div style={{
         position: 'sticky',
         top: 0,
         zIndex: 45,
         backgroundColor: '#FFFFFF',
-        paddingTop: 'calc(env(safe-area-inset-top, 44px) - 44px + 51.5px)',
+        paddingTop: '51.5px',
         paddingBottom: '0px',
         paddingLeft: '17.5px',
-        paddingRight: '19.5px',
+        paddingRight: '20px',
         display: 'flex',
         alignItems: 'center',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        {/* Search Field */}
+        {/* Search Field: height 42.5, width = screen - 81.5 (332.5 on 414) */}
         <div
           onClick={onOpenSearch}
           className="touchable"
           style={{
             flex: 1,
-            height: '42px',
+            height: '42.5px',
             backgroundColor: '#F2F2F2',
             borderRadius: '10px',
             border: 'none',
@@ -371,15 +379,15 @@ export const HomeScreen = ({
             boxSizing: 'border-box'
           }}
         >
-          {/* Magnifier 19 x 19, #8E8E8E, left edge 13 inside field */}
+          {/* Magnifier 19 x 19 at x 30.5 (left edge 13 inside field) */}
           <Search size={19} color="#8E8E8E" strokeWidth={2.2} style={{ flexShrink: 0 }} />
 
-          {/* Placeholder: 17 Regular, #8E8E8E, starts x 60 (10.5 after magnifier) */}
+          {/* Placeholder: 17 Regular, starts x 60.5 (11 after magnifier) */}
           <span style={{
             fontSize: '17px',
             fontWeight: '400',
             color: '#8E8E8E',
-            marginLeft: '10.5px',
+            marginLeft: '11px',
             flex: 1,
             userSelect: 'none',
             whiteSpace: 'nowrap',
@@ -391,27 +399,27 @@ export const HomeScreen = ({
             Поиск по Kaspi.kz
           </span>
 
-          {/* Camera icon box: 24 x 20.5, right edge 13 inside field */}
+          {/* Camera icon box: 24 x 20, right edge 13 inside field */}
           <div style={{
             width: '24px',
-            height: '20.5px',
+            height: '20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0
           }}>
-            <CameraSparkleIcon size={20.5} color="#555555" />
+            <CameraSparkleIcon width={24} height={20} color="#555555" />
           </div>
         </div>
 
-        {/* Cart icon box: 30 x 25.5, x 364.5 (15 after field), centre on field's vertical centre */}
+        {/* Cart icon box: 29.5 x 25, centred vertically on search field, starts x 364.5 */}
         <div
           onClick={() => onOpenService('cart')}
           className="touchable"
           style={{
-            marginLeft: '15px',
-            width: '30px',
-            height: '25.5px',
+            marginLeft: '14.5px',
+            width: '29.5px',
+            height: '25px',
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
@@ -420,14 +428,14 @@ export const HomeScreen = ({
             flexShrink: 0
           }}
         >
-          <TopBarCartIcon width={26} height={25.5} color="#9E9E9E" />
-          {/* Cart badge: circle 15.5, #F14635, 11 Semibold white */}
+          <TopBarCartIcon width={29.5} height={25} color="#9E9E9E" />
+          {/* Cart badge: 15 x 15 circle, number 11 Semibold */}
           <div style={{
             position: 'absolute',
             top: '-5px',
             right: '-5px',
-            width: '15.5px',
-            height: '15.5px',
+            width: '15px',
+            height: '15px',
             borderRadius: '50%',
             backgroundColor: '#F14635',
             color: '#FFFFFF',
@@ -436,7 +444,7 @@ export const HomeScreen = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            lineHeight: '15.5px',
+            lineHeight: '15px',
             boxSizing: 'border-box',
             pointerEvents: 'none'
           }}>
@@ -447,11 +455,11 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           2. BANNER
-          Gap from search field 11.5 (top 105.5 to 217). Size 380 x 112, x 17.
+          Keep 380 x 112 (item 9). Top 105 (gap 11 below search field at 94).
           Page indicator capsule: dots 4.5, centre-to-centre 8.75, bottom 4.5.
       ===================================================================== */}
       <div style={{
-        marginTop: '11.5px',
+        marginTop: '11px',
         paddingLeft: '17px',
         paddingRight: '17px',
         width: '100%',
@@ -550,15 +558,15 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           3. SHORTCUT GRID (2 x 4)
-          Row 1 icon top 20.5 below banner (y 237).
-          Column centres x 62.5 / 159.5 / 256.5 / 353.5 on 414 (4 equal columns of 97 starting at x 14).
-          Icon box 34 x 34. Magnum tile 34.5 x 35, radius 8.
-          Label: 15 Regular #000, 8 pt spacing, line box 15/18 (text top 13.5 below icon bottom).
-          Row pitch 78 icon top to icon top. Row 2 icon top y 315.
-          Divider: 14.5 below row 2 labels (y 388.5). 0.5 pt, #EBEBEB, full width.
+          Gap from banner bottom to first icon row top: 20 (item 10; row 1 top y 237).
+          Gap from icon bottom to label text top: 13.5 (item 11; label marginTop 7.5).
+          Icon row pitch: 78.5 (item 12; row 2 top y 315.5; rowGap 18.5).
+          Grid labels: font 15 Regular (item 13).
+          Magnum tile: 34.5 x 35, radius 8 (item 14).
+          Gap from row 2 labels to divider: 14 (item 15; divider y 388.5).
       ===================================================================== */}
       <div style={{
-        marginTop: '20.5px',
+        marginTop: '20px',
         paddingLeft: '14px',
         paddingRight: '12px',
         width: '100%',
@@ -567,7 +575,7 @@ export const HomeScreen = ({
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          rowGap: '18px', // icon 34 + 8 spacing + 18 line box = 60; 60 + 18 rowGap = 78 pitch!
+          rowGap: '18.5px',
           width: '100%'
         }}>
           {/* Row 1 */}
@@ -580,7 +588,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconShop size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Магазин
             </span>
           </div>
@@ -594,7 +602,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconMyBank size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Мой Банк
             </span>
           </div>
@@ -608,7 +616,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconPayments size={30.5} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Платежи
             </span>
           </div>
@@ -622,7 +630,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconTransfers size={30.5} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Переводы
             </span>
           </div>
@@ -637,7 +645,7 @@ export const HomeScreen = ({
             <div style={{ width: '34.5px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconMagnum width={34.5} height={35} />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '6.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Magnum
             </span>
           </div>
@@ -651,7 +659,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconTravel size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Travel
             </span>
           </div>
@@ -665,7 +673,7 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconGov size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Госуслуги
             </span>
           </div>
@@ -679,16 +687,16 @@ export const HomeScreen = ({
             <div style={{ width: '34px', height: '34px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconJobs size={34} color="#F14635" />
             </div>
-            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '8px', lineHeight: '18px', letterSpacing: 0 }}>
+            <span style={{ fontSize: '15px', fontWeight: '400', color: '#000000', marginTop: '7.5px', lineHeight: '18px', letterSpacing: 0 }}>
               Работа
             </span>
           </div>
         </div>
       </div>
 
-      {/* Divider 1: full width, 0.5 pt, #EBEBEB, 14.5 below row 2 labels (y 388.5) */}
+      {/* Divider 1: full width, 0.5 pt, #EBEBEB, 14 below row 2 labels (y 388.5) (item 15) */}
       <div style={{
-        marginTop: '14.5px',
+        marginTop: '14px',
         height: '0.5px',
         backgroundColor: '#EBEBEB',
         width: '100%',
@@ -698,16 +706,16 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           4. DEPOSIT ROWS
-          Tile 1 top 22.5 below divider (y 411.5).
-          Tiles 56.5 x 44, radius 6, #FFD302, x 18.5.
-          Tile pitch 53.5, gap between tiles 9.5.
-          Text x 95 (20 after tile), 18 Regular #000, line height 24.
-          Row 1: line 1 "Накопительный" text top level with tile top. Line 2 "Депозит" + pill.
-          Pill: 5 after "Депозит", 40 x 23, text "18%" 15.5 Semibold #000.
-          Row 2: "Kaspi Депозит 15%" one line, vertically centred on tile.
+          Gap from divider to tile 1: 23.5 (item 16; tile 1 top y 412).
+          Deposit tiles: 56.5 x 44, radius 6 (item 17).
+          Gap between two tiles: 9.5 (row pitch 53.5) (item 18; tile 2 top y 465).
+          Deposit text x: 95 (20 after tile) (item 19).
+          Deposit text font: 18 Regular (item 20).
+          Line 1 "Накопительный" text top: level with tile top (item 21).
+          Pill: 39 x 22.5, radius 11.25, 5 after "Депозит", "18%" 15.5 Semibold (item 22).
       ===================================================================== */}
       <div style={{
-        marginTop: '22.5px',
+        marginTop: '23.5px',
         paddingLeft: '18.5px',
         paddingRight: '18.5px',
         display: 'flex',
@@ -746,7 +754,7 @@ export const HomeScreen = ({
             display: 'flex',
             flexDirection: 'column',
             marginLeft: '20px',
-            marginTop: '-1px'
+            marginTop: '-2.5px'
           }}>
             <div style={{
               fontSize: '18px',
@@ -767,15 +775,15 @@ export const HomeScreen = ({
               }}>
                 Депозит
               </span>
-              {/* Rate pill: 5 after "Депозит", 40 x 23, radius 11.5, #FFD302, 18% 15.5 Semibold #000 */}
+              {/* Rate pill: 39 x 22.5, radius 11.25, 5 after "Депозит", "18%" 15.5 Semibold */}
               <div style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: '#FFD302',
-                borderRadius: '11.5px',
-                width: '40px',
-                height: '23px',
+                borderRadius: '11.25px',
+                width: '39px',
+                height: '22.5px',
                 marginLeft: '5px',
                 flexShrink: 0
               }}>
@@ -843,17 +851,18 @@ export const HomeScreen = ({
 
       {/* =====================================================================
           5. "ВЫ НЕДАВНО СМОТРЕЛИ" CAROUSEL
-          Title: 18 Bold #000, x 18.5, text top 26 below tile 2 bottom (y 534.5).
-          Images start 15.5 below title text bottom (y 566.5).
-          Image tile: 110 x 110, radius 10, white fill, 1 pt border #EFEFEF.
-          Card pitch 119.5, gap 9.5, first card x 17.5.
-          Image chip: height 19.5, radius 6, text 13 Bold white, pinned bottom-left, 1 pt inset.
-          Price: 7 below image bottom (y 684). 15 Bold #000.
-          Discounted: price #F14635, old price 12 Regular #8E8E8E, 4 after.
-          Bonus box: 110 x 38, radius 8, #E6F8D0, top 21 below price text top (y 705).
-          Product name: 13 Regular #000, 1 line, tail ellipsis, text top 5 below box (y 748).
-          Rating row: text top 19 below name text top (y 767).
-          Divider: 0.5 #EBEBEB at y 798, full width.
+          Gap from tile 2 bottom to title text top: 26 (item 23; y 535).
+          Section title: 18 Bold #000 (item 24; 189 wide).
+          Gap from title text bottom to images: 14.5 (item 25; images y 566.5).
+          Product image tile: 110 x 110, radius 10, 1 pt border #EFEFEF (item 26).
+          Card pitch: 119.5 (gap 9.5), first card x 17.5 (item 27).
+          Image chip: height 19.5, text 13 Bold, radius 6, pinned bottom-left 1 inside (item 28).
+          Gap from image bottom to price text top: 7 (item 29; price y 684).
+          Price: 15 Bold #000, old price 12 Regular #8E8E8E (item 30).
+          Bonus box: 110 x 38, radius 8, top 21 below price text top (y 705 to 743) (item 31).
+          Name: 13 Regular, text top 5 below box (y 748) (item 32).
+          Rating: 13 Semibold/Regular, text top 19 below name text top (y 767) (item 32).
+          Divider: 0.5 #EBEBEB at y 798, full width (item 33).
       ===================================================================== */}
       <div style={{
         marginTop: '26px',
@@ -872,9 +881,9 @@ export const HomeScreen = ({
           Вы недавно смотрели
         </div>
 
-        {/* Horizontal Carousel: images start 15.5 below title text bottom (y 566.5) */}
+        {/* Horizontal Carousel: images start 14.5 below title text bottom (y 566.5) */}
         <div style={{
-          marginTop: '15.5px',
+          marginTop: '14.5px',
           display: 'flex',
           gap: '9.5px',
           overflowX: 'auto',
@@ -978,7 +987,7 @@ export const HomeScreen = ({
 
               {/* Price: 7 below image bottom (y 684), 15 Bold #000 */}
               <div style={{
-                marginTop: '7px',
+                marginTop: '5.5px',
                 display: 'flex',
                 alignItems: 'baseline',
                 whiteSpace: 'nowrap',
@@ -1049,7 +1058,7 @@ export const HomeScreen = ({
 
               {/* Product name: 13 Regular #000, 1 line, tail ellipsis, text top 5 below box (y 748) */}
               <div style={{
-                marginTop: item.bonusBox ? '5px' : '7px',
+                marginTop: item.bonusBox ? '4px' : '6px',
                 fontSize: '13px',
                 fontWeight: '400',
                 color: '#000000',
@@ -1092,9 +1101,9 @@ export const HomeScreen = ({
         </div>
       </div>
 
-      {/* Divider 2: full width, 0.5 pt, #EBEBEB at y 798 */}
+      {/* Divider 2: full width, 0.5 pt, #EBEBEB at y 798 (item 33) */}
       <div style={{
-        marginTop: '15px',
+        marginTop: '16px',
         height: '0.5px',
         backgroundColor: '#EBEBEB',
         width: '100%',
