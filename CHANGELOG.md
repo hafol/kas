@@ -2,6 +2,19 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-26 18:43] — Смещение иконки Magnum ниже на 1.5px
+
+### 🎯 Запрос пользователя:
+> *«the svg of magnum set it below 1,5px»*
+
+### 🛠️ Что сделано:
+1. **Иконка Magnum (ряд 2 сервисов)**:
+   - В [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx) смещен контейнер иконки Magnum ниже на 1.5px: `marginTop` изменен с `-2.5px` на `-1px` (верх плитки переместился с y 313 на y 314.5, выровнявшись по центру с остальными иконками ряда 2: Travel, Госуслуги, Работа).
+   - Подпись «Magnum»: `marginTop` скорректирован с `10.5px` на `9px` для сохранения точного единого базового уровня подписей (верх y 359.5).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+
 ## [2026-10-26 18:36] — Увеличение иконки корзины, возврат аутентичных SVG депозитов и увеличение иконки Главная на 10%
 
 ### 🎯 Запрос пользователя:

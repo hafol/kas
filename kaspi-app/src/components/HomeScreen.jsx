@@ -631,16 +631,16 @@ export const HomeScreen = ({
           </div>
 
           {/* Row 2 */}
-          {/* 5. Magnum: tile 35.5 x 36, radius 8, top y 313 */}
+          {/* 5. Magnum: tile 35.5 x 36, radius 8, moved down 1.5px (top y 314.5) */}
           <div
             onClick={() => onOpenService('magnum')}
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '35.5px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-2.5px' }}>
+            <div style={{ width: '35.5px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-1px' }}>
               <IconMagnum width={35.5} height={36} />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '10.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '9px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Magnum
             </span>
           </div>
