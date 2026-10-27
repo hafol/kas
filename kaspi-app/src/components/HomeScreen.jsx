@@ -784,14 +784,15 @@ export const HomeScreen = ({
                 width: '40px',
                 height: '23px',
                 marginLeft: '6.5px',
-                marginTop: '-3px',
+                marginTop: '-4.5px',
                 flexShrink: 0
               }}>
                 <span style={{
                   fontSize: '15px',
-                  fontWeight: '700',
+                  fontWeight: '600',
                   color: '#000000',
-                  lineHeight: 1
+                  lineHeight: 1,
+                  transform: 'translateY(-0.5px)'
                 }}>
                   18%
                 </span>

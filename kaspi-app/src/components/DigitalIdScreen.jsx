@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ZoomIn, ZoomOut, Check, Loader2 } from 'lucide-react';
+import { ZoomIn, ZoomOut, Check, Loader2, X, Share2, Download } from 'lucide-react';
+import QRCode from 'qrcode';
 import {
   saveDocumentCard,
   loadDocumentCard,
@@ -120,6 +121,115 @@ export const DigitalIdScreen = ({ onBack }) => {
   // Requisites state
   const [reqValues, setReqValues] = useState(() => syncReqs || {});
   const reqEditedRef = useRef(false);
+
+  // Bottom Sheet Modal & button press state
+  const [activeModal, setActiveModal] = useState(null); // null | 'qr' | 'send'
+  const [pressedBtn, setPressedBtn] = useState(null); // 'present' | 'send'
+  const [randomCode, setRandomCode] = useState('577642');
+  const [qrDataUrl, setQrDataUrl] = useState('');
+  const [isSending, setIsSending] = useState(false);
+
+  // Generate dynamic QR code based on user's requisites and new random 6-digit code
+  const openQrModal = useCallback(async () => {
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    setRandomCode(code);
+
+    const fio = [reqValues.surname, reqValues.name, reqValues.patronymic].filter(Boolean).join(' ') || 'ЖҰМАШ ПАРАСАТ ДІЛМҰРАТҰЛЫ';
+    const payload = [
+      'KZ_DIGITAL_ID',
+      `IIN:${reqValues.iin || '100723552859'}`,
+      `FIO:${fio}`,
+      `DOC:${reqValues.docNumber || '064142808'}`,
+      `BIRTH:${reqValues.birthDate || '23.07.2010'}`,
+      `EXP:${reqValues.expiryDate || '23.07.2030'}`,
+      `CODE:${code}`,
+      `TS:${Date.now()}`
+    ].join(';');
+
+    try {
+      const url = await QRCode.toDataURL(payload, {
+        margin: 0,
+        width: 240,
+        errorCorrectionLevel: 'M',
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        }
+      });
+      setQrDataUrl(url);
+    } catch (err) {
+      console.warn('QR generation error:', err);
+    }
+
+    setActiveModal('qr');
+  }, [reqValues]);
+
+  const handlePresentClick = () => {
+    setPressedBtn('present');
+    setTimeout(() => {
+      setPressedBtn(null);
+      openQrModal();
+    }, 150);
+  };
+
+  const handleSendClick = () => {
+    setPressedBtn('send');
+    setTimeout(() => {
+      setPressedBtn(null);
+      setActiveModal('send');
+    }, 150);
+  };
+
+  const handleCloseModal = () => {
+    setActiveModal(null);
+  };
+
+  // Send already uploaded image as PNG file (Web Share API or download)
+  const handleSendPngFile = async () => {
+    setIsSending(true);
+    const src = photoUrl || '/kaspi_assets/documents/kz_id_clean.jpg';
+    try {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = async () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth || 750;
+        canvas.height = img.naturalHeight || 960;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(async (blob) => {
+          setIsSending(false);
+          if (!blob) return;
+          const file = new File([blob], 'udostoverenie_lichnosti.png', { type: 'image/png' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({
+                files: [file],
+                title: 'Удостоверение личности',
+                text: 'Цифровой документ'
+              });
+              return;
+            } catch (err) {
+              if (err.name === 'AbortError') return;
+            }
+          }
+          // Direct download fallback
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'udostoverenie_lichnosti.png';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }, 'image/png');
+      };
+      img.onerror = () => setIsSending(false);
+      img.src = src;
+    } catch (e) {
+      setIsSending(false);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -614,7 +724,8 @@ export const DigitalIdScreen = ({ onBack }) => {
           {/* Button 1 "Предъявить документ" */}
           <button
             type="button"
-            className="did-btn-primary touchable"
+            onClick={handlePresentClick}
+            className={`did-btn-primary touchable ${pressedBtn === 'present' ? 'is-pressed' : ''}`}
             style={{
               position: 'absolute',
               top: '658.5px', // 706.5 - 48 = 658.5px
@@ -647,7 +758,8 @@ export const DigitalIdScreen = ({ onBack }) => {
           {/* Button 2 "Отправить документ" */}
           <button
             type="button"
-            className="did-btn-secondary touchable"
+            onClick={handleSendClick}
+            className={`did-btn-secondary touchable ${pressedBtn === 'send' ? 'is-pressed' : ''}`}
             style={{
               position: 'absolute',
               top: '734px', // 782 - 48 = 734px
@@ -788,7 +900,8 @@ export const DigitalIdScreen = ({ onBack }) => {
           {/* Button 2 "Отправить реквизиты" */}
           <button
             type="button"
-            className="did-btn-secondary touchable"
+            onClick={handleSendClick}
+            className={`did-btn-secondary touchable ${pressedBtn === 'send' ? 'is-pressed' : ''}`}
             style={{
               position: 'absolute',
               top: '734px', // 782 - 48 = 734px
@@ -819,6 +932,306 @@ export const DigitalIdScreen = ({ onBack }) => {
             Отправить реквизиты
           </button>
         </>
+      )}
+
+      {/* =====================================================================
+          BOTTOM SHEET MODAL (Предъявить документ QR / Отправить документ PNG)
+          ===================================================================== */}
+      {activeModal && (
+        <div
+          className="bottom-sheet-overlay"
+          onClick={handleCloseModal}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.45)',
+            zIndex: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            overflow: 'hidden'
+          }}
+        >
+          <div
+            className="bottom-sheet-content"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderTopLeftRadius: '24px',
+              borderTopRightRadius: '24px',
+              width: '100%',
+              maxWidth: '430px',
+              boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.2)',
+              position: 'relative',
+              boxSizing: 'border-box',
+              paddingBottom: '24px'
+            }}
+          >
+            {/* Top pill drag bar */}
+            <div
+              style={{
+                width: '38px',
+                height: '4px',
+                backgroundColor: '#D8D8DC',
+                borderRadius: '2px',
+                margin: '10px auto 0'
+              }}
+            />
+
+            {/* Header row */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '16px 20px 4px 24px'
+              }}
+            >
+              <h2
+                style={{
+                  fontFamily,
+                  fontSize: '22px',
+                  fontWeight: 700,
+                  color: '#1C1C1E',
+                  margin: 0,
+                  letterSpacing: '-0.3px'
+                }}
+              >
+                Удостоверение личности
+              </h2>
+              <button
+                type="button"
+                onClick={handleCloseModal}
+                aria-label="Закрыть"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: '4px',
+                  cursor: 'pointer',
+                  color: '#1C1C1E',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  outline: 'none',
+                  WebkitTapHighlightColor: 'transparent'
+                }}
+              >
+                <X size={24} strokeWidth={2.2} />
+              </button>
+            </div>
+
+            {/* Modal Content: QR Code */}
+            {activeModal === 'qr' && (
+              <div>
+                <p
+                  style={{
+                    fontFamily,
+                    fontSize: '17px',
+                    fontWeight: 400,
+                    color: '#1C1C1E',
+                    textAlign: 'center',
+                    marginTop: '16px',
+                    marginBottom: '20px',
+                    letterSpacing: '-0.1px'
+                  }}
+                >
+                  Покажите QR-код сотруднику
+                </p>
+
+                {/* QR Code container */}
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: '0 auto',
+                    width: '185px',
+                    height: '185px'
+                  }}
+                >
+                  {qrDataUrl ? (
+                    <img
+                      src={qrDataUrl}
+                      alt="QR-код удостоверения личности"
+                      draggable={false}
+                      style={{
+                        width: '185px',
+                        height: '185px',
+                        display: 'block',
+                        imageRendering: 'pixelated'
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: '185px',
+                        height: '185px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#F5F5F7',
+                        borderRadius: '12px'
+                      }}
+                    >
+                      <Loader2 size={32} className="animate-spin" color="#0175CC" />
+                    </div>
+                  )}
+                </div>
+
+                <p
+                  style={{
+                    fontFamily,
+                    fontSize: '17px',
+                    fontWeight: 400,
+                    color: '#1C1C1E',
+                    textAlign: 'center',
+                    marginTop: '22px',
+                    marginBottom: '6px',
+                    letterSpacing: '-0.1px'
+                  }}
+                >
+                  или скажите код
+                </p>
+
+                <div
+                  style={{
+                    fontFamily,
+                    fontSize: '32px',
+                    fontWeight: 700,
+                    color: '#000000',
+                    textAlign: 'center',
+                    letterSpacing: '0.8px',
+                    marginTop: '4px',
+                    paddingBottom: '16px'
+                  }}
+                >
+                  {randomCode}
+                </div>
+              </div>
+            )}
+
+            {/* Modal Content: Send PNG File */}
+            {activeModal === 'send' && (
+              <div style={{ padding: '0 20px' }}>
+                <p
+                  style={{
+                    fontFamily,
+                    fontSize: '16px',
+                    fontWeight: 400,
+                    color: '#666666',
+                    textAlign: 'center',
+                    marginTop: '12px',
+                    marginBottom: '16px'
+                  }}
+                >
+                  Отправить фото удостоверения личности (PNG)
+                </p>
+
+                {/* Preview Thumbnail */}
+                <div
+                  style={{
+                    width: '240px',
+                    height: '150px',
+                    borderRadius: '10px',
+                    overflow: 'hidden',
+                    margin: '0 auto',
+                    boxShadow: '0 3px 12px rgba(0, 0, 0, 0.08)',
+                    border: '1px solid #E5E5EA',
+                    backgroundColor: '#F9F9FB',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <img
+                    src={photoUrl || '/kaspi_assets/documents/kz_id_clean.jpg'}
+                    alt="Удостоверение личности"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain'
+                    }}
+                  />
+                </div>
+
+                <div
+                  style={{
+                    fontFamily,
+                    fontSize: '13.5px',
+                    color: '#8E8E93',
+                    textAlign: 'center',
+                    marginTop: '10px',
+                    marginBottom: '20px'
+                  }}
+                >
+                  udostoverenie_lichnosti.png
+                </div>
+
+                {/* Action buttons */}
+                <button
+                  type="button"
+                  onClick={handleSendPngFile}
+                  disabled={isSending}
+                  className="touchable"
+                  style={{
+                    width: '100%',
+                    height: '56px',
+                    backgroundColor: primaryBlue,
+                    borderRadius: '12px',
+                    border: 'none',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                    fontFamily,
+                    fontSize: '17px',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    marginBottom: '10px'
+                  }}
+                >
+                  {isSending ? (
+                    <Loader2 size={20} className="animate-spin" />
+                  ) : (
+                    <Share2 size={20} />
+                  )}
+                  {isSending ? 'Подготовка...' : 'Поделиться файлом (PNG)'}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSendPngFile}
+                  className="touchable"
+                  style={{
+                    width: '100%',
+                    height: '52px',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '12px',
+                    border: 'none',
+                    boxShadow: `inset 0 0 0 2px ${outlineBorder}`,
+                    color: outlineText,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                    fontFamily,
+                    fontSize: '16.5px',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  <Download size={19} />
+                  Скачать на устройство (PNG)
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
