@@ -39,6 +39,7 @@
 ### 📁 Затронутые файлы:
 - [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
 - [`kaspi-app/src/components/MyBankScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx)
+- [`kaspi-app/vite.config.js`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/vite.config.js)
 - [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
 
 ### 🧪 Статус проверки:
