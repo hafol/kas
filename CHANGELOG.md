@@ -2,6 +2,27 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 06:44] — Исправление зависания на лоадере (добавлен недостающий импорт useRef/useCallback в App.jsx)
+
+### 🎯 Запрос пользователя:
+> *«i cant enter into the website there is just loader and thats it»*
+
+### 🛠️ Что сделано:
+1. **Причина**:
+   - В компоненте [`App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx) для интерактивного свайпа использовался хук `useRef`, который не был включён в строку импорта из `'react'`.
+   - Это приводило к `ReferenceError: useRef is not defined` при монтировании корневого компонента, из-за чего `#kaspi-splash` не снимался с экрана и приложение визуально зависало на сплеш-лоадере.
+2. **Исправление**:
+   - В [`App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx) добавлены хуки `useRef` и `useCallback`:
+     `import React, { useState, useEffect, useRef, useCallback } from 'react';`.
+3. **Проверка и деплой**:
+   - Проект успешно собран и развернут на Vercel Production. Сайт и экраны открываются моментально.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-27 06:30] — Реализация нижнего модального модуля предъявления QR-кода и отправки PNG, удаление эффекта прижатия, корректировка плашки 18% на Главной
 
 ### 🎯 Запрос пользователя:

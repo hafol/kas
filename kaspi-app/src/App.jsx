@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { initialUserData } from './data/userData';
 import { HomeScreen } from './components/HomeScreen';
 import { BottomNavBar } from './components/BottomNavBar';
