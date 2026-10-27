@@ -67,6 +67,24 @@ const CopyIcon = () => (
   </svg>
 );
 
+const WhatsAppIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ display: 'block' }}>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.456 5.711 1.457h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+);
+
+const TelegramIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ display: 'block' }}>
+    <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.56 8.16l-1.97 9.28c-.15.65-.53.81-1.08.51l-3-2.21-1.45 1.39c-.16.16-.3.3-.61.3l.21-3.05 5.56-5.02c.24-.22-.05-.34-.38-.13l-6.87 4.33-2.96-.92c-.64-.2-.66-.64.13-.95l11.57-4.46c.54-.2 1.01.13.88.92z" />
+  </svg>
+);
+
+const SmsIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
 const editControlButton = {
   width: '38px',
   height: '38px',
@@ -123,18 +141,43 @@ export const DigitalIdScreen = ({ onBack }) => {
   const reqEditedRef = useRef(false);
 
   // Bottom Sheet Modal & button press state
-  const [activeModal, setActiveModal] = useState(null); // null | 'qr' | 'send'
+  const [activeModal, setActiveModal] = useState(null); // null | 'qr' | 'share_target'
   const [pressedBtn, setPressedBtn] = useState(null); // 'present' | 'send'
   const [randomCode, setRandomCode] = useState('577642');
   const [qrDataUrl, setQrDataUrl] = useState('');
-  const [isSending, setIsSending] = useState(false);
+  const [copiedToast, setCopiedToast] = useState(false);
+  const cachedFileRef = useRef(null);
+
+  // Pre-generate PNG file blob in memory for instant native sharing without delays
+  useEffect(() => {
+    let isMounted = true;
+    const src = photoUrl || '/kaspi_assets/documents/kz_id_clean.jpg';
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth || 750;
+      canvas.height = img.naturalHeight || 960;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob((blob) => {
+        if (isMounted && blob) {
+          cachedFileRef.current = new File([blob], 'udostoverenie_lichnosti.png', { type: 'image/png' });
+        }
+      }, 'image/png');
+    };
+    img.src = src;
+    return () => {
+      isMounted = false;
+    };
+  }, [photoUrl]);
 
   // Generate dynamic QR code based on user's requisites and new random 6-digit code
   const openQrModal = useCallback(async () => {
     const code = String(Math.floor(100000 + Math.random() * 900000));
     setRandomCode(code);
 
-    const fio = [reqValues.surname, reqValues.name, reqValues.patronymic].filter(Boolean).join(' ') || 'ЖҰМАШ ПАРАСАТ ДІЛМҰРАТҰЛЫ';
+    const fio = reqValues.fullName || 'ЖҰМАШ ПАРАСАТ ДІЛМҰРАТҰЛЫ';
     const payload = [
       'KZ_DIGITAL_ID',
       `IIN:${reqValues.iin || '100723552859'}`,
@@ -149,7 +192,7 @@ export const DigitalIdScreen = ({ onBack }) => {
     try {
       const url = await QRCode.toDataURL(payload, {
         margin: 0,
-        width: 240,
+        width: 140, // 140px generation for crisp 126px display
         errorCorrectionLevel: 'M',
         color: {
           dark: '#000000',
@@ -172,63 +215,76 @@ export const DigitalIdScreen = ({ onBack }) => {
     }, 150);
   };
 
-  const handleSendClick = () => {
+  // Stage 2 recipient selection immediately upon clicking "Отправить"
+  const handleSendClick = async () => {
     setPressedBtn('send');
     setTimeout(() => {
       setPressedBtn(null);
-      setActiveModal('send');
     }, 150);
+
+    // On mobile devices supporting native file sharing, open the system "choose who" sheet directly
+    if (navigator.canShare && cachedFileRef.current && navigator.canShare({ files: [cachedFileRef.current] })) {
+      try {
+        await navigator.share({
+          files: [cachedFileRef.current],
+          title: 'Удостоверение личности',
+          text: 'Цифровой документ'
+        });
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    // Otherwise (desktop/web or fallback): immediately show the "Кому отправить" stage
+    setActiveModal('share_target');
   };
 
   const handleCloseModal = () => {
     setActiveModal(null);
   };
 
-  // Send already uploaded image as PNG file (Web Share API or download)
-  const handleSendPngFile = async () => {
-    setIsSending(true);
+  const getRequisitesSummary = () => {
+    const fio = reqValues.fullName || 'ЖҰМАШ ПАРАСАТ ДІЛМҰРАТҰЛЫ';
+    return [
+      'Удостоверение личности',
+      `ФИО: ${fio}`,
+      `ИИН: ${reqValues.iin || '100723552859'}`,
+      `Дата рождения: ${reqValues.birthDate || '23.07.2010'}`,
+      `Номер документа: ${reqValues.docNumber || '064142808'}`,
+      `Дата выдачи: ${reqValues.issueDate || '23.07.2024'}`,
+      `Срок действия: ${reqValues.expiryDate || '23.07.2030'}`
+    ].join('\n');
+  };
+
+  const handleShareWhatsApp = () => {
+    const text = getRequisitesSummary();
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
+  const handleShareTelegram = () => {
+    const text = getRequisitesSummary();
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent(text)}`, '_blank');
+  };
+
+  const handleShareSms = () => {
+    const text = getRequisitesSummary();
+    window.location.href = `sms:?&body=${encodeURIComponent(text)}`;
+  };
+
+  const handleCopyAllRequisites = () => {
+    const text = getRequisitesSummary();
+    copyToClipboard(text);
+  };
+
+  const handleDownloadPng = () => {
     const src = photoUrl || '/kaspi_assets/documents/kz_id_clean.jpg';
-    try {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = async () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth || 750;
-        canvas.height = img.naturalHeight || 960;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        canvas.toBlob(async (blob) => {
-          setIsSending(false);
-          if (!blob) return;
-          const file = new File([blob], 'udostoverenie_lichnosti.png', { type: 'image/png' });
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-              await navigator.share({
-                files: [file],
-                title: 'Удостоверение личности',
-                text: 'Цифровой документ'
-              });
-              return;
-            } catch (err) {
-              if (err.name === 'AbortError') return;
-            }
-          }
-          // Direct download fallback
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'udostoverenie_lichnosti.png';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          setTimeout(() => URL.revokeObjectURL(url), 1000);
-        }, 'image/png');
-      };
-      img.onerror = () => setIsSending(false);
-      img.src = src;
-    } catch (e) {
-      setIsSending(false);
-    }
+    const a = document.createElement('a');
+    a.href = src;
+    a.download = 'udostoverenie_lichnosti.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   useEffect(() => {
@@ -428,7 +484,18 @@ export const DigitalIdScreen = ({ onBack }) => {
 
   const copyToClipboard = (value) => {
     try {
-      navigator.clipboard?.writeText(value).catch(() => {});
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(value).catch(() => {});
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setCopiedToast(true);
+      setTimeout(() => setCopiedToast(false), 1800);
     } catch {}
   };
 
@@ -964,7 +1031,8 @@ export const DigitalIdScreen = ({ onBack }) => {
               boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.2)',
               position: 'relative',
               boxSizing: 'border-box',
-              paddingBottom: '24px'
+              paddingTop: '3px', // +3px higher
+              paddingBottom: '27px' // +3px higher (was 24px)
             }}
           >
             {/* Top pill drag bar */}
@@ -990,14 +1058,14 @@ export const DigitalIdScreen = ({ onBack }) => {
               <h2
                 style={{
                   fontFamily,
-                  fontSize: '22px',
+                  fontSize: activeModal === 'share_target' ? '22px' : '26px', // +3pt bigger (was 22px)
                   fontWeight: 700,
                   color: '#1C1C1E',
                   margin: 0,
                   letterSpacing: '-0.3px'
                 }}
               >
-                Удостоверение личности
+                {activeModal === 'share_target' ? 'Кому отправить' : 'Удостоверение личности'}
               </h2>
               <button
                 type="button"
@@ -1026,27 +1094,27 @@ export const DigitalIdScreen = ({ onBack }) => {
                 <p
                   style={{
                     fontFamily,
-                    fontSize: '17px',
+                    fontSize: '18.5px', // +1pt bigger (was 17px)
                     fontWeight: 400,
                     color: '#1C1C1E',
                     textAlign: 'center',
                     marginTop: '16px',
-                    marginBottom: '20px',
+                    marginBottom: '18px',
                     letterSpacing: '-0.1px'
                   }}
                 >
                   Покажите QR-код сотруднику
                 </p>
 
-                {/* QR Code container */}
+                {/* QR Code container: sized to match the phrase "или скажите код" (~126px) */}
                 <div
                   style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     margin: '0 auto',
-                    width: '185px',
-                    height: '185px'
+                    width: '126px',
+                    height: '126px'
                   }}
                 >
                   {qrDataUrl ? (
@@ -1055,8 +1123,8 @@ export const DigitalIdScreen = ({ onBack }) => {
                       alt="QR-код удостоверения личности"
                       draggable={false}
                       style={{
-                        width: '185px',
-                        height: '185px',
+                        width: '126px',
+                        height: '126px',
                         display: 'block',
                         imageRendering: 'pixelated'
                       }}
@@ -1064,8 +1132,8 @@ export const DigitalIdScreen = ({ onBack }) => {
                   ) : (
                     <div
                       style={{
-                        width: '185px',
-                        height: '185px',
+                        width: '126px',
+                        height: '126px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -1073,7 +1141,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                         borderRadius: '12px'
                       }}
                     >
-                      <Loader2 size={32} className="animate-spin" color="#0175CC" />
+                      <Loader2 size={28} className="animate-spin" color="#0175CC" />
                     </div>
                   )}
                 </div>
@@ -1081,11 +1149,11 @@ export const DigitalIdScreen = ({ onBack }) => {
                 <p
                   style={{
                     fontFamily,
-                    fontSize: '17px',
+                    fontSize: '19.5px', // +2pt bigger (was 17px)
                     fontWeight: 400,
                     color: '#1C1C1E',
                     textAlign: 'center',
-                    marginTop: '22px',
+                    marginTop: '20px',
                     marginBottom: '6px',
                     letterSpacing: '-0.1px'
                   }}
@@ -1096,11 +1164,11 @@ export const DigitalIdScreen = ({ onBack }) => {
                 <div
                   style={{
                     fontFamily,
-                    fontSize: '32px',
-                    fontWeight: 700,
+                    fontSize: '29px', // -2pt smaller (was 32px)
+                    fontWeight: 500, // less bold: medium (was 700)
                     color: '#000000',
                     textAlign: 'center',
-                    letterSpacing: '0.8px',
+                    letterSpacing: '1px',
                     marginTop: '4px',
                     paddingBottom: '16px'
                   }}
@@ -1110,127 +1178,246 @@ export const DigitalIdScreen = ({ onBack }) => {
               </div>
             )}
 
-            {/* Modal Content: Send PNG File */}
-            {activeModal === 'send' && (
-              <div style={{ padding: '0 20px' }}>
-                <p
-                  style={{
-                    fontFamily,
-                    fontSize: '16px',
-                    fontWeight: 400,
-                    color: '#666666',
-                    textAlign: 'center',
-                    marginTop: '12px',
-                    marginBottom: '16px'
-                  }}
-                >
-                  Отправить фото удостоверения личности (PNG)
-                </p>
-
-                {/* Preview Thumbnail */}
-                <div
-                  style={{
-                    width: '240px',
-                    height: '150px',
-                    borderRadius: '10px',
-                    overflow: 'hidden',
-                    margin: '0 auto',
-                    boxShadow: '0 3px 12px rgba(0, 0, 0, 0.08)',
-                    border: '1px solid #E5E5EA',
-                    backgroundColor: '#F9F9FB',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <img
-                    src={photoUrl || '/kaspi_assets/documents/kz_id_clean.jpg'}
-                    alt="Удостоверение личности"
+            {/* Modal Content: Stage 2 Choose Recipient ("Кому отправить") */}
+            {activeModal === 'share_target' && (
+              <div style={{ padding: '12px 18px 8px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {/* WhatsApp */}
+                  <button
+                    type="button"
+                    onClick={handleShareWhatsApp}
+                    className="touchable"
                     style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '14px',
+                      padding: '12px 14px',
+                      backgroundColor: '#F8F9FA',
+                      border: 'none',
+                      borderRadius: '14px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
                       width: '100%',
-                      height: '100%',
-                      objectFit: 'contain'
+                      boxSizing: 'border-box'
                     }}
-                  />
+                  >
+                    <div style={{
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: '12px',
+                      backgroundColor: '#25D366',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#FFFFFF',
+                      flexShrink: 0
+                    }}>
+                      <WhatsAppIcon />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily, fontSize: '16.5px', fontWeight: 600, color: '#1C1C1E' }}>
+                        WhatsApp
+                      </div>
+                      <div style={{ fontFamily, fontSize: '13px', color: '#8E8E93', marginTop: '2px' }}>
+                        Отправить в чат
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Telegram */}
+                  <button
+                    type="button"
+                    onClick={handleShareTelegram}
+                    className="touchable"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '14px',
+                      padding: '12px 14px',
+                      backgroundColor: '#F8F9FA',
+                      border: 'none',
+                      borderRadius: '14px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      width: '100%',
+                      boxSizing: 'border-box'
+                    }}
+                  >
+                    <div style={{
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: '12px',
+                      backgroundColor: '#2AABEE',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#FFFFFF',
+                      flexShrink: 0
+                    }}>
+                      <TelegramIcon />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily, fontSize: '16.5px', fontWeight: 600, color: '#1C1C1E' }}>
+                        Telegram
+                      </div>
+                      <div style={{ fontFamily, fontSize: '13px', color: '#8E8E93', marginTop: '2px' }}>
+                        Поделиться в Telegram
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* SMS / Messages */}
+                  <button
+                    type="button"
+                    onClick={handleShareSms}
+                    className="touchable"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '14px',
+                      padding: '12px 14px',
+                      backgroundColor: '#F8F9FA',
+                      border: 'none',
+                      borderRadius: '14px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      width: '100%',
+                      boxSizing: 'border-box'
+                    }}
+                  >
+                    <div style={{
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: '12px',
+                      backgroundColor: '#34C759',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#FFFFFF',
+                      flexShrink: 0
+                    }}>
+                      <SmsIcon />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily, fontSize: '16.5px', fontWeight: 600, color: '#1C1C1E' }}>
+                        Сообщения (SMS)
+                      </div>
+                      <div style={{ fontFamily, fontSize: '13px', color: '#8E8E93', marginTop: '2px' }}>
+                        Отправить текст реквизитов
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Скопировать реквизиты */}
+                  <button
+                    type="button"
+                    onClick={handleCopyAllRequisites}
+                    className="touchable"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '14px',
+                      padding: '12px 14px',
+                      backgroundColor: '#F8F9FA',
+                      border: 'none',
+                      borderRadius: '14px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      width: '100%',
+                      boxSizing: 'border-box'
+                    }}
+                  >
+                    <div style={{
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: '12px',
+                      backgroundColor: '#E5E5EA',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#1C1C1E',
+                      flexShrink: 0
+                    }}>
+                      <CopyIcon />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily, fontSize: '16.5px', fontWeight: 600, color: '#1C1C1E' }}>
+                        Скопировать данные
+                      </div>
+                      <div style={{ fontFamily, fontSize: '13px', color: '#8E8E93', marginTop: '2px' }}>
+                        ФИО, ИИН, номер документа в буфер
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Сохранить фото (PNG) */}
+                  <button
+                    type="button"
+                    onClick={handleDownloadPng}
+                    className="touchable"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '14px',
+                      padding: '12px 14px',
+                      backgroundColor: '#F8F9FA',
+                      border: 'none',
+                      borderRadius: '14px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      width: '100%',
+                      boxSizing: 'border-box'
+                    }}
+                  >
+                    <div style={{
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: '12px',
+                      backgroundColor: '#0175CC',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#FFFFFF',
+                      flexShrink: 0
+                    }}>
+                      <Download size={22} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily, fontSize: '16.5px', fontWeight: 600, color: '#1C1C1E' }}>
+                        Сохранить на устройство (PNG)
+                      </div>
+                      <div style={{ fontFamily, fontSize: '13px', color: '#8E8E93', marginTop: '2px' }}>
+                        Скачать фото удостоверения
+                      </div>
+                    </div>
+                  </button>
                 </div>
-
-                <div
-                  style={{
-                    fontFamily,
-                    fontSize: '13.5px',
-                    color: '#8E8E93',
-                    textAlign: 'center',
-                    marginTop: '10px',
-                    marginBottom: '20px'
-                  }}
-                >
-                  udostoverenie_lichnosti.png
-                </div>
-
-                {/* Action buttons */}
-                <button
-                  type="button"
-                  onClick={handleSendPngFile}
-                  disabled={isSending}
-                  className="touchable"
-                  style={{
-                    width: '100%',
-                    height: '56px',
-                    backgroundColor: primaryBlue,
-                    borderRadius: '12px',
-                    border: 'none',
-                    color: '#FFFFFF',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    fontFamily,
-                    fontSize: '17px',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    marginBottom: '10px'
-                  }}
-                >
-                  {isSending ? (
-                    <Loader2 size={20} className="animate-spin" />
-                  ) : (
-                    <Share2 size={20} />
-                  )}
-                  {isSending ? 'Подготовка...' : 'Поделиться файлом (PNG)'}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleSendPngFile}
-                  className="touchable"
-                  style={{
-                    width: '100%',
-                    height: '52px',
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '12px',
-                    border: 'none',
-                    boxShadow: `inset 0 0 0 2px ${outlineBorder}`,
-                    color: outlineText,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    fontFamily,
-                    fontSize: '16.5px',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    outline: 'none',
-                    boxSizing: 'border-box'
-                  }}
-                >
-                  <Download size={19} />
-                  Скачать на устройство (PNG)
-                </button>
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Toast notification when copied */}
+      {copiedToast && (
+        <div style={{
+          position: 'absolute',
+          top: '24px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: 'rgba(28, 28, 30, 0.92)',
+          color: '#FFFFFF',
+          padding: '10px 22px',
+          borderRadius: '24px',
+          fontSize: '14.5px',
+          fontFamily,
+          fontWeight: 500,
+          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
+          zIndex: 999,
+          pointerEvents: 'none',
+          whiteSpace: 'nowrap'
+        }}>
+          Скопировано в буфер обмена
         </div>
       )}
     </div>
