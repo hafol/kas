@@ -1042,7 +1042,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                 height: '4px',
                 backgroundColor: '#D8D8DC',
                 borderRadius: '2px',
-                margin: '7px auto 0' // moved 3px up (was 10px)
+                margin: '6px auto 1px' // moved 1px up, modal height preserved
               }}
             />
 
@@ -1064,8 +1064,8 @@ export const DigitalIdScreen = ({ onBack }) => {
                   margin: 0,
                   letterSpacing: '-0.3px',
                   position: 'relative',
-                  top: '-4px', // moved 4px up
-                  left: '-2px' // moved 2px left
+                  top: '-2.5px', // moved 1.5px down (from -4px)
+                  left: '-3px' // moved 1px left (from -2px)
                 }}
               >
                 {activeModal === 'share_target' ? 'Кому отправить' : 'Удостоверение личности'}
