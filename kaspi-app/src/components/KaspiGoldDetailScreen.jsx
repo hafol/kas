@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  IconKaspiQrGold,
   IconTransferGold,
   IconTopupGold,
   IconWebPayGold,
@@ -26,17 +27,17 @@ import {
   KaspiGoldMedallion
 } from './KaspiGoldIcons';
 
-// Chevron right: grey > matching native iOS Kaspi hairline
-const ChevronRightIcon = ({ size = 13, color = "#C7C7CC" }) => (
-  <svg width={size} height={size} viewBox="0 0 8 13" fill="none">
-    <path d="M1.5 1.5L6.5 6.5L1.5 11.5" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+// Chevron right: grey > matching right card measurement (5 x 12, inset 23)
+const ChevronRightIcon = ({ color = "#C7C7CC" }) => (
+  <svg width="7" height="13" viewBox="0 0 8 14" fill="none">
+    <path d="M1.5 1.5L6.5 7L1.5 12.5" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-// Back chevron < matching native iOS navigation bar
-const BackChevronIcon = ({ size = 20, color = "#FFFFFF" }) => (
-  <svg width={size} height={size} viewBox="0 0 12 20" fill="none">
-    <path d="M10 2L2 10L10 18" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+// Back chevron < matching right card measurement (8 x 15, sits 37px higher)
+const BackChevronIcon = ({ color = "#FFFFFF" }) => (
+  <svg width="9" height="17" viewBox="0 0 10 18" fill="none">
+    <path d="M8.5 1.5L1.5 9L8.5 16.5" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -100,8 +101,13 @@ export const KaspiGoldDetailScreen = ({
     setTimeout(() => setCopiedField(null), 2000);
   };
 
-  // 10 items for TAB 1: ДЕЙСТВИЯ (exact match with Screenshot 1)
+  const formattedBalance = typeof card.balance === 'number'
+    ? card.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\u00a0/g, ' ') + ' ₸'
+    : (card.balance || '110 922,58 ₸');
+
+  // 11 items for TAB 1: ДЕЙСТВИЯ (exact match with Right Screenshot)
   const actionsList = [
+    { id: 'qr', title: 'Kaspi QR', IconComponent: IconKaspiQrGold },
     { id: 'transfer', title: 'Перевести', IconComponent: IconTransferGold, onClick: onOpenTransfer },
     { id: 'topup', title: 'Пополнить Kaspi Gold', IconComponent: IconTopupGold },
     { id: 'webpay', title: 'Оплата в интернете', IconComponent: IconWebPayGold },
@@ -192,8 +198,8 @@ export const KaspiGoldDetailScreen = ({
         backgroundColor: isScrolled ? '#D4AE6D' : 'transparent',
         height: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px))',
         paddingTop: 'max(env(safe-area-inset-top, 44px), 44px)',
-        paddingLeft: '16px',
-        paddingRight: '16px',
+        paddingLeft: '18px',
+        paddingRight: '18px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -214,7 +220,7 @@ export const KaspiGoldDetailScreen = ({
             cursor: 'pointer'
           }}
         >
-          <BackChevronIcon size={20} color="#FFFFFF" />
+          <BackChevronIcon color="#FFFFFF" />
         </div>
 
         {/* Compact Centered Title + Balance (visible on scroll) */}
@@ -243,7 +249,7 @@ export const KaspiGoldDetailScreen = ({
             marginTop: '1px',
             lineHeight: 1.2
           }}>
-            112 022,58 ₸
+            {formattedBalance}
           </span>
         </div>
 
@@ -252,28 +258,33 @@ export const KaspiGoldDetailScreen = ({
       </div>
 
       {/* =====================================================================
-          EXPANDED GOLDEN CARD HEADER (Screenshots 3, 4, 5)
-          Uses authentic user asset /kaspi_assets/kaspi_gold_card_bg.jpg
+          EXPANDED GOLDEN CARD HEADER (Screenshots 3, 4, 5 & Right Measurement Spec)
+          - Height: 238px (+19px) per exact user measurement specification
+          - Back arrow to title: 32px
+          - Title to "Доступно": 36px
+          - "Доступно" to balance: 8px
+          - Balance: 38px, bold, white, letterSpacing -0.4px
+          - Medallion: larger, right side, cut off by white sheet
       ===================================================================== */}
       <div style={{
         marginTop: 'calc(-44px - max(env(safe-area-inset-top, 44px), 44px))',
-        paddingTop: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px) + 6px)',
+        paddingTop: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px) + 32px)',
         background: '#D4AE6D url(/kaspi_assets/kaspi_gold_card_bg.jpg) no-repeat right 0px top / cover',
-        paddingLeft: '16px',
-        paddingRight: '16px',
-        paddingBottom: '24px',
+        paddingLeft: '18px',
+        paddingRight: '18px',
+        paddingBottom: '28px',
         position: 'relative',
         boxSizing: 'border-box',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        minHeight: '238px'
       }}>
         {/* Card Name + Apple Pay badge */}
         <div style={{
           display: 'flex',
-          alignItems: 'center',
-          marginTop: '6px'
+          alignItems: 'center'
         }}>
           <span style={{
-            fontSize: '19px',
+            fontSize: '19.5px',
             fontWeight: '700',
             color: '#FFFFFF',
             letterSpacing: '0.1px',
@@ -284,38 +295,38 @@ export const KaspiGoldDetailScreen = ({
           <ApplePayBadge style={{ marginLeft: '8px' }} />
         </div>
 
-        {/* Caption "Доступно" */}
+        {/* Caption "Доступно" (gap from title: 36px) */}
         <div style={{
           fontSize: '14px',
           fontWeight: '400',
           color: 'rgba(255, 255, 255, 0.92)',
-          marginTop: '16px',
+          marginTop: '34px',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
           Доступно
         </div>
 
-        {/* Big Balance: 112 022,58 ₸ */}
+        {/* Big Balance: 110 922,58 ₸ (gap from label: 8px, font: 38px bold) */}
         <div style={{
-          fontSize: '34px',
+          fontSize: '38px',
           fontWeight: '700',
           color: '#FFFFFF',
-          letterSpacing: '-0.3px',
-          lineHeight: '1.15',
-          marginTop: '2px',
+          letterSpacing: '-0.4px',
+          lineHeight: '1.1',
+          marginTop: '6px',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
-          112 022,58 ₸
+          {formattedBalance}
         </div>
       </div>
 
       {/* =====================================================================
-          MAIN WHITE SHEET (Rounded top corners: 16px)
+          MAIN WHITE SHEET (Rounded top corners: 18px, starts lower at y 272)
       ===================================================================== */}
       <div style={{
         backgroundColor: '#FFFFFF',
-        borderTopLeftRadius: '16px',
-        borderTopRightRadius: '16px',
+        borderTopLeftRadius: '18px',
+        borderTopRightRadius: '18px',
         marginTop: '-12px',
         flex: 1,
         display: 'flex',
@@ -327,15 +338,18 @@ export const KaspiGoldDetailScreen = ({
       }}>
         {/* =====================================================================
             SEGMENTED CONTROL (Действия / Инфо / Выписка) - Sticky on scroll
+            - Height: 36px (tab pill), selected tab 31px
+            - Gap sheet top -> tab bar: 10px
+            - Labels: 14px font
         ===================================================================== */}
         <div style={{
           position: 'sticky',
           top: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px))',
           zIndex: 40,
           backgroundColor: '#FFFFFF',
-          padding: '10px 16px 8px 16px',
-          borderTopLeftRadius: isScrolled ? '0' : '16px',
-          borderTopRightRadius: isScrolled ? '0' : '16px',
+          padding: '10px 14px 12px 14px',
+          borderTopLeftRadius: isScrolled ? '0' : '18px',
+          borderTopRightRadius: isScrolled ? '0' : '18px',
           boxSizing: 'border-box',
           transition: 'border-radius 0.15s ease'
         }}>
@@ -343,7 +357,7 @@ export const KaspiGoldDetailScreen = ({
             backgroundColor: '#F0F0F2',
             height: '36px',
             borderRadius: '10px',
-            padding: '2px',
+            padding: '2.5px',
             display: 'flex',
             alignItems: 'center',
             boxSizing: 'border-box'
@@ -362,7 +376,7 @@ export const KaspiGoldDetailScreen = ({
                 className="touchable"
                 style={{
                   flex: 1,
-                  height: '32px',
+                  height: '31px',
                   borderRadius: '8px',
                   backgroundColor: isActive ? '#FFFFFF' : 'transparent',
                   border: 'none',
@@ -373,9 +387,9 @@ export const KaspiGoldDetailScreen = ({
                   justifyContent: 'center',
                   fontFamily: "'Roboto', sans-serif",
                   fontSize: '14px',
-                  fontWeight: isActive ? '500' : '400',
-                  color: '#000000',
-                  boxShadow: isActive ? '0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.04)' : 'none',
+                  fontWeight: isActive ? '600' : '400',
+                  color: isActive ? '#1C1C1E' : '#8E8E93',
+                  boxShadow: isActive ? '0 1px 3px rgba(0, 0, 0, 0.08)' : 'none',
                   transition: 'background-color 0.15s ease, box-shadow 0.15s ease',
                   padding: 0
                 }}
@@ -388,146 +402,138 @@ export const KaspiGoldDetailScreen = ({
         </div>
 
         {/* =====================================================================
-            TAB 1: ДЕЙСТВИЯ (Screenshot 1)
+            TAB 1: ДЕЙСТВИЯ (Exact Right Screenshot)
+            - 11 items starting with Kaspi QR
+            - Row pitch: 59px (equal for all rows)
+            - NO DIVIDERS (separation comes from airy 59px spacing)
+            - Text start: 64-66px
+            - Inset chevron: 22px
+            - 7 rows visible above the fold
         ===================================================================== */}
         {activeTab === 'actions' && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {actionsList.map((action, idx) => {
+            {actionsList.map((action) => {
               const { IconComponent } = action;
               return (
-                <React.Fragment key={action.id}>
-                  <div
-                    onClick={action.onClick}
-                    className="touchable"
-                    style={{
-                      height: action.subtitle ? '58px' : '52px',
-                      padding: '0 16px',
+                <div
+                  key={action.id}
+                  onClick={action.onClick}
+                  className="touchable"
+                  style={{
+                    height: '59px',
+                    padding: '0 20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{
+                      width: '26px',
+                      height: '26px',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <div style={{
-                        width: '32px',
-                        height: '32px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0
-                      }}>
-                        <IconComponent size={24} color="#DF4337" />
-                      </div>
-
-                      <div style={{ marginLeft: '12px', display: 'flex', flexDirection: 'column' }}>
-                        <span style={{
-                          fontSize: '16px',
-                          fontWeight: '400',
-                          color: '#1A1A1A',
-                          lineHeight: 1.25
-                        }}>
-                          {action.title}
-                        </span>
-                        {action.subtitle && (
-                          <span style={{
-                            fontSize: '12px',
-                            fontWeight: '400',
-                            color: '#8E8E93',
-                            marginTop: '2px',
-                            lineHeight: 1.2
-                          }}>
-                            {action.subtitle}
-                          </span>
-                        )}
-                      </div>
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      <IconComponent size={22} color="#DF4337" />
                     </div>
 
-                    <ChevronRightIcon size={13} color="#C7C7CC" />
+                    <div style={{ marginLeft: '18px', display: 'flex', flexDirection: 'column' }}>
+                      <span style={{
+                        fontSize: '16px',
+                        fontWeight: '400',
+                        color: '#1C1C1E',
+                        lineHeight: 1.25,
+                        fontFamily: "'Roboto', sans-serif"
+                      }}>
+                        {action.title}
+                      </span>
+                      {action.subtitle && (
+                        <span style={{
+                          fontSize: '12px',
+                          fontWeight: '400',
+                          color: '#8E8E93',
+                          marginTop: '2px',
+                          lineHeight: 1.2,
+                          fontFamily: "'Roboto', sans-serif"
+                        }}>
+                          {action.subtitle}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
-                  {idx < actionsList.length - 1 && (
-                    <div style={{
-                      height: '1px',
-                      backgroundColor: '#F2F2F4',
-                      marginLeft: '60px',
-                      width: 'calc(100% - 60px)'
-                    }} />
-                  )}
-                </React.Fragment>
+                  <ChevronRightIcon color="#C7C7CC" />
+                </div>
               );
             })}
           </div>
         )}
 
         {/* =====================================================================
-            TAB 2: ИНФО (Screenshot 2)
+            TAB 2: ИНФО (8 items, 59px pitch, no dividers)
         ===================================================================== */}
         {activeTab === 'info' && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {infoList.map((item, idx) => {
+            {infoList.map((item) => {
               const { IconComponent } = item;
               return (
-                <React.Fragment key={item.id}>
-                  <div
-                    onClick={item.onClick}
-                    className="touchable"
-                    style={{
-                      height: item.subtitle ? '58px' : '52px',
-                      padding: '0 16px',
+                <div
+                  key={item.id}
+                  onClick={item.onClick}
+                  className="touchable"
+                  style={{
+                    height: '59px',
+                    padding: '0 20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{
+                      width: '26px',
+                      height: '26px',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <div style={{
-                        width: '32px',
-                        height: '32px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0
-                      }}>
-                        <IconComponent size={24} color="#DF4337" />
-                      </div>
-
-                      <div style={{ marginLeft: '12px', display: 'flex', flexDirection: 'column' }}>
-                        <span style={{
-                          fontSize: '16px',
-                          fontWeight: '400',
-                          color: '#1A1A1A',
-                          lineHeight: 1.25
-                        }}>
-                          {item.title}
-                        </span>
-                        {item.subtitle && (
-                          <span style={{
-                            fontSize: '12px',
-                            fontWeight: '400',
-                            color: '#8E8E93',
-                            marginTop: '2px',
-                            lineHeight: 1.2
-                          }}>
-                            {item.subtitle}
-                          </span>
-                        )}
-                      </div>
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      <IconComponent size={22} color="#DF4337" />
                     </div>
 
-                    <ChevronRightIcon size={13} color="#C7C7CC" />
+                    <div style={{ marginLeft: '18px', display: 'flex', flexDirection: 'column' }}>
+                      <span style={{
+                        fontSize: '16px',
+                        fontWeight: '400',
+                        color: '#1C1C1E',
+                        lineHeight: 1.25,
+                        fontFamily: "'Roboto', sans-serif"
+                      }}>
+                        {item.title}
+                      </span>
+                      {item.subtitle && (
+                        <span style={{
+                          fontSize: '12px',
+                          fontWeight: '400',
+                          color: '#8E8E93',
+                          marginTop: '2px',
+                          lineHeight: 1.2,
+                          fontFamily: "'Roboto', sans-serif"
+                        }}>
+                          {item.subtitle}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
-                  {idx < infoList.length - 1 && (
-                    <div style={{
-                      height: '1px',
-                      backgroundColor: '#F2F2F4',
-                      marginLeft: '60px',
-                      width: 'calc(100% - 60px)'
-                    }} />
-                  )}
-                </React.Fragment>
+                  <ChevronRightIcon color="#C7C7CC" />
+                </div>
               );
             })}
           </div>
