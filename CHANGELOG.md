@@ -2,6 +2,24 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 04:41] — Экран Kaspi Gold: Увеличение логотипа-медальона на +3% (115px) и смещение вниз на 10px (top: +46px)
+
+### 🎯 Запрос пользователя:
+> *«make it bigger 3% and move it down 10px»*
+
+### 🛠️ Что сделано:
+1. **Увеличение логотипа на +3%**:
+   - Размер SVG-медальона в [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx) увеличен со `111.6 × 111.6 px` на +3% — до **`115 × 115 px`**.
+2. **Смещение логотипа вниз на 10px**:
+   - `top`: увеличено с `36px` до **`46px`** (`calc(env(safe-area-inset-top, 0px) + 46px)`).
+   - `right`: скорректировано до **`24px`** для идеального сохранения центровки с учетом увеличенного радиуса.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 04:36] — Экран Kaspi Gold: Геометрическая калибровка центра медальона (right: 25px, top: 36px) с учетом масштабирования и ликвидация браузерного кэша на мобильных устройствах (vercel.json Cache-Control)
 
 ### 🎯 Запрос пользователя:
