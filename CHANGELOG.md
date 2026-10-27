@@ -2,6 +2,24 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 04:28] — Экран Kaspi Gold: Уменьшение логотипа-медальона на -10% (111.6px), сдвиг влево на 2px (right: 18px) и вниз на 6px (top: +30px)
+
+### 🎯 Запрос пользователя:
+> *«the logo make it smaller by 10% and move it to the left 2px and down 6px make it fast no need to chech i will do it»*
+
+### 🛠️ Что сделано:
+1. **Масштабирование логотипа (-10%)**:
+   - Размер контейнера SVG-медальона в [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx) уменьшен с `124 × 124 px` на ровно 10% — до **`111.6 × 111.6 px`**.
+2. **Смещение логотипа влево на 2px и вниз на 6px**:
+   - `right`: увеличено с `16px` до **`18px`** (+2px влево от правого края).
+   - `top`: увеличено с `24px` до **`30px`** (`calc(env(safe-area-inset-top, 0px) + 30px)`, +6px вниз).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 04:22] — Экран Kaspi Gold: Возврат аутентичного компактного отступа сверху (238px) и 100% статичный SVG-медальон через position: sticky (не сдвигается при скролле)
 
 ### 🎯 Запрос пользователя:

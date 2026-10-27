@@ -207,10 +207,10 @@ export const KaspiGoldDetailScreen = ({
         <div
           style={{
             position: 'absolute',
-            right: '16px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 24px)',
-            width: '124px',
-            height: '124px',
+            right: '18px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 30px)',
+            width: '111.6px',
+            height: '111.6px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
