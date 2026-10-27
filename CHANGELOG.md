@@ -2,6 +2,34 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 15:25] — Навбар: увеличение иконок на +15%, шрифт подписей +0.5pt (12.5px), выравнивание иконки «Сервисы» строго в одну линию
+
+### 🎯 Запрос пользователя:
+> *«every icon in navbart make bigger by 15% and the text bigger 0.5pt the icon service gotta be in line with others i will check you just do vercel prod and write it down in your agent md»*
+
+### 🛠️ Что сделано:
+1. **Иконки навбара (+15%)**:
+   - «Главная»: увеличена с `24×24` до **`27.6×27.6px`** (+15%).
+   - «Kaspi QR»: увеличена с `24×24` до **`27.6×27.6px`** (+15%).
+   - «Сообщения»: увеличена с `24×24` до **`27.6×27.6px`** (+15%).
+   - «Сервисы»: увеличена с `20.6×16` до **`23.7×18.4px`** (+15%).
+2. **Выравнивание иконки «Сервисы» строго в одну линию**:
+   - Убран отдельный заниженный отступ `iconTop: 11.7px`. Все 4 вкладки получили одинаковый контейнер `27.6×27.6px` с `top: 6px` и флекс-центрированием `alignItems: 'center', justifyContent: 'center'`.
+   - Иконка «Сервисы» теперь визуально и геометрически выровнена строго на единой горизонтальной оси с остальными иконками.
+3. **Шрифт подписей (+0.5pt)**:
+   - Размер текста подписей увеличен с `12px` до **`12.5px`** (+0.5pt), Roboto Regular.
+4. **Бейдж «Сообщения»**:
+   - Позиционирование капсулы адаптировано под увеличенную иконку: `left: 15.5px`, `top: -4px`.
+5. **Обновление документации**:
+   - Правило и спецификация зафиксированы в [`AGENTS.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/AGENTS.md) (Раздел 1, пункт 5).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/BottomNavBar.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx)
+- [`AGENTS.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/AGENTS.md)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-27 15:15] — Откат изменений ленты (HomeScreen, index.css, KaspiServiceIcons) с сохранением доработок навигационного бара (BottomNavBar)
 
 ### 🎯 Запрос пользователя:
