@@ -1,368 +1,759 @@
 import React, { useState } from 'react';
 import {
-  ArrowLeft, ChevronRight, Eye, EyeOff, Share2, Search,
-  QrCode, ArrowRightLeft, PlusCircle, Globe, BellRing,
-  Banknote, RefreshCw, KeyRound, Lock, Smartphone, XCircle,
-  BarChart2, CreditCard, FileText, HelpCircle, MapPin, Lightbulb
-} from 'lucide-react';
+  IconTransferGold,
+  IconTopupGold,
+  IconWebPayGold,
+  IconSubscriptionsGold,
+  IconOrderCashGold,
+  IconReissueGold,
+  IconChangePinGold,
+  IconBlockCardGold,
+  IconCardlessGold,
+  IconCloseCardGold,
+  IconAnalyticsGold,
+  IconLimitsGold,
+  IconRequisitesGold,
+  IconCertificatesGold,
+  IconConditionsGold,
+  IconAtmsGold,
+  IconTipsGold,
+  IconVisaTopupGold,
+  StatementCalendarIcon,
+  StatementOperationsReceiptIcon,
+  StatementBasketIcon,
+  StatementPersonIcon,
+  ApplePayBadge,
+  KaspiGoldMedallion
+} from './KaspiGoldIcons';
 
-export const KaspiGoldDetailScreen = ({ card, statement, onBack, onOpenQr, onOpenTransfer }) => {
+// Chevron right: grey > matching native iOS Kaspi hairline
+const ChevronRightIcon = ({ size = 13, color = "#C7C7CC" }) => (
+  <svg width={size} height={size} viewBox="0 0 8 13" fill="none">
+    <path d="M1.5 1.5L6.5 6.5L1.5 11.5" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+// Back chevron < matching native iOS navigation bar
+const BackChevronIcon = ({ size = 20, color = "#FFFFFF" }) => (
+  <svg width={size} height={size} viewBox="0 0 12 20" fill="none">
+    <path d="M10 2L2 10L10 18" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+// Share / Export icon (square with upward right arrow)
+const ShareExportIcon = ({ size = 20, color = "#8E8E93" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <polyline points="16 6 12 2 8 6" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <line x1="12" y1="2" x2="12" y2="15" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
+  </svg>
+);
+
+// Search Magnifier icon
+const SearchIcon = ({ size = 17, color = "#8E8E93" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <circle cx="11" cy="11" r="7.5" stroke={color} strokeWidth="2" />
+    <line x1="16.5" y1="16.5" x2="21" y2="21" stroke={color} strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+export const KaspiGoldDetailScreen = ({
+  card = {
+    id: "gold_4163",
+    name: "Kaspi Gold",
+    last4: "4163",
+    cardNumberFormatted: "4400 4303 6188 4163",
+    iban: "KZ54722C000021658491",
+    balance: 112022.58,
+    currency: "₸",
+    expiry: "09/29",
+    cvv: "•••"
+  },
+  onBack,
+  onOpenTransfer
+}) => {
   const [activeTab, setActiveTab] = useState('actions'); // 'actions' | 'info' | 'statement'
-  const [showBalance, setShowBalance] = useState(true);
   const [showRequisitesModal, setShowRequisitesModal] = useState(false);
+  const [copiedField, setCopiedField] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const containerRef = React.useRef(null);
 
+  React.useEffect(() => {
+    const parent = containerRef.current?.parentElement;
+    if (!parent) return;
+    const handleParentScroll = () => {
+      const top = parent.scrollTop;
+      if (top > 35) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    parent.addEventListener('scroll', handleParentScroll, { passive: true });
+    return () => parent.removeEventListener('scroll', handleParentScroll);
+  }, []);
+
+  const copyToClipboard = (text, fieldName) => {
+    navigator.clipboard?.writeText(text);
+    setCopiedField(fieldName);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  // 10 items for TAB 1: ДЕЙСТВИЯ (exact match with Screenshot 1)
   const actionsList = [
-    { id: 'qr', title: 'Kaspi QR', icon: QrCode, onClick: onOpenQr },
-    { id: 'transfer', title: 'Перевести', icon: ArrowRightLeft, onClick: onOpenTransfer },
-    { id: 'topup', title: 'Пополнить Kaspi Gold', icon: PlusCircle },
-    { id: 'webpay', title: 'Оплата в интернете', icon: Globe },
-    { id: 'subscriptions', title: 'Платные сервисы и подписки', icon: BellRing },
-    { id: 'order_cash', title: 'Заказать сумму на снятие', subtitle: 'Лимит 4 000 000 ₸', icon: Banknote },
-    { id: 'reissue', title: 'Перевыпустить Kaspi Gold', icon: RefreshCw },
-    { id: 'pin', title: 'Сменить ПИН-код', icon: KeyRound },
-    { id: 'block', title: 'Заблокировать карту', icon: Lock },
-    { id: 'cardless', title: 'Снять деньги без карты', icon: Smartphone },
-    { id: 'close', title: 'Закрыть Kaspi Gold', icon: XCircle }
+    { id: 'transfer', title: 'Перевести', IconComponent: IconTransferGold, onClick: onOpenTransfer },
+    { id: 'topup', title: 'Пополнить Kaspi Gold', IconComponent: IconTopupGold },
+    { id: 'webpay', title: 'Оплата в интернете', IconComponent: IconWebPayGold },
+    { id: 'subscriptions', title: 'Платные сервисы и подписки', IconComponent: IconSubscriptionsGold },
+    { id: 'order_cash', title: 'Заказать сумму на снятие', subtitle: 'более 4 000 000 ₸', IconComponent: IconOrderCashGold },
+    { id: 'reissue', title: 'Перевыпустить Kaspi Gold', IconComponent: IconReissueGold },
+    { id: 'pin', title: 'Сменить ПИН-код', IconComponent: IconChangePinGold },
+    { id: 'block', title: 'Заблокировать карту', IconComponent: IconBlockCardGold },
+    { id: 'cardless', title: 'Снять деньги без карты', IconComponent: IconCardlessGold },
+    { id: 'close', title: 'Закрыть Kaspi Gold', IconComponent: IconCloseCardGold }
   ];
 
+  // 8 items for TAB 2: ИНФО (exact user-provided SVGs matching Screenshot 2)
   const infoList = [
-    { id: 'analytics', title: 'Аналитика покупок', icon: BarChart2 },
-    { id: 'limit', title: 'Лимит на снятие наличных', subtitle: `Осталось в этом месяце: ${card.cashWithdrawalLimit}`, icon: Banknote },
-    { id: 'reqs', title: 'Реквизиты карты и счета', icon: CreditCard, onClick: () => setShowRequisitesModal(true) },
-    { id: 'certificates', title: 'Справки', subtitle: 'О наличии счета, о доступном остатке', icon: FileText },
-    { id: 'conditions', title: 'Условия Kaspi Gold', icon: HelpCircle },
-    { id: 'atms', title: 'Терминалы и банкоматы', icon: MapPin },
-    { id: 'tips', title: 'Полезные советы', icon: Lightbulb }
+    { id: 'analytics', title: 'Аналитика покупок', IconComponent: IconAnalyticsGold },
+    { id: 'limits', title: 'Лимит на снятие наличных', IconComponent: IconLimitsGold },
+    { id: 'requisites', title: 'Реквизиты карты и счета', IconComponent: IconRequisitesGold, onClick: () => setShowRequisitesModal(true) },
+    { id: 'certificates', title: 'Справки', subtitle: 'О наличии счета, о доступном остатке', IconComponent: IconCertificatesGold },
+    { id: 'conditions', title: 'Условия Kaspi Gold', IconComponent: IconConditionsGold },
+    { id: 'terminals', title: 'Терминалы и банкоматы', IconComponent: IconAtmsGold },
+    { id: 'tips', title: 'Полезные советы', IconComponent: IconTipsGold },
+    { id: 'visa_topup', title: 'Пополнения с Visa', subtitle: 'Из другого банка по номеру телефона', IconComponent: IconVisaTopupGold }
+  ];
+
+  // Transactions list for TAB 3: ВЫПИСКА (exact user-provided SVGs matching Screenshot 3)
+  const statementGroups = [
+    {
+      date: '23 октября',
+      items: [
+        {
+          id: 'tx_1',
+          title: 'ИП МАЙМАХОВА',
+          category: 'Супермаркеты',
+          amount: '- 1 640 ₸',
+          icon: StatementBasketIcon
+        }
+      ]
+    },
+    {
+      date: '22 октября',
+      items: [
+        {
+          id: 'tx_2',
+          title: 'Әнел Ш.',
+          category: 'Переводы',
+          amount: '- 1 100 ₸',
+          icon: StatementPersonIcon
+        }
+      ]
+    },
+    {
+      date: '21 октября',
+      items: [
+        {
+          id: 'tx_3',
+          title: 'Magnum',
+          category: 'Супермаркеты',
+          amount: '- 8 450 ₸',
+          icon: StatementBasketIcon
+        }
+      ]
+    }
   ];
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: '#F2F2F2',
-      display: 'flex',
-      flexDirection: 'column',
-      paddingBottom: '40px'
-    }}>
-      {/* Top Gold Card Banner Header */}
-      <div style={{
-        background: 'linear-gradient(135deg, #E6C280 0%, #D5AE6C 50%, #C49B4B 100%)',
-        padding: '12px 16px 20px 16px',
-        color: '#FFFFFF',
+    <div
+      ref={containerRef}
+      style={{
+        width: '100%',
+        maxWidth: '430px',
+        margin: '0 auto',
+        minHeight: '100%',
+        backgroundColor: '#D4AE6D',
+        display: 'flex',
+        flexDirection: 'column',
         position: 'relative',
-        boxShadow: '0 4px 12px rgba(196, 155, 75, 0.25)'
+        fontFamily: "'Roboto', -apple-system, BlinkMacSystemFont, sans-serif",
+        boxSizing: 'border-box'
+      }}
+    >
+      {/* Sticky Compact Header (Screenshots 1 & 2) */}
+      <div style={{
+        position: 'sticky',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 50,
+        backgroundColor: isScrolled ? '#D4AE6D' : 'transparent',
+        height: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px))',
+        paddingTop: 'max(env(safe-area-inset-top, 44px), 44px)',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        boxSizing: 'border-box',
+        boxShadow: isScrolled ? '0 2px 8px rgba(138, 98, 30, 0.25)' : 'none',
+        transition: 'background-color 0.2s ease, box-shadow 0.2s ease'
       }}>
-        {/* Navigation line */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '18px'
-        }}>
-          <div onClick={onBack} className="touchable" style={{ padding: '6px' }}>
-            <ArrowLeft size={22} color="#FFFFFF" />
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '16px', fontWeight: '600' }}>
-              {card.name} *{card.last4}
-            </span>
-            <div style={{
-              width: '24px',
-              height: '16px',
-              borderRadius: '3px',
-              backgroundColor: '#FFFFFF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <span style={{ fontSize: '8px', color: '#D5AE6C', fontWeight: 'bold' }}>MC</span>
-            </div>
-          </div>
-
-          <div style={{ width: '32px' }} />
+        {/* Back navigation button */}
+        <div
+          onClick={onBack}
+          className="touchable"
+          style={{
+            width: '36px',
+            height: '36px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            cursor: 'pointer'
+          }}
+        >
+          <BackChevronIcon size={20} color="#FFFFFF" />
         </div>
 
-        {/* Silhouette Family Logo Badge on Right */}
+        {/* Compact Centered Title + Balance (visible on scroll) */}
         <div style={{
-          position: 'absolute',
-          right: '16px',
-          top: '52px',
-          width: '54px',
-          height: '54px',
-          borderRadius: '50%',
-          backgroundColor: 'rgba(255, 255, 255, 0.2)',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backdropFilter: 'blur(2px)'
+          opacity: isScrolled ? 1 : 0,
+          transform: isScrolled ? 'translateY(0)' : 'translateY(4px)',
+          transition: 'opacity 0.2s ease, transform 0.2s ease',
+          pointerEvents: isScrolled ? 'auto' : 'none'
         }}>
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="#FFFFFF">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-          </svg>
-        </div>
-
-        {/* Balance Display */}
-        <div style={{ marginTop: '10px' }}>
-          <div style={{
+          <span style={{
+            fontSize: '17px',
+            fontWeight: '700',
+            color: '#FFFFFF',
+            lineHeight: 1.2
+          }}>
+            Kaspi Gold *{card.last4}
+          </span>
+          <span style={{
             fontSize: '13px',
-            color: 'rgba(255, 255, 255, 0.85)',
-            fontWeight: '500',
-            marginBottom: '4px'
+            fontWeight: '400',
+            color: 'rgba(255, 255, 255, 0.92)',
+            marginTop: '1px',
+            lineHeight: 1.2
           }}>
-            Доступно
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{
-              fontSize: '28px',
-              fontWeight: '700',
-              letterSpacing: '0.2px'
-            }}>
-              {showBalance ? card.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 }) + ' ₸' : '•••••••• ₸'}
-            </span>
-
-            <div
-              onClick={() => setShowBalance(!showBalance)}
-              className="touchable"
-              style={{ padding: '4px' }}
-            >
-              {showBalance ? <Eye size={20} color="#FFFFFF" /> : <EyeOff size={20} color="#FFFFFF" />}
-            </div>
-          </div>
+            112 022,58 ₸
+          </span>
         </div>
+
+        {/* Empty placeholder for symmetry */}
+        <div style={{ width: '36px' }} />
       </div>
 
-      {/* 3 Tabs Bar: Действия / Инфо / Выписка */}
+      {/* =====================================================================
+          EXPANDED GOLDEN CARD HEADER (Screenshots 3, 4, 5)
+          Uses authentic user asset /kaspi_assets/kaspi_gold_card_bg.jpg
+      ===================================================================== */}
       <div style={{
-        display: 'flex',
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid #EBEBEB',
-        height: '46px'
+        marginTop: 'calc(-44px - max(env(safe-area-inset-top, 44px), 44px))',
+        paddingTop: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px) + 6px)',
+        background: '#D4AE6D url(/kaspi_assets/kaspi_gold_card_bg.jpg) no-repeat right 0px top / cover',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        paddingBottom: '24px',
+        position: 'relative',
+        boxSizing: 'border-box',
+        overflow: 'hidden'
       }}>
-        {[
-          { id: 'actions', label: 'Действия' },
-          { id: 'info', label: 'Инфо' },
-          { id: 'statement', label: 'Выписка' }
-        ].map((tab) => {
-          const isActive = activeTab === tab.id;
-          return (
-            <div
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className="touchable"
-              style={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '14px',
-                fontWeight: isActive ? '700' : '500',
-                color: isActive ? '#F14635' : '#757575',
-                position: 'relative'
-              }}
-            >
-              {tab.label}
-              {isActive && (
-                <div style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: '20%',
-                  right: '20%',
-                  height: '2.5px',
-                  backgroundColor: '#F14635',
-                  borderRadius: '2px 2px 0 0'
-                }} />
-              )}
-            </div>
-          );
-        })}
+        {/* Card Name + Apple Pay badge */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          marginTop: '6px'
+        }}>
+          <span style={{
+            fontSize: '19px',
+            fontWeight: '700',
+            color: '#FFFFFF',
+            letterSpacing: '0.1px',
+            textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+          }}>
+            Kaspi Gold *{card.last4}
+          </span>
+          <ApplePayBadge style={{ marginLeft: '8px' }} />
+        </div>
+
+        {/* Caption "Доступно" */}
+        <div style={{
+          fontSize: '14px',
+          fontWeight: '400',
+          color: 'rgba(255, 255, 255, 0.92)',
+          marginTop: '16px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+        }}>
+          Доступно
+        </div>
+
+        {/* Big Balance: 112 022,58 ₸ */}
+        <div style={{
+          fontSize: '34px',
+          fontWeight: '700',
+          color: '#FFFFFF',
+          letterSpacing: '-0.3px',
+          lineHeight: '1.15',
+          marginTop: '2px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+        }}>
+          112 022,58 ₸
+        </div>
       </div>
 
-      {/* Content for TAB 1: ДЕЙСТВИЯ */}
-      {activeTab === 'actions' && (
+      {/* =====================================================================
+          MAIN WHITE SHEET (Rounded top corners: 16px)
+      ===================================================================== */}
+      <div style={{
+        backgroundColor: '#FFFFFF',
+        borderTopLeftRadius: '16px',
+        borderTopRightRadius: '16px',
+        marginTop: '-12px',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        boxSizing: 'border-box',
+        position: 'relative',
+        zIndex: 2,
+        paddingBottom: 'calc(180px + env(safe-area-inset-bottom, 34px))'
+      }}>
+        {/* =====================================================================
+            SEGMENTED CONTROL (Действия / Инфо / Выписка) - Sticky on scroll
+        ===================================================================== */}
         <div style={{
+          position: 'sticky',
+          top: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px))',
+          zIndex: 40,
           backgroundColor: '#FFFFFF',
-          marginTop: '12px',
-          borderTop: '1px solid #EBEBEB',
-          borderBottom: '1px solid #EBEBEB'
+          padding: '10px 16px 8px 16px',
+          borderTopLeftRadius: isScrolled ? '0' : '16px',
+          borderTopRightRadius: isScrolled ? '0' : '16px',
+          boxSizing: 'border-box',
+          transition: 'border-radius 0.15s ease'
         }}>
-          {actionsList.map((action, idx) => {
-            const Icon = action.icon;
-            return (
-              <div
-                key={action.id}
-                onClick={action.onClick}
-                className="touchable"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '14px 16px',
-                  borderTop: idx > 0 ? '1px solid #F4F4F4' : 'none'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <Icon size={22} color="#F14635" strokeWidth={1.75} />
-                  <div>
-                    <div style={{ fontSize: '15px', fontWeight: '500', color: '#1F1F1F' }}>
-                      {action.title}
-                    </div>
-                    {action.subtitle && (
-                      <div style={{ fontSize: '12px', color: '#757575', marginTop: '1px' }}>
-                        {action.subtitle}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <ChevronRight size={18} color="#C2C2C2" />
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Content for TAB 2: ИНФО */}
-      {activeTab === 'info' && (
-        <div style={{
-          backgroundColor: '#FFFFFF',
-          marginTop: '12px',
-          borderTop: '1px solid #EBEBEB',
-          borderBottom: '1px solid #EBEBEB'
-        }}>
-          {infoList.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.id}
-                onClick={item.onClick}
-                className="touchable"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '14px 16px',
-                  borderTop: idx > 0 ? '1px solid #F4F4F4' : 'none'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <Icon size={22} color="#F14635" strokeWidth={1.75} />
-                  <div>
-                    <div style={{ fontSize: '15px', fontWeight: '500', color: '#1F1F1F' }}>
-                      {item.title}
-                    </div>
-                    {item.subtitle && (
-                      <div style={{ fontSize: '12px', color: '#757575', marginTop: '1px' }}>
-                        {item.subtitle}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <ChevronRight size={18} color="#C2C2C2" />
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Content for TAB 3: ВЫПИСКА */}
-      {activeTab === 'statement' && (
-        <div>
-          {/* Date Picker Header */}
           <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '14px 16px',
-            backgroundColor: '#FFFFFF',
-            borderBottom: '1px solid #EBEBEB'
-          }}>
-            <div style={{ fontSize: '14px', fontWeight: '600', color: '#1F1F1F' }}>
-              29 августа — 29 сентября
-            </div>
-            <Share2 size={18} color="#757575" className="touchable" />
-          </div>
-
-          {/* Search in operations */}
-          <div style={{
-            padding: '10px 16px',
-            backgroundColor: '#FFFFFF',
-            borderBottom: '1px solid #EBEBEB',
+            backgroundColor: '#F0F0F2',
+            height: '36px',
+            borderRadius: '10px',
+            padding: '2px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            boxSizing: 'border-box'
           }}>
-            <Search size={16} color="#969696" />
-            <input
-              type="text"
-              placeholder="Поиск по операциям"
-              style={{
-                border: 'none',
-                outline: 'none',
-                fontSize: '14px',
-                width: '100%',
-                color: '#1F1F1F'
-              }}
-            />
+          {[
+            { id: 'actions', label: 'Действия' },
+            { id: 'info', label: 'Инфо' },
+            { id: 'statement', label: 'Выписка' }
+          ].map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className="touchable"
+                style={{
+                  flex: 1,
+                  height: '32px',
+                  borderRadius: '8px',
+                  backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: "'Roboto', sans-serif",
+                  fontSize: '14px',
+                  fontWeight: isActive ? '500' : '400',
+                  color: '#000000',
+                  boxShadow: isActive ? '0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.04)' : 'none',
+                  transition: 'background-color 0.15s ease, box-shadow 0.15s ease',
+                  padding: 0
+                }}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
           </div>
+        </div>
 
-          {/* Grouped Statement List */}
-          {statement.map((group) => (
-            <div key={group.date} style={{ marginTop: '12px' }}>
-              <div style={{
-                padding: '6px 16px',
-                fontSize: '12px',
-                color: '#757575',
-                fontWeight: '600',
-                textTransform: 'uppercase'
-              }}>
-                {group.date}
-              </div>
-
-              <div style={{
-                backgroundColor: '#FFFFFF',
-                borderTop: '1px solid #EBEBEB',
-                borderBottom: '1px solid #EBEBEB'
-              }}>
-                {group.items.map((tx, idx) => (
+        {/* =====================================================================
+            TAB 1: ДЕЙСТВИЯ (Screenshot 1)
+        ===================================================================== */}
+        {activeTab === 'actions' && (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {actionsList.map((action, idx) => {
+              const { IconComponent } = action;
+              return (
+                <React.Fragment key={action.id}>
                   <div
-                    key={tx.id}
+                    onClick={action.onClick}
                     className="touchable"
                     style={{
+                      height: action.subtitle ? '58px' : '52px',
+                      padding: '0 16px',
                       display: 'flex',
-                      justifyContent: 'space-between',
                       alignItems: 'center',
-                      padding: '14px 16px',
-                      borderTop: idx > 0 ? '1px solid #F4F4F4' : 'none'
+                      justifyContent: 'space-between',
+                      cursor: 'pointer'
                     }}
                   >
-                    <div>
-                      <div style={{ fontSize: '15px', fontWeight: '600', color: '#1F1F1F' }}>
-                        {tx.title}
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{
+                        width: '32px',
+                        height: '32px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}>
+                        <IconComponent size={24} color="#DF4337" />
                       </div>
-                      <div style={{ fontSize: '12px', color: '#757575', marginTop: '2px' }}>
-                        {tx.category}
+
+                      <div style={{ marginLeft: '12px', display: 'flex', flexDirection: 'column' }}>
+                        <span style={{
+                          fontSize: '16px',
+                          fontWeight: '400',
+                          color: '#1A1A1A',
+                          lineHeight: 1.25
+                        }}>
+                          {action.title}
+                        </span>
+                        {action.subtitle && (
+                          <span style={{
+                            fontSize: '12px',
+                            fontWeight: '400',
+                            color: '#8E8E93',
+                            marginTop: '2px',
+                            lineHeight: 1.2
+                          }}>
+                            {action.subtitle}
+                          </span>
+                        )}
                       </div>
                     </div>
 
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '15px', fontWeight: '700', color: '#1F1F1F' }}>
-                        {tx.amount.toLocaleString('ru-RU')} ₸
+                    <ChevronRightIcon size={13} color="#C7C7CC" />
+                  </div>
+
+                  {idx < actionsList.length - 1 && (
+                    <div style={{
+                      height: '1px',
+                      backgroundColor: '#F2F2F4',
+                      marginLeft: '60px',
+                      width: 'calc(100% - 60px)'
+                    }} />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        )}
+
+        {/* =====================================================================
+            TAB 2: ИНФО (Screenshot 2)
+        ===================================================================== */}
+        {activeTab === 'info' && (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {infoList.map((item, idx) => {
+              const { IconComponent } = item;
+              return (
+                <React.Fragment key={item.id}>
+                  <div
+                    onClick={item.onClick}
+                    className="touchable"
+                    style={{
+                      height: item.subtitle ? '58px' : '52px',
+                      padding: '0 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{
+                        width: '32px',
+                        height: '32px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}>
+                        <IconComponent size={24} color="#DF4337" />
                       </div>
-                      <div style={{ fontSize: '11px', color: '#0089D0', marginTop: '2px' }}>
-                        Чек об оплате
+
+                      <div style={{ marginLeft: '12px', display: 'flex', flexDirection: 'column' }}>
+                        <span style={{
+                          fontSize: '16px',
+                          fontWeight: '400',
+                          color: '#1A1A1A',
+                          lineHeight: 1.25
+                        }}>
+                          {item.title}
+                        </span>
+                        {item.subtitle && (
+                          <span style={{
+                            fontSize: '12px',
+                            fontWeight: '400',
+                            color: '#8E8E93',
+                            marginTop: '2px',
+                            lineHeight: 1.2
+                          }}>
+                            {item.subtitle}
+                          </span>
+                        )}
                       </div>
                     </div>
+
+                    <ChevronRightIcon size={13} color="#C7C7CC" />
                   </div>
-                ))}
+
+                  {idx < infoList.length - 1 && (
+                    <div style={{
+                      height: '1px',
+                      backgroundColor: '#F2F2F4',
+                      marginLeft: '60px',
+                      width: 'calc(100% - 60px)'
+                    }} />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        )}
+
+        {/* =====================================================================
+            TAB 3: ВЫПИСКА (Screenshot 3)
+        ===================================================================== */}
+        {activeTab === 'statement' && (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {/* Search Input: "Поиск по операциям" */}
+            <div style={{
+              margin: '8px 16px 12px 16px',
+              backgroundColor: '#F2F2F4',
+              height: '36px',
+              borderRadius: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              paddingLeft: '10px',
+              paddingRight: '10px',
+              boxSizing: 'border-box'
+            }}>
+              <SearchIcon size={17} color="#8E8E93" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Поиск по операциям"
+                style={{
+                  border: 'none',
+                  outline: 'none',
+                  backgroundColor: 'transparent',
+                  marginLeft: '8px',
+                  width: '100%',
+                  fontFamily: "'Roboto', sans-serif",
+                  fontSize: '15px',
+                  color: '#000000'
+                }}
+              />
+            </div>
+
+            {/* Date Range Row: Red Calendar + "26 сентября - 26 октября" + Share/Export */}
+            <div style={{
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer'
+            }} className="touchable">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <StatementCalendarIcon size={24} color="#DF4337" />
+                </div>
+                <span style={{
+                  marginLeft: '12px',
+                  fontSize: '16px',
+                  fontWeight: '400',
+                  color: '#000000'
+                }}>
+                  26 сентября - 26 октября
+                </span>
+              </div>
+
+              <div className="touchable" style={{ padding: '4px' }}>
+                <ShareExportIcon size={20} color="#8E8E93" />
               </div>
             </div>
-          ))}
-        </div>
-      )}
 
-      {/* Requisites Modal (Реквизиты карты и счета) */}
+            <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '60px', width: 'calc(100% - 60px)' }} />
+
+            {/* Summary Row: "Операции" + "+ 1 059 650 ₸" / "- 970 912,39 ₸" */}
+            <div style={{
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer'
+            }} className="touchable">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <StatementOperationsReceiptIcon size={24} color="#DF4337" />
+                </div>
+                <span style={{
+                  marginLeft: '12px',
+                  fontSize: '16px',
+                  fontWeight: '400',
+                  color: '#000000'
+                }}>
+                  Операции
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                  <span style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#27A13B',
+                    lineHeight: 1.25
+                  }}>
+                    + 1 059 650 ₸
+                  </span>
+                  <span style={{
+                    fontSize: '13px',
+                    fontWeight: '400',
+                    color: '#757575',
+                    marginTop: '2px',
+                    lineHeight: 1.2
+                  }}>
+                    - 970 912,39 ₸
+                  </span>
+                </div>
+                <ChevronRightIcon size={13} color="#C7C7CC" />
+              </div>
+            </div>
+
+            <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '60px', width: 'calc(100% - 60px)' }} />
+
+            {/* Grouped Transactions List by Date */}
+            {statementGroups.map((group) => (
+              <div key={group.date} style={{ display: 'flex', flexDirection: 'column' }}>
+                {/* Date Header: e.g. "23 октября" */}
+                <div style={{
+                  padding: '16px 16px 8px 16px',
+                  fontSize: '17px',
+                  fontWeight: '700',
+                  color: '#000000',
+                  letterSpacing: '-0.2px'
+                }}>
+                  {group.date}
+                </div>
+
+                {group.items.map((tx, idx) => {
+                  const Icon = tx.icon;
+                  return (
+                    <React.Fragment key={tx.id}>
+                      <div
+                        className="touchable"
+                        style={{
+                          padding: '12px 16px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          {/* Circular icon container */}
+                          <div style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            backgroundColor: '#F5F5F7',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                          }}>
+                            <Icon size={20} color="#262626" />
+                          </div>
+
+                          <div style={{ marginLeft: '12px', display: 'flex', flexDirection: 'column' }}>
+                            <span style={{
+                              fontSize: '16px',
+                              fontWeight: '500',
+                              color: '#000000',
+                              lineHeight: 1.25
+                            }}>
+                              {tx.title}
+                            </span>
+                            <span style={{
+                              fontSize: '13px',
+                              fontWeight: '400',
+                              color: '#8E8E93',
+                              marginTop: '2px',
+                              lineHeight: 1.2
+                            }}>
+                              {tx.category}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{
+                            fontSize: '16px',
+                            fontWeight: '600',
+                            color: '#000000'
+                          }}>
+                            {tx.amount}
+                          </span>
+                          <ChevronRightIcon size={13} color="#C7C7CC" />
+                        </div>
+                      </div>
+
+                      {idx < group.items.length - 1 && (
+                        <div style={{
+                          height: '1px',
+                          backgroundColor: '#F2F2F4',
+                          marginLeft: '68px',
+                          width: 'calc(100% - 68px)'
+                        }} />
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* =====================================================================
+          REQUISITES MODAL (Реквизиты карты и счета)
+      ===================================================================== */}
       {showRequisitesModal && (
         <div style={{
           position: 'fixed',
@@ -370,7 +761,7 @@ export const KaspiGoldDetailScreen = ({ card, statement, onBack, onOpenQr, onOpe
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.6)',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
           zIndex: 300,
           display: 'flex',
           alignItems: 'flex-end',
@@ -378,52 +769,137 @@ export const KaspiGoldDetailScreen = ({ card, statement, onBack, onOpenQr, onOpe
         }}>
           <div style={{
             width: '100%',
-            maxWidth: '440px',
+            maxWidth: '430px',
             backgroundColor: '#FFFFFF',
-            borderRadius: '16px 16px 0 0',
-            padding: '20px 20px 30px 20px'
+            borderRadius: '20px 20px 0 0',
+            padding: '20px 20px 36px 20px',
+            boxSizing: 'border-box'
           }}>
+            {/* Modal top drag pill */}
+            <div style={{
+              width: '36px',
+              height: '4px',
+              backgroundColor: '#D1D1D6',
+              borderRadius: '2px',
+              margin: '0 auto 16px auto'
+            }} />
+
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '16px'
+              marginBottom: '20px'
             }}>
-              <span style={{ fontSize: '18px', fontWeight: '700' }}>Реквизиты</span>
-              <div
+              <span style={{ fontSize: '20px', fontWeight: '700', color: '#000000' }}>
+                Реквизиты карты и счета
+              </span>
+              <button
+                type="button"
                 onClick={() => setShowRequisitesModal(false)}
                 className="touchable"
-                style={{ padding: '6px', color: '#757575' }}
+                style={{
+                  background: '#F2F2F4',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#8E8E93',
+                  fontSize: '16px'
+                }}
               >
                 ✕
-              </div>
+              </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '14px' }}>
-              <div>
-                <div style={{ color: '#757575', fontSize: '12px' }}>Номер карты</div>
-                <div style={{ fontWeight: '600', fontSize: '16px', letterSpacing: '0.5px' }}>{card.cardNumberFormatted}</div>
-              </div>
-
-              <div>
-                <div style={{ color: '#757575', fontSize: '12px' }}>Имя на карте</div>
-                <div style={{ fontWeight: '600' }}>PARASSAT ZHUMASH</div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* Card Number */}
+              <div
+                onClick={() => copyToClipboard('4400 4303 6188 4163', 'card')}
+                className="touchable"
+                style={{
+                  padding: '12px 14px',
+                  backgroundColor: '#F8F8FA',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  cursor: 'pointer'
+                }}
+              >
                 <div>
-                  <div style={{ color: '#757575', fontSize: '12px' }}>Срок действия</div>
-                  <div style={{ fontWeight: '600' }}>{card.expiry}</div>
+                  <div style={{ color: '#8E8E93', fontSize: '12px' }}>Номер карты</div>
+                  <div style={{ fontWeight: '600', fontSize: '16px', color: '#000000', marginTop: '2px' }}>
+                    4400 4303 6188 4163
+                  </div>
                 </div>
-                <div>
-                  <div style={{ color: '#757575', fontSize: '12px' }}>CVV</div>
-                  <div style={{ fontWeight: '600' }}>{card.cvv}</div>
+                <span style={{ fontSize: '13px', color: copiedField === 'card' ? '#27A13B' : '#E2464A', fontWeight: '500' }}>
+                  {copiedField === 'card' ? 'Скопировано' : 'Скопировать'}
+                </span>
+              </div>
+
+              {/* Cardholder Name */}
+              <div style={{
+                padding: '12px 14px',
+                backgroundColor: '#F8F8FA',
+                borderRadius: '12px'
+              }}>
+                <div style={{ color: '#8E8E93', fontSize: '12px' }}>Имя на карте</div>
+                <div style={{ fontWeight: '600', fontSize: '15px', color: '#000000', marginTop: '2px' }}>
+                  PARASSAT ZHUMASH
                 </div>
               </div>
 
-              <div>
-                <div style={{ color: '#757575', fontSize: '12px' }}>Счет (IBAN)</div>
-                <div style={{ fontWeight: '600', fontSize: '13px' }}>{card.iban}</div>
+              {/* Expiry & CVV */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{
+                  padding: '12px 14px',
+                  backgroundColor: '#F8F8FA',
+                  borderRadius: '12px'
+                }}>
+                  <div style={{ color: '#8E8E93', fontSize: '12px' }}>Срок действия</div>
+                  <div style={{ fontWeight: '600', fontSize: '15px', color: '#000000', marginTop: '2px' }}>
+                    09/29
+                  </div>
+                </div>
+                <div style={{
+                  padding: '12px 14px',
+                  backgroundColor: '#F8F8FA',
+                  borderRadius: '12px'
+                }}>
+                  <div style={{ color: '#8E8E93', fontSize: '12px' }}>CVV</div>
+                  <div style={{ fontWeight: '600', fontSize: '15px', color: '#000000', marginTop: '2px' }}>
+                    •••
+                  </div>
+                </div>
+              </div>
+
+              {/* IBAN */}
+              <div
+                onClick={() => copyToClipboard('KZ54722C000021658491', 'iban')}
+                className="touchable"
+                style={{
+                  padding: '12px 14px',
+                  backgroundColor: '#F8F8FA',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  cursor: 'pointer'
+                }}
+              >
+                <div>
+                  <div style={{ color: '#8E8E93', fontSize: '12px' }}>Счет (IBAN)</div>
+                  <div style={{ fontWeight: '600', fontSize: '14px', color: '#000000', marginTop: '2px' }}>
+                    KZ54722C000021658491
+                  </div>
+                </div>
+                <span style={{ fontSize: '13px', color: copiedField === 'iban' ? '#27A13B' : '#E2464A', fontWeight: '500' }}>
+                  {copiedField === 'iban' ? 'Скопировано' : 'Скопировать'}
+                </span>
               </div>
             </div>
           </div>

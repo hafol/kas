@@ -23,7 +23,7 @@ export const initialUserData = {
       last4: "4163",
       cardNumberFormatted: "4400 4303 6188 4163",
       iban: "KZ54722C000021658491",
-      balance: 17824.97,
+      balance: 112022.58,
       currency: "₸",
       subtitle: "1 счет",
       expiry: "09/29",

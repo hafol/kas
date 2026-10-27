@@ -61,6 +61,12 @@ export default function App() {
       if (params.get('screen') === 'digital_id' || window.location.hash === '#digital_id') {
         return 'digital_id';
       }
+      if (params.get('screen') === 'gold_detail' || window.location.hash === '#gold_detail') {
+        return 'gold_detail';
+      }
+      if (params.get('screen') === 'my_bank' || window.location.hash === '#my_bank') {
+        return 'my_bank';
+      }
     }
     return 'tab';
   });

@@ -2,6 +2,53 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 01:05] — Экран Kaspi Gold («Мой Банк»): 100% 1-в-1 реализация экрана детальной карты Kaspi Gold с 3 вкладками (Действия, Инфо, Выписка), векторными SVG-иконками, аутентичным фоном и коллапсирующим заголовком
+
+### 🎯 Запрос пользователя:
+> *«lets move on to the page my bank wheras in the project you can find fields with icons for each sector of this my bank. here you can see the the original screenshots attached and after that you gotta calculate every single mm and detail in screenshots to implement exact 1 in 1 copy into the our website in that particular page i was talking about.»*
+
+### 🛠️ Что сделано:
+1. **Заголовок карты (Collapsible Sticky Header)**:
+   - **Развернутое состояние** (Screenshots 3, 4, 5): Статус-бар с безопасной зоной iOS, кнопка «Назад» `<` в нативном стиле, название карты `Kaspi Gold *4163`, бейдж `Pay` (`36×18px`, белый с черным логотипом), статус `Доступно`, баланс крупным шрифтом `112 022,58 ₸`, аутентичный золотистый фон с рельефным медальоном семьи (`kaspi_gold_card_bg.jpg` из ассета пользователя `photo_5406696723213656067_x.jpg`).
+   - **Компактное состояние при скролле** (Screenshots 1, 2): При прокрутке вниз навигационная панель плавно закрепляется наверху (`backgroundColor: #D4AE6D`, `height: 88px` с учетом `safe-area-inset-top`), центрируя название `Kaspi Gold *4163` и баланс `112 022,58 ₸` с изящной тенью.
+2. **Сегментированный переключатель (Segmented Control)**:
+   - 3 вкладки: «Действия», «Инфо», «Выписка».
+   - Закрепляется под компактным заголовком при скролле (`position: sticky`), позволяя мгновенно переключать разделы на любой глубине прокрутки без возврата наверх.
+3. **Вкладка 1 — «Действия» (Screenshot 1)**:
+   - 10 аутентичных пунктов: Перевести, Пополнить Kaspi Gold, Оплата в интернете, Платные сервисы и подписки, Заказать сумму на снятие (более 4 000 000 ₸), Перевыпустить Kaspi Gold, Сменить ПИН-код, Заблокировать карту, Снять деньги без карты, Закрыть Kaspi Gold.
+   - Красные векторные иконки `#DF4337`, тонкие разделители `1px #F2F2F4`, шевроны `> #C7C7CC`.
+4. **Вкладка 2 — «Инфо» (Screenshot 2)**:
+   - 8 аутентичных пунктов с точными векторными SVG из предоставленной пользователем папки `icons for my bank info page`:
+     - Аналитика покупок (`card-tap.svg`)
+     - Лимит на снятие наличных (`tenge-box.svg`)
+     - Реквизиты карты и счета (`list-box.svg`)
+     - Справки (`document.svg`, подзаголовок «О наличии счета, о доступном остатке»)
+     - Условия Kaspi Gold (`checklist-document.svg`)
+     - Терминалы и банкоматы (`location-pin.svg`)
+     - Полезные советы (`star.svg`)
+     - Пополнения с Visa (`phone-sign-in.svg`, подзаголовок «Из другого банка по номеру телефона»)
+   - Интерактивное нативное всплывающее окно «Реквизиты карты и счета» с копированием в буфер обмена номера карты (`4400 4303 6188 4163`), IBAN (`KZ54722C000021658491`), срока `09/29`, CVV `•••` и имени держателя `PARASSAT ZHUMASH`.
+5. **Вкладка 3 — «Выписка» (Screenshot 3)**:
+   - Поле поиска «Поиск по операциям» с иконкой лупы `#8E8E93` и скругленным серым фоном `#F2F2F4`.
+   - Выбор диапазона дат «26 сентября - 26 октября» с иконкой календаря (`calendar.svg`) и кнопкой экспорта/шаринга.
+   - Строка общей сводки «Операции» с иконкой чека (`tenge-receipt.svg`), зеленым доходом `+ 1 059 650 ₸` (`#27A13B`) и расходом `- 970 912,39 ₸` (`#757575`).
+   - Группированная история транзакций по датам:
+     - «23 октября»: ИП МАЙМАХОВА, Супермаркеты (`basket.svg`), `- 1 640 ₸`
+     - «22 октября»: Әнел Ш., Переводы (`person.svg`), `- 1 100 ₸`
+     - «21 октября»: Magnum, Супермаркеты (`basket.svg`), `- 8 450 ₸`
+6. **Тестирование и проверка**:
+   - Проверено скриптом Playwright в мобильном разрешении 393 × 852 (iPhone 14 Pro): проверены развернутое состояние, компактное состояние при прокрутке, вкладка «Инфо», вкладка «Выписка».
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`kaspi-app/src/components/KaspiGoldIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldIcons.jsx)
+- [`kaspi-app/public/kaspi_assets/kaspi_gold_card_bg.jpg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/kaspi_gold_card_bg.jpg)
+- [`kaspi-app/src/data/userData.js`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/data/userData.js)
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-27 15:25] — Навбар: увеличение иконок на +15%, шрифт подписей +0.5pt (12.5px), выравнивание иконки «Сервисы» строго в одну линию
 
 ### 🎯 Запрос пользователя:
