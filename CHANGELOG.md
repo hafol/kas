@@ -2,6 +2,22 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 04:53] — Экран Kaspi Gold: Смещение логотипа-медальона вниз на 4px (top: +73px)
+
+### 🎯 Запрос пользователя:
+> *«move it down 4px»*
+
+### 🛠️ Что сделано:
+1. **Смещение логотипа вниз на 4px**:
+   - `top` в [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx) увеличено с `69px` до **`73px`** (`calc(env(safe-area-inset-top, 0px) + 73px)`).
+   - Сохранены параметры: `right: 24px`, размер `115 × 115 px`.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 04:50] — Экран Kaspi Gold: Смещение логотипа-медальона вниз на 8px (top: +69px)
 
 ### 🎯 Запрос пользователя:
