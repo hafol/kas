@@ -1042,7 +1042,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                 height: '4px',
                 backgroundColor: '#D8D8DC',
                 borderRadius: '2px',
-                margin: '10px auto 0'
+                margin: '7px auto 0' // moved 3px up (was 10px)
               }}
             />
 
@@ -1058,11 +1058,14 @@ export const DigitalIdScreen = ({ onBack }) => {
               <h2
                 style={{
                   fontFamily,
-                  fontSize: activeModal === 'share_target' ? '22px' : '24px', // +1pt bigger (was 22.5px)
-                  fontWeight: 600, // bolder (was 400)
+                  fontSize: activeModal === 'share_target' ? '22px' : '24px',
+                  fontWeight: 600,
                   color: '#1C1C1E',
                   margin: 0,
-                  letterSpacing: '-0.3px'
+                  letterSpacing: '-0.3px',
+                  position: 'relative',
+                  top: '-4px', // moved 4px up
+                  left: '-2px' // moved 2px left
                 }}
               >
                 {activeModal === 'share_target' ? 'Кому отправить' : 'Удостоверение личности'}
