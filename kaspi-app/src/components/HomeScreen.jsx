@@ -340,7 +340,7 @@ export const HomeScreen = ({
         borderBottom: 'none',
         boxShadow: 'none',
         outline: 'none',
-        paddingTop: '2px',
+        paddingTop: 'max(env(safe-area-inset-top, 0px), 2px)',
         paddingBottom: '0px',
         paddingLeft: '17.5px',
         paddingRight: '20px',

@@ -2,6 +2,44 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 02:10] — Прозрачный нативный статус-бар iOS (Full-Bleed Status Bar): устранение белой полосы вверху экрана на iPhone и бесшовное слияние с золотой картой Kaspi Gold 1-в-1 с оригинальным приложением Kaspi
+
+### 🎯 Запрос пользователя:
+> *«why in my phone there is white thing at the top can we make it transpaernt as well as real kaspi»* (с приложением скриншота экрана iPhone, где над золотой картой Kaspi Gold отображалась белая полоса со временем `01:51` и батареей `52%`).
+
+### 🔍 Диагностика первопричины:
+1. В [`kaspi-app/index.html`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html) стоял тег `<meta name="apple-mobile-web-app-status-bar-style" content="default" />`, который принудительно заставлял iOS в PWA / Home Screen режиме рисовать белую непрозрачную полосу с черным текстом над веб-страницей.
+2. Тег `<meta name="theme-color" content="#FFFFFF" />` был жестко задан белым цветом, из-за чего Safari на iOS красил верхнюю часть браузера и островок/челку в белый цвет даже при нахождении на экране Kaspi Gold.
+3. В теге `<style>` внутри `index.html` для `html, body` стояло `background-color: #FFFFFF !important;`, что не давало динамически задавать цвет холста для безопасной зоны экрана.
+4. Контейнеры подэкранов в [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx) (`.app-viewport`, `.page-slide-in`) имели дефолтный белый/светло-серый фон `#F8F8F9`, создававший границу при переходе на экран карты.
+
+### 🛠️ Что сделано:
+1. **Нативная прозрачность статус-бара iOS (PWA / WebApp)**:
+   - В [`kaspi-app/index.html`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html) параметр `apple-mobile-web-app-status-bar-style` изменен на `black-translucent`. В этом режиме статус-бар iOS становится 100% прозрачным, парит прямо поверх контента приложения, текст и иконки (время, Wi-Fi, заряд аккумулятора) становятся белыми, а золотой фон Kaspi Gold продолжается до самого верхнего края физического стекла экрана (full-bleed 1-в-1 как в оригинальном нативном iOS-приложении Kaspi.kz).
+   - Удален `!important` у `background-color` для `html, body` в инлайн-стилях загрузчика `index.html`.
+2. **Динамический `theme-color` и цвет холста (Safari iOS 15+)**:
+   - В [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx) добавлен `useEffect`, динамически отслеживающий текущий активный экран `currentScreen`:
+     - При переходе на `gold_detail`: `<meta name="theme-color">` переключается на аутентичный золотой цвет `#D4AE6D`, а фон `document.documentElement`, `document.body` и `#root` устанавливается в `#D4AE6D`.
+     - При возврате на главную / в другие разделы: `<meta name="theme-color">` возвращается в `#FFFFFF`.
+3. **Бесшовные контейнеры приложения**:
+   - Фон `.app-viewport`, контейнера скольжения `.page-slide-in` (Layer 3) и закрывающегося слоя `.page-slide-out` (Layer 4) в `App.jsx` теперь динамически принимает цвет `#D4AE6D` при открытом `gold_detail`.
+4. **Адаптация верхней безопасной зоны главной страницы**:
+   - В [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx) верхний отступ поисковой строки скорректирован на `paddingTop: max(env(safe-area-inset-top, 0px), 2px)`, чтобы в полноэкранном режиме белая шапка плавно заходила под челку/Dynamic Island без наложения поиска на системные часы.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/index.html`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html)
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+### 🧪 Статус проверки:
+- Успешная сборка Vite: `npm run build` (0 ошибок).
+- Проверено скриптом Playwright на вьюпорте iPhone 14 Pro (`393 × 852`):
+  - `gold_detail`: `theme-color = #D4AE6D`, `apple-mobile-web-app-status-bar-style = black-translucent`, `backgroundColor = rgb(212, 174, 109)`
+  - `home`: `theme-color = #FFFFFF`, `backgroundColor = rgb(255, 255, 255)`.
+
+---
+
 ## [2026-10-28 01:42] — Вкладка «Действия» экрана Kaspi Gold: 100% интеграция оригинальных векторных SVG из папки «icons for my bank deisvyie page»
 
 ### 🎯 Запрос пользователя:

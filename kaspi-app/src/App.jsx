@@ -92,6 +92,26 @@ export default function App() {
     settings: 'tab'
   };
 
+  // Dynamic status bar theme-color and document background for native iOS & Android transparency
+  useEffect(() => {
+    const isGold = currentScreen === 'gold_detail';
+    const targetColor = isGold ? '#D4AE6D' : '#FFFFFF';
+    
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', targetColor);
+    }
+    
+    // Set document background color so iOS overscroll and notch bleed seamlessly
+    document.documentElement.style.backgroundColor = targetColor;
+    document.body.style.backgroundColor = targetColor;
+    
+    const rootEl = document.getElementById('root');
+    if (rootEl) {
+      rootEl.style.backgroundColor = targetColor;
+    }
+  }, [currentScreen]);
+
   // Closing screen state for slide-out animation (left to right)
   const [closingScreen, setClosingScreen] = useState(null);
 
@@ -388,7 +408,12 @@ export default function App() {
   const isSubscreenActive = currentScreen !== 'tab' && currentScreen !== 'passcode' && currentScreen !== 'qr_modal';
 
   return (
-    <div className={`app-viewport${currentScreen === 'passcode' ? ' app-viewport--lock' : ''}`}>
+    <div
+      className={`app-viewport${currentScreen === 'passcode' ? ' app-viewport--lock' : ''}`}
+      style={{
+        backgroundColor: currentScreen === 'gold_detail' ? '#D4AE6D' : '#FFFFFF'
+      }}
+    >
       {/* Screen Router */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '100%', minWidth: 0, overflowX: 'hidden', position: 'relative' }}>
         
@@ -429,7 +454,7 @@ export default function App() {
               width: '100%',
               height: '100%',
               zIndex: 10,
-              backgroundColor: '#F8F8F9',
+              backgroundColor: currentScreen === 'gold_detail' ? '#D4AE6D' : '#F8F8F9',
               overflowY: currentScreen === 'digital_id' ? 'hidden' : 'auto',
               overflowX: 'hidden',
               WebkitOverflowScrolling: 'touch',
@@ -458,7 +483,7 @@ export default function App() {
               width: '100%',
               height: '100%',
               zIndex: 20,
-              backgroundColor: '#F8F8F9',
+              backgroundColor: closingScreen === 'gold_detail' ? '#D4AE6D' : '#F8F8F9',
               overflowY: 'hidden',
               overflowX: 'hidden',
               pointerEvents: 'none',
