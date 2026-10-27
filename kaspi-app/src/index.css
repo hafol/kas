@@ -295,12 +295,33 @@ body {
   }
 }
 
+@keyframes pageSlideOutRight {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
 .page-slide-in {
-  animation: pageSlideInRight 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: pageSlideInRight 295ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
   will-change: transform;
   width: 100%;
   min-height: 100%;
   position: relative;
+  background-color: #F8F8F9;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.12);
+}
+
+.page-slide-out {
+  animation: pageSlideOutRight 295ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+  background-color: #F8F8F9;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.12);
 }
 
 /* eGov splash before «Удостоверение личности» - slides over from right side */
@@ -328,8 +349,8 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  animation: egovSplashSlideInRight 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  transition: opacity 250ms ease;
+  animation: egovSplashSlideInRight 295ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transition: opacity 260ms ease;
 }
 .egov-splash--out {
   opacity: 0;

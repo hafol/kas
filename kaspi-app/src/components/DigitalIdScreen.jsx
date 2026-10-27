@@ -112,6 +112,10 @@ export const DigitalIdScreen = ({ onBack }) => {
   const dragStartRef = useRef({ x: 0, y: 0, initialOffsetX: 0, initialOffsetY: 0 });
   const touchStartDistRef = useRef(null);
   const touchStartScaleRef = useRef(1);
+  const offsetRef = useRef(offset);
+  offsetRef.current = offset;
+  const scaleRef = useRef(scale);
+  scaleRef.current = scale;
 
   // Requisites state
   const [reqValues, setReqValues] = useState(() => syncReqs || {});
@@ -172,43 +176,56 @@ export const DigitalIdScreen = ({ onBack }) => {
     }
   };
 
+  const persistCardPosition = useCallback(() => {
+    if (!photoUrl) return;
+    saveDocumentCard({
+      photoUrl,
+      scale: scaleRef.current,
+      offsetX: offsetRef.current.x,
+      offsetY: offsetRef.current.y,
+      isSaved: true,
+      savedAt: Date.now()
+    }).catch(() => {});
+  }, [photoUrl]);
+
   const handleMouseDown = (e) => {
-    if (isSaved || !photoUrl) return;
+    if (!photoUrl) return;
     setIsDragging(true);
     dragStartRef.current = {
       x: e.clientX,
       y: e.clientY,
-      initialOffsetX: offset.x,
-      initialOffsetY: offset.y
+      initialOffsetX: offsetRef.current.x,
+      initialOffsetY: offsetRef.current.y
     };
   };
 
   const handleMouseMove = useCallback((e) => {
-    if (!isDragging || isSaved || !photoUrl) return;
+    if (!isDragging || !photoUrl) return;
     const dx = e.clientX - dragStartRef.current.x;
     const dy = e.clientY - dragStartRef.current.y;
     setOffset({
       x: dragStartRef.current.initialOffsetX + dx,
       y: dragStartRef.current.initialOffsetY + dy
     });
-  }, [isDragging, isSaved, photoUrl]);
+  }, [isDragging, photoUrl]);
 
   const handleMouseUp = useCallback(() => {
     if (isDragging) {
       setIsDragging(false);
+      persistCardPosition();
     }
-  }, [isDragging]);
+  }, [isDragging, persistCardPosition]);
 
   const handleTouchStart = (e) => {
-    if (isSaved || !photoUrl) return;
+    if (!photoUrl) return;
     if (e.touches.length === 1) {
       const touch = e.touches[0];
       setIsDragging(true);
       dragStartRef.current = {
         x: touch.clientX,
         y: touch.clientY,
-        initialOffsetX: offset.x,
-        initialOffsetY: offset.y
+        initialOffsetX: offsetRef.current.x,
+        initialOffsetY: offsetRef.current.y
       };
     } else if (e.touches.length === 2) {
       setIsDragging(false);
@@ -216,14 +233,14 @@ export const DigitalIdScreen = ({ onBack }) => {
       const t2 = e.touches[1];
       const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
       touchStartDistRef.current = dist;
-      touchStartScaleRef.current = scale;
+      touchStartScaleRef.current = scaleRef.current;
     }
   };
 
   const handleTouchMove = (e) => {
-    if (isSaved || !photoUrl) return;
+    if (!photoUrl) return;
     if (e.touches.length === 1 && isDragging) {
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
       const touch = e.touches[0];
       const dx = touch.clientX - dragStartRef.current.x;
       const dy = touch.clientY - dragStartRef.current.y;
@@ -232,7 +249,7 @@ export const DigitalIdScreen = ({ onBack }) => {
         y: dragStartRef.current.initialOffsetY + dy
       });
     } else if (e.touches.length === 2 && touchStartDistRef.current) {
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
       const t1 = e.touches[0];
       const t2 = e.touches[1];
       const currentDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
@@ -243,14 +260,22 @@ export const DigitalIdScreen = ({ onBack }) => {
   };
 
   const handleTouchEnd = () => {
-    setIsDragging(false);
+    if (isDragging) {
+      setIsDragging(false);
+    }
     touchStartDistRef.current = null;
+    persistCardPosition();
   };
 
   useEffect(() => {
-    const onWindowMouseUp = () => setIsDragging(false);
+    const onWindowMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+        persistCardPosition();
+      }
+    };
     const onWindowMouseMove = (e) => {
-      if (isDragging && !isSaved) {
+      if (isDragging) {
         handleMouseMove(e);
       }
     };
@@ -260,7 +285,7 @@ export const DigitalIdScreen = ({ onBack }) => {
       window.removeEventListener('mouseup', onWindowMouseUp);
       window.removeEventListener('mousemove', onWindowMouseMove);
     };
-  }, [isDragging, isSaved, handleMouseMove]);
+  }, [isDragging, handleMouseMove, persistCardPosition]);
 
   const handleSave = async () => {
     if (!photoUrl) return;
@@ -486,9 +511,12 @@ export const DigitalIdScreen = ({ onBack }) => {
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             onClick={() => {
-              if (!photoUrl && !isSaved) {
+              if (!photoUrl) {
                 fileInputRef.current?.click();
               }
+            }}
+            onDoubleClick={() => {
+              fileInputRef.current?.click();
             }}
             style={{
               position: 'absolute',
@@ -498,8 +526,8 @@ export const DigitalIdScreen = ({ onBack }) => {
               height: '459.5px',
               borderRadius: '8px',
               overflow: 'hidden',
-              cursor: isSaved ? 'default' : photoUrl ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
-              touchAction: photoUrl && !isSaved ? 'none' : 'pan-y',
+              cursor: photoUrl ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
+              touchAction: photoUrl ? 'none' : 'pan-y',
               userSelect: 'none',
               zIndex: 5
             }}
@@ -661,7 +689,7 @@ export const DigitalIdScreen = ({ onBack }) => {
             className="hide-scrollbar"
             style={{
               position: 'absolute',
-              top: '114px', // moved 2px up closer to toggler (was 116px)
+              top: '112px', // moved 2px up closer to toggler (was 114px)
               bottom: '80px',
               left: 0,
               right: 0,

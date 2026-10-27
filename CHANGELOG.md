@@ -2,6 +2,49 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 05:32] — Подвижное фото документа, смещение реквизитов (ФИО) на 2px вверх, добавление оригинальных фото карусели товаров и нативные свайпы/анимации закрытия страниц (+5% медленнее и плавнее)
+
+### 🎯 Запрос пользователя:
+> *«in the page реквезиты the block that satrts ФИО gotta be closer to the toggler above so move the netire text block 2px up and the phtoto that you upload make it movable also about swipes and animations when you enter to the page is slides from right when you close it it slides from left to right and moreoer add feature that you can swipe and close page like place finger at the left edge slide it to the right it just goes to previous page with aniamtion as well. the aniamtion fotta be smoother and 5% slower everyone»*
+> *«oh laso i added the product cards images field look inside and put them where they belonh in the carusel one i will add some more afterwords i just needed to check you can continue»*
+
+### 🛠️ Что сделано:
+1. **Карусель товаров («Вы недавно смотрели»)**:
+   - Интегрированы 4 оригинальные фотографии высокого разрешения из папки `Products card images/` в `public/kaspi_assets/products/`:
+     - `photo_...173_x.jpg` → `leadbros_fridge.jpg` (Холодильник LEADBROS BCD-400W).
+     - `photo_...174_x.jpg` → `laptop_lenovo_white.jpg` (Ноутбук Lenovo LOQ RTX).
+     - `photo_...175_x.jpg` → `fridge_lg.jpg` (Холодильник LG Side-by-Side).
+     - `photo_...176_x.jpg` → `charger_pd20.jpg` (Сетевое зарядное устройство PD20W).
+2. **Вкладка «Реквизиты» (блок ФИО)**:
+   - Контейнер списка реквизитов смещён ещё на **2px вверх**: с `top: 114px` на **`top: 112px`**, зазор до переключателя уменьшен до 6px.
+3. **Загруженное фото документа (всегда подвижное)**:
+   - Снято ограничение `isSaved`, блокировавшее перемещение после сохранения или перезагрузки.
+   - Загруженную фотографию теперь можно свободно перемещать жестом перетаскивания (touch/mouse pan) и масштабировать двумя пальцами в любой момент.
+   - Смещение (`offset`) и масштаб (`scale`) автоматически сохраняются при завершении жеста (`mouseup`/`touchend`).
+   - Добавлен `onDoubleClick` на карточку для быстрой замены фото при необходимости.
+4. **Анимации перехода экранов (на 5% медленнее и ультраплавные)**:
+   - Длительность увеличена на 5%: с `280ms` до **`295ms`**.
+   - Кривая ускорения переведена на органичный нативный iOS cubic-bezier: **`cubic-bezier(0.22, 1, 0.36, 1)`**.
+   - Добавлена анимация закрытия страницы слева направо: `@keyframes pageSlideOutRight` (`0% → 100%`).
+   - При закрытии страницы (по кнопке «Назад» или свайпом) целевой родительский экран отображается под закрывающимся экраном без белых вспышек.
+5. **Интерактивный жест закрытия свайпом от левого края (iOS Edge Swipe Back)**:
+   - На всех вложенных экранах (`digital_id`, `gov`, `gold_detail`, `my_bank`, `transfers`, `settings`) реализован нативный жест свайпа от левого края экрана (`touch.clientX <= 36px`).
+   - Экран в реальном времени следует за пальцем вправо с тенью `boxShadow: -4px 0 20px rgba(0,0,0,0.12)`.
+   - Если пользователь протянул экран более 75px или сделал резкий свайп вправо — экран плавно завершает сдвиг вправо и закрывается.
+   - Если жест отпущен раньше — экран пружинисто возвращается в исходное положение.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/public/kaspi_assets/products/leadbros_fridge.jpg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/products/leadbros_fridge.jpg)
+- [`kaspi-app/public/kaspi_assets/products/laptop_lenovo_white.jpg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/products/laptop_lenovo_white.jpg)
+- [`kaspi-app/public/kaspi_assets/products/fridge_lg.jpg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/products/fridge_lg.jpg)
+- [`kaspi-app/public/kaspi_assets/products/charger_pd20.jpg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/products/charger_pd20.jpg)
+- [`kaspi-app/src/components/DigitalIdScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/DigitalIdScreen.jsx)
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`kaspi-app/src/index.css`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-27 05:12] — Смещение блока реквизитов (ФИО) на 2px вверх к тогглеру и поднятие заголовка «Удостоверение личности» на 1px вверх
 
 ### 🎯 Запрос пользователя:

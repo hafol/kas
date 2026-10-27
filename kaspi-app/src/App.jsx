@@ -76,13 +76,101 @@ export default function App() {
     img.src = '/kaspi_assets/egov_splash.png';
   }, []);
 
-  // Navigate to screen with Kaspi UI skeleton loading
+  // Screen hierarchy for parent navigation
+  const PARENT_MAP = {
+    digital_id: 'gov',
+    gold_detail: 'my_bank',
+    gov: 'tab',
+    my_bank: 'tab',
+    transfers: 'tab',
+    settings: 'tab'
+  };
+
+  // Closing screen state for slide-out animation (left to right)
+  const [closingScreen, setClosingScreen] = useState(null);
+
+  // Interactive edge swipe state (iOS style swipe-back)
+  const [swipeOffset, setSwipeOffset] = useState(null);
+  const [isSwipeClosing, setIsSwipeClosing] = useState(false);
+  const edgeSwipeStartRef = useRef(null);
+  const isEdgeSwipingRef = useRef(false);
+
+  // Navigate to screen with Kaspi UI skeleton loading and slide-in from right
   const navigateToScreen = (screenName) => {
+    if (closingScreen) return;
     setLoadingScreen(screenName);
     setCurrentScreen(screenName);
     setTimeout(() => {
       setLoadingScreen(null);
-    }, 360);
+    }, 320);
+  };
+
+  // Navigate back with smooth slide out from left to right (295ms, 5% slower)
+  const navigateBack = (targetScreen = null) => {
+    if (closingScreen) return;
+    const fromScreen = currentScreen;
+    const dest = targetScreen || PARENT_MAP[fromScreen] || 'tab';
+    setClosingScreen(fromScreen);
+    setCurrentScreen(dest);
+    setTimeout(() => {
+      setClosingScreen(null);
+      setSwipeOffset(null);
+      setIsSwipeClosing(false);
+    }, 295);
+  };
+
+  // Edge-swipe touch listeners (place finger at left edge and slide right to close)
+  const handleEdgeTouchStart = (e) => {
+    if (closingScreen) return;
+    const touch = e.touches[0];
+    if (touch.clientX <= 36) {
+      edgeSwipeStartRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        time: Date.now()
+      };
+      isEdgeSwipingRef.current = true;
+    } else {
+      isEdgeSwipingRef.current = false;
+    }
+  };
+
+  const handleEdgeTouchMove = (e) => {
+    if (!isEdgeSwipingRef.current || closingScreen) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - edgeSwipeStartRef.current.x;
+    const dy = touch.clientY - edgeSwipeStartRef.current.y;
+
+    if (Math.abs(dy) > Math.abs(dx) && dx < 12) {
+      isEdgeSwipingRef.current = false;
+      setSwipeOffset(null);
+      return;
+    }
+
+    if (dx > 0) {
+      if (e.cancelable) e.preventDefault();
+      setSwipeOffset(dx);
+    }
+  };
+
+  const handleEdgeTouchEnd = () => {
+    if (!isEdgeSwipingRef.current || closingScreen) return;
+    isEdgeSwipingRef.current = false;
+    const currentOffset = swipeOffset || 0;
+    const dt = Math.max(1, Date.now() - (edgeSwipeStartRef.current?.time || Date.now()));
+    const velocity = currentOffset / dt;
+
+    if (currentOffset > 75 || velocity > 0.35) {
+      setIsSwipeClosing(true);
+      navigateBack();
+    } else if (currentOffset > 0) {
+      setSwipeOffset(0);
+      setTimeout(() => {
+        setSwipeOffset(null);
+      }, 295);
+    } else {
+      setSwipeOffset(null);
+    }
   };
 
   const handleOpenGovDoc = (docId) => {
@@ -185,12 +273,11 @@ export default function App() {
     });
   };
 
-  return (
-    <div className={`app-viewport${currentScreen === 'passcode' ? ' app-viewport--lock' : ''}`}>
-      {/* Screen Router */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '100%', minWidth: 0, overflowX: 'hidden' }}>
-        {/* Main Tab Bar Views */}
-        {currentScreen === 'tab' && (
+  // Content renderer for all screens
+  const renderScreenContent = (screenName, isUnderneath = false) => {
+    switch (screenName) {
+      case 'tab':
+        return (
           <>
             {activeTab === 'home' && (
               <HomeScreen
@@ -202,100 +289,176 @@ export default function App() {
                 onOpenGov={handleOpenGov}
               />
             )}
-
             {activeTab === 'messages' && (
               <MessagesScreen messages={userData.messages} />
             )}
-
             {activeTab === 'services' && (
               <ServicesScreen
                 profile={userData.profile}
-                onOpenSettings={() => setCurrentScreen('settings')}
+                onOpenSettings={() => navigateToScreen('settings')}
                 onSelectService={handleSelectService}
               />
             )}
           </>
-        )}
+        );
 
-        {/* Subscreens (all slide-over from the right with Kaspi skeleton loading) */}
-        {currentScreen === 'my_bank' && (
-          <div className="page-slide-in">
-            {loadingScreen === 'my_bank' ? (
-              <MyBankSkeleton />
-            ) : (
-              <MyBankScreen
-                cards={userData.cards}
-                onSelectCard={() => navigateToScreen('gold_detail')}
-                onBack={() => setCurrentScreen('tab')}
-              />
-            )}
+      case 'my_bank':
+        return loadingScreen === 'my_bank' && !isUnderneath ? (
+          <MyBankSkeleton />
+        ) : (
+          <MyBankScreen
+            cards={userData.cards}
+            onSelectCard={() => navigateToScreen('gold_detail')}
+            onBack={() => navigateBack('tab')}
+          />
+        );
+
+      case 'gold_detail':
+        return loadingScreen === 'gold_detail' && !isUnderneath ? (
+          <MyBankSkeleton />
+        ) : (
+          <KaspiGoldDetailScreen
+            card={userData.cards.gold}
+            statement={userData.statement}
+            onBack={() => navigateBack('my_bank')}
+            onOpenQr={() => setCurrentScreen('qr_modal')}
+            onOpenTransfer={() => navigateToScreen('transfers')}
+          />
+        );
+
+      case 'gov':
+        return loadingScreen === 'gov' && !isUnderneath ? (
+          <GovServicesSkeleton />
+        ) : (
+          <GovServicesScreen
+            govData={userData.gov}
+            onOpenDoc={handleOpenGovDoc}
+            onBack={() => navigateBack('tab')}
+          />
+        );
+
+      case 'digital_id':
+        return (
+          <DigitalIdScreen
+            profile={userData.profile}
+            onBack={() => navigateBack('gov')}
+          />
+        );
+
+      case 'transfers':
+        return loadingScreen === 'transfers' && !isUnderneath ? (
+          <TransfersSkeleton />
+        ) : (
+          <TransfersScreen
+            card={userData.cards.gold}
+            onBack={() => navigateBack('tab')}
+            onCompleteTransfer={handleCompleteTransfer}
+          />
+        );
+
+      case 'settings':
+        return loadingScreen === 'settings' && !isUnderneath ? (
+          <GenericPageSkeleton title="Настройки" />
+        ) : (
+          <SettingsScreen
+            profile={userData.profile}
+            onUpdateProfile={handleUpdateProfile}
+            onBack={() => navigateBack('tab')}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  // Screen that should be visible underneath during subscreen transitions or edge swipe
+  const underneathScreen = closingScreen
+    ? (closingScreen === currentScreen ? PARENT_MAP[closingScreen] : currentScreen)
+    : (currentScreen !== 'tab' && currentScreen !== 'passcode' && currentScreen !== 'qr_modal'
+        ? PARENT_MAP[currentScreen] || 'tab'
+        : null);
+
+  const isSubscreenActive = currentScreen !== 'tab' && currentScreen !== 'passcode' && currentScreen !== 'qr_modal';
+
+  return (
+    <div className={`app-viewport${currentScreen === 'passcode' ? ' app-viewport--lock' : ''}`}>
+      {/* Screen Router */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '100%', minWidth: 0, overflowX: 'hidden', position: 'relative' }}>
+        
+        {/* Layer 1: Screen rendered underneath during transitions or edge swipe */}
+        {underneathScreen && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              zIndex: 1,
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              backgroundColor: '#F8F8F9',
+              pointerEvents: isSubscreenActive ? 'none' : 'auto'
+            }}
+          >
+            {renderScreenContent(underneathScreen, true)}
           </div>
         )}
 
-        {currentScreen === 'gold_detail' && (
-          <div className="page-slide-in">
-            {loadingScreen === 'gold_detail' ? (
-              <MyBankSkeleton />
-            ) : (
-              <KaspiGoldDetailScreen
-                card={userData.cards.gold}
-                statement={userData.statement}
-                onBack={() => navigateToScreen('my_bank')}
-                onOpenQr={() => setCurrentScreen('qr_modal')}
-                onOpenTransfer={() => navigateToScreen('transfers')}
-              />
-            )}
+        {/* Layer 2: Main Tab View if tab screen is current and not covered */}
+        {currentScreen === 'tab' && !closingScreen && (
+          renderScreenContent('tab')
+        )}
+
+        {/* Layer 3: Active Subscreen with entrance slide and interactive edge swipe */}
+        {isSubscreenActive && (
+          <div
+            className={swipeOffset === null ? 'page-slide-in' : ''}
+            onTouchStart={handleEdgeTouchStart}
+            onTouchMove={handleEdgeTouchMove}
+            onTouchEnd={handleEdgeTouchEnd}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              zIndex: 10,
+              backgroundColor: '#F8F8F9',
+              overflowY: 'hidden',
+              overflowX: 'hidden',
+              transform: swipeOffset !== null
+                ? `translate3d(${isSwipeClosing ? '100%' : `${swipeOffset}px`}, 0, 0)`
+                : undefined,
+              transition: isSwipeClosing
+                ? 'transform 295ms cubic-bezier(0.22, 1, 0.36, 1)'
+                : swipeOffset === 0
+                ? 'transform 295ms cubic-bezier(0.22, 1, 0.36, 1)'
+                : undefined,
+              boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.12)'
+            }}
+          >
+            {renderScreenContent(currentScreen)}
           </div>
         )}
 
-        {currentScreen === 'gov' && (
-          <div className="page-slide-in">
-            {loadingScreen === 'gov' ? (
-              <GovServicesSkeleton />
-            ) : (
-              <GovServicesScreen
-                govData={userData.gov}
-                onOpenDoc={handleOpenGovDoc}
-                onBack={() => setCurrentScreen('tab')}
-              />
-            )}
-          </div>
-        )}
-
-        {currentScreen === 'digital_id' && (
-          <div className="page-slide-in">
-            <DigitalIdScreen
-              profile={userData.profile}
-              onBack={() => navigateToScreen('gov')}
-            />
-          </div>
-        )}
-
-        {currentScreen === 'transfers' && (
-          <div className="page-slide-in">
-            {loadingScreen === 'transfers' ? (
-              <TransfersSkeleton />
-            ) : (
-              <TransfersScreen
-                card={userData.cards.gold}
-                onBack={() => setCurrentScreen('tab')}
-                onCompleteTransfer={handleCompleteTransfer}
-              />
-            )}
-          </div>
-        )}
-
-        {currentScreen === 'settings' && (
-          <div className="page-slide-in">
-            {loadingScreen === 'settings' ? (
-              <GenericPageSkeleton title="Настройки" />
-            ) : (
-              <SettingsScreen
-                profile={userData.profile}
-                onUpdateProfile={handleUpdateProfile}
-                onBack={() => setCurrentScreen('tab')}
-              />
-            )}
+        {/* Layer 4: Closing Subscreen (slides from left to right when closed) */}
+        {closingScreen && closingScreen !== currentScreen && (
+          <div
+            className="page-slide-out"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              zIndex: 20,
+              backgroundColor: '#F8F8F9',
+              overflowY: 'hidden',
+              overflowX: 'hidden',
+              pointerEvents: 'none',
+              boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.12)'
+            }}
+          >
+            {renderScreenContent(closingScreen, true)}
           </div>
         )}
       </div>
