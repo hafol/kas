@@ -1031,8 +1031,8 @@ export const DigitalIdScreen = ({ onBack }) => {
               boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.2)',
               position: 'relative',
               boxSizing: 'border-box',
-              paddingTop: '3px', // +3px higher
-              paddingBottom: '27px' // +3px higher (was 24px)
+              paddingTop: '6px',
+              paddingBottom: '36px' // +8px bottom gap, moving entire modal & block up
             }}
           >
             {/* Top pill drag bar */}
@@ -1058,11 +1058,11 @@ export const DigitalIdScreen = ({ onBack }) => {
               <h2
                 style={{
                   fontFamily,
-                  fontSize: activeModal === 'share_target' ? '22px' : '26px', // +3pt bigger (was 22px)
-                  fontWeight: 700,
+                  fontSize: activeModal === 'share_target' ? '22px' : '22.5px', // reduced by 3pt (was 26px)
+                  fontWeight: 400, // less bold: same as numbers (regular 400)
                   color: '#1C1C1E',
                   margin: 0,
-                  letterSpacing: '-0.3px'
+                  letterSpacing: '-0.2px'
                 }}
               >
                 {activeModal === 'share_target' ? 'Кому отправить' : 'Удостоверение личности'}
@@ -1084,7 +1084,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                   WebkitTapHighlightColor: 'transparent'
                 }}
               >
-                <X size={24} strokeWidth={2.2} />
+                <X size={24} strokeWidth={2} />
               </button>
             </div>
 
@@ -1098,7 +1098,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                     fontWeight: 400,
                     color: '#1C1C1E',
                     textAlign: 'center',
-                    marginTop: '16px',
+                    marginTop: '19px', // +3px interval below title (was 16px)
                     marginBottom: '18px',
                     letterSpacing: '-0.1px'
                   }}
@@ -1165,12 +1165,12 @@ export const DigitalIdScreen = ({ onBack }) => {
                   style={{
                     fontFamily,
                     fontSize: '29px', // -2pt smaller (was 32px)
-                    fontWeight: 500, // less bold: medium (was 700)
+                    fontWeight: 400, // less bold: regular 400 (same as title)
                     color: '#000000',
                     textAlign: 'center',
                     letterSpacing: '1px',
                     marginTop: '4px',
-                    paddingBottom: '16px'
+                    paddingBottom: '24px' // +8px bottom gap to push block up (was 16px)
                   }}
                 >
                   {randomCode}
