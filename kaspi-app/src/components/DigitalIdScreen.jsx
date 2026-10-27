@@ -350,10 +350,10 @@ export const DigitalIdScreen = ({ onBack }) => {
         <BackChevronIcon />
       </button>
 
-      {/* Title "Удостоверение личности": 218 wide, text top 15.5px (up 2px), centred */}
+      {/* Title "Удостоверение личности": 218 wide, text top 14.5px (up 1px), centred */}
       <h1 style={{
         position: 'absolute',
-        top: '15.5px', // up by 2px (was 17.5px)
+        top: '14.5px', // up by 1px (was 15.5px)
         left: 'calc(50% - 109px)',
         width: '218px',
         margin: 0,
@@ -661,7 +661,7 @@ export const DigitalIdScreen = ({ onBack }) => {
             className="hide-scrollbar"
             style={{
               position: 'absolute',
-              top: '116px', // 164 - 48 = 116px
+              top: '114px', // moved 2px up closer to toggler (was 116px)
               bottom: '80px',
               left: 0,
               right: 0,
