@@ -31,9 +31,9 @@ const BackChevronIcon = () => (
   </svg>
 );
 
-// 2. QR-scan icon: icon ≈ 26 x 24.5
+// 2. QR-scan icon: +5% bigger (27.3 x 25.7)
 const QrScanIcon = () => (
-  <svg width="26" height="24.5" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="27.3" height="25.7" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M1.1,2.5C1.1,1.727 1.727,1.1 2.5,1.1H7C7.497,1.1 7.9,1.503 7.9,2C7.9,2.497 7.497,2.9 7,2.9H2.9V7C2.9,7.497 2.497,7.9 2,7.9C1.503,7.9 1.1,7.497 1.1,7V2.5Z" fill="currentColor" />
     <path d="M16.1,2C16.1,1.503 16.503,1.1 17,1.1H21.5C22.273,1.1 22.9,1.727 22.9,2.5V7C22.9,7.497 22.497,7.9 22,7.9C21.503,7.9 21.1,7.497 21.1,7V2.9H17C16.503,2.9 16.1,2.497 16.1,2Z" fill="currentColor" />
     <path d="M7.35,8.65V7.35H8.65V8.65H7.35Z" fill="currentColor" />
@@ -50,17 +50,17 @@ const QrScanIcon = () => (
   </svg>
 );
 
-// 3. Upload/share icon: icon ≈ 23 wide, colour #1665A2
+// 3. Upload/share icon: +5% bigger (24.2 x 26.3)
 const UploadIcon = () => (
-  <svg width="23" height="25" viewBox="1 0 22 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="24.2" height="26.3" viewBox="1 0 22 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M20,18V12C20,10.895 19.105,10 18,10H16C15.448,10 15,9.552 15,9C15,8.448 15.448,8 16,8H18C20.209,8 22,9.791 22,12V18C22,20.209 20.209,22 18,22H6C3.791,22 2,20.209 2,18L2,12C2,9.791 3.791,8 6,8H8C8.552,8 9,8.448 9,9C9,9.552 8.552,10 8,10H6C4.895,10 4,10.895 4,12L4,18C4,19.105 4.895,20 6,20H18C19.105,20 20,19.105 20,18Z" fill="currentColor" />
     <path d="M12,15.5C12.552,15.5 13,15.052 13,14.5L13,4.414L14.293,5.707C14.683,6.098 15.317,6.098 15.707,5.707C16.098,5.317 16.098,4.683 15.707,4.293L12.707,1.293C12.317,0.902 11.683,0.902 11.293,1.293L8.293,4.293C7.902,4.683 7.902,5.317 8.293,5.707C8.683,6.098 9.317,6.098 9.707,5.707L11,4.414L11,14.5C11,15.052 11.448,15.5 12,15.5Z" fill="currentColor" />
   </svg>
 );
 
-// 4. Copy icon (two overlapping rounded squares)
+// 4. Copy icon: +4% bigger (25 x 25)
 const CopyIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="25" height="25" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M12,2C10.067,2 8.5,3.567 8.5,5.5V6C8.5,6.552 8.948,7 9.5,7C10.052,7 10.5,6.552 10.5,6V5.5C10.5,4.672 11.172,4 12,4H18.5C19.328,4 20,4.672 20,5.5V12.5C20,13.052 19.552,13.5 19,13.5H18C17.448,13.5 17,13.948 17,14.5C17,15.052 17.448,15.5 18,15.5H19C20.657,15.5 22,14.157 22,12.5V5.5C22,3.567 20.433,2 18.5,2H12Z" fill="currentColor" />
     <path d="M5.5,8C3.567,8 2,9.567 2,11.5V18.5C2,20.433 3.567,22 5.5,22H12.5C14.433,22 16,20.433 16,18.5V11.5C16,9.567 14.433,8 12.5,8H5.5ZM4,11.5C4,10.672 4.672,10 5.5,10H12.5C13.328,10 14,10.672 14,11.5V18.5C14,19.328 13.328,20 12.5,20H5.5C4.672,20 4,19.328 4,18.5V11.5Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd" />
   </svg>
@@ -350,10 +350,10 @@ export const DigitalIdScreen = ({ onBack }) => {
         <BackChevronIcon />
       </button>
 
-      {/* Title "Удостоверение личности": 218 wide, text top 17.5px, centred */}
+      {/* Title "Удостоверение личности": 218 wide, text top 15.5px (up 2px), centred */}
       <h1 style={{
         position: 'absolute',
-        top: '17.5px', // 65.5 - 48 = 17.5px
+        top: '15.5px', // up by 2px (was 17.5px)
         left: 'calc(50% - 109px)',
         width: '218px',
         margin: 0,
@@ -381,7 +381,7 @@ export const DigitalIdScreen = ({ onBack }) => {
           style={{
             position: 'absolute',
             right: '16px',
-            top: '8px', // 56 - 48 = 8px
+            top: '8px',
             width: '36px',
             height: '36px',
             borderRadius: '50%',
@@ -401,19 +401,15 @@ export const DigitalIdScreen = ({ onBack }) => {
 
       {/* =====================================================================
           2. SEGMENTED CONTROL (Документ / Реквизиты)
-          - track: y 67 → 108 (41 tall, 115 - 48 = 67), x 17.5 → 396.5
-          - track colour: #F2F2F2
-          - selected pill: white, inset 2 px
-          - label text top: y 80.5 (13.5px from track top)
-          - "Документ" width ≈ 75.5, "Реквизиты" width ≈ 82
-          - label font: ≈ 17.5 px
+          - height: 39px (decreased by 2px)
+          - label font: 16.5px (smaller by 1px)
           ===================================================================== */}
       <div style={{
         position: 'absolute',
-        top: '67px', // 115 - 48 = 67px
+        top: '67px',
         left: '17.5px',
         right: '17.5px',
-        height: '41px',
+        height: '39px', // decreased by 2px (was 41px)
         backgroundColor: segTrack,
         borderRadius: '10px',
         zIndex: 15,
@@ -443,7 +439,7 @@ export const DigitalIdScreen = ({ onBack }) => {
             onClick={() => setActiveTab(tab.id)}
             style={{
               flex: 1,
-              height: '41px',
+              height: '39px', // 39px
               display: 'flex',
               alignItems: 'flex-start',
               justifyContent: 'center',
@@ -452,9 +448,9 @@ export const DigitalIdScreen = ({ onBack }) => {
               background: 'none',
               border: 'none',
               padding: 0,
-              paddingTop: '13.5px', // track top 115 + 13.5 = y 128.5 text top
+              paddingTop: '12px',
               fontFamily,
-              fontSize: '17.5px',
+              fontSize: '16.5px', // smaller by 1px (was 17.5px)
               fontWeight: 500,
               color: textPrimary,
               lineHeight: 1,
@@ -679,8 +675,8 @@ export const DigitalIdScreen = ({ onBack }) => {
                 <div
                   key={row.label}
                   style={{
-                    height: '71px',
-                    padding: '14px 18px 14px 30px',
+                    height: '73px',
+                    padding: '13px 18px 13px 30px',
                     display: 'flex',
                     alignItems: 'flex-start',
                     gap: '12px',
@@ -689,9 +685,9 @@ export const DigitalIdScreen = ({ onBack }) => {
                 >
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{
-                      fontSize: '13px',
+                      fontSize: '14.5px', // +1.5pt bigger (was 13px)
                       fontWeight: 400,
-                      lineHeight: '16px',
+                      lineHeight: '18px',
                       color: textSecondary,
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
@@ -710,16 +706,16 @@ export const DigitalIdScreen = ({ onBack }) => {
                       style={{
                         display: 'block',
                         width: '100%',
-                        height: '22px',
-                        marginTop: '5px',
+                        height: '24px',
+                        marginTop: '4px',
                         padding: 0,
                         border: 'none',
                         outline: 'none',
                         background: 'transparent',
                         fontFamily,
-                        fontSize: '17px',
+                        fontSize: '18.5px', // +1.5pt bigger (was 17px)
                         fontWeight: 400,
-                        lineHeight: '22px',
+                        lineHeight: '24px',
                         letterSpacing: 0,
                         color: textPrimary,
                         textOverflow: 'ellipsis',
@@ -730,7 +726,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                     />
                   </div>
 
-                  <div style={{ width: '24px', height: '24px', marginTop: '6px', flexShrink: 0, position: 'relative' }}>
+                  <div style={{ width: '25px', height: '25px', marginTop: '6px', flexShrink: 0, position: 'relative' }}>
                     <button
                       type="button"
                       onClick={() => copyToClipboard(row.value)}
@@ -739,8 +735,8 @@ export const DigitalIdScreen = ({ onBack }) => {
                         position: 'absolute',
                         top: '-10px',
                         left: '-10px',
-                        width: '44px',
-                        height: '44px',
+                        width: '45px',
+                        height: '45px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -781,7 +777,7 @@ export const DigitalIdScreen = ({ onBack }) => {
               justifyContent: 'center',
               gap: '10px',
               fontFamily,
-              fontSize: '17.5px',
+              fontSize: '19px', // +1.5pt bigger (was 17.5px)
               fontWeight: 500,
               letterSpacing: 0,
               whiteSpace: 'nowrap',
