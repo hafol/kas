@@ -424,8 +424,9 @@ export default function App() {
               height: '100%',
               zIndex: 10,
               backgroundColor: '#F8F8F9',
-              overflowY: 'hidden',
+              overflowY: currentScreen === 'digital_id' ? 'hidden' : 'auto',
               overflowX: 'hidden',
+              WebkitOverflowScrolling: 'touch',
               transform: swipeOffset !== null
                 ? `translate3d(${isSwipeClosing ? '100%' : `${swipeOffset}px`}, 0, 0)`
                 : undefined,

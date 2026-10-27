@@ -2,6 +2,29 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 06:54] — Исправление вертикального скролла на странице «Госуслуги» (разблокирован нижний блок «Популярные и новые»)
+
+### 🎯 Запрос пользователя:
+> *«why i cant scroll in the page гос улсги нижний блок популярные и новые»*
+
+### 🛠️ Что сделано:
+1. **Причина**:
+   - Контейнер активного подэкрана (Layer 3) в [`App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx) имел жёстко заданный `overflowY: 'hidden'`.
+   - В отличие от экрана удостоверения личности (имеющего собственный фиксированный скролл списка), экран Госуслуг (`GovServicesScreen`) имеет естественную высоту около 1400px и полагается на прокрутку внешнего контейнера. Из-за `overflowY: 'hidden'` экран обрезался по высоте окна, и блок «Популярные и новые» оставался недоступен для скролла.
+2. **Исправление**:
+   - В [`App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx) для Layer 3 установлено динамическое поведение прокрутки:
+     `overflowY: currentScreen === 'digital_id' ? 'hidden' : 'auto'`, а также `-webkit-overflow-scrolling: touch`.
+   - В [`GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx) увеличен `paddingBottom` до `100px`, чтобы при прокрутке до самого конца нижний блок услуг комфортно располагался выше нижней панели навигации (BottomNavBar).
+3. **Проверка**:
+   - Страница «Госуслуги» теперь плавно и свободно скроллится на всю длину, нижний блок «Популярные и новые» и все его услуги полностью доступны для просмотра и нажатия.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`kaspi-app/src/components/GovServicesScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-27 06:44] — Исправление зависания на лоадере (добавлен недостающий импорт useRef/useCallback в App.jsx)
 
 ### 🎯 Запрос пользователя:

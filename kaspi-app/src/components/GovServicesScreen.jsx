@@ -378,7 +378,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
       display: 'flex',
       flexDirection: 'column',
       fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      paddingBottom: '80px',
+      paddingBottom: '100px',
       overflowX: 'hidden',
       boxSizing: 'border-box'
     }}>
