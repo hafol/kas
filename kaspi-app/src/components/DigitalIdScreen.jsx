@@ -192,7 +192,7 @@ export const DigitalIdScreen = ({ onBack }) => {
     try {
       const url = await QRCode.toDataURL(payload, {
         margin: 0,
-        width: 140, // 140px generation for crisp 126px display
+        width: 160, // 160px generation for crisp 145px display (+15% bigger)
         errorCorrectionLevel: 'M',
         color: {
           dark: '#000000',
@@ -1032,7 +1032,7 @@ export const DigitalIdScreen = ({ onBack }) => {
               position: 'relative',
               boxSizing: 'border-box',
               paddingTop: '6px',
-              paddingBottom: '36px' // +8px bottom gap, moving entire modal & block up
+              paddingBottom: '46px' // +10px higher (was 36px)
             }}
           >
             {/* Top pill drag bar */}
@@ -1058,11 +1058,11 @@ export const DigitalIdScreen = ({ onBack }) => {
               <h2
                 style={{
                   fontFamily,
-                  fontSize: activeModal === 'share_target' ? '22px' : '22.5px', // reduced by 3pt (was 26px)
-                  fontWeight: 400, // less bold: same as numbers (regular 400)
+                  fontSize: activeModal === 'share_target' ? '22px' : '24px', // +1pt bigger (was 22.5px)
+                  fontWeight: 600, // bolder (was 400)
                   color: '#1C1C1E',
                   margin: 0,
-                  letterSpacing: '-0.2px'
+                  letterSpacing: '-0.3px'
                 }}
               >
                 {activeModal === 'share_target' ? 'Кому отправить' : 'Удостоверение личности'}
@@ -1084,7 +1084,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                   WebkitTapHighlightColor: 'transparent'
                 }}
               >
-                <X size={24} strokeWidth={2} />
+                <X size={24} strokeWidth={2.2} />
               </button>
             </div>
 
@@ -1106,15 +1106,15 @@ export const DigitalIdScreen = ({ onBack }) => {
                   Покажите QR-код сотруднику
                 </p>
 
-                {/* QR Code container: sized to match the phrase "или скажите код" (~126px) */}
+                {/* QR Code container: +15% bigger (145px x 145px) */}
                 <div
                   style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     margin: '0 auto',
-                    width: '126px',
-                    height: '126px'
+                    width: '145px',
+                    height: '145px'
                   }}
                 >
                   {qrDataUrl ? (
@@ -1123,8 +1123,8 @@ export const DigitalIdScreen = ({ onBack }) => {
                       alt="QR-код удостоверения личности"
                       draggable={false}
                       style={{
-                        width: '126px',
-                        height: '126px',
+                        width: '145px',
+                        height: '145px',
                         display: 'block',
                         imageRendering: 'pixelated'
                       }}
@@ -1132,8 +1132,8 @@ export const DigitalIdScreen = ({ onBack }) => {
                   ) : (
                     <div
                       style={{
-                        width: '126px',
-                        height: '126px',
+                        width: '145px',
+                        height: '145px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -1141,7 +1141,7 @@ export const DigitalIdScreen = ({ onBack }) => {
                         borderRadius: '12px'
                       }}
                     >
-                      <Loader2 size={28} className="animate-spin" color="#0175CC" />
+                      <Loader2 size={30} className="animate-spin" color="#0175CC" />
                     </div>
                   )}
                 </div>
@@ -1165,12 +1165,12 @@ export const DigitalIdScreen = ({ onBack }) => {
                   style={{
                     fontFamily,
                     fontSize: '29px', // -2pt smaller (was 32px)
-                    fontWeight: 400, // less bold: regular 400 (same as title)
+                    fontWeight: 600, // bolder (was 400)
                     color: '#000000',
                     textAlign: 'center',
                     letterSpacing: '1px',
                     marginTop: '4px',
-                    paddingBottom: '24px' // +8px bottom gap to push block up (was 16px)
+                    paddingBottom: '34px' // +10px higher (was 24px)
                   }}
                 >
                   {randomCode}
