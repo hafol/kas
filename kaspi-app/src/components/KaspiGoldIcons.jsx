@@ -3,119 +3,94 @@ import React from 'react';
 /**
  * Authentic 1:1 Vector Icons for Kaspi Gold Detail Screen
  * User-provided exact SVGs from:
- * - icons for my bank info page/
- * - icons for my bank vypiska/
- * - Decompiled APK assets
+ * - icons for my bank deisvyie page/ (10 actions)
+ * - icons for my bank info page/ (8 info items)
+ * - icons for my bank vypiska/ (statement items)
  */
 
 const RED = "#DF4337";
 
 // ============================================================================
-// TAB 1: ДЕЙСТВИЯ (Actions)
+// TAB 1: ДЕЙСТВИЯ (Actions) — Exact user SVGs from "icons for my bank deisvyie page"
 // ============================================================================
 
-// 1. Перевести (Transfer - two curved loop arrows)
+// 1. Перевести (repeat.svg)
 export const IconTransferGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <path d="M17 4l3 3-3 3" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M7 7h13" stroke={color} strokeWidth="2" strokeLinecap="round" />
-    <path d="M7 7a4 4 0 0 0-4 4v1" stroke={color} strokeWidth="2" strokeLinecap="round" />
-    <path d="M7 20l-3-3 3-3" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M17 17H4" stroke={color} strokeWidth="2" strokeLinecap="round" />
-    <path d="M17 17a4 4 0 0 0 4-4v-1" stroke={color} strokeWidth="2" strokeLinecap="round" />
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3.15 11.7V11.85Q3.15 6.06 8.94 6.06H20.54M17.74 3.26L20.54 6.06L17.74 8.86"/>
+    <path d="M20.85 12.22V12.15Q20.85 17.94 15.06 17.94H3.42M6.22 15.14L3.42 17.94L6.22 20.74"/>
   </svg>
 );
 
-// 2. Пополнить Kaspi Gold (Top up - card with + circle badge)
+// 2. Пополнить Kaspi Gold (card-add.svg)
 export const IconTopupGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <rect x="3" y="6" width="18" height="13" rx="2.5" stroke={color} strokeWidth="1.9" />
-    <line x1="3" y1="10" x2="21" y2="10" stroke={color} strokeWidth="1.5" />
-    <circle cx="5.5" cy="5.5" r="3.5" fill="#FFFFFF" stroke={color} strokeWidth="1.6" />
-    <line x1="5.5" y1="3.5" x2="5.5" y2="7.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" />
-    <line x1="3.5" y1="5.5" x2="7.5" y2="5.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" />
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M11.64 5.6H19.06Q22.36 5.6 22.36 8.9V18.05Q22.36 21.35 19.06 21.35H4.93Q1.62 21.35 1.62 18.05V11.63"/>
+    <path d="M8.7 10.47H22.36M17.06 17.42H18.77M1.69 5.53H7.46M4.58 2.64V8.41"/>
   </svg>
 );
 
-// 3. Оплата в интернете (Web pay - globe with grid)
+// 3. Оплата в интернете (globe.svg)
 export const IconWebPayGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="9" stroke={color} strokeWidth="1.9" />
-    <ellipse cx="12" cy="12" rx="4.5" ry="9" stroke={color} strokeWidth="1.7" />
-    <line x1="3.5" y1="12" x2="20.5" y2="12" stroke={color} strokeWidth="1.7" />
-    <line x1="5" y1="7" x2="19" y2="7" stroke={color} strokeWidth="1.5" />
-    <line x1="5" y1="17" x2="19" y2="17" stroke={color} strokeWidth="1.5" />
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="8.86"/>
+    <path d="M11.39 3.14A13.26 13.26 0 0 0 11.39 20.86M12.61 3.14A13.26 13.26 0 0 1 12.61 20.86M4.2 7.79Q12 11.86 19.8 7.79M4.2 16.21Q12 12.14 19.8 16.21"/>
   </svg>
 );
 
-// 4. Платные сервисы и подписки (Subscriptions - calendar/box with sync arrows)
+// 4. Платные сервисы и подписки (calendar-refresh.svg)
 export const IconSubscriptionsGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <rect x="3" y="4" width="18" height="17" rx="3" stroke={color} strokeWidth="1.9" />
-    <line x1="7" y1="2" x2="7" y2="5" stroke={color} strokeWidth="2" strokeLinecap="round" />
-    <line x1="17" y1="2" x2="17" y2="5" stroke={color} strokeWidth="2" strokeLinecap="round" />
-    <path d="M14.5 10.5A3.5 3.5 0 1 0 15.5 14" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
-    <polyline points="15.5,9.5 15.5,12 13,12" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3.09" y="4.59" width="17.81" height="16.73" rx="2.9"/>
+    <path d="M8 2.69V6.35M15.92 2.69V6.35M16.01 12.19A4.35 4.35 0 0 0 8.4 11.3M9.54 11.75H8.03V10.05M8.19 15.09A4.35 4.35 0 0 0 15.49 15.93M14.61 15.26H16.14V16.85"/>
   </svg>
 );
 
-// 5. Заказать сумму на снятие (ATM cash dispenser with tenge symbol)
+// 5. Заказать сумму на снятие (tenge-box-2.svg)
 export const IconOrderCashGold = ({ size = 24, color = RED }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="1.17" y="3.75" width="21.64" height="16.49" rx="2.74"/>
-    <path d="M9.01 7.88H15.01M9.01 10.94H15.01M12.01 10.94V16.14"/>
+    <rect x="1.62" y="4.13" width="20.75" height="15.75" rx="2.54"/>
+    <path d="M9.14 8.04H14.89M9.14 10.93H14.89M12.01 10.93V15.85"/>
   </svg>
 );
 
-// 6. Перевыпустить Kaspi Gold (Reissue - card with recycle loop)
+// 6. Перевыпустить Kaspi Gold (card-refresh.svg)
 export const IconReissueGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <rect x="6" y="6" width="15" height="12" rx="2.5" stroke={color} strokeWidth="1.9" />
-    <line x1="6" y1="10" x2="21" y2="10" stroke={color} strokeWidth="1.5" />
-    <path d="M3 13.5a4 4 0 0 1 4-4H5" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    <polyline points="2.5,11.5 5,9 2.5,6.5" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M5 16.5a4 4 0 0 0 4-4" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15.03 5.14H19.28Q22.79 5.14 22.79 8.65V17.46Q22.79 20.98 19.28 20.98H5.54Q2.03 20.98 2.03 17.46V16.61"/>
+    <path d="M15.03 9.1H22.79M17.53 17.01H19.19M4.45 3.24A5.24 5.24 0 0 0 3.48 12.4M1.98 13.23H4.1V11.03M10.74 3.01H8.51V5.25M8.67 3.4A5.24 5.24 0 0 1 7.81 12.95"/>
   </svg>
 );
 
-// 7. Сменить ПИН-код (Change PIN - 8-point asterisk)
+// 7. Сменить ПИН-код (asterisk.svg)
 export const IconChangePinGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <line x1="12" y1="4" x2="12" y2="20" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
-    <line x1="4" y1="12" x2="20" y2="12" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
-    <line x1="6.3" y1="6.3" x2="17.7" y2="17.7" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
-    <line x1="6.3" y1="17.7" x2="17.7" y2="6.3" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3.21L12 20.79M19.61 7.61L4.39 16.39M19.61 16.39L4.39 7.61"/>
   </svg>
 );
 
-// 8. Заблокировать карту (Block card - padlock)
+// 8. Заблокировать карту (lock.svg)
 export const IconBlockCardGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <rect x="4" y="9.5" width="16" height="11.5" rx="3" stroke={color} strokeWidth="1.9" />
-    <path d="M7.5 9.5V6.5a4.5 4.5 0 0 1 9 0v3" stroke={color} strokeWidth="1.9" strokeLinecap="round" />
-    <circle cx="12" cy="14.5" r="1.5" fill={color} />
-    <line x1="12" y1="15.5" x2="12" y2="18" stroke={color} strokeWidth="1.7" strokeLinecap="round" />
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3.11" y="9.04" width="17.76" height="11.86" rx="2.9"/>
+    <path d="M7.04 9.04V7.16Q7.04 3.08 11.12 3.08H12.86Q16.95 3.08 16.95 7.16V9.04M11.95 14.09V15.91"/>
   </svg>
 );
 
-// 9. Снять деньги без карты (Cardless cash - ATM dispenser with downward banknote)
+// 9. Снять деньги без карты (atm-card.svg)
 export const IconCardlessGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <rect x="3" y="3" width="18" height="7" rx="2" stroke={color} strokeWidth="1.9" />
-    <line x1="6" y1="6.5" x2="18" y2="6.5" stroke={color} strokeWidth="1.7" strokeLinecap="round" />
-    <rect x="5.5" y="8" width="13" height="13" rx="2" stroke={color} strokeWidth="1.9" fill="#FFFFFF" />
-    <circle cx="12" cy="14.5" r="2.2" stroke={color} strokeWidth="1.5" />
-    <line x1="8" y1="14.5" x2="9" y2="14.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-    <line x1="15" y1="14.5" x2="16" y2="14.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6.55 8.76H4.74Q2.56 8.76 2.56 6.59V5.04Q2.56 2.86 4.74 2.86H19.25Q21.43 2.86 21.43 5.04V6.59Q21.43 8.76 19.25 8.76H17.45"/>
+    <rect x="6.55" y="6.28" width="10.9" height="14.85" rx="0.94"/>
+    <path d="M9.4 13.71H10.2M12.34 12.15V15.34M14.91 12.15V15.34"/>
   </svg>
 );
 
-// 10. Закрыть Kaspi Gold (Close card - circle with X)
+// 10. Закрыть Kaspi Gold (close-circle.svg)
 export const IconCloseCardGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="9" stroke={color} strokeWidth="1.9" />
-    <line x1="8.5" y1="8.5" x2="15.5" y2="15.5" stroke={color} strokeWidth="1.9" strokeLinecap="round" />
-    <line x1="15.5" y1="8.5" x2="8.5" y2="15.5" stroke={color} strokeWidth="1.9" strokeLinecap="round" />
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="8.89"/>
+    <path d="M9.14 9.14L14.91 14.91M14.91 9.14L9.14 14.91"/>
   </svg>
 );
 

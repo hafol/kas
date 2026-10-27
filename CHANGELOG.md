@@ -2,6 +2,35 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 01:42] — Вкладка «Действия» экрана Kaspi Gold: 100% интеграция оригинальных векторных SVG из папки «icons for my bank deisvyie page»
+
+### 🎯 Запрос пользователя:
+> *«так крч в страинце действии этой мой банк там используй чисто C:\Users\erkez\Downloads\uptodown-kz.kaspi.mobile\kaspi-app\icons for my bank deisvyie page из этого иконки»*
+
+### 🛠️ Что сделано:
+1. **Интеграция 10 аутентичных векторных иконок**:
+   - «Перевести» ➔ [`repeat.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/repeat.svg)
+   - «Пополнить Kaspi Gold» ➔ [`card-add.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/card-add.svg)
+   - «Оплата в интернете» ➔ [`globe.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/globe.svg)
+   - «Платные сервисы и подписки» ➔ [`calendar-refresh.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/calendar-refresh.svg)
+   - «Заказать сумму на снятие» ➔ [`tenge-box-2.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/tenge-box-2.svg)
+   - «Перевыпустить Kaspi Gold» ➔ [`card-refresh.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/card-refresh.svg)
+   - «Сменить ПИН-код» ➔ [`asterisk.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/asterisk.svg)
+   - «Заблокировать карту» ➔ [`lock.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/lock.svg)
+   - «Снять деньги без карты» ➔ [`atm-card.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/atm-card.svg)
+   - «Закрыть Kaspi Gold» ➔ [`close-circle.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page/close-circle.svg)
+2. **Параметры векторной графики**:
+   - Точные координаты, strokeWidth `2`, strokeLinecap `round`, strokeLinejoin `round`, аутентичный цвет `#DF4337`.
+3. **Статус проверки**:
+   - Проверено в мобильном вьюпорте (iPhone 14 Pro, 393 × 852 pt) Playwright (`test_gold_actions_expanded.png`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/icons for my bank deisvyie page/`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/icons%20for%20my%20bank%20deisvyie%20page)
+- [`kaspi-app/src/components/KaspiGoldIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldIcons.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 01:05] — Экран Kaspi Gold («Мой Банк»): 100% 1-в-1 реализация экрана детальной карты Kaspi Gold с 3 вкладками (Действия, Инфо, Выписка), векторными SVG-иконками, аутентичным фоном и коллапсирующим заголовком
 
 ### 🎯 Запрос пользователя:
