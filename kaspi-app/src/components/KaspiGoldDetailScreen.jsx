@@ -85,7 +85,7 @@ export const KaspiGoldDetailScreen = ({
     if (!parent) return;
     const handleParentScroll = () => {
       const top = parent.scrollTop;
-      if (top > 35) {
+      if (top > 120) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -180,7 +180,7 @@ export const KaspiGoldDetailScreen = ({
         maxWidth: '430px',
         margin: '0 auto',
         minHeight: '100%',
-        backgroundColor: '#D4AE6D',
+        backgroundColor: '#D5AE6B',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
@@ -188,14 +188,59 @@ export const KaspiGoldDetailScreen = ({
         boxSizing: 'border-box'
       }}
     >
-      {/* Sticky Compact Header (Screenshots 1 & 2 - NO artificial gap above) */}
+      {/* 1. STATIC GOLD BACKGROUND & MEDALLION LAYER (Stays static on scroll down/up) */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '100%',
+          maxWidth: '430px',
+          height: '100%',
+          backgroundColor: '#D5AE6B',
+          backgroundImage: 'url(/kaspi_assets/kaspi_gold_bg.jpg)',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center top',
+          backgroundSize: 'cover',
+          pointerEvents: 'none',
+          zIndex: 0
+        }}
+      >
+        {/* Vector SVG Medallion in upper-right (Matches user screenshot 1:1) */}
+        <div
+          style={{
+            position: 'absolute',
+            right: '25px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 64px)',
+            width: '108px',
+            height: '108px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <img
+            src="/kaspi_assets/kaspi_gold_medallion.svg"
+            alt="Kaspi Gold Medallion"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              display: 'block'
+            }}
+          />
+        </div>
+      </div>
+
+      {/* 2. STICKY COMPACT HEADER (Back arrow static on left, compact balance on scroll) */}
       <div style={{
         position: 'sticky',
         top: 0,
         left: 0,
         right: 0,
         zIndex: 50,
-        backgroundColor: isScrolled ? '#D4AE6D' : 'transparent',
+        backgroundColor: isScrolled ? '#D5AE6B' : 'transparent',
         height: 'calc(48px + env(safe-area-inset-top, 0px))',
         paddingTop: 'env(safe-area-inset-top, 0px)',
         paddingLeft: '18px',
@@ -257,27 +302,16 @@ export const KaspiGoldDetailScreen = ({
         <div style={{ width: '36px' }} />
       </div>
 
-      {/* =====================================================================
-          EXPANDED GOLDEN CARD HEADER (Screenshots 3, 4, 5 & Right Measurement Spec)
-          - Height: 238px (+19px) per exact user measurement specification
-          - Back arrow sits at y ≈ 16-19px (NO extra gap above)
-          - Back arrow to title: 32px (title starts at y ≈ 66px)
-          - Title to "Доступно": 36px
-          - "Доступно" to balance: 8px
-          - Balance: 38px, bold, white, letterSpacing -0.4px
-          - Medallion: larger, right side, cut off by white sheet
-      ===================================================================== */}
+      {/* 3. EXPANDED CARD INFO (Card Name + Apple Pay, Доступно, Balance) */}
       <div style={{
         marginTop: 'calc(-48px - env(safe-area-inset-top, 0px))',
-        paddingTop: 'calc(48px + env(safe-area-inset-top, 0px) + 18px)',
-        background: '#D4AE6D url(/kaspi_assets/kaspi_gold_card_bg.jpg) no-repeat right 0px top / cover',
-        paddingLeft: '18px',
-        paddingRight: '18px',
-        paddingBottom: '28px',
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 205px)',
+        paddingLeft: '22px',
+        paddingRight: '22px',
+        paddingBottom: '22px',
         position: 'relative',
-        boxSizing: 'border-box',
-        overflow: 'hidden',
-        minHeight: '250px'
+        zIndex: 1,
+        boxSizing: 'border-box'
       }}>
         {/* Card Name + Apple Pay badge */}
         <div style={{
@@ -285,29 +319,29 @@ export const KaspiGoldDetailScreen = ({
           alignItems: 'center'
         }}>
           <span style={{
-            fontSize: '19.5px',
+            fontSize: '20px',
             fontWeight: '700',
             color: '#FFFFFF',
             letterSpacing: '0.1px',
-            textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+            textShadow: '0 1px 2px rgba(0,0,0,0.08)'
           }}>
             Kaspi Gold *{card.last4}
           </span>
           <ApplePayBadge style={{ marginLeft: '8px' }} />
         </div>
 
-        {/* Caption "Доступно" (gap from title: 36px) */}
+        {/* Caption "Доступно" */}
         <div style={{
-          fontSize: '14px',
+          fontSize: '14.5px',
           fontWeight: '400',
           color: 'rgba(255, 255, 255, 0.92)',
-          marginTop: '34px',
-          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+          marginTop: '20px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.08)'
         }}>
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ (gap from label: 8px, font: 38px bold) */}
+        {/* Big Balance: 110 922,58 ₸ */}
         <div style={{
           fontSize: '38px',
           fontWeight: '700',
@@ -315,26 +349,23 @@ export const KaspiGoldDetailScreen = ({
           letterSpacing: '-0.4px',
           lineHeight: '1.1',
           marginTop: '6px',
-          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+          textShadow: '0 1px 2px rgba(0,0,0,0.08)'
         }}>
           {formattedBalance}
         </div>
       </div>
 
-      {/* =====================================================================
-          MAIN WHITE SHEET (Rounded top corners: 18px, starts lower at y 272)
-      ===================================================================== */}
+      {/* 4. MAIN WHITE SHEET (Rounded top corners: 18px, slides up over card on scroll) */}
       <div style={{
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: '18px',
         borderTopRightRadius: '18px',
-        marginTop: '-12px',
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box',
         position: 'relative',
-        zIndex: 2,
+        zIndex: 10,
         paddingBottom: 'calc(180px + env(safe-area-inset-bottom, 34px))'
       }}>
         {/* =====================================================================

@@ -2,6 +2,52 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 04:15] — Экран Kaspi Gold: Статичные стрелка и логотип-медальон при скролле вверх/вниз, конвертация медальона в векторный SVG и раздельный фон background.jpg (1-в-1 по нативному скриншоту Kaspi с iPhone)
+
+### 🎯 Запрос пользователя:
+> *«you know that the arrow and the logo is static i mean when you scroll down or up they stay the same as you can see in the screenshot becuse they are static we need new bg so there is it "C:\Users\erkez\Downloads\uptodown-kz.kaspi.mobile\kaspi-app\new icon for bg image\icon need to be svg.png" this one is icon in the right needs to be svg converted so it ownt lose its quality and separate bg "C:\Users\erkez\Downloads\uptodown-kz.kaspi.mobile\kaspi-app\new icon for bg image\background.jpg" i hope you understand me»* (с приложением скриншота из оригинального приложения Kaspi на iPhone 11).
+
+### 🔍 Диагностика первопричины:
+1. Ранее логотип-медальон семьи был встроен непосредственно в растровое изображение `kaspi_gold_card_bg.jpg` (750×549 JPEG), привязанное к скроллируемому блоку шапки. Из-за этого при свайпах, оттяжке вниз (rubber-band) и скролле логотип смещался вместе с контентом и терял четкость.
+2. В оригинальном нативном приложении Kaspi на iPhone:
+   - Стрелка `<` и золотой медальон на правом крае экрана являются **статичными** (не сдвигаются и не деформируются при скролле вверх или вниз).
+   - Золотой фон карты является чистым и равномерным (`#D5AE6B` / `background.jpg`).
+   - Медальон расположен в верхней правой зоне экрана (`right: 25px`, `top: calc(safe-area + 64px)`), размер `108 × 108 px`.
+   - Текстовая информация карты (`Kaspi Gold *4163`, `Доступно`, `110 922,58 ₸`) находится в нижней части золотой области непосредственно над белым листом.
+   - Белый лист с закругленными углами плавно скользит поверх золотого фона при скролле списка транзакций/действий.
+
+### 🛠️ Что сделано:
+1. **Конвертация логотипа в SVG (`kaspi_gold_medallion.svg`)**:
+   - Из предоставленного файла `icon need to be svg.png` создан векторный SVG [`kaspi-app/public/kaspi_assets/kaspi_gold_medallion.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/kaspi_gold_medallion.svg).
+   - Векторная маска `<clipPath id="medallionCircle"><circle cx="202" cy="202" r="201" /></clipPath>` обеспечивает абсолютно гладкую круглую границу без пикселизации при любом масштабировании на экранах Retina.
+   - Сохранены все аутентичные объемные светотеневые градиенты и гравировка силуэта Kaspi (высокое разрешение 404×404).
+2. **Раздельный золотой фон (`background.jpg`)**:
+   - Ассет `background.jpg` скопирован в `kaspi_gold_bg.jpg` с цветом `#D5AE6B`, фон отделен от логотипа.
+3. **Статичная двухслойная архитектура (Static Backdrop & Scrollable Sheet)**:
+   - Создан фиксированный фоновый слой (`position: fixed`, центрирован в `maxWidth: 430px`, `zIndex: 0`) с `background.jpg` и векторным медальоном в позиции `right: 25px`, `top: calc(env(safe-area-inset-top, 0px) + 64px)`.
+   - При скролле вниз (оттяжке) и вверх медальон и стрелка остаются строго на своих местах (100% статичные).
+   - При вертикальном скролле вверх белый лист (`zIndex: 10`, `backgroundColor: #FFFFFF`) плавно надвигается на золотую карту, а сегментированные табы (`Действия / Инфо / Выписка`) залипают ровно под компактной шапкой на `top: calc(48px + env(safe-area-inset-top, 0px))`.
+   - Порог плавного появления компактного заголовка и баланса в шапке оптимизирован до `120px`.
+4. **Цветовая синхронизация**:
+   - Все фоновые стили экрана переведены на эталонный золотой оттенок `#D5AE6B` в [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx) и [`App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/public/kaspi_assets/kaspi_gold_medallion.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/kaspi_gold_medallion.svg)
+- [`kaspi-app/public/kaspi_assets/kaspi_gold_bg.jpg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/kaspi_gold_bg.jpg)
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+### 🧪 Статус проверки:
+- Сборка Vite: `npm run build` прошла за 1.24 с (0 ошибок).
+- Тесты Playwright:
+  - `_archive/test_gold_actions_expanded.png`: 100% визуальное соответствие оригинальному скриншоту пользователя (статичная стрелка на `y ≈ 18px`, статичный четкий SVG-медальон на `y ≈ 64px`, разгруженная золотая область, заголовок и баланс над белым листом с 3 видимыми строками списка).
+  - `_archive/test_gold_actions_docked.png`: при скролле белый лист закрывает карту, табы аккуратно стыкуются с шапкой на `top: 48px`, все 11 пунктов плавно скроллятся.
+  - `_archive/test_gold_info.png`: вкладка «Инфо» с единым шагом 76px.
+  - `_archive/test_gold_statement.png`: вкладка «Выписка» с увеличенными элементами.
+
+---
+
 ## [2026-10-28 02:55] — Устранение бага с отступом сверху (Gap Above) и увеличение строк/секций на +30% в экране Kaspi Gold и Мой Банк
 
 ### 🎯 Запрос пользователя:
