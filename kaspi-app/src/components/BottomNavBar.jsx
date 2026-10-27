@@ -66,7 +66,7 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
       left: 0,
       right: 0,
       width: '100%',
-      maxWidth: '393px',
+      maxWidth: '430px',
       margin: '0 auto',
       backgroundColor: '#FFFFFF',
       opacity: 1,

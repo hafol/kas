@@ -2,6 +2,32 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-27 15:15] — Откат изменений ленты (HomeScreen, index.css, KaspiServiceIcons) с сохранением доработок навигационного бара (BottomNavBar)
+
+### 🎯 Запрос пользователя:
+> *«пипец удали все изминение что ыт делал после последного промпта кроме навбара навбар изминение остаьв»*
+
+### 🛠️ Что сделано:
+1. **HomeScreen**: Полностью возвращен в исходное рабочее состояние (с 4 баннерами, 8 иконками сервисов APK, золотыми плашками депозитов, каруселью «Вы недавно смотрели» и разделителями hairline).
+2. **index.css**: Возвращен нативный мобильный контейнер (`max-width: 430px`, шрифтовой стек `'Roboto Flex Kaspi', 'Roboto'`).
+3. **KaspiServiceIcons**: Возвращен в исходное состояние.
+4. **BottomNavBar**: Сохранены все калибровки по референсу:
+   - Высота `84.7px`, верхний hairline бордер `0.5px solid #EFEFEF`, фон `#FFFFFF`.
+   - Иконка «Главная» контурная `#C8392F`.
+   - Иконка «Сервисы» с 3 полосами толщиной 2px `#4C4C4C`.
+   - Бейдж сообщений `19 × 14px` капсула `#F14635` со шрифтом Roboto Medium 11pt.
+   - Метки вкладок на `top: 38.5px` (активная `#E2464A`, неактивные `#808080`).
+   - Контейнер `maxWidth: 430px` для гармоничной интеграции в мобильный вьюпорт.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/HomeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx)
+- [`kaspi-app/src/index.css`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css)
+- [`kaspi-app/src/components/KaspiServiceIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiServiceIcons.jsx)
+- [`kaspi-app/src/components/BottomNavBar.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-27 15:10] — 100% Пиксель-в-пиксель калибровка главной ленты (Home Feed) по референсным скриншотам (393 × 852 pt)
 
 ### 🎯 Запрос пользователя:
