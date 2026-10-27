@@ -30,52 +30,52 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
       </div>
 
       {/* Accounts List Container */}
-      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {/* Kaspi Gold Item */}
         <div
           onClick={() => onSelectCard('gold')}
           className="touchable"
           style={{
             backgroundColor: '#FFFFFF',
-            borderRadius: '8px',
-            padding: '16px',
+            borderRadius: '10px',
+            padding: '20px 18px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             {/* Gold Card Miniature */}
             <div style={{
-              width: '38px',
-              height: '24px',
-              borderRadius: '4px',
+              width: '46px',
+              height: '28px',
+              borderRadius: '5px',
               background: 'linear-gradient(135deg, #ECC880 0%, #C49B4B 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              paddingRight: '4px',
+              paddingRight: '6px',
               boxShadow: '0 1px 3px rgba(196, 155, 75, 0.3)'
             }}>
-              <span style={{ fontSize: '9px', color: '#FFFFFF', fontWeight: 'bold' }}>MC</span>
+              <span style={{ fontSize: '10px', color: '#FFFFFF', fontWeight: 'bold' }}>MC</span>
             </div>
 
             <div>
-              <div style={{ fontSize: '16px', fontWeight: '600', color: '#1F1F1F' }}>
+              <div style={{ fontSize: '18px', fontWeight: '600', color: '#1F1F1F' }}>
                 {cards.gold.name}
               </div>
-              <div style={{ fontSize: '12px', color: '#757575', marginTop: '2px' }}>
+              <div style={{ fontSize: '13.5px', color: '#757575', marginTop: '2px' }}>
                 {cards.gold.subtitle}
               </div>
             </div>
           </div>
 
-          <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '16px', fontWeight: '700', color: '#1F1F1F' }}>
+          <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '18px', fontWeight: '700', color: '#1F1F1F' }}>
               {cards.gold.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} {cards.gold.currency}
             </span>
-            <ChevronRight size={18} color="#C2C2C2" />
+            <ChevronRight size={20} color="#C2C2C2" />
           </div>
         </div>
 
@@ -84,17 +84,17 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           className="touchable"
           style={{
             backgroundColor: '#FFFFFF',
-            borderRadius: '8px',
-            padding: '16px',
+            borderRadius: '10px',
+            padding: '18px 18px',
             display: 'flex',
             alignItems: 'center',
-            gap: '14px',
+            gap: '16px',
             boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
           }}
         >
           <div style={{
-            width: '32px',
-            height: '32px',
+            width: '36px',
+            height: '36px',
             borderRadius: '50%',
             backgroundColor: '#DEF8CF',
             display: 'flex',
@@ -102,10 +102,10 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
             justifyContent: 'center',
             color: '#42760D'
           }}>
-            <Plus size={20} strokeWidth={2.5} />
+            <Plus size={22} strokeWidth={2.5} />
           </div>
 
-          <span style={{ fontSize: '16px', fontWeight: '600', color: '#0089D0' }}>
+          <span style={{ fontSize: '18px', fontWeight: '600', color: '#0089D0' }}>
             Открыть депозит
           </span>
         </div>
@@ -115,40 +115,40 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           className="touchable"
           style={{
             backgroundColor: '#FFFFFF',
-            borderRadius: '8px',
-            padding: '16px',
+            borderRadius: '10px',
+            padding: '20px 18px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '6px',
+              width: '36px',
+              height: '36px',
+              borderRadius: '8px',
               backgroundColor: '#58A000',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: '#FFFFFF',
               fontWeight: '700',
-              fontSize: '16px'
+              fontSize: '18px'
             }}>
               Б
             </div>
 
-            <div style={{ fontSize: '16px', fontWeight: '600', color: '#1F1F1F' }}>
+            <div style={{ fontSize: '18px', fontWeight: '600', color: '#1F1F1F' }}>
               {cards.bonus.name}
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '16px', fontWeight: '700', color: '#1F1F1F' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '18px', fontWeight: '700', color: '#1F1F1F' }}>
               {cards.bonus.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} {cards.bonus.currency}
             </span>
-            <ChevronRight size={18} color="#C2C2C2" />
+            <ChevronRight size={20} color="#C2C2C2" />
           </div>
         </div>
       </div>

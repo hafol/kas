@@ -27,10 +27,10 @@ import {
   KaspiGoldMedallion
 } from './KaspiGoldIcons';
 
-// Chevron right: grey > matching right card measurement (5 x 12, inset 23)
+// Chevron right: grey > (+30% bigger: 9 x 17, stroke 2.2)
 const ChevronRightIcon = ({ color = "#C7C7CC" }) => (
-  <svg width="7" height="13" viewBox="0 0 8 14" fill="none">
-    <path d="M1.5 1.5L6.5 7L1.5 12.5" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  <svg width="9" height="17" viewBox="0 0 10 18" fill="none">
+    <path d="M2 2L8 9L2 16" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -41,8 +41,8 @@ const BackChevronIcon = ({ color = "#FFFFFF" }) => (
   </svg>
 );
 
-// Share / Export icon (square with upward right arrow)
-const ShareExportIcon = ({ size = 20, color = "#8E8E93" }) => (
+// Share / Export icon (square with upward right arrow, +30% bigger)
+const ShareExportIcon = ({ size = 24, color = "#8E8E93" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
     <polyline points="16 6 12 2 8 6" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -50,8 +50,8 @@ const ShareExportIcon = ({ size = 20, color = "#8E8E93" }) => (
   </svg>
 );
 
-// Search Magnifier icon
-const SearchIcon = ({ size = 17, color = "#8E8E93" }) => (
+// Search Magnifier icon (+30% bigger)
+const SearchIcon = ({ size = 20, color = "#8E8E93" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <circle cx="11" cy="11" r="7.5" stroke={color} strokeWidth="2" />
     <line x1="16.5" y1="16.5" x2="21" y2="21" stroke={color} strokeWidth="2" strokeLinecap="round" />
@@ -188,7 +188,7 @@ export const KaspiGoldDetailScreen = ({
         boxSizing: 'border-box'
       }}
     >
-      {/* Sticky Compact Header (Screenshots 1 & 2) */}
+      {/* Sticky Compact Header (Screenshots 1 & 2 - NO artificial gap above) */}
       <div style={{
         position: 'sticky',
         top: 0,
@@ -196,8 +196,8 @@ export const KaspiGoldDetailScreen = ({
         right: 0,
         zIndex: 50,
         backgroundColor: isScrolled ? '#D4AE6D' : 'transparent',
-        height: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px))',
-        paddingTop: 'max(env(safe-area-inset-top, 44px), 44px)',
+        height: 'calc(48px + env(safe-area-inset-top, 0px))',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
         paddingLeft: '18px',
         paddingRight: '18px',
         display: 'flex',
@@ -260,15 +260,16 @@ export const KaspiGoldDetailScreen = ({
       {/* =====================================================================
           EXPANDED GOLDEN CARD HEADER (Screenshots 3, 4, 5 & Right Measurement Spec)
           - Height: 238px (+19px) per exact user measurement specification
-          - Back arrow to title: 32px
+          - Back arrow sits at y ≈ 16-19px (NO extra gap above)
+          - Back arrow to title: 32px (title starts at y ≈ 66px)
           - Title to "Доступно": 36px
           - "Доступно" to balance: 8px
           - Balance: 38px, bold, white, letterSpacing -0.4px
           - Medallion: larger, right side, cut off by white sheet
       ===================================================================== */}
       <div style={{
-        marginTop: 'calc(-44px - max(env(safe-area-inset-top, 44px), 44px))',
-        paddingTop: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px) + 32px)',
+        marginTop: 'calc(-48px - env(safe-area-inset-top, 0px))',
+        paddingTop: 'calc(48px + env(safe-area-inset-top, 0px) + 18px)',
         background: '#D4AE6D url(/kaspi_assets/kaspi_gold_card_bg.jpg) no-repeat right 0px top / cover',
         paddingLeft: '18px',
         paddingRight: '18px',
@@ -276,7 +277,7 @@ export const KaspiGoldDetailScreen = ({
         position: 'relative',
         boxSizing: 'border-box',
         overflow: 'hidden',
-        minHeight: '238px'
+        minHeight: '250px'
       }}>
         {/* Card Name + Apple Pay badge */}
         <div style={{
@@ -344,7 +345,7 @@ export const KaspiGoldDetailScreen = ({
         ===================================================================== */}
         <div style={{
           position: 'sticky',
-          top: 'calc(44px + max(env(safe-area-inset-top, 44px), 44px))',
+          top: 'calc(48px + env(safe-area-inset-top, 0px))',
           zIndex: 40,
           backgroundColor: '#FFFFFF',
           padding: '10px 14px 12px 14px',
@@ -402,13 +403,13 @@ export const KaspiGoldDetailScreen = ({
         </div>
 
         {/* =====================================================================
-            TAB 1: ДЕЙСТВИЯ (Exact Right Screenshot)
+            TAB 1: ДЕЙСТВИЯ (Exact Right Screenshot + 30% Scale Specification)
             - 11 items starting with Kaspi QR
-            - Row pitch: 59px (equal for all rows)
-            - NO DIVIDERS (separation comes from airy 59px spacing)
-            - Text start: 64-66px
-            - Inset chevron: 22px
-            - 7 rows visible above the fold
+            - Row pitch: 76px (+30% larger, spacious & comfortable)
+            - Icon size: 29px in 36x36px container (+30%)
+            - Main text: 19px, subtitle 14.5px (+30%)
+            - Chevron: 9x17px (+30%)
+            - NO DIVIDERS (separation comes from airy 76px spacing)
         ===================================================================== */}
         {activeTab === 'actions' && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -420,8 +421,8 @@ export const KaspiGoldDetailScreen = ({
                   onClick={action.onClick}
                   className="touchable"
                   style={{
-                    height: '59px',
-                    padding: '0 20px',
+                    height: '76px',
+                    padding: '0 22px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -431,19 +432,19 @@ export const KaspiGoldDetailScreen = ({
                 >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{
-                      width: '26px',
-                      height: '26px',
+                      width: '36px',
+                      height: '36px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
-                      <IconComponent size={22} color="#DF4337" />
+                      <IconComponent size={29} color="#DF4337" />
                     </div>
 
-                    <div style={{ marginLeft: '18px', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ marginLeft: '20px', display: 'flex', flexDirection: 'column' }}>
                       <span style={{
-                        fontSize: '16px',
+                        fontSize: '19px',
                         fontWeight: '400',
                         color: '#1C1C1E',
                         lineHeight: 1.25,
@@ -453,7 +454,7 @@ export const KaspiGoldDetailScreen = ({
                       </span>
                       {action.subtitle && (
                         <span style={{
-                          fontSize: '12px',
+                          fontSize: '14.5px',
                           fontWeight: '400',
                           color: '#8E8E93',
                           marginTop: '2px',
@@ -474,7 +475,7 @@ export const KaspiGoldDetailScreen = ({
         )}
 
         {/* =====================================================================
-            TAB 2: ИНФО (8 items, 59px pitch, no dividers)
+            TAB 2: ИНФО (8 items, 76px pitch, 29px icons, 19px title, no dividers)
         ===================================================================== */}
         {activeTab === 'info' && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -486,8 +487,8 @@ export const KaspiGoldDetailScreen = ({
                   onClick={item.onClick}
                   className="touchable"
                   style={{
-                    height: '59px',
-                    padding: '0 20px',
+                    height: '76px',
+                    padding: '0 22px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -497,19 +498,19 @@ export const KaspiGoldDetailScreen = ({
                 >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{
-                      width: '26px',
-                      height: '26px',
+                      width: '36px',
+                      height: '36px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
-                      <IconComponent size={22} color="#DF4337" />
+                      <IconComponent size={29} color="#DF4337" />
                     </div>
 
-                    <div style={{ marginLeft: '18px', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ marginLeft: '20px', display: 'flex', flexDirection: 'column' }}>
                       <span style={{
-                        fontSize: '16px',
+                        fontSize: '19px',
                         fontWeight: '400',
                         color: '#1C1C1E',
                         lineHeight: 1.25,
@@ -519,7 +520,7 @@ export const KaspiGoldDetailScreen = ({
                       </span>
                       {item.subtitle && (
                         <span style={{
-                          fontSize: '12px',
+                          fontSize: '14.5px',
                           fontWeight: '400',
                           color: '#8E8E93',
                           marginTop: '2px',
@@ -540,23 +541,23 @@ export const KaspiGoldDetailScreen = ({
         )}
 
         {/* =====================================================================
-            TAB 3: ВЫПИСКА (Screenshot 3)
+            TAB 3: ВЫПИСКА (+30% Larger Spacious Sections)
         ===================================================================== */}
         {activeTab === 'statement' && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {/* Search Input: "Поиск по операциям" */}
             <div style={{
-              margin: '8px 16px 12px 16px',
+              margin: '10px 18px 14px 18px',
               backgroundColor: '#F2F2F4',
-              height: '36px',
-              borderRadius: '10px',
+              height: '44px',
+              borderRadius: '12px',
               display: 'flex',
               alignItems: 'center',
-              paddingLeft: '10px',
-              paddingRight: '10px',
+              paddingLeft: '12px',
+              paddingRight: '12px',
               boxSizing: 'border-box'
             }}>
-              <SearchIcon size={17} color="#8E8E93" />
+              <SearchIcon size={20} color="#8E8E93" />
               <input
                 type="text"
                 value={searchQuery}
@@ -566,10 +567,10 @@ export const KaspiGoldDetailScreen = ({
                   border: 'none',
                   outline: 'none',
                   backgroundColor: 'transparent',
-                  marginLeft: '8px',
+                  marginLeft: '10px',
                   width: '100%',
                   fontFamily: "'Roboto', sans-serif",
-                  fontSize: '15px',
+                  fontSize: '17px',
                   color: '#000000'
                 }}
               />
@@ -577,7 +578,8 @@ export const KaspiGoldDetailScreen = ({
 
             {/* Date Range Row: Red Calendar + "26 сентября - 26 октября" + Share/Export */}
             <div style={{
-              padding: '12px 16px',
+              height: '62px',
+              padding: '0 20px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -585,17 +587,17 @@ export const KaspiGoldDetailScreen = ({
             }} className="touchable">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{
-                  width: '32px',
-                  height: '32px',
+                  width: '36px',
+                  height: '36px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <StatementCalendarIcon size={24} color="#DF4337" />
+                  <StatementCalendarIcon size={29} color="#DF4337" />
                 </div>
                 <span style={{
-                  marginLeft: '12px',
-                  fontSize: '16px',
+                  marginLeft: '16px',
+                  fontSize: '19px',
                   fontWeight: '400',
                   color: '#000000'
                 }}>
@@ -603,16 +605,17 @@ export const KaspiGoldDetailScreen = ({
                 </span>
               </div>
 
-              <div className="touchable" style={{ padding: '4px' }}>
-                <ShareExportIcon size={20} color="#8E8E93" />
+              <div className="touchable" style={{ padding: '6px' }}>
+                <ShareExportIcon size={24} color="#8E8E93" />
               </div>
             </div>
 
-            <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '60px', width: 'calc(100% - 60px)' }} />
+            <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '72px', width: 'calc(100% - 72px)' }} />
 
             {/* Summary Row: "Операции" + "+ 1 059 650 ₸" / "- 970 912,39 ₸" */}
             <div style={{
-              padding: '12px 16px',
+              height: '62px',
+              padding: '0 20px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -620,17 +623,17 @@ export const KaspiGoldDetailScreen = ({
             }} className="touchable">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{
-                  width: '32px',
-                  height: '32px',
+                  width: '36px',
+                  height: '36px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <StatementOperationsReceiptIcon size={24} color="#DF4337" />
+                  <StatementOperationsReceiptIcon size={29} color="#DF4337" />
                 </div>
                 <span style={{
-                  marginLeft: '12px',
-                  fontSize: '16px',
+                  marginLeft: '16px',
+                  fontSize: '19px',
                   fontWeight: '400',
                   color: '#000000'
                 }}>
@@ -638,10 +641,10 @@ export const KaspiGoldDetailScreen = ({
                 </span>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                   <span style={{
-                    fontSize: '16px',
+                    fontSize: '19px',
                     fontWeight: '600',
                     color: '#27A13B',
                     lineHeight: 1.25
@@ -649,7 +652,7 @@ export const KaspiGoldDetailScreen = ({
                     + 1 059 650 ₸
                   </span>
                   <span style={{
-                    fontSize: '13px',
+                    fontSize: '15px',
                     fontWeight: '400',
                     color: '#757575',
                     marginTop: '2px',
@@ -658,19 +661,19 @@ export const KaspiGoldDetailScreen = ({
                     - 970 912,39 ₸
                   </span>
                 </div>
-                <ChevronRightIcon size={13} color="#C7C7CC" />
+                <ChevronRightIcon color="#C7C7CC" />
               </div>
             </div>
 
-            <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '60px', width: 'calc(100% - 60px)' }} />
+            <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '72px', width: 'calc(100% - 72px)' }} />
 
             {/* Grouped Transactions List by Date */}
             {statementGroups.map((group) => (
               <div key={group.date} style={{ display: 'flex', flexDirection: 'column' }}>
                 {/* Date Header: e.g. "23 октября" */}
                 <div style={{
-                  padding: '16px 16px 8px 16px',
-                  fontSize: '17px',
+                  padding: '18px 20px 8px 20px',
+                  fontSize: '19px',
                   fontWeight: '700',
                   color: '#000000',
                   letterSpacing: '-0.2px'
@@ -685,7 +688,8 @@ export const KaspiGoldDetailScreen = ({
                       <div
                         className="touchable"
                         style={{
-                          padding: '12px 16px',
+                          height: '76px',
+                          padding: '0 20px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -693,10 +697,10 @@ export const KaspiGoldDetailScreen = ({
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                          {/* Circular icon container */}
+                          {/* Circular icon container (+30% bigger: 50x50px) */}
                           <div style={{
-                            width: '40px',
-                            height: '40px',
+                            width: '50px',
+                            height: '50px',
                             borderRadius: '50%',
                             backgroundColor: '#F5F5F7',
                             display: 'flex',
@@ -704,12 +708,12 @@ export const KaspiGoldDetailScreen = ({
                             justifyContent: 'center',
                             flexShrink: 0
                           }}>
-                            <Icon size={20} color="#262626" />
+                            <Icon size={26} color="#262626" />
                           </div>
 
-                          <div style={{ marginLeft: '12px', display: 'flex', flexDirection: 'column' }}>
+                          <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
                             <span style={{
-                              fontSize: '16px',
+                              fontSize: '19px',
                               fontWeight: '500',
                               color: '#000000',
                               lineHeight: 1.25
@@ -717,7 +721,7 @@ export const KaspiGoldDetailScreen = ({
                               {tx.title}
                             </span>
                             <span style={{
-                              fontSize: '13px',
+                              fontSize: '15px',
                               fontWeight: '400',
                               color: '#8E8E93',
                               marginTop: '2px',
@@ -728,15 +732,15 @@ export const KaspiGoldDetailScreen = ({
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <span style={{
-                            fontSize: '16px',
+                            fontSize: '19px',
                             fontWeight: '600',
                             color: '#000000'
                           }}>
                             {tx.amount}
                           </span>
-                          <ChevronRightIcon size={13} color="#C7C7CC" />
+                          <ChevronRightIcon color="#C7C7CC" />
                         </div>
                       </div>
 
@@ -744,8 +748,8 @@ export const KaspiGoldDetailScreen = ({
                         <div style={{
                           height: '1px',
                           backgroundColor: '#F2F2F4',
-                          marginLeft: '68px',
-                          width: 'calc(100% - 68px)'
+                          marginLeft: '86px',
+                          width: 'calc(100% - 86px)'
                         }} />
                       )}
                     </React.Fragment>
@@ -827,7 +831,7 @@ export const KaspiGoldDetailScreen = ({
                 onClick={() => copyToClipboard('4400 4303 6188 4163', 'card')}
                 className="touchable"
                 style={{
-                  padding: '12px 14px',
+                  padding: '16px 16px',
                   backgroundColor: '#F8F8FA',
                   borderRadius: '12px',
                   display: 'flex',
@@ -837,24 +841,24 @@ export const KaspiGoldDetailScreen = ({
                 }}
               >
                 <div>
-                  <div style={{ color: '#8E8E93', fontSize: '12px' }}>Номер карты</div>
-                  <div style={{ fontWeight: '600', fontSize: '16px', color: '#000000', marginTop: '2px' }}>
+                  <div style={{ color: '#8E8E93', fontSize: '13.5px' }}>Номер карты</div>
+                  <div style={{ fontWeight: '600', fontSize: '18px', color: '#000000', marginTop: '2px' }}>
                     4400 4303 6188 4163
                   </div>
                 </div>
-                <span style={{ fontSize: '13px', color: copiedField === 'card' ? '#27A13B' : '#E2464A', fontWeight: '500' }}>
+                <span style={{ fontSize: '14.5px', color: copiedField === 'card' ? '#27A13B' : '#E2464A', fontWeight: '500' }}>
                   {copiedField === 'card' ? 'Скопировано' : 'Скопировать'}
                 </span>
               </div>
 
               {/* Cardholder Name */}
               <div style={{
-                padding: '12px 14px',
+                padding: '16px 16px',
                 backgroundColor: '#F8F8FA',
                 borderRadius: '12px'
               }}>
-                <div style={{ color: '#8E8E93', fontSize: '12px' }}>Имя на карте</div>
-                <div style={{ fontWeight: '600', fontSize: '15px', color: '#000000', marginTop: '2px' }}>
+                <div style={{ color: '#8E8E93', fontSize: '13.5px' }}>Имя на карте</div>
+                <div style={{ fontWeight: '600', fontSize: '17px', color: '#000000', marginTop: '2px' }}>
                   PARASSAT ZHUMASH
                 </div>
               </div>
@@ -862,22 +866,22 @@ export const KaspiGoldDetailScreen = ({
               {/* Expiry & CVV */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div style={{
-                  padding: '12px 14px',
+                  padding: '16px 16px',
                   backgroundColor: '#F8F8FA',
                   borderRadius: '12px'
                 }}>
-                  <div style={{ color: '#8E8E93', fontSize: '12px' }}>Срок действия</div>
-                  <div style={{ fontWeight: '600', fontSize: '15px', color: '#000000', marginTop: '2px' }}>
+                  <div style={{ color: '#8E8E93', fontSize: '13.5px' }}>Срок действия</div>
+                  <div style={{ fontWeight: '600', fontSize: '17px', color: '#000000', marginTop: '2px' }}>
                     09/29
                   </div>
                 </div>
                 <div style={{
-                  padding: '12px 14px',
+                  padding: '16px 16px',
                   backgroundColor: '#F8F8FA',
                   borderRadius: '12px'
                 }}>
-                  <div style={{ color: '#8E8E93', fontSize: '12px' }}>CVV</div>
-                  <div style={{ fontWeight: '600', fontSize: '15px', color: '#000000', marginTop: '2px' }}>
+                  <div style={{ color: '#8E8E93', fontSize: '13.5px' }}>CVV</div>
+                  <div style={{ fontWeight: '600', fontSize: '17px', color: '#000000', marginTop: '2px' }}>
                     •••
                   </div>
                 </div>
@@ -888,7 +892,7 @@ export const KaspiGoldDetailScreen = ({
                 onClick={() => copyToClipboard('KZ54722C000021658491', 'iban')}
                 className="touchable"
                 style={{
-                  padding: '12px 14px',
+                  padding: '16px 16px',
                   backgroundColor: '#F8F8FA',
                   borderRadius: '12px',
                   display: 'flex',
@@ -898,12 +902,12 @@ export const KaspiGoldDetailScreen = ({
                 }}
               >
                 <div>
-                  <div style={{ color: '#8E8E93', fontSize: '12px' }}>Счет (IBAN)</div>
-                  <div style={{ fontWeight: '600', fontSize: '14px', color: '#000000', marginTop: '2px' }}>
+                  <div style={{ color: '#8E8E93', fontSize: '13.5px' }}>Счет (IBAN)</div>
+                  <div style={{ fontWeight: '600', fontSize: '16px', color: '#000000', marginTop: '2px' }}>
                     KZ54722C000021658491
                   </div>
                 </div>
-                <span style={{ fontSize: '13px', color: copiedField === 'iban' ? '#27A13B' : '#E2464A', fontWeight: '500' }}>
+                <span style={{ fontSize: '14.5px', color: copiedField === 'iban' ? '#27A13B' : '#E2464A', fontWeight: '500' }}>
                   {copiedField === 'iban' ? 'Скопировано' : 'Скопировать'}
                 </span>
               </div>
