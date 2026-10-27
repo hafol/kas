@@ -85,7 +85,7 @@ export const KaspiGoldDetailScreen = ({
     if (!parent) return;
     const handleParentScroll = () => {
       const top = parent.scrollTop;
-      if (top > 120) {
+      if (top > 35) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -181,6 +181,10 @@ export const KaspiGoldDetailScreen = ({
         margin: '0 auto',
         minHeight: '100%',
         backgroundColor: '#D5AE6B',
+        backgroundImage: 'url(/kaspi_assets/kaspi_gold_bg.jpg)',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center top',
+        backgroundSize: 'cover',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
@@ -188,33 +192,25 @@ export const KaspiGoldDetailScreen = ({
         boxSizing: 'border-box'
       }}
     >
-      {/* 1. STATIC GOLD BACKGROUND & MEDALLION LAYER (Stays static on scroll down/up) */}
+      {/* 1. STATIC STICKY MEDALLION (Pinned to top: 0, DOES NOT MOVE on scroll, below white sheet) */}
       <div
         style={{
-          position: 'fixed',
+          position: 'sticky',
           top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '100%',
-          maxWidth: '430px',
-          height: '100%',
-          backgroundColor: '#D5AE6B',
-          backgroundImage: 'url(/kaspi_assets/kaspi_gold_bg.jpg)',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center top',
-          backgroundSize: 'cover',
-          pointerEvents: 'none',
-          zIndex: 0
+          left: 0,
+          right: 0,
+          height: 0,
+          zIndex: 2,
+          pointerEvents: 'none'
         }}
       >
-        {/* Vector SVG Medallion in upper-right (Matches user screenshot 1:1) */}
         <div
           style={{
             position: 'absolute',
-            right: '25px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 64px)',
-            width: '108px',
-            height: '108px',
+            right: '16px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 24px)',
+            width: '124px',
+            height: '124px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
@@ -302,16 +298,18 @@ export const KaspiGoldDetailScreen = ({
         <div style={{ width: '36px' }} />
       </div>
 
-      {/* 3. EXPANDED CARD INFO (Card Name + Apple Pay, Доступно, Balance) */}
+      {/* 3. EXPANDED GOLDEN CARD HEADER (Restored authentic spacing: 238px minHeight) */}
       <div style={{
         marginTop: 'calc(-48px - env(safe-area-inset-top, 0px))',
-        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 205px)',
-        paddingLeft: '22px',
-        paddingRight: '22px',
-        paddingBottom: '22px',
+        paddingTop: 'calc(48px + env(safe-area-inset-top, 0px) + 18px)',
+        paddingLeft: '18px',
+        paddingRight: '18px',
+        paddingBottom: '28px',
         position: 'relative',
-        zIndex: 1,
-        boxSizing: 'border-box'
+        zIndex: 3,
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        minHeight: '250px'
       }}>
         {/* Card Name + Apple Pay badge */}
         <div style={{
@@ -319,29 +317,29 @@ export const KaspiGoldDetailScreen = ({
           alignItems: 'center'
         }}>
           <span style={{
-            fontSize: '20px',
+            fontSize: '19.5px',
             fontWeight: '700',
             color: '#FFFFFF',
             letterSpacing: '0.1px',
-            textShadow: '0 1px 2px rgba(0,0,0,0.08)'
+            textShadow: '0 1px 2px rgba(0,0,0,0.1)'
           }}>
             Kaspi Gold *{card.last4}
           </span>
           <ApplePayBadge style={{ marginLeft: '8px' }} />
         </div>
 
-        {/* Caption "Доступно" */}
+        {/* Caption "Доступно" (gap from title: 34-36px) */}
         <div style={{
-          fontSize: '14.5px',
+          fontSize: '14px',
           fontWeight: '400',
           color: 'rgba(255, 255, 255, 0.92)',
-          marginTop: '20px',
-          textShadow: '0 1px 2px rgba(0,0,0,0.08)'
+          marginTop: '34px',
+          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ */}
+        {/* Big Balance: 110 922,58 ₸ (gap from label: 8px, font: 38px bold) */}
         <div style={{
           fontSize: '38px',
           fontWeight: '700',
@@ -349,17 +347,18 @@ export const KaspiGoldDetailScreen = ({
           letterSpacing: '-0.4px',
           lineHeight: '1.1',
           marginTop: '6px',
-          textShadow: '0 1px 2px rgba(0,0,0,0.08)'
+          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
           {formattedBalance}
         </div>
       </div>
 
-      {/* 4. MAIN WHITE SHEET (Rounded top corners: 18px, slides up over card on scroll) */}
+      {/* 4. MAIN WHITE SHEET (Rounded top corners: 18px, starts at y 238, cuts off medallion bottom) */}
       <div style={{
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: '18px',
         borderTopRightRadius: '18px',
+        marginTop: '-12px',
         flex: 1,
         display: 'flex',
         flexDirection: 'column',

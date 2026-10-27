@@ -2,6 +2,44 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 04:22] — Экран Kaspi Gold: Возврат аутентичного компактного отступа сверху (238px) и 100% статичный SVG-медальон через position: sticky (не сдвигается при скролле)
+
+### 🎯 Запрос пользователя:
+> *«i didnt meant that you to leave a space above return the space above how it was, in the screenshot itself i was holding my finger to show you that logo doesnt move with scroll in orig app but now in our it still does ove with scroll even tho i give you icon and bg separated, the arrow is good keep it»*
+
+### 🔍 Диагностика:
+1. Пользователь на присланном ранее скриншоте удерживал палец и оттягивал экран вниз (overscroll/rubber-band), чтобы продемонстрировать поведение нативного приложения: стрелка и логотип остаются на месте при оттяжке, а не то, что вверху должна быть огромная пустая зона.
+2. В коде из-за контейнера со скроллом и `transform` в `App.jsx` свойство `position: fixed` внутри скроллируемой области вело себя как абсолютное и прокручивалось вместе со страницей. При этом стрелка `<` использовала `position: sticky; top: 0`, благодаря чему оставалась абсолютно статичной («the arrow is good keep it»).
+
+### 🛠️ Что сделано:
+1. **Возврат компактного отступа сверху 1-в-1 как было**:
+   - Высота золотой шапки возвращена к аутентичным `minHeight: 238px` (с учетом `marginTop: -12px`).
+   - Заголовок `Kaspi Gold *4163` начинается ровно на `y = 66px` (32px ниже стрелки `<`).
+   - Подпись `Доступно` — с отступом `34px` от заголовка.
+   - Баланс `110 922,58 ₸` — с отступом `6px` от подписи.
+   - Белый лист с табами начинается строго на `y ≈ 238px`, аккуратно срезая нижнюю дугу медальона.
+   - Над линией сгиба снова отображаются все 7 пунктов действий.
+2. **100% статичный медальон через `position: sticky; top: 0`**:
+   - Медальон вынесен в отдельный слой `position: sticky; top: 0; height: 0; zIndex: 2; pointerEvents: none;`.
+   - Внутри него SVG-медальон расположен в `right: 16px`, `top: calc(env(safe-area-inset-top, 0px) + 24px)`, размер `124 × 124 px`.
+   - Теперь медальон привязан к той же механике залипания, что и стрелка: **при оттяжке вниз пальцем или любом скролле медальон не сдвигается ни на один пиксель** (проверено тестами: координаты `y: 24` неизменны при `scrollTop = 0, 100, 200`).
+   - При скролле вверх белый лист (`zIndex: 10`) плавно накрывает медальон и шапку.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+### 🧪 Статус проверки:
+- Автотест Playwright `verify_medallion_static.py`:
+  - `Initial medallion`: `y: 24`
+  - `Medallion at scrollTop=100`: `y: 24` (0px смещения)
+  - `Medallion at scrollTop=200`: `y: 24` (0px смещения)
+- Скриншоты Playwright:
+  - `_archive/test_gold_actions_expanded.png`: компактный аутентичный вид 1-в-1 по спецификации.
+  - `_archive/test_gold_actions_docked.png`: безупречное залипание таббара и компактной шапки.
+
+---
+
 ## [2026-10-28 04:15] — Экран Kaspi Gold: Статичные стрелка и логотип-медальон при скролле вверх/вниз, конвертация медальона в векторный SVG и раздельный фон background.jpg (1-в-1 по нативному скриншоту Kaspi с iPhone)
 
 ### 🎯 Запрос пользователя:
