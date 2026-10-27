@@ -314,6 +314,28 @@ export const KaspiFlameIcon = ({ width = 16, height = 16, size = 16, isActive = 
   );
 };
 
+// Filter chip flame: 13 x 21 pt, orange gradient (#FB5410 base to #FFC700 top)
+export const KaspiBonusGradientFlame = ({ width = 13, height = 21, id = "kaspiBonusFlame", style = {} }) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="14 1 71 82"
+    fill="none"
+    style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0, ...style }}
+  >
+    <defs>
+      <linearGradient id={id} x1="0" y1="82" x2="0" y2="1" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#FB5410" />
+        <stop offset="100%" stopColor="#FFC700" />
+      </linearGradient>
+    </defs>
+    <path
+      fill={`url(#${id})`}
+      d="M27 20.5C31 22 35 28 38 34C39.5 28 42 17 45 11.5C47 7.5 49 5.5 51 4.5C54 7 56.5 14 58.5 21C60.5 28 62 35 63 41C64 37 66 33 68.5 30.5C73 32.5 77 40 79.5 47C81.5 54 80.5 62 77 68C74 73 69.5 77 64.5 79.5C62 77 61.5 73 61.5 70.5C61.5 68 60 65.5 58 64C56 66.5 53.5 68.5 50.5 69.5C46.5 67.5 42 61 40.5 55C38 59 36 65 35.5 70C35.2 73.5 34.5 76.5 32 79C26 77 21 70 19 62C17.5 55 19 48 21.5 41C23.5 34 24.5 27 27 20.5Z"
+    />
+  </svg>
+);
+
 // Official Kaspi Heart Icon (from heart.svg)
 export const KaspiHeartIcon = ({ isFavorite = false, size = 24, style = {} }) => (
   <svg
@@ -330,5 +352,6 @@ export const KaspiHeartIcon = ({ isFavorite = false, size = 24, style = {} }) =>
     <path d="M24 41L8.2 25.2a9.6 9.6 0 0 1 0-13.6 9.6 9.6 0 0 1 13.6 0L24 13.8l2.2-2.2a9.6 9.6 0 0 1 13.6 0 9.6 9.6 0 0 1 0 13.6z" />
   </svg>
 );
+
 
 

@@ -1,22 +1,22 @@
 import React from 'react';
 
-// B2. Главная (active) icon – house (enlarged by ~10%: 21.5 w x 23.7 h, stroke 2.3 px, darker red #C0382C)
-const NavIconHome = ({ color = "#C0382C" }) => (
-  <svg width="21.5" height="23.7" viewBox="0 0 19.5 21.5" fill="none">
+// B2. Главная (active) icon – house (outline style, 24 x 24 pt, stroke 2 pt, active brand red #C8392F / #E2464A)
+const NavIconHome = ({ color = "#C8392F" }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
     <path
-      d="M2.3 8.8L9.75 2.2L17.2 8.8V19.4C17.2 19.95 16.75 20.4 16.2 20.4H12.2V14.8H7.3V20.4H3.3C2.75 20.4 2.3 19.95 2.3 19.4V8.8Z"
+      d="M3 9.5L12 2.5L21 9.5V20.5C21 21.05 20.55 21.5 20 21.5H15V15.5H9V21.5H4C3.45 21.5 3 21.05 3 20.5V9.5Z"
       stroke={color}
-      strokeWidth="2.3"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <path d="M7.3 10.4H12.2" stroke={color} strokeWidth="2.3" strokeLinecap="round" />
+    <path d="M9 11.5H15" stroke={color} strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
 
-// B3. Kaspi QR icon (24.5 x 24, stroke 2 px, #535353)
-const NavIconQR = ({ color = "#535353" }) => (
-  <svg width="24.5" height="24" viewBox="0 0 24 24" fill="none">
+// B3. Kaspi QR icon (24 x 24 pt, stroke 2 pt, #4C4C4C)
+const NavIconQR = ({ color = "#4C4C4C" }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
     <path
       d="M1.2 2.5C1.2 1.8 1.8 1.2 2.5 1.2H7C7.6 1.2 8 1.6 8 2.2C8 2.8 7.6 3.2 7 3.2H3.2V7C3.2 7.6 2.8 8 2.2 8C1.6 8 1.2 7.6 1.2 7V2.5ZM16 2.2C16 1.6 16.4 1.2 17 1.2H21.5C22.2 1.2 22.8 1.8 22.8 2.5V7C22.8 7.6 22.4 8 21.8 8C21.2 8 20.8 7.6 20.8 7V3.2H17C16.4 3.2 16 2.8 16 2.2ZM2.2 16C2.8 16 3.2 16.4 3.2 17V20.8H7C7.6 20.8 8 21.2 8 21.8C8 22.4 7.6 22.8 7 22.8H2.5C1.8 22.8 1.2 22.2 1.2 21.5V17C1.2 16.4 1.6 16 2.2 16ZM22.8 16C22.8 16.6 22.4 17 21.8 17H20.8V20.8H17C16.4 20.8 16 21.2 16 21.8C16 22.4 16.4 22.8 17 22.8H21.5C22.2 22.8 22.8 22.2 22.8 21.5V17C22.8 16.4 22.8 16 22.8 16ZM5.5 4.5C4.9 4.5 4.5 4.9 4.5 5.5V10.5C4.5 11.1 4.9 11.5 5.5 11.5H10.5C11.1 11.5 11.5 11.1 11.5 10.5V5.5C11.5 4.9 11.1 4.5 10.5 4.5H5.5ZM12.5 5.5C12.5 4.9 12.9 4.5 13.5 4.5H18.5C19.1 4.5 19.5 4.9 19.5 5.5V10.5C19.5 11.1 19.1 11.5 18.5 11.5H13.5C12.9 11.5 12.5 11.1 12.5 10.5V5.5ZM5.5 12.5C4.9 12.5 4.5 12.9 4.5 13.5V18.5C4.5 19.1 4.9 19.5 5.5 19.5H10.5C11.1 19.5 11.5 19.1 11.5 18.5V13.5C11.5 12.9 11.1 12.5 10.5 12.5H5.5ZM13.5 12.5H17.2V14.5H14.5V17.2H12.5V13.5C12.5 12.9 12.9 12.5 13.5 12.5ZM14.5 9.5V6.5H17.5V9.5H14.5ZM17.5 14.8V17.5H14.8V19.5H18.5C19.1 19.5 19.5 19.1 19.5 18.5V14.8H17.5ZM6.5 14.5V17.5H9.5V14.5H6.5ZM16.8 7.2H15.2V8.8H16.8V7.2ZM15.2 15.2H16.8V16.8H15.2V15.2ZM8.8 15.2H7.2V16.8H8.8V15.2ZM6.5 6.5V9.5H9.5V6.5H6.5ZM7.2 7.2H8.8V8.8H7.2V7.2Z"
       fill={color}
@@ -26,38 +26,37 @@ const NavIconQR = ({ color = "#535353" }) => (
   </svg>
 );
 
-// B4. Сообщения icon (speech bubble with three small dots: 26 x 24, stroke 2 px, #535353)
-const NavIconMessages = ({ color = "#535353" }) => (
-  <svg width="26" height="24" viewBox="0 0 26 24" fill="none">
+// B4. Сообщения icon (speech bubble with three small dots: 24 x 24 pt, stroke 2 pt, #4C4C4C)
+const NavIconMessages = ({ color = "#4C4C4C" }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
     <path
-      d="M2.5 6.5C2.5 4.3 4.3 2.5 6.5 2.5H19.5C21.7 2.5 23.5 4.3 23.5 6.5V14.5C23.5 16.7 21.7 18.5 19.5 18.5H11.5L6.5 22V18.5H6.5C4.3 18.5 2.5 16.7 2.5 14.5V6.5Z"
+      d="M2.5 6C2.5 4.1 4.1 2.5 6 2.5H18C19.9 2.5 21.5 4.1 21.5 6V13.5C21.5 15.4 19.9 17 18 17H11L6 20.5V17H6C4.1 17 2.5 15.4 2.5 13.5V6Z"
       stroke={color}
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    {/* Three small non-bold dots: ~2px each, gap ~2.5px */}
-    <circle cx="9" cy="10.5" r="1.1" fill={color} />
-    <circle cx="13" cy="10.5" r="1.1" fill={color} />
-    <circle cx="17" cy="10.5" r="1.1" fill={color} />
+    <circle cx="8" cy="9.8" r="1.1" fill={color} />
+    <circle cx="12" cy="9.8" r="1.1" fill={color} />
+    <circle cx="16" cy="9.8" r="1.1" fill={color} />
   </svg>
 );
 
-// B5. Сервисы icon (three horizontal bars: 22 w x 17 h, 2.2 px thick with round caps, tops at 820, 827, 834.5)
-const NavIconServices = ({ color = "#535353" }) => (
-  <svg width="22" height="17" viewBox="0 0 22 17" fill="none">
-    <line x1="1.1" y1="1.6" x2="20.9" y2="1.6" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
-    <line x1="1.1" y1="8.5" x2="20.9" y2="8.5" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
-    <line x1="1.1" y1="15.4" x2="20.9" y2="15.4" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+// B5. Сервисы icon (hamburger: 20.6 x 16 pt, three 2 pt bars, #4C4C4C)
+const NavIconServices = ({ color = "#4C4C4C" }) => (
+  <svg width="20.6" height="16" viewBox="0 0 20.6 16" fill="none">
+    <line x1="1" y1="2" x2="19.6" y2="2" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    <line x1="1" y1="8" x2="19.6" y2="8" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    <line x1="1" y1="14" x2="19.6" y2="14" stroke={color} strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
 
 export const BottomNavBar = ({ activeTab, onTabChange }) => {
   const tabs = [
-    { id: 'home', label: 'Главная', IconComponent: NavIconHome, iconColor: '#C0382C', labelColor: '#E0402F', iconTop: '8.5px' },
-    { id: 'qr', label: 'Kaspi QR', IconComponent: NavIconQR, iconColor: '#535353', labelColor: '#8A8A8E', iconTop: '8px' },
-    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, iconColor: '#535353', labelColor: '#8A8A8E', badge: 29, iconTop: '8px' },
-    { id: 'services', label: 'Сервисы', IconComponent: NavIconServices, iconColor: '#535353', labelColor: '#8A8A8E', iconTop: '11.5px' }
+    { id: 'home', label: 'Главная', IconComponent: NavIconHome, iconColor: '#C8392F', labelColor: '#E2464A', iconTop: '7.7px' },
+    { id: 'qr', label: 'Kaspi QR', IconComponent: NavIconQR, iconColor: '#4C4C4C', labelColor: '#808080', iconTop: '7.7px' },
+    { id: 'messages', label: 'Сообщения', IconComponent: NavIconMessages, iconColor: '#4C4C4C', labelColor: '#808080', badge: '32', iconTop: '7.7px' },
+    { id: 'services', label: 'Сервисы', IconComponent: NavIconServices, iconColor: '#4C4C4C', labelColor: '#808080', iconTop: '11.7px' }
   ];
 
   return (
@@ -67,19 +66,20 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
       left: 0,
       right: 0,
       width: '100%',
-      maxWidth: '430px',
+      maxWidth: '393px',
       margin: '0 auto',
       backgroundColor: '#FFFFFF',
       opacity: 1,
       backdropFilter: 'none',
       WebkitBackdropFilter: 'none',
-      borderTop: '0.5px solid #EEEEEE',
+      borderTop: '0.5px solid #EFEFEF',
       borderBottom: 'none',
+      borderLeft: 'none',
+      borderRight: 'none',
       boxShadow: 'none',
       zIndex: 60,
-      height: 'calc(54px + max(env(safe-area-inset-bottom, 34px), 34px))',
-      minHeight: '88px',
-      paddingBottom: 'max(env(safe-area-inset-bottom, 34px), 34px)',
+      height: '84.7px',
+      paddingBottom: '30.7px',
       boxSizing: 'border-box'
     }}>
       <div style={{
@@ -92,8 +92,8 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           const { IconComponent } = tab;
-          const iconColor = isActive ? (tab.id === 'home' ? '#C0382C' : '#E0402F') : '#535353';
-          const labelColor = isActive ? '#E0402F' : '#8A8A8E';
+          const iconColor = isActive ? (tab.id === 'home' ? '#C8392F' : '#E2464A') : '#4C4C4C';
+          const labelColor = isActive ? '#E2464A' : '#808080';
 
           return (
             <div
@@ -108,14 +108,14 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 position: 'relative',
                 height: '100%',
                 cursor: 'pointer',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif'
+                fontFamily: "'Roboto', sans-serif"
               }}
             >
               {/* Icon wrapper positioned with exact top offset */}
               <div style={{
                 position: 'absolute',
                 top: tab.iconTop,
-                width: '26px',
+                width: '24px',
                 height: '24px',
                 display: 'flex',
                 alignItems: 'center',
@@ -123,23 +123,24 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
               }}>
                 <IconComponent color={iconColor} />
 
-                {/* B4: Red badge 20.5 x 15 at x 258.5, y 809 (top: -7px, left: 12.5px relative to 26x24 bubble) */}
+                {/* Messages badge: 19 x 14 pt capsule, fill #F14635, white Roboto Medium 11 pt */}
                 {tab.badge && (
                   <div style={{
                     position: 'absolute',
-                    top: '-7px',
-                    left: '12.5px',
-                    width: '20.5px',
-                    height: '15px',
-                    borderRadius: '7.5px',
+                    top: '-4px',
+                    left: '13.5px',
+                    width: '19px',
+                    height: '14px',
+                    borderRadius: '7px',
                     backgroundColor: '#F14635',
                     color: '#FFFFFF',
+                    fontFamily: "'Roboto', sans-serif",
                     fontSize: '11px',
-                    fontWeight: '600',
+                    fontWeight: '500',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    lineHeight: 1,
+                    lineHeight: '14px',
                     boxSizing: 'border-box',
                     pointerEvents: 'none'
                   }}>
@@ -148,10 +149,11 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 )}
               </div>
 
-              {/* B1: Label text top at y 848.5 (808 + 40.5) */}
+              {/* Label: Roboto Regular 12 pt, top at y 1212 px (38.5 pt from bar top) */}
               <span style={{
                 position: 'absolute',
-                top: '40.5px',
+                top: '38.5px',
+                fontFamily: "'Roboto', sans-serif",
                 fontSize: '12px',
                 fontWeight: '400',
                 color: labelColor,
