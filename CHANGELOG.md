@@ -2,6 +2,32 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 04:36] — Экран Kaspi Gold: Геометрическая калибровка центра медальона (right: 25px, top: 36px) с учетом масштабирования и ликвидация браузерного кэша на мобильных устройствах (vercel.json Cache-Control)
+
+### 🎯 Запрос пользователя:
+> *«why it is not moving it still in its pace unmoved»*
+
+### 🔍 Диагностика первопричины:
+1. **Геометрическое смещение центра при масштабировании**: При уменьшении размера элемента со 124px до 111.6px (-12.4px в диаметре) правая привязка `right: 18px` привела к тому, что геометрический центр и левая граница круга сдвинулись вправо на 4–10px, компенсируя сдвиг влево. В итоге визуальный центр медальона оставался практически на том же месте (`x: 315 -> 319px`, `y: 86 -> 85.8px`), создавая ощущение, что логотип не сдвинулся.
+2. **Агрессивное кэширование на iOS (Safari / PWA)**: В `vercel.json` отсутствовали директивы `Cache-Control: max-age=0, must-revalidate` для `index.html`, из-за чего на iPhone мобильный браузер часто открывал предыдущую версию бандла из дискового/оперативного кэша.
+
+### 🛠️ Что сделано:
+1. **Точная центровка логотипа с учетом радиуса**:
+   - `right`: установлено в **`25px`** в [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx). С учетом диаметра `111.6px` (радиус `55.8px`) центр медальона переместился ровно на `x = 312.2px` (на 2.8px левее исходного 315px).
+   - `top`: установлено в **`calc(env(safe-area-inset-top, 0px) + 36px)`**. Центр медальона сместился на `y = 91.8px` (ровно на 5.8px ниже исходного 86px).
+   - Размер: сохранен на уровне **`111.6 × 111.6 px`** (-10% от 124px).
+2. **Ликвидация кэширования для мобильных устройств**:
+   - В [`kaspi-app/vercel.json`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/vercel.json) добавлены строгие заголовки `Cache-Control: public, max-age=0, must-revalidate` для корневого документа и `max-age=31536000, immutable` для бандлов.
+   - В [`kaspi-app/index.html`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html) добавлены мета-теги `Cache-Control: no-cache, no-store, must-revalidate`, `Pragma: no-cache`.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`kaspi-app/vercel.json`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/vercel.json)
+- [`kaspi-app/index.html`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 04:28] — Экран Kaspi Gold: Уменьшение логотипа-медальона на -10% (111.6px), сдвиг влево на 2px (right: 18px) и вниз на 6px (top: +30px)
 
 ### 🎯 Запрос пользователя:
