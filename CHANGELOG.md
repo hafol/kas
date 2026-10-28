@@ -2,6 +2,25 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 04:02] — Экран Kaspi Gold: Смещение векторного SVG-медальона на 5px влево и 10px вниз
+
+### 🎯 Запрос пользователя:
+> *«the icon svg move it to the left by 5px and then down by 10px»*
+
+### 🛠️ Что сделано:
+1. **Корректировка координат векторного медальона (`KaspiGoldDetailScreen.jsx`)**:
+   - `right`: с `20px` до **`25px`** (+5px влево от правого края экрана).
+   - `top`: с `8px` до **`18px`** (+10px вниз).
+   - Теперь медальон идеально центрирован по вертикали относительно текстового блока карты и названия «Доступно».
+2. **Проверка**:
+   - Скриншот `_archive/test_iphone_rest.png` подтвердил гармоничное и точное расположение иконки.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 03:52] — Экран Kaspi Gold: Устранение перекрытия баланса шторкой и постоянные скругленные углы (18px)
 
 ### 🎯 Запрос пользователя:

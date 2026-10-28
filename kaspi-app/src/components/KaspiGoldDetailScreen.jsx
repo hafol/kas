@@ -427,8 +427,8 @@ export const KaspiGoldDetailScreen = ({
         <div
           style={{
             position: 'absolute',
-            right: '20px',
-            top: '8px',
+            right: '25px',
+            top: '18px',
             width: '108px',
             height: '108px',
             display: 'flex',
