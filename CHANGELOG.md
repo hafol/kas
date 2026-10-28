@@ -2,6 +2,28 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 00:40] — Экран Kaspi Gold: Числа и валюта подняты на 4px ближе к «Доступно» (marginTop 16px), заголовок Kaspi Gold увеличен на +0.5pt, смещен вниз на 2px и сделан жирнее (750)
+
+### 🎯 Запрос пользователя:
+> *«the доступно is in the right place but the number and the currecny symbol gotta be closer to that text so move them up by 4px and then the word kaspi gold at the top make it bigger 0.5pt move it down 2px and bolder»*
+
+### 🛠️ Что сделано:
+1. **Числа и символ валюты подняты на 4px ближе к «Доступно»**:
+   - `marginTop` блока баланса уменьшен с `20px` до **`16px`** (-4px).
+2. **Заголовок карты Kaspi Gold увеличен на +0.5pt**:
+   - `fontSize`: увеличено до **`calc(22.5px + 0.5pt)`** (~23.2px).
+3. **Заголовок Kaspi Gold смещен вниз на 2px**:
+   - `marginTop: '2px'` добавлен строке названия карты.
+   - `marginTop` текста «Доступно» скорректирован до `34px`, сохраняя точное положение на экране (`+2px - 2px = 0px`).
+4. **Заголовок Kaspi Gold сделан жирнее**:
+   - `fontWeight` и `fontVariationSettings: "'wght' 750"` установлены в **`750`**.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 00:30] — Экран Kaspi Gold: Текст «Доступно» увеличен на +1pt, смещен вниз на 4px (marginTop 36px)
 
 ### 🎯 Запрос пользователя:

@@ -316,14 +316,17 @@ export const KaspiGoldDetailScreen = ({
         overflow: 'hidden',
         minHeight: '250px'
       }}>
-        {/* Card Name + Apple Pay badge (+15% bigger) */}
+        {/* Card Name + Apple Pay badge (+0.5pt bigger: calc(22.5px + 0.5pt), bolder 750, moved down 2px) */}
         <div style={{
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'center',
+          marginTop: '2px'
         }}>
           <span style={{
-            fontSize: '22.5px',
-            fontWeight: '700',
+            fontSize: 'calc(22.5px + 0.5pt)',
+            fontWeight: '750',
+            fontVariationSettings: "'wght' 750",
+            fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
             color: '#FFFFFF',
             letterSpacing: '0.1px',
             textShadow: '0 1px 2px rgba(0,0,0,0.1)'
@@ -333,18 +336,18 @@ export const KaspiGoldDetailScreen = ({
           <ApplePayBadge style={{ marginLeft: '9px' }} />
         </div>
 
-        {/* Caption "Доступно" (+1pt bigger: calc(17px + 1.5pt), moved down 4px: marginTop 36px) */}
+        {/* Caption "Доступно" (kept at same Y position: marginTop 34px) */}
         <div style={{
           fontSize: 'calc(17px + 1.5pt)',
           fontWeight: '400',
           color: 'rgba(255, 255, 255, 0.92)',
-          marginTop: '36px',
+          marginTop: '34px',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ (+1pt: calc(43px + 1.2pt), weight 630, ₸ weight 487, gap 12px, down 5px: marginTop 20px) */}
+        {/* Big Balance: 110 922,58 ₸ (moved up 4px closer to Доступно: marginTop 16px) */}
         <div style={{
           display: 'inline-block',
           fontSize: 'calc(43px + 1.2pt)',
@@ -354,7 +357,7 @@ export const KaspiGoldDetailScreen = ({
           color: '#FFFFFF',
           letterSpacing: '0.6px',
           lineHeight: '1.05',
-          marginTop: '20px',
+          marginTop: '16px',
           transform: 'scaleY(1.01)',
           transformOrigin: 'left center',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
