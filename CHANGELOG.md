@@ -2,6 +2,25 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 11:59] — Экран Kaspi Gold: Числа баланса чуть жирнее (650), крупнее на 0.2pt, межсимвольный интервал +1px
+
+### 🎯 Запрос пользователя:
+> *«make the nubers a little bit bolder not much and then bigger 0,2pt aftert that the intervla between each exact number like 1 and 1 and 0 etc fruther not much as well add 1px for each gap»*
+
+### 🛠️ Что сделано:
+1. **Числа баланса чуть жирнее, но умеренно**:
+   - `fontWeight` и `fontVariationSettings: "'wght' 650"` установлены в **`650`** (идеальный баланс между 600 и 700 без излишней массивности).
+2. **Размер чисел увеличен на 0.2pt**:
+   - `fontSize`: установлено в `calc(43px + 0.2pt)` (~43.3px).
+3. **Межсимвольный интервал между цифрами увеличен ровно на +1px**:
+   - `letterSpacing`: изменено с `-0.4px` на **`0.6px`** (+1.0px к каждому зазору между символами `1`, `1`, `0`, `9`, `2`, `2`, `,`, `5`, `8`, `₸`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 11:53] — Экран Kaspi Gold: Смещение логотипа вниз на 2px (top: +75px), числа баланса выше и крупнее, «Доступно» +3pt, заголовок и Apple Pay +15%
 
 ### 🎯 Запрос пользователя:
