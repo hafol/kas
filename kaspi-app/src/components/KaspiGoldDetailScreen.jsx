@@ -333,12 +333,12 @@ export const KaspiGoldDetailScreen = ({
           <ApplePayBadge style={{ marginLeft: '9px' }} />
         </div>
 
-        {/* Caption "Доступно" (+0.5pt: calc(17px + 0.5pt)) */}
+        {/* Caption "Доступно" (+1pt bigger: calc(17px + 1.5pt), moved down 4px: marginTop 36px) */}
         <div style={{
-          fontSize: 'calc(17px + 0.5pt)',
+          fontSize: 'calc(17px + 1.5pt)',
           fontWeight: '400',
           color: 'rgba(255, 255, 255, 0.92)',
-          marginTop: '32px',
+          marginTop: '36px',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
           Доступно

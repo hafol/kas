@@ -2,6 +2,23 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 00:30] — Экран Kaspi Gold: Текст «Доступно» увеличен на +1pt, смещен вниз на 4px (marginTop 36px)
+
+### 🎯 Запрос пользователя:
+> *«make доступно 1pt bigger move it down by 4px»*
+
+### 🛠️ Что сделано:
+1. **Размер «Доступно» увеличен на +1pt**:
+   - `fontSize`: увеличено до **`calc(17px + 1.5pt)`** (~19px).
+2. **Смещение «Доступно» вниз на 4px**:
+   - `marginTop` увеличен с `32px` до **`36px`** относительно заголовка карты.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 00:14] — Экран Kaspi Gold: Баланс +1pt, символ тенге вес 487, вес цифр 630 (+5), зазор между ними 12px (+4px), смещение строки вниз на 5px (marginTop 20px)
 
 ### 🎯 Запрос пользователя:
