@@ -2,6 +2,32 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 03:33] — Экран Kaspi Gold: Возврат пофреймового collapsing header (16 frames) и уменьшение стрелки на 20%
+
+### 🎯 Запрос пользователя:
+> *«oh wait i was wrong can you return where the numbers wasnt fixed within that module do you remeber its only when you scroll up like i mean there is no room up to scroll and then the module with the numbers just starts to going down i meant that but when you scroll down the numbers have to be like it was before do you understand an then the arrow make it smaller 20% and less bolder, so when you scroll down nothing but the module down moves as it was before so i mean return how it was that scroll effect when i send you this promt as you remember # Kaspi Gold: scroll-down animation, frame by frame»*
+
+### 🛠️ Что сделано:
+1. **Возврат пофреймового collapsing header (спецификация 16 кадров)**:
+   - При скролле вниз (`scrollTop > 0`): большой заголовок (название карты, «Доступно», баланс и SVG-медальон) остается неподвижным на месте (`position: sticky; top: 0`), а белая шторка с вкладками и списком плавно наезжает поверх него.
+   - Плавное линейное угасание большого заголовка (`bigHeaderOpacity = clamp(1 - (s - 35) / 235, 0, 1)`).
+   - Плавное линейное появление компактного заголовка в навбаре (`navTitleOpacity = clamp((s - 128) / 117, 0, 1)`).
+   - При достижении навбара вкладки (`tabBarRef`) прилипают под навбаром (`position: sticky`), и только список продолжает скроллиться под ними.
+2. **Поддержка pull-down (overscroll при скролле вверх при отсутствии места)**:
+   - При попытке скролла вверх, когда страница уже вверху (`scrollTop <= 0` / оверскролл), модуль с цифрами и шторка естественно растягиваются вниз вслед за пальцем (резиновый отклик iOS), а при отпускании плавно пружинят обратно на `top: 0`.
+3. **Уменьшение стрелки возврата на 20% и уменьшение жирности**:
+   - Размер шеврона `<` уменьшен ровно на **20%**: с 13.5×25.5px до **`11 × 20.5px`**.
+   - Толщина штриха уменьшена: `strokeWidth` с 2.4 до **`1.8`** (менее жирный, аутентичный нативный iOS-стиль).
+   - Контейнер кнопки возвращен к компактному **`36 × 36px`**.
+4. **Проверка**:
+   - Скриншоты `_archive/test_scroll_rest.png`, `_archive/test_scroll_100.png`, `_archive/test_scroll_pinned.png`, `_archive/test_pull_down_active.png` подтвердили идеальную работу логики.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 03:18] — Экран Kaspi Gold: Смещение иконки SVG (медальона) вверх на 25px (top: 39px)
 
 ### 🎯 Запрос пользователя:

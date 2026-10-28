@@ -34,10 +34,10 @@ const ChevronRightIcon = ({ color = "#C7C7CC" }) => (
   </svg>
 );
 
-// Back chevron < (enlarged +50%: 13.5 x 25.5, sits in top bar)
+// Back chevron < (20% smaller: 11 x 20.5, less bold: strokeWidth 1.8)
 const BackChevronIcon = ({ color = "#FFFFFF" }) => (
-  <svg width="13.5" height="25.5" viewBox="0 0 10 18" fill="none">
-    <path d="M8.5 1.5L1.5 9L8.5 16.5" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+  <svg width="11" height="20.5" viewBox="0 0 10 18" fill="none">
+    <path d="M8.5 1.5L1.5 9L8.5 16.5" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -79,11 +79,11 @@ export const KaspiGoldDetailScreen = ({
   const [searchQuery, setSearchQuery] = useState('');
   const containerRef = React.useRef(null);
   const navBarRef = React.useRef(null);
-  const medallionRef = React.useRef(null);
-  const bigHeaderTextRef = React.useRef(null);
+  const bigHeaderRef = React.useRef(null);
   const compactTitleRef = React.useRef(null);
   const tabBarRef = React.useRef(null);
   const sheetRef = React.useRef(null);
+  const spacerRef = React.useRef(null);
 
   React.useEffect(() => {
     const parent = containerRef.current?.parentElement;
@@ -106,26 +106,44 @@ export const KaspiGoldDetailScreen = ({
           const s = parent.scrollTop;
           const { pinDistance } = getGeometry();
 
-          // Normalized progress 0.0 -> 1.0 based on this specific screen's physical geometry
+          // 1. OVERSCROLL / PULL-DOWN WHEN AT THE TOP (s < 0):
+          // User: "its only when you scroll up like i mean there is no room up to scroll and then the module with the numbers just starts to going down"
+          if (s < 0) {
+            if (bigHeaderRef.current) {
+              bigHeaderRef.current.style.opacity = '1';
+              bigHeaderRef.current.style.transform = `translate3d(0, ${-s}px, 0)`;
+              bigHeaderRef.current.style.pointerEvents = 'auto';
+            }
+            if (compactTitleRef.current) {
+              compactTitleRef.current.style.opacity = '0';
+              compactTitleRef.current.style.pointerEvents = 'none';
+            }
+            if (tabBarRef.current) {
+              tabBarRef.current.style.borderTopLeftRadius = '18px';
+              tabBarRef.current.style.borderTopRightRadius = '18px';
+            }
+            ticking = false;
+            return;
+          }
+
+          // 2. NORMAL SCROLL-DOWN (s >= 0):
+          // User: "when you scroll down nothing but the module down moves as it was before so i mean return how it was that scroll effect when i send you this promt as you remember # Kaspi Gold: scroll-down animation, frame by frame"
           const progress = Math.min(Math.max(s / pinDistance, 0), 2.0);
 
           // Reverse-engineered relative phase ratios (matched from 16 measured frames):
-          // 1. Big header text fades out from 13% of scroll up to 100% (pin threshold):
-          const textOpacity = Math.min(Math.max(1 - (progress - 0.13) / (1.0 - 0.13), 0), 1);
+          // 1. Big header fades out from 13% of scroll up to 100% (pin threshold):
+          const bigHeaderOpacity = Math.min(Math.max(1 - (progress - 0.13) / (1.0 - 0.13), 0), 1);
 
-          // 2. Medallion opacity also fades linearly as the white sheet slides up:
-          const medallionOpacity = Math.min(Math.max(1 - (progress - 0.13) / (1.0 - 0.13), 0), 1);
-
-          // 3. Compact title fades in from halfway (49%) up to 94% of scroll:
+          // 2. Compact title fades in from halfway (49%) up to 94% of scroll:
           const navTitleOpacity = Math.min(Math.max((progress - 0.49) / (0.94 - 0.49), 0), 1);
 
-          if (bigHeaderTextRef.current) {
-            bigHeaderTextRef.current.style.opacity = textOpacity;
-            bigHeaderTextRef.current.style.pointerEvents = textOpacity < 0.1 ? 'none' : 'auto';
-          }
+          // 3. Subtle parallax drift up to 4.6px:
+          const drift = Math.min(Math.max((progress - 0.13) * 4.6, 0), 4.6);
 
-          if (medallionRef.current) {
-            medallionRef.current.style.opacity = medallionOpacity;
+          if (bigHeaderRef.current) {
+            bigHeaderRef.current.style.opacity = bigHeaderOpacity;
+            bigHeaderRef.current.style.transform = `translate3d(0, -${drift}px, 0)`;
+            bigHeaderRef.current.style.pointerEvents = bigHeaderOpacity < 0.1 ? 'none' : 'auto';
           }
 
           if (compactTitleRef.current) {
@@ -150,10 +168,85 @@ export const KaspiGoldDetailScreen = ({
       }
     };
 
+    // Touch pull-down gesture tracking (for devices/browsers where parent.scrollTop doesn't go negative)
+    let startTouchY = 0;
+    let isPullingDown = false;
+    let pullOffset = 0;
+
+    const onTouchStart = (e) => {
+      if (parent.scrollTop <= 0) {
+        startTouchY = e.touches[0].clientY;
+        isPullingDown = true;
+      } else {
+        isPullingDown = false;
+      }
+    };
+
+    const onTouchMove = (e) => {
+      if (!isPullingDown) return;
+      if (parent.scrollTop > 0) {
+        isPullingDown = false;
+        if (pullOffset > 0) {
+          pullOffset = 0;
+          resetPull();
+        }
+        return;
+      }
+      const currentY = e.touches[0].clientY;
+      const diffY = currentY - startTouchY;
+      if (diffY > 0) {
+        pullOffset = Math.pow(diffY, 0.82);
+        if (bigHeaderRef.current) {
+          bigHeaderRef.current.style.transition = 'none';
+          bigHeaderRef.current.style.transform = `translate3d(0, ${pullOffset}px, 0)`;
+        }
+        if (sheetRef.current) {
+          sheetRef.current.style.transition = 'none';
+          sheetRef.current.style.transform = `translate3d(0, ${pullOffset}px, 0)`;
+        }
+      }
+    };
+
+    const onTouchEnd = () => {
+      if (isPullingDown && pullOffset > 0) {
+        if (bigHeaderRef.current) {
+          bigHeaderRef.current.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+          bigHeaderRef.current.style.transform = 'translate3d(0, 0, 0)';
+        }
+        if (sheetRef.current) {
+          sheetRef.current.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+          sheetRef.current.style.transform = 'translate3d(0, 0, 0)';
+        }
+      }
+      isPullingDown = false;
+      pullOffset = 0;
+    };
+
+    const resetPull = () => {
+      if (bigHeaderRef.current) {
+        bigHeaderRef.current.style.transition = 'none';
+        bigHeaderRef.current.style.transform = 'translate3d(0, 0, 0)';
+      }
+      if (sheetRef.current) {
+        sheetRef.current.style.transition = 'none';
+        sheetRef.current.style.transform = 'translate3d(0, 0, 0)';
+      }
+    };
+
     parent.addEventListener('scroll', handleScroll, { passive: true });
+    parent.addEventListener('touchstart', onTouchStart, { passive: true });
+    parent.addEventListener('touchmove', onTouchMove, { passive: true });
+    parent.addEventListener('touchend', onTouchEnd, { passive: true });
+    parent.addEventListener('touchcancel', onTouchEnd, { passive: true });
     handleScroll();
 
-    return () => parent.removeEventListener('scroll', handleScroll);
+    return () => {
+      parent.removeEventListener('scroll', handleScroll);
+      parent.removeEventListener('touchstart', onTouchStart);
+      parent.removeEventListener('touchmove', onTouchMove);
+      parent.removeEventListener('touchend', onTouchEnd);
+      parent.removeEventListener('touchcancel', onTouchEnd);
+    };
   }, []);
 
   const copyToClipboard = (text, fieldName) => {
@@ -282,8 +375,8 @@ export const KaspiGoldDetailScreen = ({
           onClick={onBack}
           className="touchable"
           style={{
-            width: '42px',
-            height: '42px',
+            width: '36px',
+            height: '36px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-start',
@@ -326,23 +419,26 @@ export const KaspiGoldDetailScreen = ({
         </div>
 
         {/* Empty placeholder for symmetry */}
-        <div style={{ width: '42px' }} />
+        <div style={{ width: '36px' }} />
       </div>
 
-      {/* 2. STATIC STICKY MEDALLION (Stays in place at top right, does NOT move with scroll) */}
+      {/* 2. STICKY BIG HEADER GROUP (STAYS STILL at top, does not scroll with page, fades out linearly s = 23 -> 180 pt) */}
       <div
+        ref={bigHeaderRef}
         style={{
           position: 'sticky',
           top: 0,
           left: 0,
           right: 0,
           height: 0,
+          marginTop: 'calc(-48px - env(safe-area-inset-top, 0px))',
           zIndex: 2,
-          pointerEvents: 'none'
+          pointerEvents: 'none',
+          willChange: 'opacity, transform'
         }}
       >
+        {/* Medallion illustration (SVG) */}
         <div
-          ref={medallionRef}
           style={{
             position: 'absolute',
             right: '25px',
@@ -351,8 +447,7 @@ export const KaspiGoldDetailScreen = ({
             height: '108px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            willChange: 'opacity'
+            justifyContent: 'center'
           }}
         >
           <img
@@ -366,80 +461,87 @@ export const KaspiGoldDetailScreen = ({
             }}
           />
         </div>
-      </div>
 
-      {/* 3. EXPANDED GOLDEN CARD HEADER (Linked to white module: moves up with scroll and fades away) */}
-      <div
-        ref={bigHeaderTextRef}
-        style={{
-          paddingTop: '18px',
-          paddingLeft: '18px',
-          paddingRight: '18px',
-          paddingBottom: '32px',
-          position: 'relative',
-          zIndex: 3,
-          boxSizing: 'border-box',
-          willChange: 'opacity'
-        }}
-      >
-        {/* Card Name + Apple Pay badge (+0.5pt bigger: calc(22.5px + 0.5pt), bolder 750, moved down 2px) */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginTop: '2px'
-        }}>
-          <span style={{
-            fontSize: 'calc(22.5px + 0.5pt)',
-            fontWeight: '750',
-            fontVariationSettings: "'wght' 750",
-            fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
-            color: '#FFFFFF',
-            letterSpacing: '0.1px',
+        {/* Big Header Text: "Kaspi Gold *4163" + Apple Pay, "Доступно", Balance */}
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 'calc(48px + env(safe-area-inset-top, 0px) + 18px)',
+            paddingLeft: '18px',
+            paddingRight: '18px',
+            boxSizing: 'border-box'
+          }}
+        >
+          {/* Card Name + Apple Pay badge (+0.5pt bigger: calc(22.5px + 0.5pt), bolder 750, moved down 2px) */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: '2px'
+          }}>
+            <span style={{
+              fontSize: 'calc(22.5px + 0.5pt)',
+              fontWeight: '750',
+              fontVariationSettings: "'wght' 750",
+              fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
+              color: '#FFFFFF',
+              letterSpacing: '0.1px',
+              textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+            }}>
+              Kaspi Gold *{card.last4}
+            </span>
+            <ApplePayBadge style={{ marginLeft: '9px' }} />
+          </div>
+
+          {/* Caption "Доступно" (kept at same Y position: marginTop 34px) */}
+          <div style={{
+            fontSize: 'calc(17px + 1.5pt)',
+            fontWeight: '400',
+            color: 'rgba(255, 255, 255, 0.92)',
+            marginTop: '34px',
             textShadow: '0 1px 2px rgba(0,0,0,0.1)'
           }}>
-            Kaspi Gold *{card.last4}
-          </span>
-          <ApplePayBadge style={{ marginLeft: '9px' }} />
-        </div>
+            Доступно
+          </div>
 
-        {/* Caption "Доступно" (kept at same Y position: marginTop 34px) */}
-        <div style={{
-          fontSize: 'calc(17px + 1.5pt)',
-          fontWeight: '400',
-          color: 'rgba(255, 255, 255, 0.92)',
-          marginTop: '34px',
-          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-        }}>
-          Доступно
-        </div>
-
-        {/* Big Balance: 110 922,58 ₸ (moved up 4px again: marginTop 9px) */}
-        <div style={{
-          display: 'inline-block',
-          fontSize: 'calc(43px + 1.2pt)',
-          fontWeight: '630',
-          fontVariationSettings: "'wght' 630",
-          fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
-          color: '#FFFFFF',
-          letterSpacing: '0.6px',
-          lineHeight: '1.05',
-          marginTop: '9px',
-          transform: 'scaleY(1.01)',
-          transformOrigin: 'left center',
-          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-        }}>
-          {balanceAmount}
-          {balanceSymbol && (
-            <span style={{
-              fontWeight: '487',
-              fontVariationSettings: "'wght' 487",
-              marginLeft: '12px'
-            }}>
-              {balanceSymbol}
-            </span>
-          )}
+          {/* Big Balance: 110 922,58 ₸ (moved up 4px again: marginTop 9px) */}
+          <div style={{
+            display: 'inline-block',
+            fontSize: 'calc(43px + 1.2pt)',
+            fontWeight: '630',
+            fontVariationSettings: "'wght' 630",
+            fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
+            color: '#FFFFFF',
+            letterSpacing: '0.6px',
+            lineHeight: '1.05',
+            marginTop: '9px',
+            transform: 'scaleY(1.01)',
+            transformOrigin: 'left center',
+            textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+          }}>
+            {balanceAmount}
+            {balanceSymbol && (
+              <span style={{
+                fontWeight: '487',
+                fontVariationSettings: "'wght' 487",
+                marginLeft: '12px'
+              }}>
+                {balanceSymbol}
+              </span>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* 3. SCROLL SPACER (Reserves height so the white sheet rests at exact native position) */}
+      <div
+        ref={spacerRef}
+        style={{
+          height: '190px',
+          flexShrink: 0
+        }}
+      />
 
       {/* 4. MAIN WHITE SHEET (Rounded top corners: 18px, slides up over the golden header) */}
       <div
@@ -448,15 +550,15 @@ export const KaspiGoldDetailScreen = ({
           backgroundColor: '#FFFFFF',
           borderTopLeftRadius: '18px',
           borderTopRightRadius: '18px',
-        marginTop: '-12px',
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        boxSizing: 'border-box',
-        position: 'relative',
-        zIndex: 10,
-        paddingBottom: 'calc(180px + env(safe-area-inset-bottom, 34px))'
-      }}>
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          boxSizing: 'border-box',
+          position: 'relative',
+          zIndex: 10,
+          paddingBottom: 'calc(180px + env(safe-area-inset-bottom, 34px))'
+        }}
+      >
         {/* =====================================================================
             SEGMENTED CONTROL (Действия / Инфо / Выписка) - Sticky on scroll
             - Height: 36px (tab pill), selected tab 31px
