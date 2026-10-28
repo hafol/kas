@@ -345,10 +345,10 @@ export const KaspiGoldDetailScreen = ({
           ref={medallionRef}
           style={{
             position: 'absolute',
-            right: '24px',
-            top: 'calc(48px + env(safe-area-inset-top, 0px) + 30px)',
-            width: '115px',
-            height: '115px',
+            right: '16px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 52px)',
+            width: '126px',
+            height: '126px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -553,8 +553,8 @@ export const KaspiGoldDetailScreen = ({
                 >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{
-                      width: '40px',
-                      height: '40px',
+                      width: '44px',
+                      height: '44px',
                       borderRadius: '50%',
                       backgroundColor: '#F6F6F7',
                       display: 'flex',
@@ -562,7 +562,7 @@ export const KaspiGoldDetailScreen = ({
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
-                      <IconComponent size={action.id === 'qr' ? 24 : 22} color="#EE3524" />
+                      <IconComponent size={action.id === 'qr' ? 27 : 26} color="#EE3524" />
                     </div>
 
                     <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
@@ -621,8 +621,8 @@ export const KaspiGoldDetailScreen = ({
                 >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{
-                      width: '40px',
-                      height: '40px',
+                      width: '44px',
+                      height: '44px',
                       borderRadius: '50%',
                       backgroundColor: '#F6F6F7',
                       display: 'flex',
@@ -630,7 +630,7 @@ export const KaspiGoldDetailScreen = ({
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
-                      <IconComponent size={22} color="#EE3524" />
+                      <IconComponent size={26} color="#EE3524" />
                     </div>
 
                     <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
@@ -712,8 +712,8 @@ export const KaspiGoldDetailScreen = ({
             }} className="touchable">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{
-                  width: '40px',
-                  height: '40px',
+                  width: '44px',
+                  height: '44px',
                   borderRadius: '50%',
                   backgroundColor: '#F6F6F7',
                   display: 'flex',
@@ -721,7 +721,7 @@ export const KaspiGoldDetailScreen = ({
                   justifyContent: 'center',
                   flexShrink: 0
                 }}>
-                  <StatementCalendarIcon size={22} color="#EE3524" />
+                  <StatementCalendarIcon size={26} color="#EE3524" />
                 </div>
                 <span style={{
                   marginLeft: '16px',
@@ -751,8 +751,8 @@ export const KaspiGoldDetailScreen = ({
             }} className="touchable">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{
-                  width: '40px',
-                  height: '40px',
+                  width: '44px',
+                  height: '44px',
                   borderRadius: '50%',
                   backgroundColor: '#F6F6F7',
                   display: 'flex',
@@ -760,7 +760,7 @@ export const KaspiGoldDetailScreen = ({
                   justifyContent: 'center',
                   flexShrink: 0
                 }}>
-                  <StatementOperationsReceiptIcon size={22} color="#EE3524" />
+                  <StatementOperationsReceiptIcon size={26} color="#EE3524" />
                 </div>
                 <span style={{
                   marginLeft: '16px',
