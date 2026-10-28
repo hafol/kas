@@ -333,9 +333,9 @@ export const KaspiGoldDetailScreen = ({
           <ApplePayBadge style={{ marginLeft: '9px' }} />
         </div>
 
-        {/* Caption "Доступно" (+3pt bigger: 17px) */}
+        {/* Caption "Доступно" (+0.5pt: calc(17px + 0.5pt)) */}
         <div style={{
-          fontSize: '17px',
+          fontSize: 'calc(17px + 0.5pt)',
           fontWeight: '400',
           color: 'rgba(255, 255, 255, 0.92)',
           marginTop: '32px',
@@ -344,7 +344,7 @@ export const KaspiGoldDetailScreen = ({
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ (-4% less tall: scaleY 1.04, -4% less bold: weight 625, tenge symbol less bold 450, gap 7px) */}
+        {/* Big Balance: 110 922,58 ₸ (tallness -1-2px: scaleY 1.01, tenge symbol weight 410) */}
         <div style={{
           display: 'inline-block',
           fontSize: 'calc(43px + 0.2pt)',
@@ -355,15 +355,15 @@ export const KaspiGoldDetailScreen = ({
           letterSpacing: '0.6px',
           lineHeight: '1.05',
           marginTop: '7px',
-          transform: 'scaleY(1.04)',
+          transform: 'scaleY(1.01)',
           transformOrigin: 'left center',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
           {balanceAmount}
           {balanceSymbol && (
             <span style={{
-              fontWeight: '400',
-              fontVariationSettings: "'wght' 450",
+              fontWeight: '410',
+              fontVariationSettings: "'wght' 410",
               marginLeft: '4px'
             }}>
               {balanceSymbol}

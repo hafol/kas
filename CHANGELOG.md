@@ -2,6 +2,25 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 12:19] — Экран Kaspi Gold: Высота чисел уменьшена на 1-2px (scaleY 1.01), символ тенге вес 410, «Доступно» +0.5pt
+
+### 🎯 Запрос пользователя:
+> *«make the numbers tallnes samller for like 1-2px maximun while the currency symbol have to be bolder amek it weight 410 increase the sixe of Доступно by 0,5pt»*
+
+### 🛠️ Что сделано:
+1. **Уменьшение высоты чисел на ~1.3px (максимум 1-2px)**:
+   - `transform: scaleY(...)` снижено с `1.04` до **`scaleY(1.01)`**, устраняя избыточную вертикальную растянутость и возвращая цифрам естественные пропорции.
+2. **Символ тенге (₸) сделан жирнее до веса 410**:
+   - `fontWeight` и `fontVariationSettings: "'wght' ..."` символа тенге установлены строго в **`410`**.
+3. **Размер «Доступно» увеличен на 0.5pt**:
+   - `fontSize`: увеличено с `17px` до **`calc(17px + 0.5pt)`** (~17.67px).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 12:10] — Экран Kaspi Gold: Смещение логотипа вниз на 3px (top: +78px), символ тенге менее жирный (400/450), зазор от «Доступно» +1px
 
 ### 🎯 Запрос пользователя:
