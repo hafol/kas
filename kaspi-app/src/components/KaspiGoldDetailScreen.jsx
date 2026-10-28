@@ -385,6 +385,45 @@ export const KaspiGoldDetailScreen = ({
         boxSizing: 'border-box'
       }}
     >
+      {/* 0. STATIC MEDALLION (Stickied at top: 0, before navBar in DOM so it starts at y=0, height: 0, zIndex: 2) */}
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 0,
+          zIndex: 2,
+          pointerEvents: 'none',
+          overflow: 'visible'
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            right: '26px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 72px)',
+            width: '125px',
+            height: '125px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none'
+          }}
+        >
+          <img
+            src="/kaspi_assets/kaspi_gold_medallion.svg"
+            alt="Kaspi Gold Medallion"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              display: 'block'
+            }}
+          />
+        </div>
+      </div>
+
       {/* 1. STICKY TOP NAV BAR (Back arrow fixed & always visible, compact title fades in) */}
       <div
         ref={navBarRef}
@@ -456,7 +495,7 @@ export const KaspiGoldDetailScreen = ({
         <div style={{ width: '36px' }} />
       </div>
 
-      {/* 2. STICKY BIG HEADER GROUP (STAYS STILL at top, does not scroll with page, fades out linearly as sheet slides up) */}
+      {/* 2. STICKY BIG HEADER GROUP (Fades out linearly as sheet slides up) */}
       <div
         ref={bigHeaderRef}
         style={{
@@ -464,7 +503,7 @@ export const KaspiGoldDetailScreen = ({
           top: 'calc(48px + env(safe-area-inset-top, 0px))',
           left: 0,
           right: 0,
-          zIndex: 2,
+          zIndex: 3,
           paddingTop: '16px',
           paddingLeft: '18px',
           paddingRight: '18px',
@@ -473,32 +512,6 @@ export const KaspiGoldDetailScreen = ({
           willChange: 'opacity, transform'
         }}
       >
-        {/* Medallion illustration (SVG) positioned in top-right of the header */}
-        <div
-          style={{
-            position: 'absolute',
-            right: '25px',
-            top: '26px',
-            width: '113.4px',
-            height: '113.4px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            pointerEvents: 'none'
-          }}
-        >
-          <img
-            src="/kaspi_assets/kaspi_gold_medallion.svg"
-            alt="Kaspi Gold Medallion"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              display: 'block'
-            }}
-          />
-        </div>
-
         {/* Card Name + Apple Pay badge */}
         <div style={{
           display: 'flex',
@@ -562,7 +575,8 @@ export const KaspiGoldDetailScreen = ({
       <div
         ref={sheetRef}
         style={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: activeTab === 'statement' ? '#F2F2F7' : '#FFFFFF',
+          transition: 'background-color 0.52s cubic-bezier(0.2, 0.9, 0.25, 1)',
           borderTopLeftRadius: '18px',
           borderTopRightRadius: '18px',
           flex: 1,
@@ -576,9 +590,11 @@ export const KaspiGoldDetailScreen = ({
       >
         {/* =====================================================================
             SEGMENTED CONTROL (Действия / Инфо / Выписка) - Sticky on scroll
-            - Height: 36px (tab pill), selected tab 31px
-            - Gap sheet top -> tab bar: 10px
-            - Labels: 14px font
+            - Height: 43px (tab pill), selected tab 38px (+2px taller)
+            - Gap sheet top -> tab bar: 14px (+4px interval)
+            - Interval to icon section: 9px (-3px interval)
+            - Active text stays regular 400 (not bold)
+            - Labels: calc(14px + 2pt) font
         ===================================================================== */}
         <div
           ref={tabBarRef}
@@ -587,14 +603,14 @@ export const KaspiGoldDetailScreen = ({
             top: 'calc(48px + env(safe-area-inset-top, 0px))',
             zIndex: 40,
             backgroundColor: '#FFFFFF',
-            padding: '10px 14px 12px 14px',
+            padding: '14px 14px 9px 14px',
             borderTopLeftRadius: '18px',
             borderTopRightRadius: '18px',
             boxSizing: 'border-box'
           }}>
           <div style={{
             backgroundColor: '#F0F0F2',
-            height: '41px',
+            height: '43px',
             borderRadius: '11px',
             padding: '2.5px',
             display: 'flex',
@@ -634,7 +650,7 @@ export const KaspiGoldDetailScreen = ({
                   className="touchable"
                   style={{
                     flex: 1,
-                    height: '36px',
+                    height: '38px',
                     borderRadius: '8.5px',
                     backgroundColor: 'transparent',
                     border: 'none',
@@ -645,9 +661,9 @@ export const KaspiGoldDetailScreen = ({
                     justifyContent: 'center',
                     fontFamily: "'Roboto', sans-serif",
                     fontSize: 'calc(14px + 2pt)',
-                    fontWeight: isActive ? '600' : '400',
+                    fontWeight: '400',
                     color: isActive ? '#1C1C1E' : '#8E8E93',
-                    transition: 'color 0.3s ease, font-weight 0.3s ease',
+                    transition: 'color 0.3s ease',
                     padding: 0,
                     position: 'relative',
                     zIndex: 2,
@@ -844,145 +860,154 @@ export const KaspiGoldDetailScreen = ({
                 width: '33.333333%',
                 flexShrink: 0,
                 boxSizing: 'border-box',
+                backgroundColor: '#F2F2F7',
+                paddingBottom: '24px',
                 pointerEvents: activeTab === 'statement' ? 'auto' : 'none'
               }}
             >
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {/* Search Input: "Поиск по операциям" */}
+                {/* Top White Island Card (Search + Date Range + Summary) with curved bottom corners */}
                 <div style={{
-                  margin: '10px 18px 14px 18px',
-                  backgroundColor: '#F2F2F4',
-                  height: '44px',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  paddingLeft: '12px',
-                  paddingRight: '12px',
-                  boxSizing: 'border-box'
+                  backgroundColor: '#FFFFFF',
+                  borderBottomLeftRadius: '16px',
+                  borderBottomRightRadius: '16px',
+                  paddingBottom: '4px',
+                  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.03)'
                 }}>
-                  <SearchIcon size={20} color="#8E8E93" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Поиск по операциям"
-                    style={{
-                      border: 'none',
-                      outline: 'none',
-                      backgroundColor: 'transparent',
-                      marginLeft: '10px',
-                      width: '100%',
-                      fontFamily: "'Roboto', sans-serif",
-                      fontSize: '17px',
-                      color: '#000000'
-                    }}
-                  />
-                </div>
-
-                {/* Date Range Row: Red Calendar + "26 сентября - 26 октября" + Share/Export */}
-                <div style={{
-                  height: '62px',
-                  padding: '0 20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer'
-                }} className="touchable">
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '50%',
-                      backgroundColor: 'rgba(0, 0, 0, 0.02)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
-                    }}>
-                      <StatementCalendarIcon size={26} color="#EE3524" />
-                    </div>
-                    <span style={{
-                      marginLeft: '16px',
-                      fontSize: '19px',
-                      fontWeight: '400',
-                      color: '#000000'
-                    }}>
-                      26 сентября - 26 октября
-                    </span>
+                  {/* Search Input: "Поиск по операциям" - Height 46px (+2px), margin top 6px (-4px interval) */}
+                  <div style={{
+                    margin: '6px 14px 12px 14px',
+                    backgroundColor: '#F2F2F4',
+                    height: '46px',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    paddingLeft: '12px',
+                    paddingRight: '12px',
+                    boxSizing: 'border-box'
+                  }}>
+                    <SearchIcon size={20} color="#8E8E93" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Поиск по операциям"
+                      style={{
+                        border: 'none',
+                        outline: 'none',
+                        backgroundColor: 'transparent',
+                        marginLeft: '10px',
+                        width: '100%',
+                        fontFamily: "'Roboto', sans-serif",
+                        fontSize: '17px',
+                        color: '#000000'
+                      }}
+                    />
                   </div>
 
-                  <div className="touchable" style={{ padding: '6px' }}>
-                    <ShareExportIcon size={24} color="#8E8E93" />
-                  </div>
-                </div>
-
-                <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '72px', width: 'calc(100% - 72px)' }} />
-
-                {/* Summary Row: "Операции" + "+ 1 059 650 ₸" / "- 970 912,39 ₸" */}
-                <div style={{
-                  height: '62px',
-                  padding: '0 20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer'
-                }} className="touchable">
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '50%',
-                      backgroundColor: 'rgba(0, 0, 0, 0.02)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
-                    }}>
-                      <StatementOperationsReceiptIcon size={26} color="#EE3524" />
-                    </div>
-                    <span style={{
-                      marginLeft: '16px',
-                      fontSize: '19px',
-                      fontWeight: '400',
-                      color: '#000000'
-                    }}>
-                      Операции
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                      <span style={{
-                        fontSize: '19px',
-                        fontWeight: '600',
-                        color: '#27A13B',
-                        lineHeight: 1.25
+                  {/* Date Range Row: Red Calendar (+8% icon size: 28px, circle unchanged: 44px) + "26 сентября - 26 октября" + Share/Export */}
+                  <div style={{
+                    height: '62px',
+                    padding: '0 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer'
+                  }} className="touchable">
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
                       }}>
-                        + 1 059 650 ₸
-                      </span>
+                        <StatementCalendarIcon size={28} color="#EE3524" />
+                      </div>
                       <span style={{
-                        fontSize: '15px',
+                        marginLeft: '14px',
+                        fontSize: '18px',
                         fontWeight: '400',
-                        color: '#757575',
-                        marginTop: '2px',
-                        lineHeight: 1.2
+                        color: '#000000'
                       }}>
-                        - 970 912,39 ₸
+                        26 сентября - 26 октября
                       </span>
                     </div>
-                    <ChevronRightIcon color="#C7C7CC" />
+
+                    <div className="touchable" style={{ padding: '6px' }}>
+                      <ShareExportIcon size={24} color="#8E8E93" />
+                    </div>
+                  </div>
+
+                  <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '74px', width: 'calc(100% - 74px)' }} />
+
+                  {/* Summary Row: "Операции" (+8% icon: 28px) + "+ 1 059 650 ₸" (NOT bold) / "- 970 912,39 ₸" */}
+                  <div style={{
+                    height: '62px',
+                    padding: '0 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer'
+                  }} className="touchable">
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}>
+                        <StatementOperationsReceiptIcon size={28} color="#EE3524" />
+                      </div>
+                      <span style={{
+                        marginLeft: '14px',
+                        fontSize: '18px',
+                        fontWeight: '400',
+                        color: '#000000'
+                      }}>
+                        Операции
+                      </span>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                        <span style={{
+                          fontSize: '18px',
+                          fontWeight: '400',
+                          color: '#27A13B',
+                          lineHeight: 1.25
+                        }}>
+                          + 1 059 650 ₸
+                        </span>
+                        <span style={{
+                          fontSize: '14.5px',
+                          fontWeight: '400',
+                          color: '#757575',
+                          marginTop: '2px',
+                          lineHeight: 1.2
+                        }}>
+                          - 970 912,39 ₸
+                        </span>
+                      </div>
+                      <ChevronRightIcon color="#C7C7CC" />
+                    </div>
                   </div>
                 </div>
 
-                <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '72px', width: 'calc(100% - 72px)' }} />
-
-                {/* Grouped Transactions List by Date */}
+                {/* Grouped Transactions List by Date: Date headers on grey background + Curved white cards */}
                 {statementGroups.map((group) => (
-                  <div key={group.date} style={{ display: 'flex', flexDirection: 'column' }}>
-                    {/* Date Header: e.g. "23 октября" */}
+                  <div key={group.date} style={{ display: 'flex', flexDirection: 'column', marginTop: '4px' }}>
+                    {/* Date Header: e.g. "23 октября" sitting on the grey background */}
                     <div style={{
-                      padding: '18px 20px 8px 20px',
-                      fontSize: '19px',
+                      padding: '16px 16px 8px 16px',
+                      fontSize: '18px',
                       fontWeight: '700',
                       color: '#000000',
                       letterSpacing: '-0.2px'
@@ -990,80 +1015,90 @@ export const KaspiGoldDetailScreen = ({
                       {group.date}
                     </div>
 
-                    {group.items.map((tx, idx) => {
-                      const Icon = tx.icon;
-                      return (
-                        <React.Fragment key={tx.id}>
-                          <div
-                            className="touchable"
-                            style={{
-                              height: '76px',
-                              padding: '0 20px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                              {/* Circular icon container */}
-                              <div style={{
-                                width: '50px',
-                                height: '50px',
-                                borderRadius: '50%',
-                                backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                    {/* Curved white card containing transactions */}
+                    <div style={{
+                      backgroundColor: '#FFFFFF',
+                      borderRadius: '16px',
+                      margin: '0 12px 6px 12px',
+                      overflow: 'hidden',
+                      boxShadow: '0 0.5px 1.5px rgba(0, 0, 0, 0.03)'
+                    }}>
+                      {group.items.map((tx, idx) => {
+                        const Icon = tx.icon;
+                        return (
+                          <React.Fragment key={tx.id}>
+                            <div
+                              className="touchable"
+                              style={{
+                                height: '74px',
+                                padding: '0 16px',
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                              }}>
-                                <Icon size={26} color="#262626" />
+                                justifyContent: 'space-between',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center' }}>
+                                {/* Circular icon container: unchanged 44px, icon inside +8%: 28px */}
+                                <div style={{
+                                  width: '44px',
+                                  height: '44px',
+                                  borderRadius: '50%',
+                                  backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  flexShrink: 0
+                                }}>
+                                  <Icon size={28} color="#262626" />
+                                </div>
+
+                                <div style={{ marginLeft: '14px', display: 'flex', flexDirection: 'column' }}>
+                                  <span style={{
+                                    fontSize: '18px',
+                                    fontWeight: '400',
+                                    color: '#000000',
+                                    lineHeight: 1.25
+                                  }}>
+                                    {tx.title}
+                                  </span>
+                                  <span style={{
+                                    fontSize: '14.5px',
+                                    fontWeight: '400',
+                                    color: '#8E8E93',
+                                    marginTop: '2px',
+                                    lineHeight: 1.2
+                                  }}>
+                                    {tx.category}
+                                  </span>
+                                </div>
                               </div>
 
-                              <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                {/* Number is NOT bold: fontWeight 400 */}
                                 <span style={{
-                                  fontSize: '19px',
-                                  fontWeight: '500',
-                                  color: '#000000',
-                                  lineHeight: 1.25
-                                }}>
-                                  {tx.title}
-                                </span>
-                                <span style={{
-                                  fontSize: '15px',
+                                  fontSize: '18px',
                                   fontWeight: '400',
-                                  color: '#8E8E93',
-                                  marginTop: '2px',
-                                  lineHeight: 1.2
+                                  color: '#000000'
                                 }}>
-                                  {tx.category}
+                                  {tx.amount}
                                 </span>
+                                <ChevronRightIcon color="#C7C7CC" />
                               </div>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                              <span style={{
-                                fontSize: '19px',
-                                fontWeight: '600',
-                                color: '#000000'
-                              }}>
-                                {tx.amount}
-                              </span>
-                              <ChevronRightIcon color="#C7C7CC" />
-                            </div>
-                          </div>
-
-                          {idx < group.items.length - 1 && (
-                            <div style={{
-                              height: '1px',
-                              backgroundColor: '#F2F2F4',
-                              marginLeft: '86px',
-                              width: 'calc(100% - 86px)'
-                            }} />
-                          )}
-                        </React.Fragment>
-                      );
-                    })}
+                            {idx < group.items.length - 1 && (
+                              <div style={{
+                                height: '1px',
+                                backgroundColor: '#F2F2F4',
+                                marginLeft: '74px',
+                                width: 'calc(100% - 74px)'
+                              }} />
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
                   </div>
                 ))}
               </div>

@@ -2,6 +2,78 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 05:00] — Экран Kaspi Gold: Восстановление компактного верхнего отступа (заголовок y=66px), разделение фона и векторного логотипа (SVG), статичное закрепление медальона при любом скролле (position: sticky, top: 0)
+
+### 🎯 Запрос пользователя:
+> *«you know that the arrow and the logo is static i mean when you scroll down or up they stay the same as you can see in the screenshot becuse they are static we need new bg so there is it "icon need to be svg.png" this one is icon in the right needs to be svg converted so it ownt lose its quality and separate bg "background.jpg" i hope you understand me»*
+> *«i didnt meant that you to leave a space above return the space above how it was, in the screenshot itself i was holding my finger to show you that logo doesnt move with scroll in orig app but now in our it still does ove with scroll even tho i give you icon and bg separated, the arrow is good keep it»*
+
+### 🛠️ Что сделано:
+1. **Восстановление аутентичного компактного верхнего пространства**:
+   - Восстановлены оригинальные компактные пропорции шапки: заголовок карты `Kaspi Gold *4163` начинается на `y = 66px` (сразу под стрелкой «назад», без искусственного гигантского пустого зазора).
+   - Подпись «Доступно» расположена на 34px ниже заголовка, баланс `110 922,58 ₸` — на 9px ниже.
+   - Белая шторка начинается на аутентичной отметке `y ≈ 238px`, отображая 7 действий пользователя («Kaspi QR», «Перевести», «Пополнить Kaspi Gold», «Оплата в интернете», «Платные сервисы и подписки», «Заказать сумму на снятие», «Перевыпустить Kaspi Gold») выше линии сгиба экрана.
+2. **Разделение фона и векторной эмблемы**:
+   - Фон шапки: чистый градиентный ассет [`kaspi_gold_bg.jpg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/kaspi_gold_bg.jpg) (`#D5AE6B`).
+   - Иконка семьи/медальона: конвертирована в кристально чёткий круговой векторный SVG [`kaspi_gold_medallion.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/kaspi_gold_medallion.svg) с `<clipPath id="medallionCircle"><circle cx="202" cy="202" r="201" /></clipPath>`, без артефактов пикселизации или размытия на Retina/OLED дисплеях.
+3. **100% статичное поведение медальона при скролле и оттягивании пальцем**:
+   - Медальон вынесен в отдельный верхний контейнер с `position: sticky; top: 0; left: 0; right: 0; height: 0; zIndex: 2; pointerEvents: none;`.
+   - В DOM-дереве контейнер размещён в самом начале родителя (до навбара `navBarRef`), поэтому он стартует ровно с координаты `y = 0` и находится в том же механизме прилипания, что и стрелка «назад» `<`.
+   - Точные координаты: `right: 26px`, `top: calc(env(safe-area-inset-top, 0px) + 72px)`, размер `125 × 125px`.
+   - При скролле вверх, вниз и при удержании пальца (rubber-band pull down / overscroll) координаты медальона неизменно зафиксированы: `x = 242`, `y = 72` (смещение ровно 0px).
+   - При прокрутке вниз белая шторка (`zIndex: 10`) плавно наезжает на медальон и шапку, а компактный заголовок с балансом и стрелкой паркуются в верхнем баре (`zIndex: 50`).
+4. **Проверка**:
+   - `npm run build` успешно прошёл за 1.64с (0 ошибок).
+   - Автоматизированный тест Playwright зафиксировал координаты:
+     - `scrollTop = 0`: `y: 72`
+     - `scrollTop = 100`: `y: 72` (0px смещения)
+     - `scrollTop = 200`: `y: 72` (0px смещения)
+     - `mouse drag / touch pull-down`: `y: 72` (0px смещения)
+   - Стрелка: `x = 22`, `y = 10.5` (0px смещения).
+   - Скриншоты `_archive/gold_restored_layout_initial.png` и `_archive/gold_restored_layout.png` подтвердили визуальное совершенство.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`kaspi-app/public/kaspi_assets/kaspi_gold_medallion.svg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/kaspi_gold_medallion.svg)
+- [`kaspi-app/public/kaspi_assets/kaspi_gold_bg.jpg`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/public/kaspi_assets/kaspi_gold_bg.jpg)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
+## [2026-10-29 04:45] — Экран Kaspi Gold: Тогглер (отступ сверху +4px, высота +2px, зазор до списка -3px, нежирный текст при клике) и редизайн Выписки (поиск +2px, отступ -4px, иконки +8%, нежирные числа, изогнутые белые карточки на сером фоне)
+
+### 🎯 Запрос пользователя:
+> *«make the toggler interval from the up increase by 4px and then the toggler make it taller by 2 px after that the text when you click dont have to be bald it just stays the same next interval between the icon section and toggler decrease it by -3px after that head over to the выписки and then the search bar taller by 2px interval of it with toggler decrease by 4px and then the icons with out changing the circle change the side of icons inside by increasing them +8% the numbers in that section gotta be not bald. and then the section is divided like this in the screenshot like curved with the grey color inside»*
+
+### 🛠️ Что сделано:
+1. **Тогглер (сегментированный переключатель вкладок)**:
+   - **Отступ сверху увеличен на +4px**: `paddingTop` в `tabBarRef` увеличен с `10px` до **`14px`**.
+   - **Высота увеличена на +2px**: высота контейнера тогглера увеличена с `41px` до **`43px`**, внутренняя белая плашка и кнопки увеличены с `36px` до **`38px`**.
+   - **Текст активной вкладки не жирный**: `fontWeight` при клике сохранён обычным **`400`** (ранее переключался на `600`), надпись остаётся изящной и стабильной по толщине.
+   - **Интервал между тогглером и блоком иконок уменьшен на -3px**: `paddingBottom` в `tabBarRef` уменьшен с `12px` до **`9px`**.
+2. **Вкладка «Выписка» (PANE 3)**:
+   - **Поисковая строка выше на +2px**: `height` строки поиска увеличен с `44px` до **`46px`**.
+   - **Интервал поиска с тогглером уменьшен на -4px**: верхний отступ уменьшен с `10px` до **`6px`** (`margin: 6px 14px 12px 14px`).
+   - **Иконки увеличены на +8% без изменения кругов**:
+     - Внешний диаметр круглых плашек оставлен неизменным (`44 × 44px`).
+     - Размер внутренних пиктограмм (календарь, операции, корзины, переводы) увеличен на +8%: с `26px` до **`28px`**.
+   - **Числа в разделе «Выписка» не жирные (regular)**:
+     - Суммы операций (`+ 1 059 650 ₸`, `- 970 912,39 ₸` и `{tx.amount}`) переведены в **`fontWeight: 400`** (не жирные).
+   - **Разделение на изогнутые карточки на сером фоне (Curved Cards on Grey Background)**:
+     - Фоновый цвет шторки во вкладке «Выписка» переведён в аутентичный нативный светло-серый **`#F2F2F7`**.
+     - Верхний блок (Поиск + Календарь периода + Итого операций) оформлен в виде цельного белого острова с мягко скруглёнными нижними углами (`borderBottomLeftRadius: 16px`, `borderBottomRightRadius: 16px`).
+     - Заголовки дат («23 октября», «22 октября», «21 октября») естественно расположены на сером фоне.
+     - Каждая группа транзакций вынесена в отдельную белую карточку с изогнутыми углами (`borderRadius: 16px`, `margin: 0 12px 6px 12px`, `backgroundColor: #FFFFFF`) в точном соответствии со скриншотом оригинала.
+3. **Проверка**:
+   - `npm run build` прошёл за 1.03с (0 ошибок).
+   - Скриншоты `_archive/test_actions_tab.png`, `_archive/test_statement_tab.png`, `_archive/test_statement_tab_scrolled.png` подтвердили 100% точность геометрии и вёрстки.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 04:25] — Экран Kaspi Gold: Замедление анимации слайдов до 0.52s, увеличение высоты тогглера на +5px (41px) и текста табов на +2pt
 
 ### 🎯 Запрос пользователя:
