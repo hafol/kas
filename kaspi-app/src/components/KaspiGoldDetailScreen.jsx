@@ -74,6 +74,7 @@ export const KaspiGoldDetailScreen = ({
   onOpenTransfer
 }) => {
   const [activeTab, setActiveTab] = useState('actions'); // 'actions' | 'info' | 'statement'
+  const [sliderHeight, setSliderHeight] = useState('auto');
   const [showRequisitesModal, setShowRequisitesModal] = useState(false);
   const [copiedField, setCopiedField] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -83,6 +84,55 @@ export const KaspiGoldDetailScreen = ({
   const compactTitleRef = React.useRef(null);
   const tabBarRef = React.useRef(null);
   const sheetRef = React.useRef(null);
+  const actionsPaneRef = React.useRef(null);
+  const infoPaneRef = React.useRef(null);
+  const statementPaneRef = React.useRef(null);
+  const touchStartXRef = React.useRef(0);
+  const touchStartYRef = React.useRef(0);
+
+  const TAB_KEYS = ['actions', 'info', 'statement'];
+  const tabIndex = Math.max(TAB_KEYS.indexOf(activeTab), 0);
+
+  // Measure and adapt container height to the active tab pane
+  React.useEffect(() => {
+    const updateHeight = () => {
+      let ref = actionsPaneRef;
+      if (activeTab === 'info') ref = infoPaneRef;
+      else if (activeTab === 'statement') ref = statementPaneRef;
+      if (ref.current) {
+        setSliderHeight(ref.current.offsetHeight);
+      }
+    };
+    updateHeight();
+    const timeout = setTimeout(updateHeight, 50);
+    return () => clearTimeout(timeout);
+  }, [activeTab, searchQuery]);
+
+  // Horizontal touch swipe handling between tabs
+  const handleModuleTouchStart = (e) => {
+    if (e.touches && e.touches[0]) {
+      touchStartXRef.current = e.touches[0].clientX;
+      touchStartYRef.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleModuleTouchEnd = (e) => {
+    if (!e.changedTouches || !e.changedTouches[0]) return;
+    const diffX = e.changedTouches[0].clientX - touchStartXRef.current;
+    const diffY = e.changedTouches[0].clientY - touchStartYRef.current;
+    // Trigger tab slide only if horizontal swipe dominates and exceeds 45px
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 45) {
+      if (diffX < 0) {
+        // Swiped left -> advance to next tab
+        if (activeTab === 'actions') setActiveTab('info');
+        else if (activeTab === 'info') setActiveTab('statement');
+      } else {
+        // Swiped right -> return to previous tab
+        if (activeTab === 'statement') setActiveTab('info');
+        else if (activeTab === 'info') setActiveTab('actions');
+      }
+    }
+  };
 
   React.useEffect(() => {
     const parent = containerRef.current?.parentElement;
@@ -549,414 +599,477 @@ export const KaspiGoldDetailScreen = ({
             padding: '2.5px',
             display: 'flex',
             alignItems: 'center',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            position: 'relative'
           }}>
-          {[
-            { id: 'actions', label: 'Действия' },
-            { id: 'info', label: 'Инфо' },
-            { id: 'statement', label: 'Выписка' }
-          ].map((tab) => {
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTab(tab.id)}
-                className="touchable"
-                style={{
-                  flex: 1,
-                  height: '31px',
-                  borderRadius: '8px',
-                  backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: "'Roboto', sans-serif",
-                  fontSize: '14px',
-                  fontWeight: isActive ? '600' : '400',
-                  color: isActive ? '#1C1C1E' : '#8E8E93',
-                  boxShadow: isActive ? '0 1px 3px rgba(0, 0, 0, 0.08)' : 'none',
-                  transition: 'background-color 0.15s ease, box-shadow 0.15s ease',
-                  padding: 0
-                }}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
+            {/* Sliding white pill indicator */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '2.5px',
+                bottom: '2.5px',
+                left: '2.5px',
+                width: 'calc((100% - 5px) / 3)',
+                borderRadius: '8px',
+                backgroundColor: '#FFFFFF',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12), 0 0.5px 1px rgba(0, 0, 0, 0.06)',
+                transform: `translateX(${tabIndex * 100}%)`,
+                transition: 'transform 0.28s cubic-bezier(0.25, 1, 0.5, 1)',
+                pointerEvents: 'none',
+                zIndex: 1
+              }}
+            />
+
+            {[
+              { id: 'actions', label: 'Действия' },
+              { id: 'info', label: 'Инфо' },
+              { id: 'statement', label: 'Выписка' }
+            ].map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  className="touchable"
+                  style={{
+                    flex: 1,
+                    height: '31px',
+                    borderRadius: '8px',
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontFamily: "'Roboto', sans-serif",
+                    fontSize: '14px',
+                    fontWeight: isActive ? '600' : '400',
+                    color: isActive ? '#1C1C1E' : '#8E8E93',
+                    transition: 'color 0.2s ease, font-weight 0.2s ease',
+                    padding: 0,
+                    position: 'relative',
+                    zIndex: 2,
+                    WebkitTapHighlightColor: 'transparent'
+                  }}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* =====================================================================
-            TAB 1: ДЕЙСТВИЯ (Exact Right Screenshot + 30% Scale Specification)
-            - 11 items starting with Kaspi QR
-            - Row pitch: 76px (+30% larger, spacious & comfortable)
-            - Icon size: 29px in 36x36px container (+30%)
-            - Main text: 19px, subtitle 14.5px (+30%)
-            - Chevron: 9x17px (+30%)
-            - NO DIVIDERS (separation comes from airy 76px spacing)
+            SLIDING CONTENT MODULES (Действия / Инфо / Выписка)
+            - 3-pane horizontal track with cubic-bezier transition
+            - Slides right-to-left or left-to-right when switching tabs
+            - Dynamically updates container height
+            - Circles less visible: rgba(0, 0, 0, 0.02)
+            - Pitch between section icons: 74px (-2px interval)
         ===================================================================== */}
-        {activeTab === 'actions' && (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {actionsList.map((action) => {
-              const { IconComponent } = action;
-              return (
-                <div
-                  key={action.id}
-                  onClick={action.onClick}
-                  className="touchable"
-                  style={{
-                    height: '76px',
-                    padding: '0 22px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    cursor: 'pointer',
-                    boxSizing: 'border-box'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '50%',
-                      backgroundColor: '#F6F6F7',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
-                    }}>
-                      <IconComponent size={action.id === 'qr' ? 27 : 26} color="#EE3524" />
-                    </div>
-
-                    <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
-                      <span style={{
-                        fontSize: '19px',
-                        fontWeight: '400',
-                        color: '#1C1C1E',
-                        lineHeight: 1.25,
-                        fontFamily: "'Roboto', sans-serif"
-                      }}>
-                        {action.title}
-                      </span>
-                      {action.subtitle && (
-                        <span style={{
-                          fontSize: '14.5px',
-                          fontWeight: '400',
-                          color: '#8E8E93',
-                          marginTop: '2px',
-                          lineHeight: 1.2,
-                          fontFamily: "'Roboto', sans-serif"
-                        }}>
-                          {action.subtitle}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <ChevronRightIcon color="#C7C7CC" />
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* =====================================================================
-            TAB 2: ИНФО (8 items, 76px pitch, 29px icons, 19px title, no dividers)
-        ===================================================================== */}
-        {activeTab === 'info' && (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {infoList.map((item) => {
-              const { IconComponent } = item;
-              return (
-                <div
-                  key={item.id}
-                  onClick={item.onClick}
-                  className="touchable"
-                  style={{
-                    height: '76px',
-                    padding: '0 22px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    cursor: 'pointer',
-                    boxSizing: 'border-box'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '50%',
-                      backgroundColor: '#F6F6F7',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
-                    }}>
-                      <IconComponent size={26} color="#EE3524" />
-                    </div>
-
-                    <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
-                      <span style={{
-                        fontSize: '19px',
-                        fontWeight: '400',
-                        color: '#1C1C1E',
-                        lineHeight: 1.25,
-                        fontFamily: "'Roboto', sans-serif"
-                      }}>
-                        {item.title}
-                      </span>
-                      {item.subtitle && (
-                        <span style={{
-                          fontSize: '14.5px',
-                          fontWeight: '400',
-                          color: '#8E8E93',
-                          marginTop: '2px',
-                          lineHeight: 1.2,
-                          fontFamily: "'Roboto', sans-serif"
-                        }}>
-                          {item.subtitle}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <ChevronRightIcon color="#C7C7CC" />
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* =====================================================================
-            TAB 3: ВЫПИСКА (+30% Larger Spacious Sections)
-        ===================================================================== */}
-        {activeTab === 'statement' && (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {/* Search Input: "Поиск по операциям" */}
-            <div style={{
-              margin: '10px 18px 14px 18px',
-              backgroundColor: '#F2F2F4',
-              height: '44px',
-              borderRadius: '12px',
+        <div
+          style={{
+            width: '100%',
+            overflow: 'hidden',
+            position: 'relative',
+            height: sliderHeight === 'auto' ? 'auto' : `${sliderHeight}px`,
+            transition: 'height 0.3s cubic-bezier(0.25, 1, 0.5, 1)'
+          }}
+          onTouchStart={handleModuleTouchStart}
+          onTouchEnd={handleModuleTouchEnd}
+        >
+          <div
+            style={{
               display: 'flex',
-              alignItems: 'center',
-              paddingLeft: '12px',
-              paddingRight: '12px',
-              boxSizing: 'border-box'
-            }}>
-              <SearchIcon size={20} color="#8E8E93" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Поиск по операциям"
-                style={{
-                  border: 'none',
-                  outline: 'none',
-                  backgroundColor: 'transparent',
-                  marginLeft: '10px',
-                  width: '100%',
-                  fontFamily: "'Roboto', sans-serif",
-                  fontSize: '17px',
-                  color: '#000000'
-                }}
-              />
-            </div>
-
-            {/* Date Range Row: Red Calendar + "26 сентября - 26 октября" + Share/Export */}
-            <div style={{
-              height: '62px',
-              padding: '0 20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              cursor: 'pointer'
-            }} className="touchable">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '50%',
-                  backgroundColor: '#F6F6F7',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0
-                }}>
-                  <StatementCalendarIcon size={26} color="#EE3524" />
-                </div>
-                <span style={{
-                  marginLeft: '16px',
-                  fontSize: '19px',
-                  fontWeight: '400',
-                  color: '#000000'
-                }}>
-                  26 сентября - 26 октября
-                </span>
-              </div>
-
-              <div className="touchable" style={{ padding: '6px' }}>
-                <ShareExportIcon size={24} color="#8E8E93" />
-              </div>
-            </div>
-
-            <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '72px', width: 'calc(100% - 72px)' }} />
-
-            {/* Summary Row: "Операции" + "+ 1 059 650 ₸" / "- 970 912,39 ₸" */}
-            <div style={{
-              height: '62px',
-              padding: '0 20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              cursor: 'pointer'
-            }} className="touchable">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '50%',
-                  backgroundColor: '#F6F6F7',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0
-                }}>
-                  <StatementOperationsReceiptIcon size={26} color="#EE3524" />
-                </div>
-                <span style={{
-                  marginLeft: '16px',
-                  fontSize: '19px',
-                  fontWeight: '400',
-                  color: '#000000'
-                }}>
-                  Операции
-                </span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                  <span style={{
-                    fontSize: '19px',
-                    fontWeight: '600',
-                    color: '#27A13B',
-                    lineHeight: 1.25
-                  }}>
-                    + 1 059 650 ₸
-                  </span>
-                  <span style={{
-                    fontSize: '15px',
-                    fontWeight: '400',
-                    color: '#757575',
-                    marginTop: '2px',
-                    lineHeight: 1.2
-                  }}>
-                    - 970 912,39 ₸
-                  </span>
-                </div>
-                <ChevronRightIcon color="#C7C7CC" />
-              </div>
-            </div>
-
-            <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '72px', width: 'calc(100% - 72px)' }} />
-
-            {/* Grouped Transactions List by Date */}
-            {statementGroups.map((group) => (
-              <div key={group.date} style={{ display: 'flex', flexDirection: 'column' }}>
-                {/* Date Header: e.g. "23 октября" */}
-                <div style={{
-                  padding: '18px 20px 8px 20px',
-                  fontSize: '19px',
-                  fontWeight: '700',
-                  color: '#000000',
-                  letterSpacing: '-0.2px'
-                }}>
-                  {group.date}
-                </div>
-
-                {group.items.map((tx, idx) => {
-                  const Icon = tx.icon;
+              width: '300%',
+              transform: `translate3d(-${tabIndex * 33.333333}%, 0, 0)`,
+              transition: 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
+              alignItems: 'flex-start'
+            }}
+          >
+            {/* PANE 1: ДЕЙСТВИЯ */}
+            <div
+              ref={actionsPaneRef}
+              style={{
+                width: '33.333333%',
+                flexShrink: 0,
+                boxSizing: 'border-box',
+                pointerEvents: activeTab === 'actions' ? 'auto' : 'none'
+              }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {actionsList.map((action) => {
+                  const { IconComponent } = action;
                   return (
-                    <React.Fragment key={tx.id}>
-                      <div
-                        className="touchable"
-                        style={{
-                          height: '76px',
-                          padding: '0 20px',
+                    <div
+                      key={action.id}
+                      onClick={action.onClick}
+                      className="touchable"
+                      style={{
+                        height: '74px',
+                        padding: '0 22px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        boxSizing: 'border-box'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '50%',
+                          backgroundColor: 'rgba(0, 0, 0, 0.02)',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'space-between',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                          {/* Circular icon container (+30% bigger: 50x50px) */}
-                          <div style={{
-                            width: '50px',
-                            height: '50px',
-                            borderRadius: '50%',
-                            backgroundColor: '#F5F5F7',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0
-                          }}>
-                            <Icon size={26} color="#262626" />
-                          </div>
+                          justifyContent: 'center',
+                          flexShrink: 0
+                        }}>
+                          <IconComponent size={action.id === 'qr' ? 27 : 26} color="#EE3524" />
+                        </div>
 
-                          <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
+                          <span style={{
+                            fontSize: '19px',
+                            fontWeight: '400',
+                            color: '#1C1C1E',
+                            lineHeight: 1.25,
+                            fontFamily: "'Roboto', sans-serif"
+                          }}>
+                            {action.title}
+                          </span>
+                          {action.subtitle && (
                             <span style={{
-                              fontSize: '19px',
-                              fontWeight: '500',
-                              color: '#000000',
-                              lineHeight: 1.25
-                            }}>
-                              {tx.title}
-                            </span>
-                            <span style={{
-                              fontSize: '15px',
+                              fontSize: '14.5px',
                               fontWeight: '400',
                               color: '#8E8E93',
                               marginTop: '2px',
-                              lineHeight: 1.2
+                              lineHeight: 1.2,
+                              fontFamily: "'Roboto', sans-serif"
                             }}>
-                              {tx.category}
+                              {action.subtitle}
                             </span>
-                          </div>
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{
-                            fontSize: '19px',
-                            fontWeight: '600',
-                            color: '#000000'
-                          }}>
-                            {tx.amount}
-                          </span>
-                          <ChevronRightIcon color="#C7C7CC" />
+                          )}
                         </div>
                       </div>
 
-                      {idx < group.items.length - 1 && (
-                        <div style={{
-                          height: '1px',
-                          backgroundColor: '#F2F2F4',
-                          marginLeft: '86px',
-                          width: 'calc(100% - 86px)'
-                        }} />
-                      )}
-                    </React.Fragment>
+                      <ChevronRightIcon color="#C7C7CC" />
+                    </div>
                   );
                 })}
               </div>
-            ))}
+            </div>
+
+            {/* PANE 2: ИНФО */}
+            <div
+              ref={infoPaneRef}
+              style={{
+                width: '33.333333%',
+                flexShrink: 0,
+                boxSizing: 'border-box',
+                pointerEvents: activeTab === 'info' ? 'auto' : 'none'
+              }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {infoList.map((item) => {
+                  const { IconComponent } = item;
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={item.onClick}
+                      className="touchable"
+                      style={{
+                        height: '74px',
+                        padding: '0 22px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        boxSizing: 'border-box'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '50%',
+                          backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0
+                        }}>
+                          <IconComponent size={26} color="#EE3524" />
+                        </div>
+
+                        <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
+                          <span style={{
+                            fontSize: '19px',
+                            fontWeight: '400',
+                            color: '#1C1C1E',
+                            lineHeight: 1.25,
+                            fontFamily: "'Roboto', sans-serif"
+                          }}>
+                            {item.title}
+                          </span>
+                          {item.subtitle && (
+                            <span style={{
+                              fontSize: '14.5px',
+                              fontWeight: '400',
+                              color: '#8E8E93',
+                              marginTop: '2px',
+                              lineHeight: 1.2,
+                              fontFamily: "'Roboto', sans-serif"
+                            }}>
+                              {item.subtitle}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <ChevronRightIcon color="#C7C7CC" />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* PANE 3: ВЫПИСКА */}
+            <div
+              ref={statementPaneRef}
+              style={{
+                width: '33.333333%',
+                flexShrink: 0,
+                boxSizing: 'border-box',
+                pointerEvents: activeTab === 'statement' ? 'auto' : 'none'
+              }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {/* Search Input: "Поиск по операциям" */}
+                <div style={{
+                  margin: '10px 18px 14px 18px',
+                  backgroundColor: '#F2F2F4',
+                  height: '44px',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '12px',
+                  paddingRight: '12px',
+                  boxSizing: 'border-box'
+                }}>
+                  <SearchIcon size={20} color="#8E8E93" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Поиск по операциям"
+                    style={{
+                      border: 'none',
+                      outline: 'none',
+                      backgroundColor: 'transparent',
+                      marginLeft: '10px',
+                      width: '100%',
+                      fontFamily: "'Roboto', sans-serif",
+                      fontSize: '17px',
+                      color: '#000000'
+                    }}
+                  />
+                </div>
+
+                {/* Date Range Row: Red Calendar + "26 сентября - 26 октября" + Share/Export */}
+                <div style={{
+                  height: '62px',
+                  padding: '0 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer'
+                }} className="touchable">
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{
+                      width: '44px',
+                      height: '44px',
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      <StatementCalendarIcon size={26} color="#EE3524" />
+                    </div>
+                    <span style={{
+                      marginLeft: '16px',
+                      fontSize: '19px',
+                      fontWeight: '400',
+                      color: '#000000'
+                    }}>
+                      26 сентября - 26 октября
+                    </span>
+                  </div>
+
+                  <div className="touchable" style={{ padding: '6px' }}>
+                    <ShareExportIcon size={24} color="#8E8E93" />
+                  </div>
+                </div>
+
+                <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '72px', width: 'calc(100% - 72px)' }} />
+
+                {/* Summary Row: "Операции" + "+ 1 059 650 ₸" / "- 970 912,39 ₸" */}
+                <div style={{
+                  height: '62px',
+                  padding: '0 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer'
+                }} className="touchable">
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{
+                      width: '44px',
+                      height: '44px',
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      <StatementOperationsReceiptIcon size={26} color="#EE3524" />
+                    </div>
+                    <span style={{
+                      marginLeft: '16px',
+                      fontSize: '19px',
+                      fontWeight: '400',
+                      color: '#000000'
+                    }}>
+                      Операции
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                      <span style={{
+                        fontSize: '19px',
+                        fontWeight: '600',
+                        color: '#27A13B',
+                        lineHeight: 1.25
+                      }}>
+                        + 1 059 650 ₸
+                      </span>
+                      <span style={{
+                        fontSize: '15px',
+                        fontWeight: '400',
+                        color: '#757575',
+                        marginTop: '2px',
+                        lineHeight: 1.2
+                      }}>
+                        - 970 912,39 ₸
+                      </span>
+                    </div>
+                    <ChevronRightIcon color="#C7C7CC" />
+                  </div>
+                </div>
+
+                <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '72px', width: 'calc(100% - 72px)' }} />
+
+                {/* Grouped Transactions List by Date */}
+                {statementGroups.map((group) => (
+                  <div key={group.date} style={{ display: 'flex', flexDirection: 'column' }}>
+                    {/* Date Header: e.g. "23 октября" */}
+                    <div style={{
+                      padding: '18px 20px 8px 20px',
+                      fontSize: '19px',
+                      fontWeight: '700',
+                      color: '#000000',
+                      letterSpacing: '-0.2px'
+                    }}>
+                      {group.date}
+                    </div>
+
+                    {group.items.map((tx, idx) => {
+                      const Icon = tx.icon;
+                      return (
+                        <React.Fragment key={tx.id}>
+                          <div
+                            className="touchable"
+                            style={{
+                              height: '76px',
+                              padding: '0 20px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              {/* Circular icon container */}
+                              <div style={{
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '50%',
+                                backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0
+                              }}>
+                                <Icon size={26} color="#262626" />
+                              </div>
+
+                              <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
+                                <span style={{
+                                  fontSize: '19px',
+                                  fontWeight: '500',
+                                  color: '#000000',
+                                  lineHeight: 1.25
+                                }}>
+                                  {tx.title}
+                                </span>
+                                <span style={{
+                                  fontSize: '15px',
+                                  fontWeight: '400',
+                                  color: '#8E8E93',
+                                  marginTop: '2px',
+                                  lineHeight: 1.2
+                                }}>
+                                  {tx.category}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                              <span style={{
+                                fontSize: '19px',
+                                fontWeight: '600',
+                                color: '#000000'
+                              }}>
+                                {tx.amount}
+                              </span>
+                              <ChevronRightIcon color="#C7C7CC" />
+                            </div>
+                          </div>
+
+                          {idx < group.items.length - 1 && (
+                            <div style={{
+                              height: '1px',
+                              backgroundColor: '#F2F2F4',
+                              marginLeft: '86px',
+                              width: 'calc(100% - 86px)'
+                            }} />
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* =====================================================================

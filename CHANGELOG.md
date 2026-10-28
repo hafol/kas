@@ -2,6 +2,43 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 04:20] — Экран Kaspi Gold: Слайдер-переключатель табов, двунаправленная анимация модулей, ослабление кругов, -2px шаг строк и +4% толщина иконок
+
+### 🎯 Запрос пользователя:
+> *«make those circles less visible an then the interval between the sectionos icons in th module decrease it by -2px and then the boldness for each of them except for qr code increase ike 4%. the animation of togglear gotta be slider like when you click it slides over to oi and the module too slides from the right ot the left and same in the opposite derection»*
+
+### 🛠️ Что сделано:
+1. **Менее заметные круги вокруг иконок (`backgroundColor: rgba(0, 0, 0, 0.02)`)**:
+   - Фон круглых бейджей (`44×44px` и `50×50px`) заменён с заметного серого `#F6F6F7`/`#F5F5F7` на ультрамягкий полупрозрачный `rgba(0, 0, 0, 0.02)` во всех трёх вкладках («Действия», «Инфо», «Выписка»). Круги стали едва уловимыми и аккуратными.
+2. **Уменьшение интервала между строками модулей на -2px**:
+   - Высота каждой строки разделов уменьшена с `76px` до **`74px`** (в разделах «Действия» и «Инфо»), сократив вертикальный интервал между иконками ровно на 2px.
+3. **Увеличение толщины иконок на 4% (кроме QR-кода)**:
+   - В файле [`KaspiGoldIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldIcons.jsx) параметр `strokeWidth` всех контурных иконок увеличен с `1.6` до **`1.664`** (+4%).
+   - Иконка `IconKaspiQrGold` сохранена без изменений (`1.65` / `1.6`), как запрошено («except for qr code»).
+4. **Слайдер-переключатель таб-бара (Toggle Bar Slider)**:
+   - Внутри сегментированного контроллера добавлен анимированный белый слайдер (`position: absolute`, скругление `8px`, тень `0 1px 3px rgba(0,0,0,0.12)`).
+   - При клике на табы белая плашка плавно скользит к выбранной вкладке (`transform: translateX(${tabIndex * 100}%)`, пружинный переход `0.28s cubic-bezier(0.25, 1, 0.5, 1)`).
+5. **Двунаправленная плавная анимация модулей (Module Carousel Slider)**:
+   - Все 3 вкладки объединены в 3-панельный горизонтальный слайдер (`width: 300%`, `translate3d(-${tabIndex * 33.333333}%, 0, 0)`).
+   - Переключение вправо (Действия → Инфо → Выписка) плавно выдвигает модуль справа налево.
+   - Переключение влево (Выписка → Инфо → Действия) плавно возвращает модуль слева направо.
+   - Динамическая подгонка высоты контейнера под активную вкладку (`transition: height 0.3s cubic-bezier(0.25, 1, 0.5, 1)`).
+   - Поддержка горизонтального сенсорного свайпа пальцем (Touch Swipe) влево/вправо.
+6. **Проверка**:
+   - `npm run build` прошёл за 930мс (0 ошибок).
+   - Playwright-тест [`_archive/scripts/test_tabs_slider.py`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/_archive/scripts/test_tabs_slider.py) зафиксировал скриншоты:
+     - `_archive/test_tab1_actions.png`: тонкие круги, высота строки ровно 74px, жирность +4%.
+     - `_archive/test_tab2_info.png`: плашка таба и модуль скользнули на «Инфо».
+     - `_archive/test_tab3_statement.png`: плашка таба и модуль скользнули на «Выписка».
+     - `_archive/test_tab1_actions_returned.png`: обратная анимация влево на «Действия».
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldIcons.jsx)
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 04:05] — Экран Kaspi Gold: Увеличение SVG-медальона на 5% и смещение вниз на 8px
 
 ### 🎯 Запрос пользователя:
