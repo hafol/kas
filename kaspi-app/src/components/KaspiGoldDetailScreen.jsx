@@ -77,22 +77,64 @@ export const KaspiGoldDetailScreen = ({
   const [showRequisitesModal, setShowRequisitesModal] = useState(false);
   const [copiedField, setCopiedField] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isScrolled, setIsScrolled] = useState(false);
   const containerRef = React.useRef(null);
+  const bigHeaderRef = React.useRef(null);
+  const compactTitleRef = React.useRef(null);
+  const tabBarRef = React.useRef(null);
 
   React.useEffect(() => {
     const parent = containerRef.current?.parentElement;
     if (!parent) return;
-    const handleParentScroll = () => {
-      const top = parent.scrollTop;
-      if (top > 35) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const s = parent.scrollTop;
+
+          // Exact reverse-engineered linear formulas from 16 frames:
+          // bigHeaderOpacity = clamp(1 - (s - 23) / 157, 0, 1)  (fade: scroll 23 -> 180 pt)
+          const bigHeaderOpacity = Math.min(Math.max(1 - (s - 23) / 157, 0), 1);
+
+          // navTitleOpacity = clamp((s - 85) / 78, 0, 1)        (fade-in: scroll 85 -> 163 pt)
+          const navTitleOpacity = Math.min(Math.max((s - 85) / 78, 0), 1);
+
+          // Subtle parallax drift for big header illustration: up to ~4.6px (7px in 1280 frame)
+          const drift = Math.min(Math.max((s - 23) * (4.6 / 157), 0), 4.6);
+
+          if (bigHeaderRef.current) {
+            bigHeaderRef.current.style.opacity = bigHeaderOpacity;
+            bigHeaderRef.current.style.transform = `translate3d(0, -${drift}px, 0)`;
+            bigHeaderRef.current.style.pointerEvents = bigHeaderOpacity < 0.1 ? 'none' : 'auto';
+          }
+
+          if (compactTitleRef.current) {
+            compactTitleRef.current.style.opacity = navTitleOpacity;
+            compactTitleRef.current.style.pointerEvents = navTitleOpacity > 0.5 ? 'auto' : 'none';
+          }
+
+          if (tabBarRef.current) {
+            // When reaching pin threshold (~174pt), tabs meet nav bar flush
+            if (s >= 170) {
+              tabBarRef.current.style.borderTopLeftRadius = '0px';
+              tabBarRef.current.style.borderTopRightRadius = '0px';
+            } else {
+              tabBarRef.current.style.borderTopLeftRadius = '18px';
+              tabBarRef.current.style.borderTopRightRadius = '18px';
+            }
+          }
+
+          ticking = false;
+        });
+        ticking = true;
       }
     };
-    parent.addEventListener('scroll', handleParentScroll, { passive: true });
-    return () => parent.removeEventListener('scroll', handleParentScroll);
+
+    parent.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => parent.removeEventListener('scroll', handleScroll);
   }, []);
 
   const copyToClipboard = (text, fieldName) => {
@@ -197,51 +239,14 @@ export const KaspiGoldDetailScreen = ({
         boxSizing: 'border-box'
       }}
     >
-      {/* 1. STATIC STICKY MEDALLION (Pinned to top: 0, DOES NOT MOVE on scroll, below white sheet) */}
-      <div
-        style={{
-          position: 'sticky',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 0,
-          zIndex: 2,
-          pointerEvents: 'none'
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            right: '24px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 78px)',
-            width: '115px',
-            height: '115px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <img
-            src="/kaspi_assets/kaspi_gold_medallion.svg"
-            alt="Kaspi Gold Medallion"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              display: 'block'
-            }}
-          />
-        </div>
-      </div>
-
-      {/* 2. STICKY COMPACT HEADER (Back arrow static on left, compact balance on scroll) */}
+      {/* 1. STICKY TOP NAV BAR (Back arrow fixed & always visible, compact title fades in) */}
       <div style={{
         position: 'sticky',
         top: 0,
         left: 0,
         right: 0,
         zIndex: 50,
-        backgroundColor: isScrolled ? '#D5AE6B' : 'transparent',
+        backgroundColor: '#D5AE6B',
         height: 'calc(48px + env(safe-area-inset-top, 0px))',
         paddingTop: 'env(safe-area-inset-top, 0px)',
         paddingLeft: '18px',
@@ -249,9 +254,7 @@ export const KaspiGoldDetailScreen = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        boxSizing: 'border-box',
-        boxShadow: isScrolled ? '0 2px 8px rgba(138, 98, 30, 0.25)' : 'none',
-        transition: 'background-color 0.2s ease, box-shadow 0.2s ease'
+        boxSizing: 'border-box'
       }}>
         {/* Back navigation button */}
         <div
@@ -269,17 +272,19 @@ export const KaspiGoldDetailScreen = ({
           <BackChevronIcon color="#FFFFFF" />
         </div>
 
-        {/* Compact Centered Title + Balance (visible on scroll) */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          opacity: isScrolled ? 1 : 0,
-          transform: isScrolled ? 'translateY(0)' : 'translateY(4px)',
-          transition: 'opacity 0.2s ease, transform 0.2s ease',
-          pointerEvents: isScrolled ? 'auto' : 'none'
-        }}>
+        {/* Compact Centered Title + Balance (Fixed in place, fades in linearly s = 85 -> 163 pt) */}
+        <div
+          ref={compactTitleRef}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0,
+            pointerEvents: 'none',
+            willChange: 'opacity'
+          }}
+        >
           <span style={{
             fontSize: '17px',
             fontWeight: '700',
@@ -303,79 +308,124 @@ export const KaspiGoldDetailScreen = ({
         <div style={{ width: '36px' }} />
       </div>
 
-      {/* 3. EXPANDED GOLDEN CARD HEADER (Restored authentic spacing: 238px minHeight) */}
-      <div style={{
-        marginTop: 'calc(-48px - env(safe-area-inset-top, 0px))',
-        paddingTop: 'calc(48px + env(safe-area-inset-top, 0px) + 18px)',
-        paddingLeft: '18px',
-        paddingRight: '18px',
-        paddingBottom: '28px',
-        position: 'relative',
-        zIndex: 3,
-        boxSizing: 'border-box',
-        overflow: 'hidden',
-        minHeight: '250px'
-      }}>
-        {/* Card Name + Apple Pay badge (+0.5pt bigger: calc(22.5px + 0.5pt), bolder 750, moved down 2px) */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginTop: '2px'
-        }}>
-          <span style={{
-            fontSize: 'calc(22.5px + 0.5pt)',
-            fontWeight: '750',
-            fontVariationSettings: "'wght' 750",
-            fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
-            color: '#FFFFFF',
-            letterSpacing: '0.1px',
+      {/* 2. STICKY BIG HEADER GROUP (STAYS STILL at top, does not scroll with page, fades out linearly s = 23 -> 180 pt) */}
+      <div
+        ref={bigHeaderRef}
+        style={{
+          position: 'sticky',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 0,
+          zIndex: 2,
+          pointerEvents: 'none',
+          willChange: 'opacity, transform'
+        }}
+      >
+        {/* Medallion illustration (SVG) */}
+        <div
+          style={{
+            position: 'absolute',
+            right: '24px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 78px)',
+            width: '115px',
+            height: '115px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <img
+            src="/kaspi_assets/kaspi_gold_medallion.svg"
+            alt="Kaspi Gold Medallion"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              display: 'block'
+            }}
+          />
+        </div>
+
+        {/* Big Header Text: "Kaspi Gold *4163" + Apple Pay, "Доступно", Balance */}
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 'calc(48px + env(safe-area-inset-top, 0px) + 18px)',
+            paddingLeft: '18px',
+            paddingRight: '18px',
+            boxSizing: 'border-box'
+          }}
+        >
+          {/* Card Name + Apple Pay badge (+0.5pt bigger: calc(22.5px + 0.5pt), bolder 750, moved down 2px) */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: '2px'
+          }}>
+            <span style={{
+              fontSize: 'calc(22.5px + 0.5pt)',
+              fontWeight: '750',
+              fontVariationSettings: "'wght' 750",
+              fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
+              color: '#FFFFFF',
+              letterSpacing: '0.1px',
+              textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+            }}>
+              Kaspi Gold *{card.last4}
+            </span>
+            <ApplePayBadge style={{ marginLeft: '9px' }} />
+          </div>
+
+          {/* Caption "Доступно" (kept at same Y position: marginTop 34px) */}
+          <div style={{
+            fontSize: 'calc(17px + 1.5pt)',
+            fontWeight: '400',
+            color: 'rgba(255, 255, 255, 0.92)',
+            marginTop: '34px',
             textShadow: '0 1px 2px rgba(0,0,0,0.1)'
           }}>
-            Kaspi Gold *{card.last4}
-          </span>
-          <ApplePayBadge style={{ marginLeft: '9px' }} />
-        </div>
+            Доступно
+          </div>
 
-        {/* Caption "Доступно" (kept at same Y position: marginTop 34px) */}
-        <div style={{
-          fontSize: 'calc(17px + 1.5pt)',
-          fontWeight: '400',
-          color: 'rgba(255, 255, 255, 0.92)',
-          marginTop: '34px',
-          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-        }}>
-          Доступно
-        </div>
-
-        {/* Big Balance: 110 922,58 ₸ (moved up 4px again: marginTop 9px) */}
-        <div style={{
-          display: 'inline-block',
-          fontSize: 'calc(43px + 1.2pt)',
-          fontWeight: '630',
-          fontVariationSettings: "'wght' 630",
-          fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
-          color: '#FFFFFF',
-          letterSpacing: '0.6px',
-          lineHeight: '1.05',
-          marginTop: '9px',
-          transform: 'scaleY(1.01)',
-          transformOrigin: 'left center',
-          textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-        }}>
-          {balanceAmount}
-          {balanceSymbol && (
-            <span style={{
-              fontWeight: '487',
-              fontVariationSettings: "'wght' 487",
-              marginLeft: '12px'
-            }}>
-              {balanceSymbol}
-            </span>
-          )}
+          {/* Big Balance: 110 922,58 ₸ (moved up 4px again: marginTop 9px) */}
+          <div style={{
+            display: 'inline-block',
+            fontSize: 'calc(43px + 1.2pt)',
+            fontWeight: '630',
+            fontVariationSettings: "'wght' 630",
+            fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
+            color: '#FFFFFF',
+            letterSpacing: '0.6px',
+            lineHeight: '1.05',
+            marginTop: '9px',
+            transform: 'scaleY(1.01)',
+            transformOrigin: 'left center',
+            textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+          }}>
+            {balanceAmount}
+            {balanceSymbol && (
+              <span style={{
+                fontWeight: '487',
+                fontVariationSettings: "'wght' 487",
+                marginLeft: '12px'
+              }}>
+                {balanceSymbol}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* 4. MAIN WHITE SHEET (Rounded top corners: 18px, starts at y 238, cuts off medallion bottom) */}
+      {/* 3. HEADER SPACER (Creates resting height: total 238px so the white sheet rests at y ≈ 238px) */}
+      <div style={{
+        height: 'calc(250px - 48px)',
+        flexShrink: 0
+      }} />
+
+      {/* 4. MAIN WHITE SHEET (Rounded top corners: 18px, slides up over the golden header) */}
       <div style={{
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: '18px',
@@ -395,17 +445,18 @@ export const KaspiGoldDetailScreen = ({
             - Gap sheet top -> tab bar: 10px
             - Labels: 14px font
         ===================================================================== */}
-        <div style={{
-          position: 'sticky',
-          top: 'calc(48px + env(safe-area-inset-top, 0px))',
-          zIndex: 40,
-          backgroundColor: '#FFFFFF',
-          padding: '10px 14px 12px 14px',
-          borderTopLeftRadius: isScrolled ? '0' : '18px',
-          borderTopRightRadius: isScrolled ? '0' : '18px',
-          boxSizing: 'border-box',
-          transition: 'border-radius 0.15s ease'
-        }}>
+        <div
+          ref={tabBarRef}
+          style={{
+            position: 'sticky',
+            top: 'calc(48px + env(safe-area-inset-top, 0px))',
+            zIndex: 40,
+            backgroundColor: '#FFFFFF',
+            padding: '10px 14px 12px 14px',
+            borderTopLeftRadius: '18px',
+            borderTopRightRadius: '18px',
+            boxSizing: 'border-box'
+          }}>
           <div style={{
             backgroundColor: '#F0F0F2',
             height: '36px',
