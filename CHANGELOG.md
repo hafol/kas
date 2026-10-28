@@ -2,6 +2,24 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 12:04] — Экран Kaspi Gold: Числа баланса на 4% менее вытянутые и на 4% менее жирные
+
+### 🎯 Запрос пользователя:
+> *«make it a little bit less taller and less bolder by decreasing it 4%»*
+
+### 🛠️ Что сделано:
+1. **Уменьшение вытянутости чисел по вертикали на 4%**:
+   - `transform: scaleY(...)` снижено с `1.08` на 4% — до **`scaleY(1.04)`**.
+2. **Уменьшение насыщенности чисел на 4%**:
+   - `fontWeight` и `fontVariationSettings: "'wght' ..."` уменьшены с `650` на 4% — до **`625`**.
+   - Сохранены: `fontSize: calc(43px + 0.2pt)`, `letterSpacing: 0.6px`.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 11:59] — Экран Kaspi Gold: Числа баланса чуть жирнее (650), крупнее на 0.2pt, межсимвольный интервал +1px
 
 ### 🎯 Запрос пользователя:

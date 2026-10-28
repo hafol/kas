@@ -339,18 +339,18 @@ export const KaspiGoldDetailScreen = ({
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ (a little bit bolder: 650, +0.2pt bigger, +1px letter gap: 0.6px) */}
+        {/* Big Balance: 110 922,58 ₸ (-4% less tall: scaleY 1.04, -4% less bold: weight 625) */}
         <div style={{
           display: 'inline-block',
           fontSize: 'calc(43px + 0.2pt)',
-          fontWeight: '650',
-          fontVariationSettings: "'wght' 650",
+          fontWeight: '625',
+          fontVariationSettings: "'wght' 625",
           fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
           color: '#FFFFFF',
           letterSpacing: '0.6px',
           lineHeight: '1.05',
           marginTop: '6px',
-          transform: 'scaleY(1.08)',
+          transform: 'scaleY(1.04)',
           transformOrigin: 'left center',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
