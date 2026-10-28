@@ -8,85 +8,104 @@ import React from 'react';
  * - icons for my bank vypiska/ (statement items)
  */
 
-const RED = "#DF4337";
+const RED = "#EE3524";
 
 // ============================================================================
 // TAB 1: ДЕЙСТВИЯ (Actions) — Exact user SVGs
 // ============================================================================
 
-// 0. Kaspi QR (authentic vector icon from APK / transfer_ic_icon_qr_main.svg)
-export const IconKaspiQrGold = ({ size = 22, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 96 96" fill={color}>
-    <path d="M30,12C30,10.3431 28.6569,9 27,9H15.75L15.2879,9.0156C11.7755,9.2531 9,12.1774 9,15.75V27L9.0202,27.3499C9.1935,28.8419 10.4615,30 12,30C13.6569,30 15,28.6569 15,27V15.75L15.0198,15.578C15.0975,15.2467 15.395,15 15.75,15H27L27.3499,14.9798C28.8419,14.8065 30,13.5385 30,12ZM86.9844,15.2879C86.7469,11.7755 83.8226,9 80.25,9H69L68.6501,9.0202C67.1581,9.1935 66,10.4615 66,12C66,13.6569 67.3431,15 69,15H80.25L80.422,15.0198C80.7533,15.0975 81,15.395 81,15.75V27L81.0202,27.3499C81.1935,28.8419 82.4615,30 84,30C85.6569,30 87,28.6569 87,27V15.75L86.9844,15.2879ZM41.7,21C43.6882,21 45.3,22.6118 45.3,24.6V41.7C45.3,43.6882 43.6882,45.3 41.7,45.3H24.6C22.6118,45.3 21,43.6882 21,41.7V24.6C21,22.6118 22.6118,21 24.6,21H41.7ZM39.9,26.4H26.4V39.9H39.9V26.4ZM37.2,29.1H29.1V37.2H37.2V29.1ZM45.3,54.3C45.3,52.3118 43.6882,50.7 41.7,50.7H24.6C22.6118,50.7 21,52.3118 21,54.3V71.4C21,73.3882 22.6118,75 24.6,75H41.7C43.6882,75 45.3,73.3882 45.3,71.4V54.3ZM26.4,56.1H39.9V69.6H26.4V56.1ZM37.2,58.8H29.1V66.9H37.2V58.8ZM71.4001,50.7C73.3883,50.7 75.0001,52.3118 75.0001,54.3V71.4C75.0001,73.3882 73.3883,75 71.4001,75H61.5V69.6H56.1V75H54.3C52.3118,75 50.7001,73.3882 50.7001,71.4V69.6H56.1H69.6V61.5H75V56.1H69.6V50.7H71.4001ZM64.2001,50.7H54.3C52.3118,50.7 50.7001,52.3118 50.7001,54.3V64.2H56.1V56.1H64.2001V50.7ZM66.9,58.8H58.7999V66.9H66.9V58.8ZM75.0001,24.6C75.0001,22.6118 73.3883,21 71.4001,21H54.3C52.3118,21 50.7001,22.6118 50.7001,24.6V41.7C50.7001,43.6882 52.3118,45.3 54.3,45.3H71.4001C73.3883,45.3 75.0001,43.6882 75.0001,41.7V24.6ZM56.1,26.4H69.6V39.9H56.1V26.4ZM66.9,29.1H58.7999V37.2H66.9V29.1ZM27,87C28.6569,87 30,85.6569 30,84C30,82.4615 28.8419,81.1935 27.3499,81.0202L27,81H15.75C15.395,81 15.0975,80.7533 15.0198,80.422L15,80.25V69C15,67.3431 13.6569,66 12,66C10.4615,66 9.1935,67.1581 9.0202,68.6501L9,69V80.25C9,83.8226 11.7755,86.7469 15.2879,86.9844L15.75,87H27ZM80.25,87C83.8226,87 86.7469,84.2245 86.9844,80.7121L87,80.25V69C87,67.3431 85.6569,66 84,66C82.4615,66 81.1935,67.1581 81.0202,68.6501L81,69V80.25C81,80.605 80.7533,80.9025 80.422,80.9802L80.25,81H69C67.3431,81 66,82.3431 66,84C66,85.5385 67.1581,86.8065 68.6501,86.9798L69,87H80.25Z" fill={color} fillRule="evenodd" clipRule="evenodd" />
+// 0. Kaspi QR (authentic refined stroke icon with corner brackets and 3 nested markers)
+export const IconKaspiQrGold = ({ size = 23, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    {/* 4 outer corners */}
+    <path d="M2.5 7.5V3.8C2.5 3.08 3.08 2.5 3.8 2.5H7.5" stroke={color} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16.5 2.5H20.2C20.92 2.5 21.5 3.08 21.5 3.8V7.5" stroke={color} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2.5 16.5V20.2C2.5 20.92 3.08 21.5 3.8 21.5H7.5" stroke={color} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16.5 21.5H20.2C20.92 21.5 21.5 20.92 21.5 20.2V16.5" stroke={color} strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" />
+    
+    {/* 3 inner markers */}
+    <rect x="5.2" y="5.2" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.6" />
+    <rect x="6.85" y="6.85" width="1.8" height="1.8" rx="0.5" fill={color} />
+    
+    <rect x="13.7" y="5.2" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.6" />
+    <rect x="15.35" y="6.85" width="1.8" height="1.8" rx="0.5" fill={color} />
+    
+    <rect x="5.2" y="13.7" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.6" />
+    <rect x="6.85" y="15.35" width="1.8" height="1.8" rx="0.5" fill={color} />
+    
+    {/* Bottom right structure */}
+    <path d="M13.7 13.7H16.5V16.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16.5 16.5H19.2V19.2" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="15.1" cy="18" r="0.9" fill={color} />
   </svg>
 );
 
 // 1. Перевести (repeat.svg)
-export const IconTransferGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconTransferGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3.15 11.7V11.85Q3.15 6.06 8.94 6.06H20.54M17.74 3.26L20.54 6.06L17.74 8.86"/>
     <path d="M20.85 12.22V12.15Q20.85 17.94 15.06 17.94H3.42M6.22 15.14L3.42 17.94L6.22 20.74"/>
   </svg>
 );
 
 // 2. Пополнить Kaspi Gold (card-add.svg)
-export const IconTopupGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconTopupGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M11.64 5.6H19.06Q22.36 5.6 22.36 8.9V18.05Q22.36 21.35 19.06 21.35H4.93Q1.62 21.35 1.62 18.05V11.63"/>
     <path d="M8.7 10.47H22.36M17.06 17.42H18.77M1.69 5.53H7.46M4.58 2.64V8.41"/>
   </svg>
 );
 
 // 3. Оплата в интернете (globe.svg)
-export const IconWebPayGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconWebPayGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="8.86"/>
     <path d="M11.39 3.14A13.26 13.26 0 0 0 11.39 20.86M12.61 3.14A13.26 13.26 0 0 1 12.61 20.86M4.2 7.79Q12 11.86 19.8 7.79M4.2 16.21Q12 12.14 19.8 16.21"/>
   </svg>
 );
 
 // 4. Платные сервисы и подписки (calendar-refresh.svg)
-export const IconSubscriptionsGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconSubscriptionsGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <rect x="3.09" y="4.59" width="17.81" height="16.73" rx="2.9"/>
     <path d="M8 2.69V6.35M15.92 2.69V6.35M16.01 12.19A4.35 4.35 0 0 0 8.4 11.3M9.54 11.75H8.03V10.05M8.19 15.09A4.35 4.35 0 0 0 15.49 15.93M14.61 15.26H16.14V16.85"/>
   </svg>
 );
 
 // 5. Заказать сумму на снятие (tenge-box-2.svg)
-export const IconOrderCashGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconOrderCashGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <rect x="1.62" y="4.13" width="20.75" height="15.75" rx="2.54"/>
     <path d="M9.14 8.04H14.89M9.14 10.93H14.89M12.01 10.93V15.85"/>
   </svg>
 );
 
 // 6. Перевыпустить Kaspi Gold (card-refresh.svg)
-export const IconReissueGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconReissueGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M15.03 5.14H19.28Q22.79 5.14 22.79 8.65V17.46Q22.79 20.98 19.28 20.98H5.54Q2.03 20.98 2.03 17.46V16.61"/>
     <path d="M15.03 9.1H22.79M17.53 17.01H19.19M4.45 3.24A5.24 5.24 0 0 0 3.48 12.4M1.98 13.23H4.1V11.03M10.74 3.01H8.51V5.25M8.67 3.4A5.24 5.24 0 0 1 7.81 12.95"/>
   </svg>
 );
 
 // 7. Сменить ПИН-код (asterisk.svg)
-export const IconChangePinGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconChangePinGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 3.21L12 20.79M19.61 7.61L4.39 16.39M19.61 16.39L4.39 7.61"/>
   </svg>
 );
 
 // 8. Заблокировать карту (lock.svg)
-export const IconBlockCardGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconBlockCardGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <rect x="3.11" y="9.04" width="17.76" height="11.86" rx="2.9"/>
     <path d="M7.04 9.04V7.16Q7.04 3.08 11.12 3.08H12.86Q16.95 3.08 16.95 7.16V9.04M11.95 14.09V15.91"/>
   </svg>
 );
 
 // 9. Снять деньги без карты (atm-card.svg)
-export const IconCardlessGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconCardlessGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M6.55 8.76H4.74Q2.56 8.76 2.56 6.59V5.04Q2.56 2.86 4.74 2.86H19.25Q21.43 2.86 21.43 5.04V6.59Q21.43 8.76 19.25 8.76H17.45"/>
     <rect x="6.55" y="6.28" width="10.9" height="14.85" rx="0.94"/>
     <path d="M9.4 13.71H10.2M12.34 12.15V15.34M14.91 12.15V15.34"/>
@@ -94,8 +113,8 @@ export const IconCardlessGold = ({ size = 24, color = RED }) => (
 );
 
 // 10. Закрыть Kaspi Gold (close-circle.svg)
-export const IconCloseCardGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconCloseCardGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="8.89"/>
     <path d="M9.14 9.14L14.91 14.91M14.91 9.14L9.14 14.91"/>
   </svg>
@@ -107,8 +126,8 @@ export const IconCloseCardGold = ({ size = 24, color = RED }) => (
 // ============================================================================
 
 // 1. Аналитика покупок (card-tap.svg)
-export const IconAnalyticsGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconAnalyticsGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M15.51 19.76L12.02 16.13Q12.9 13.35 14.78 14.08L19.06 18.34V7.08Q19.06 4.24 16.22 4.24H3.85Q1.01 4.24 1.01 7.08V15.49Q1.01 18.33 3.85 18.33H9.46"/>
     <path d="M1.01 8.7H19.06"/>
     <path d="M18.92 8.21L21.12 10.65Q22.09 10.81 22.98 17.55V18.28"/>
@@ -116,24 +135,24 @@ export const IconAnalyticsGold = ({ size = 24, color = RED }) => (
 );
 
 // 2. Лимит на снятие наличных (tenge-box.svg)
-export const IconLimitsGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconLimitsGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <rect x="1.17" y="3.75" width="21.64" height="16.49" rx="2.74"/>
     <path d="M9.01 7.88H15.01M9.01 10.94H15.01M12.01 10.94V16.14"/>
   </svg>
 );
 
 // 3. Реквизиты карты и счета (list-box.svg)
-export const IconRequisitesGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconRequisitesGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <rect x="3.75" y="2.75" width="16.5" height="18.5" rx="3"/>
     <path d="M7.83 8.4h0.01M7.83 11.42V15.57M12.07 10.44H15.98M12.07 14.56H15.98"/>
   </svg>
 );
 
 // 4. Справки (document.svg)
-export const IconCertificatesGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconCertificatesGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M15.18 2.75H7.4Q3.75 2.75 3.75 6.4V17.6Q3.75 21.25 7.4 21.25H16.6Q20.25 21.25 20.25 17.6V7.75Z"/>
     <path d="M15.18 2.75V7.39Q15.18 7.75 15.54 7.75H20.25"/>
     <path d="M7.93 12.09H16.03M7.93 16.18H10.84"/>
@@ -141,31 +160,31 @@ export const IconCertificatesGold = ({ size = 24, color = RED }) => (
 );
 
 // 5. Условия Kaspi Gold (checklist-document.svg)
-export const IconConditionsGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconConditionsGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <rect x="3.75" y="2.74" width="16.5" height="18.5" rx="3"/>
     <path d="M7.97 6.8H16.06M7.97 10.95H10.39M8.91 15.48L11.07 17.62L16.03 12.64"/>
   </svg>
 );
 
 // 6. Терминалы и банкоматы (location-pin.svg)
-export const IconAtmsGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconAtmsGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 22.81L5.6 16.08A8.83 8.83 0 1 1 18.4 16.08Z"/>
     <circle cx="12" cy="9.88" r="4.13"/>
   </svg>
 );
 
 // 7. Полезные советы (star.svg)
-export const IconTipsGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconTipsGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 2.76L15.02 8.82L21.71 9.82L16.89 14.56L18 21.24L12 18.11L6 21.24L7.11 14.56L2.29 9.82L8.98 8.82Z"/>
   </svg>
 );
 
 // 8. Пополнения с Visa (phone-sign-in.svg)
-export const IconVisaTopupGold = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const IconVisaTopupGold = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <path d="M7.89 10.03V4.74Q7.89 1.7 10.93 1.7H17.17Q20.21 1.7 20.21 4.74V19.26Q20.21 22.3 17.17 22.3H10.93Q7.89 22.3 7.89 19.26V18.16"/>
     <path d="M13.1 4.8H15.02"/>
     <path d="M3.77 10.41L4.19 12.25Q5.83 14.05 6.71 14.05H15.85M12.34 10.38L15.85 14.05L12.34 17.73"/>
@@ -178,16 +197,16 @@ export const IconVisaTopupGold = ({ size = 24, color = RED }) => (
 // ============================================================================
 
 // Календарь даты (calendar.svg)
-export const StatementCalendarIcon = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const StatementCalendarIcon = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <rect x="3.74" y="5.09" width="16.53" height="15.55" rx="2.75"/>
     <path d="M8.27 3.36V6.69M15.65 3.36V6.69M7.68 10.57H16.29"/>
   </svg>
 );
 
 // Иконка строки Операции (tenge-receipt.svg)
-export const StatementOperationsReceiptIcon = ({ size = 24, color = RED }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+export const StatementOperationsReceiptIcon = ({ size = 22, color = RED }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
     <rect x="4.65" y="2.83" width="14.7" height="18.35" rx="2.45"/>
     <path d="M9.43 6.5H14.45M9.43 9.25H14.45M11.94 9.25V13.65M8.35 17.5h0.01M12 17.5h0.01M15.65 17.5h0.01"/>
   </svg>

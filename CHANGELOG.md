@@ -2,6 +2,32 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 02:44] — Экран Kaspi Gold: Аутентичные круглые плашки (#F6F6F7), утончение штриха иконок (1.6px) и утонченный Kaspi QR
+
+### 🎯 Запрос пользователя:
+> *«idk if you can see it or not but the every icon in that page has that almost invincible circle around them check it out in the screenshot and then you gotta make thta icons less bolder and smaller(except qr code just make it less bolder) for like 2px best what you can do you know try to comapre whats in our website and this screenshot or the whole orig page so you hit that exact point with calculated ratios stuff like that alr?»*
+
+### 🛠️ Что сделано:
+1. **Аутентичный круглый диск вокруг каждой иконки («almost invisible circle»)**:
+   - Анализ пикселей оригинального скриншота показал наличие круглого фона цвета `#F6F6F7` (соотношение иконка/диск ~ 0.53–0.56).
+   - Все контейнеры иконок во вкладках «Действия», «Инфо» и «Выписка» преобразованы в круглые плашки: `width: 40px`, `height: 40px`, `borderRadius: '50%'`, `backgroundColor: '#F6F6F7'`.
+   - Текст аккуратно выровнен с отступом `marginLeft: '16px'`.
+2. **Утонченный векторный Kaspi QR**:
+   - Заменен громоздкий сплошной QR на оригинальный контурный штриховой QR-сканер из APK (4 угловых фиксатора, 3 квадратных маркера с точками, тонкий штрих `1.65px`, `size: 24px`).
+3. **Уменьшение размера и толщины всех остальных иконок**:
+   - Размер уменьшен на ~2px: со `size={24}` / `29` до `size={22}` (идеальное соотношение 22/40 = 0.55 внутри круга).
+   - Толщина штриха `strokeWidth` уменьшена с `2px` до изящных `1.6px` у всех контурных иконок.
+   - Цвет приведен к чистому Kaspi Red `#EE3524`.
+4. **Проверка**:
+   - Скрипты `measure_ratios.py`, `test_qr_refined.py` и `test_circles_live.py` подтвердили 1:1 соответствие с оригинальными кропами (`_archive/compare_icons.png`, `_archive/test_circles_actions.png`).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldIcons.jsx)
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 02:28] — Экран Kaspi Gold: Текст и баланс привязаны к движению белой шторки, статичный медальон и стрелка назад +50%
 
 ### 🎯 Запрос пользователя:

@@ -553,17 +553,19 @@ export const KaspiGoldDetailScreen = ({
                 >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{
-                      width: '36px',
-                      height: '36px',
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      backgroundColor: '#F6F6F7',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
-                      <IconComponent size={29} color="#DF4337" />
+                      <IconComponent size={action.id === 'qr' ? 24 : 22} color="#EE3524" />
                     </div>
 
-                    <div style={{ marginLeft: '20px', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
                       <span style={{
                         fontSize: '19px',
                         fontWeight: '400',
@@ -619,17 +621,19 @@ export const KaspiGoldDetailScreen = ({
                 >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{
-                      width: '36px',
-                      height: '36px',
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      backgroundColor: '#F6F6F7',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
-                      <IconComponent size={29} color="#DF4337" />
+                      <IconComponent size={22} color="#EE3524" />
                     </div>
 
-                    <div style={{ marginLeft: '20px', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
                       <span style={{
                         fontSize: '19px',
                         fontWeight: '400',
@@ -708,13 +712,16 @@ export const KaspiGoldDetailScreen = ({
             }} className="touchable">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#F6F6F7',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  flexShrink: 0
                 }}>
-                  <StatementCalendarIcon size={29} color="#DF4337" />
+                  <StatementCalendarIcon size={22} color="#EE3524" />
                 </div>
                 <span style={{
                   marginLeft: '16px',
@@ -744,13 +751,16 @@ export const KaspiGoldDetailScreen = ({
             }} className="touchable">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: '#F6F6F7',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  flexShrink: 0
                 }}>
-                  <StatementOperationsReceiptIcon size={29} color="#DF4337" />
+                  <StatementOperationsReceiptIcon size={22} color="#EE3524" />
                 </div>
                 <span style={{
                   marginLeft: '16px',
