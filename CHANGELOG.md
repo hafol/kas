@@ -2,6 +2,24 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 03:18] — Экран Kaspi Gold: Смещение иконки SVG (медальона) вверх на 25px (top: 39px)
+
+### 🎯 Запрос пользователя:
+> *«move it up for like 25px»*
+
+### 🛠️ Что сделано:
+1. **Смещение медальона вверх на 25px**:
+   - `top` изменено с `calc(env(safe-area-inset-top, 0px) + 64px)` на `calc(env(safe-area-inset-top, 0px) + 39px)`.
+   - Медальон смещен вверх ровно на 25px, сохраняя фиксированную ширину и высоту `108 × 108px` и `right: 25px`.
+2. **Проверка**:
+   - Скриншот `_archive/test_circles_actions.png` подтвердил новое расположение.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 03:07] — Экран Kaspi Gold: Возврат иконки SVG (медальона) строго к исходным размерам и положению (108px, top: 64px, right: 25px)
 
 ### 🎯 Запрос пользователя:

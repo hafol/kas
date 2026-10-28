@@ -346,7 +346,7 @@ export const KaspiGoldDetailScreen = ({
           style={{
             position: 'absolute',
             right: '25px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 64px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 39px)',
             width: '108px',
             height: '108px',
             display: 'flex',
