@@ -347,7 +347,7 @@ export const KaspiGoldDetailScreen = ({
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ (moved up 4px closer to Доступно: marginTop 16px) */}
+        {/* Big Balance: 110 922,58 ₸ (moved up 3px: marginTop 13px) */}
         <div style={{
           display: 'inline-block',
           fontSize: 'calc(43px + 1.2pt)',
@@ -357,7 +357,7 @@ export const KaspiGoldDetailScreen = ({
           color: '#FFFFFF',
           letterSpacing: '0.6px',
           lineHeight: '1.05',
-          marginTop: '16px',
+          marginTop: '13px',
           transform: 'scaleY(1.01)',
           transformOrigin: 'left center',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
