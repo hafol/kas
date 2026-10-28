@@ -317,6 +317,7 @@ export const KaspiGoldDetailScreen = ({
           left: 0,
           right: 0,
           height: 0,
+          marginTop: 'calc(-48px - env(safe-area-inset-top, 0px))',
           zIndex: 2,
           pointerEvents: 'none',
           willChange: 'opacity, transform'
@@ -421,7 +422,7 @@ export const KaspiGoldDetailScreen = ({
 
       {/* 3. HEADER SPACER (Creates resting height: total 238px so the white sheet rests at y ≈ 238px) */}
       <div style={{
-        height: 'calc(250px - 48px)',
+        height: 'calc(250px + env(safe-area-inset-top, 0px))',
         flexShrink: 0
       }} />
 
