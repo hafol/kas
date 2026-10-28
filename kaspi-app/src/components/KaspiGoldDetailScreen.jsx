@@ -105,6 +105,11 @@ export const KaspiGoldDetailScreen = ({
     ? card.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\u00a0/g, ' ') + ' ₸'
     : (card.balance || '110 922,58 ₸');
 
+  const balanceAmount = formattedBalance.endsWith('₸')
+    ? formattedBalance.slice(0, -1).trimEnd()
+    : formattedBalance;
+  const balanceSymbol = formattedBalance.endsWith('₸') ? '₸' : '';
+
   // 11 items for TAB 1: ДЕЙСТВИЯ (exact match with Right Screenshot)
   const actionsList = [
     { id: 'qr', title: 'Kaspi QR', IconComponent: IconKaspiQrGold },
@@ -208,7 +213,7 @@ export const KaspiGoldDetailScreen = ({
           style={{
             position: 'absolute',
             right: '24px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 75px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 78px)',
             width: '115px',
             height: '115px',
             display: 'flex',
@@ -339,7 +344,7 @@ export const KaspiGoldDetailScreen = ({
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ (-4% less tall: scaleY 1.04, -4% less bold: weight 625) */}
+        {/* Big Balance: 110 922,58 ₸ (-4% less tall: scaleY 1.04, -4% less bold: weight 625, tenge symbol less bold 450, gap 7px) */}
         <div style={{
           display: 'inline-block',
           fontSize: 'calc(43px + 0.2pt)',
@@ -349,12 +354,21 @@ export const KaspiGoldDetailScreen = ({
           color: '#FFFFFF',
           letterSpacing: '0.6px',
           lineHeight: '1.05',
-          marginTop: '6px',
+          marginTop: '7px',
           transform: 'scaleY(1.04)',
           transformOrigin: 'left center',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
-          {formattedBalance}
+          {balanceAmount}
+          {balanceSymbol && (
+            <span style={{
+              fontWeight: '400',
+              fontVariationSettings: "'wght' 450",
+              marginLeft: '4px'
+            }}>
+              {balanceSymbol}
+            </span>
+          )}
         </div>
       </div>
 

@@ -2,6 +2,25 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 12:10] — Экран Kaspi Gold: Смещение логотипа вниз на 3px (top: +78px), символ тенге менее жирный (400/450), зазор от «Доступно» +1px
+
+### 🎯 Запрос пользователя:
+> *«now change it postion down by 3px and the tenge symbol next to nmbers make it less bolder increas a gap between the доступно and numbers by 1px»*
+
+### 🛠️ Что сделано:
+1. **Смещение логотипа-медальона вниз на 3px**:
+   - `top` в [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx) увеличено с `75px` до **`78px`** (`calc(env(safe-area-inset-top, 0px) + 78px)`).
+2. **Символ тенге (₸) менее жирный**:
+   - Значение баланса разделено на сумму и знак валюты: символ `₸` вынесен в отдельный тег `<span>` с `fontWeight: 400` и `fontVariationSettings: "'wght' 450"`, аутентично повторяя начертание в оригинальном приложении Kaspi.
+3. **Увеличение отступа между «Доступно» и числами баланса на 1px**:
+   - `marginTop` блока чисел увеличен с `6px` до **`7px`**.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 12:04] — Экран Kaspi Gold: Числа баланса на 4% менее вытянутые и на 4% менее жирные
 
 ### 🎯 Запрос пользователя:
