@@ -2,6 +2,29 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 03:52] — Экран Kaspi Gold: Устранение перекрытия баланса шторкой и постоянные скругленные углы (18px)
+
+### 🎯 Запрос пользователя:
+> *«wth is that fix it the second image, and btw the curved cornres dont gotta dissapear they gotta stay check out the screenshot first image this is original»*
+
+### 🛠️ Что сделано:
+1. **Устранение перекрытия баланса шторкой (второй скриншот пользователя)**:
+   - Причина: искусственный `spacerRef: 190px` с `height: 0` на `bigHeaderRef` на экранах iPhone (с `safe-area-inset-top: 47px`) приводил к тому, что шторка начиналась на 70px выше, срезая пополам цифры баланса `110 922,58 ₸`.
+   - Решение: `bigHeaderRef` теперь имеет естественную высоту в потоке документа (`paddingTop: 16px`, `paddingBottom: 24px`) и `position: sticky; top: calc(48px + env(safe-area-inset-top, 0px))`. Искусственный `spacerRef` полностью удален.
+   - Теперь на любых экранах и любых отступах Safe Area белая шторка всегда начинается строго ниже баланса с комфортным зазором в 24px, цифры никогда не срезаются.
+2. **Сохранение скругленных углов шторки (первый скриншот пользователя — оригинал)**:
+   - Удалено динамическое обнуление `borderTopLeftRadius = '0px'` / `borderTopRightRadius = '0px'` при достижении навбара.
+   - Скругленные углы `18px` теперь **постоянны** и не исчезают при скролле, в точности повторяя оригинальный скриншот приложения Kaspi.kz.
+3. **Проверка**:
+   - `test_scroll_rest.png`, `test_iphone_rest.png`: баланс полностью виден, шторка не перекрывает цифры.
+   - `test_scroll_pinned.png`, `test_iphone_pinned.png`: скругленные углы 18px сохранены в зафиксированном состоянии.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 03:33] — Экран Kaspi Gold: Возврат пофреймового collapsing header (16 frames) и уменьшение стрелки на 20%
 
 ### 🎯 Запрос пользователя:
