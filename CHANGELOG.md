@@ -2,6 +2,21 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 01:12] — Экран Kaspi Gold: Числа баланса и символ валюты подняты еще на 4px (marginTop 9px)
+
+### 🎯 Запрос пользователя:
+> *«no make it up by 4px again»*
+
+### 🛠️ Что сделано:
+1. **Числа и символ валюты подняты на 4px**:
+   - `marginTop` блока баланса уменьшен с `13px` до **`9px`** (-4px ближе к «Доступно»).
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 00:46] — Экран Kaspi Gold: Числа баланса и символ валюты подняты на 3px (marginTop 13px)
 
 ### 🎯 Запрос пользователя:
