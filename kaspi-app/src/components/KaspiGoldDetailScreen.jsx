@@ -594,8 +594,8 @@ export const KaspiGoldDetailScreen = ({
           }}>
           <div style={{
             backgroundColor: '#F0F0F2',
-            height: '36px',
-            borderRadius: '10px',
+            height: '41px',
+            borderRadius: '11px',
             padding: '2.5px',
             display: 'flex',
             alignItems: 'center',
@@ -610,11 +610,11 @@ export const KaspiGoldDetailScreen = ({
                 bottom: '2.5px',
                 left: '2.5px',
                 width: 'calc((100% - 5px) / 3)',
-                borderRadius: '8px',
+                borderRadius: '8.5px',
                 backgroundColor: '#FFFFFF',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12), 0 0.5px 1px rgba(0, 0, 0, 0.06)',
                 transform: `translateX(${tabIndex * 100}%)`,
-                transition: 'transform 0.28s cubic-bezier(0.25, 1, 0.5, 1)',
+                transition: 'transform 0.52s cubic-bezier(0.2, 0.9, 0.25, 1)',
                 pointerEvents: 'none',
                 zIndex: 1
               }}
@@ -634,8 +634,8 @@ export const KaspiGoldDetailScreen = ({
                   className="touchable"
                   style={{
                     flex: 1,
-                    height: '31px',
-                    borderRadius: '8px',
+                    height: '36px',
+                    borderRadius: '8.5px',
                     backgroundColor: 'transparent',
                     border: 'none',
                     outline: 'none',
@@ -644,10 +644,10 @@ export const KaspiGoldDetailScreen = ({
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontFamily: "'Roboto', sans-serif",
-                    fontSize: '14px',
+                    fontSize: 'calc(14px + 2pt)',
                     fontWeight: isActive ? '600' : '400',
                     color: isActive ? '#1C1C1E' : '#8E8E93',
-                    transition: 'color 0.2s ease, font-weight 0.2s ease',
+                    transition: 'color 0.3s ease, font-weight 0.3s ease',
                     padding: 0,
                     position: 'relative',
                     zIndex: 2,
@@ -663,7 +663,7 @@ export const KaspiGoldDetailScreen = ({
 
         {/* =====================================================================
             SLIDING CONTENT MODULES (Действия / Инфо / Выписка)
-            - 3-pane horizontal track with cubic-bezier transition
+            - 3-pane horizontal track with slow & smooth cubic-bezier transition (0.52s)
             - Slides right-to-left or left-to-right when switching tabs
             - Dynamically updates container height
             - Circles less visible: rgba(0, 0, 0, 0.02)
@@ -675,7 +675,7 @@ export const KaspiGoldDetailScreen = ({
             overflow: 'hidden',
             position: 'relative',
             height: sliderHeight === 'auto' ? 'auto' : `${sliderHeight}px`,
-            transition: 'height 0.3s cubic-bezier(0.25, 1, 0.5, 1)'
+            transition: 'height 0.52s cubic-bezier(0.2, 0.9, 0.25, 1)'
           }}
           onTouchStart={handleModuleTouchStart}
           onTouchEnd={handleModuleTouchEnd}
@@ -685,7 +685,7 @@ export const KaspiGoldDetailScreen = ({
               display: 'flex',
               width: '300%',
               transform: `translate3d(-${tabIndex * 33.333333}%, 0, 0)`,
-              transition: 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
+              transition: 'transform 0.52s cubic-bezier(0.2, 0.9, 0.25, 1)',
               alignItems: 'flex-start'
             }}
           >
