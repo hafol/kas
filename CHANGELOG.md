@@ -2,6 +2,33 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-28 11:53] — Экран Kaspi Gold: Смещение логотипа вниз на 2px (top: +75px), числа баланса выше и крупнее, «Доступно» +3pt, заголовок и Apple Pay +15%
+
+### 🎯 Запрос пользователя:
+> *«move it down by 2 px and then the numbers make taller and bigger not bolder доступно bigger for like 3pt then the word Kaspi Gold \*4163with appple pat attached make them bigger by 15%»*
+
+### 🛠️ Что сделано:
+1. **Смещение логотипа-медальона вниз на 2px**:
+   - `top` в [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx) увеличено с `73px` до **`75px`** (`calc(env(safe-area-inset-top, 0px) + 75px)`).
+2. **Числа баланса (110 922,58 ₸) выше и крупнее, но не жирнее**:
+   - `fontSize`: увеличено с `38px` до **`43px`**.
+   - `fontWeight`: установлено в чистый четкий **`600`** (не утяжеляя до 700/800, сохраняя изящество линий).
+   - Вытянутость по вертикали: добавлено `transform: scaleY(1.08)` с `transformOrigin: left center`.
+   - `fontFamily`: явно подключен нативный `'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif`.
+3. **Подпись «Доступно» увеличена на ~3pt**:
+   - `fontSize`: увеличено с `14px` до **`17px`**.
+   - `marginTop`: `32px` для гармоничного вертикального ритма.
+4. **Заголовок «Kaspi Gold *4163» и значок Apple Pay увеличены на +15%**:
+   - Текст заголовка: `fontSize` увеличен с `19.5px` на +15% — до **`22.5px`**.
+   - Бейдж [`ApplePayBadge`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldIcons.jsx): высота увеличена с `14px` до **`16px`**, SVG логотипа яблока с `8.5×10` до **`10×11.5`**, шрифт «Pay» с `8px` до **`9.2px`**, отступ `marginLeft: 9px`.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`kaspi-app/src/components/KaspiGoldIcons.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldIcons.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 04:53] — Экран Kaspi Gold: Смещение логотипа-медальона вниз на 4px (top: +73px)
 
 ### 🎯 Запрос пользователя:

@@ -214,27 +214,27 @@ export const StatementPersonIcon = ({ size = 20, color = "#929292" }) => (
 // HEADER ELEMENTS (Apple Pay badge & Kaspi Gold Medallion)
 // ============================================================================
 
-// Apple Pay badge pill: right screenshot is narrower (~22-24px), faded/semi-transparent (14px height)
+// Apple Pay badge pill: +15% bigger (height 16px, SVG 10x11.5, font 9.2px)
 export const ApplePayBadge = ({ style = {} }) => (
   <div style={{
-    height: '14px',
+    height: '16px',
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    borderRadius: '3px',
+    borderRadius: '3.5px',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '0 4px',
+    padding: '0 5px',
     boxSizing: 'border-box',
     verticalAlign: 'middle',
     opacity: 0.85,
     ...style
   }}>
-    <svg width="8.5" height="10" viewBox="0 0 170 170" fill="#222222" style={{ marginRight: '1.5px' }}>
+    <svg width="10" height="11.5" viewBox="0 0 170 170" fill="#222222" style={{ marginRight: '2px' }}>
       <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.68-7.85-11.96-14.43-5.77-8.91-10.29-19.12-13.56-30.64-3.27-11.52-4.9-22.37-4.9-32.55 0-14.68 3.7-26.68 11.1-36 7.4-9.32 16.59-14.07 27.56-14.25 4.35 0 9.4 1.15 15.15 3.45 5.75 2.3 9.4 3.51 10.95 3.63 1.99-.24 5.86-1.56 11.61-3.95 5.76-2.39 10.74-3.48 14.95-3.28 11.31.5 20.46 4.9 27.46 13.2-9.8 5.89-14.6 14.04-14.4 24.45.2 8.01 3.28 14.71 9.25 20.1 5.96 5.39 13.06 8.52 21.3 9.38-2.32 7.18-5.46 14.24-9.4 21.18zM119.22 33.15c0-6.72 2.45-13.07 7.35-19.05 4.9-5.98 10.92-9.94 18.06-11.88.54 1.52.82 3.03.82 4.53 0 6.6-2.6 13.04-7.8 19.32-5.2 6.28-11.33 9.94-18.43 10.98-.07-1.3-.0-2.6-.0-3.9z"/>
     </svg>
     <span style={{
       fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Roboto", sans-serif',
-      fontSize: '8px',
+      fontSize: '9.2px',
       fontWeight: '600',
       color: '#222222',
       lineHeight: 1

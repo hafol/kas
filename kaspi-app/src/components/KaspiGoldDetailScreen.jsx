@@ -208,7 +208,7 @@ export const KaspiGoldDetailScreen = ({
           style={{
             position: 'absolute',
             right: '24px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 73px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 75px)',
             width: '115px',
             height: '115px',
             display: 'flex',
@@ -311,13 +311,13 @@ export const KaspiGoldDetailScreen = ({
         overflow: 'hidden',
         minHeight: '250px'
       }}>
-        {/* Card Name + Apple Pay badge */}
+        {/* Card Name + Apple Pay badge (+15% bigger) */}
         <div style={{
           display: 'flex',
           alignItems: 'center'
         }}>
           <span style={{
-            fontSize: '19.5px',
+            fontSize: '22.5px',
             fontWeight: '700',
             color: '#FFFFFF',
             letterSpacing: '0.1px',
@@ -325,28 +325,32 @@ export const KaspiGoldDetailScreen = ({
           }}>
             Kaspi Gold *{card.last4}
           </span>
-          <ApplePayBadge style={{ marginLeft: '8px' }} />
+          <ApplePayBadge style={{ marginLeft: '9px' }} />
         </div>
 
-        {/* Caption "Доступно" (gap from title: 34-36px) */}
+        {/* Caption "Доступно" (+3pt bigger: 17px) */}
         <div style={{
-          fontSize: '14px',
+          fontSize: '17px',
           fontWeight: '400',
           color: 'rgba(255, 255, 255, 0.92)',
-          marginTop: '34px',
+          marginTop: '32px',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ (gap from label: 8px, font: 38px bold) */}
+        {/* Big Balance: 110 922,58 ₸ (taller & bigger, not bolder: 43px, scaleY 1.08, weight 600) */}
         <div style={{
-          fontSize: '38px',
-          fontWeight: '700',
+          display: 'inline-block',
+          fontSize: '43px',
+          fontWeight: '600',
+          fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
           color: '#FFFFFF',
           letterSpacing: '-0.4px',
-          lineHeight: '1.1',
+          lineHeight: '1.05',
           marginTop: '6px',
+          transform: 'scaleY(1.08)',
+          transformOrigin: 'left center',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
           {formattedBalance}
