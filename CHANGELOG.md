@@ -2,6 +2,35 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 02:28] — Экран Kaspi Gold: Текст и баланс привязаны к движению белой шторки, статичный медальон и стрелка назад +50%
+
+### 🎯 Запрос пользователя:
+> *«you know that text and stuffs excaept for arrow and icon svf they are gotta be linked tothis white module alright when you start moving it up ro scroll down the numbers starts also going up and faids away as the animations you get it? and also amke the arraow icon bigger 50%»*
+
+### 🛠️ Что сделано:
+1. **Стрелка назад `<` увеличена ровно на +50%**:
+   - Размер векторного SVG изменен с `9 × 17` до `13.5 × 25.5` (viewBox 10×18, `strokeWidth: 2.4`).
+   - Контейнер увеличен до `42 × 42px` для удобного пальцевого тапа (`touch-action`).
+   - Стрелка остается строго статичной в верхнем левом углу навбара (`zIndex: 50`).
+2. **Золотой медальон (SVG) зафиксирован статично**:
+   - Медальон вынесен в отдельный независимый слой `position: sticky; top: 0; height: 0; zIndex: 2`.
+   - При скролле медальон физически не смещается (остается на `y = 78px`), пока белая шторка надвигается снизу.
+3. **Текст заголовка и баланс привязаны к белой шторке (Linked Flow)**:
+   - Контейнер `bigHeaderTextRef` помещен в естественный поток документа прямо над шторкой.
+   - При свайпе вверх / скролле вниз цифры баланса (`110 922,58 ₸`), надпись `Доступно` и название карты начинают синхронно подниматься вверх вместе с белой шторкой и угасают (`opacity -> 0`).
+   - При скролле назад вниз — возвращаются на свои места.
+4. **Проверка**:
+   - Проверено скриптами `test_linked_header.py`, `test_pinned.py` и `verify_all_displays.py`.
+   - В покое: заголовок на `y=66px`, шторка на `y=228px` (все 7 пунктов видны).
+   - При скролле 50px: баланс поднимается на 50px выше, плавно затухая.
+   - При скролле 200px: табы намертво прилипают к навбару (`y=48px`), радиус `0px`, компактный заголовок `opacity: 1`.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 01:52] — Экран Kaspi Gold: Динамический замер геометрии (Dynamic Geometry) и мульти-девайс тестирование 360–430px
 
 ### 🎯 Запрос пользователя:
