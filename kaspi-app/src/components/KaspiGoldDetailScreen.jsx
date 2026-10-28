@@ -428,9 +428,9 @@ export const KaspiGoldDetailScreen = ({
           style={{
             position: 'absolute',
             right: '25px',
-            top: '18px',
-            width: '108px',
-            height: '108px',
+            top: '26px',
+            width: '113.4px',
+            height: '113.4px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

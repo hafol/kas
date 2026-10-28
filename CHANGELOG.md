@@ -2,6 +2,25 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 04:05] — Экран Kaspi Gold: Увеличение SVG-медальона на 5% и смещение вниз на 8px
+
+### 🎯 Запрос пользователя:
+> *«make it bigger by 5%and move down by 8px»*
+
+### 🛠️ Что сделано:
+1. **Корректировка размеров и координат SVG-медальона (`KaspiGoldDetailScreen.jsx`)**:
+   - `width` и `height`: увеличены на 5% (со `108px` до **`113.4px`**).
+   - `top`: смещён вниз на 8px (с `18px` до **`26px`**).
+   - `right`: сохранён `25px`.
+2. **Проверка**:
+   - Скриншот `_archive/test_iphone_rest.png` подтвердил увеличенный и идеально выровненный вид медальона.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 04:02] — Экран Kaspi Gold: Смещение векторного SVG-медальона на 5px влево и 10px вниз
 
 ### 🎯 Запрос пользователя:
