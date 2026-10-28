@@ -2,6 +2,29 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 00:14] — Экран Kaspi Gold: Баланс +1pt, символ тенге вес 487, вес цифр 630 (+5), зазор между ними 12px (+4px), смещение строки вниз на 5px (marginTop 20px)
+
+### 🎯 Запрос пользователя:
+> *«make those two bigger like +1pt an then make the currencsy weight 487 and then the numbers weight add 5 adn then the gap betwwen those two move the currency 4px to the right and both down by 5px»*
+
+### 🛠️ Что сделано:
+1. **Размер баланса увеличен на +1pt**:
+   - `fontSize`: увеличено с `calc(43px + 0.2pt)` до **`calc(43px + 1.2pt)`** (~44.6px).
+2. **Символ тенге (₸) насыщенность установлена на 487**:
+   - `fontWeight` и `fontVariationSettings: "'wght' ..."` для символа тенге установлены строго в **`487`**.
+3. **Насыщенность цифр увеличена на 5**:
+   - `fontWeight` и `fontVariationSettings: "'wght' ..."` цифр увеличены с 625 до **`630`**.
+4. **Смещение символа валюты вправо на 4px**:
+   - `marginLeft` символа `₸` увеличен с `8px` до **`12px`**.
+5. **Смещение всей строки баланса вниз на 5px**:
+   - `marginTop` блока баланса увеличен с `15px` до **`20px`** относительно «Доступно».
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-28 23:49] — Экран Kaspi Gold: Символ тенге вес 480, смещение символа вправо на 3px (gap 8px), смещение строки баланса вниз на 3px (marginTop 15px)
 
 ### 🎯 Запрос пользователя:

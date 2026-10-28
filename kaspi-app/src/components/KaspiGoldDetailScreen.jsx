@@ -344,17 +344,17 @@ export const KaspiGoldDetailScreen = ({
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ (+3px down: marginTop 15px, tenge weight 480, ₸ right +3px: marginLeft 8px) */}
+        {/* Big Balance: 110 922,58 ₸ (+1pt: calc(43px + 1.2pt), weight 630, ₸ weight 487, gap 12px, down 5px: marginTop 20px) */}
         <div style={{
           display: 'inline-block',
-          fontSize: 'calc(43px + 0.2pt)',
-          fontWeight: '625',
-          fontVariationSettings: "'wght' 625",
+          fontSize: 'calc(43px + 1.2pt)',
+          fontWeight: '630',
+          fontVariationSettings: "'wght' 630",
           fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
           color: '#FFFFFF',
           letterSpacing: '0.6px',
           lineHeight: '1.05',
-          marginTop: '15px',
+          marginTop: '20px',
           transform: 'scaleY(1.01)',
           transformOrigin: 'left center',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
@@ -362,9 +362,9 @@ export const KaspiGoldDetailScreen = ({
           {balanceAmount}
           {balanceSymbol && (
             <span style={{
-              fontWeight: '480',
-              fontVariationSettings: "'wght' 480",
-              marginLeft: '8px'
+              fontWeight: '487',
+              fontVariationSettings: "'wght' 487",
+              marginLeft: '12px'
             }}>
               {balanceSymbol}
             </span>
