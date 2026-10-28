@@ -78,9 +78,11 @@ export const KaspiGoldDetailScreen = ({
   const [copiedField, setCopiedField] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const containerRef = React.useRef(null);
+  const navBarRef = React.useRef(null);
   const bigHeaderRef = React.useRef(null);
   const compactTitleRef = React.useRef(null);
   const tabBarRef = React.useRef(null);
+  const sheetRef = React.useRef(null);
 
   React.useEffect(() => {
     const parent = containerRef.current?.parentElement;
@@ -88,20 +90,33 @@ export const KaspiGoldDetailScreen = ({
 
     let ticking = false;
 
+    // Dynamically measure the exact geometry of this specific device screen
+    const getGeometry = () => {
+      const navHeight = navBarRef.current ? navBarRef.current.offsetHeight : 48;
+      const sheetTop = sheetRef.current ? sheetRef.current.offsetTop : 238;
+      // Exact distance the sheet travels until it pins under the nav bar
+      const pinDistance = Math.max(sheetTop - navHeight, 100);
+      return { navHeight, sheetTop, pinDistance };
+    };
+
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
           const s = parent.scrollTop;
+          const { pinDistance } = getGeometry();
 
-          // Exact reverse-engineered linear formulas from 16 frames:
-          // bigHeaderOpacity = clamp(1 - (s - 23) / 157, 0, 1)  (fade: scroll 23 -> 180 pt)
-          const bigHeaderOpacity = Math.min(Math.max(1 - (s - 23) / 157, 0), 1);
+          // Normalized progress 0.0 -> 1.0 based on this specific screen's physical geometry
+          const progress = Math.min(Math.max(s / pinDistance, 0), 2.0);
 
-          // navTitleOpacity = clamp((s - 85) / 78, 0, 1)        (fade-in: scroll 85 -> 163 pt)
-          const navTitleOpacity = Math.min(Math.max((s - 85) / 78, 0), 1);
+          // Reverse-engineered relative phase ratios (matched from 16 measured frames):
+          // 1. Big header fades out from 13% of scroll up to 100% (pin threshold):
+          const bigHeaderOpacity = Math.min(Math.max(1 - (progress - 0.13) / (1.0 - 0.13), 0), 1);
 
-          // Subtle parallax drift for big header illustration: up to ~4.6px (7px in 1280 frame)
-          const drift = Math.min(Math.max((s - 23) * (4.6 / 157), 0), 4.6);
+          // 2. Compact title fades in from halfway (49%) up to 94% of scroll:
+          const navTitleOpacity = Math.min(Math.max((progress - 0.49) / (0.94 - 0.49), 0), 1);
+
+          // 3. Subtle parallax drift up to 4.6px:
+          const drift = Math.min(Math.max((progress - 0.13) * 4.6, 0), 4.6);
 
           if (bigHeaderRef.current) {
             bigHeaderRef.current.style.opacity = bigHeaderOpacity;
@@ -115,8 +130,8 @@ export const KaspiGoldDetailScreen = ({
           }
 
           if (tabBarRef.current) {
-            // When reaching pin threshold (~174pt), tabs meet nav bar flush
-            if (s >= 170) {
+            // When reaching pin threshold (progress >= 0.98), tabs meet nav bar flush
+            if (progress >= 0.98) {
               tabBarRef.current.style.borderTopLeftRadius = '0px';
               tabBarRef.current.style.borderTopRightRadius = '0px';
             } else {
@@ -240,11 +255,13 @@ export const KaspiGoldDetailScreen = ({
       }}
     >
       {/* 1. STICKY TOP NAV BAR (Back arrow fixed & always visible, compact title fades in) */}
-      <div style={{
-        position: 'sticky',
-        top: 0,
-        left: 0,
-        right: 0,
+      <div
+        ref={navBarRef}
+        style={{
+          position: 'sticky',
+          top: 0,
+          left: 0,
+          right: 0,
         zIndex: 50,
         backgroundColor: '#D5AE6B',
         height: 'calc(48px + env(safe-area-inset-top, 0px))',
@@ -427,10 +444,12 @@ export const KaspiGoldDetailScreen = ({
       }} />
 
       {/* 4. MAIN WHITE SHEET (Rounded top corners: 18px, slides up over the golden header) */}
-      <div style={{
-        backgroundColor: '#FFFFFF',
-        borderTopLeftRadius: '18px',
-        borderTopRightRadius: '18px',
+      <div
+        ref={sheetRef}
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderTopLeftRadius: '18px',
+          borderTopRightRadius: '18px',
         marginTop: '-12px',
         flex: 1,
         display: 'flex',

@@ -2,6 +2,48 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 01:52] — Экран Kaspi Gold: Динамический замер геометрии (Dynamic Geometry) и мульти-девайс тестирование 360–430px
+
+### 🎯 Запрос пользователя:
+> *«lets try and are you going to check those displaies or am i in order for that?»*
+
+### 🛠️ Что сделано:
+1. **Переход на динамический замер геометрии экрана**:
+   - Вместо жестких пиксельных порогов (`174pt`, `23pt`, `85pt`) внедрена динамическая функция `getGeometry()`:
+     - `navHeight = navBarRef.current.offsetHeight` (автоматически включает статус-бар / Dynamic Island конкретного телефона).
+     - `sheetTop = sheetRef.current.offsetTop` (исходное положение шторки в покое).
+     - `pinDistance = Math.max(sheetTop - navHeight, 100)` (точное физическое расстояние до стыковки).
+     - Фазы анимации переведены на нормализованные пропорции: `progress = s / pinDistance` (затухание заголовка $13\% \to 100\%$, появление компактного навбара $49\% \to 94\%$, стыковка при $98\%$).
+2. **Автоматизированное сквозное тестирование 4 ключевых разрешений**:
+   - **Samsung Galaxy (360×740)**: компактный Android — нулевой горизонтальный скролл, баланс и пункты меню идеально вмещаются.
+   - **iPhone 13/14 (390×844)**: стандартная чёлка iOS — идеальные пропорции и плавный кроссфейд.
+   - **iPhone 15/16 Pro (393×852)**: Dynamic Island — четкая стыковка при скролле.
+   - **iPhone Pro Max (430×932)**: крупный экран — сбалансированные отступы и комфортное чтение.
+   - Скрипт `_archive/scripts/verify_all_displays.py` сохранил скриншоты покоя, полускролла и фиксации для каждого устройства.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`_archive/scripts/verify_all_displays.py`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/_archive/scripts/verify_all_displays.py)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
+## [2026-10-29 01:48] — Создан конфигурационный файл CLAUDE.md для безопасной работы с Claude
+
+### 🎯 Запрос пользователя:
+> *«создай этот дисклеймер файл для клода и как начать самое первое сообщение напиши его мне на англ»*
+
+### 🛠️ Что сделано:
+1. Создан файл [`CLAUDE.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CLAUDE.md) в корне репозитория.
+2. Включен детальный дисклеймер безопасности (Academic & Educational Intent Disclaimer, Anti-Phishing Compliance, локальные моковые данные без реальных учеток и бэкенда).
+3. Прописаны технические инструкции для Claude Code (Mobile-first 360-430px, CSS-анимации, правила разделителей).
+
+### 📁 Затронутые файлы:
+- [`CLAUDE.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CLAUDE.md)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 01:36] — Экран Kaspi Gold: Устранен паразитный отступ сверху, заголовок и баланс возвращены на свои аутентичные позиции
 
 ### 🎯 Запрос пользователя:
