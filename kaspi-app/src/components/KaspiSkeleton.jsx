@@ -149,10 +149,10 @@ export const MyBankSkeleton = () => (
     flexDirection: 'column',
     boxSizing: 'border-box'
   }}>
-    {/* Nav Header */}
+    {/* Nav Header: 47px */}
     <div style={{
       width: '100%',
-      height: '48px',
+      height: '47px',
       backgroundColor: '#FFFFFF',
       borderBottom: '1px solid #EBEBEB',
       paddingLeft: '16px',
@@ -170,27 +170,24 @@ export const MyBankSkeleton = () => (
     {/* 3 Account Cards */}
     <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
       {/* 1. Kaspi Gold Card */}
-      <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <SkeletonBlock width="52px" height="40px" borderRadius="6px" />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <SkeletonBlock width="100px" height="16px" borderRadius="4px" />
-            <SkeletonBlock width="50px" height="12px" borderRadius="4px" />
-          </div>
+      <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', padding: '18.5px 16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <SkeletonBlock width="47px" height="36px" borderRadius="5.5px" />
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+          <SkeletonBlock width="100px" height="16px" borderRadius="4px" />
+          <SkeletonBlock width="90px" height="16px" borderRadius="4px" />
         </div>
-        <SkeletonBlock width="90px" height="16px" borderRadius="4px" />
       </div>
 
       {/* 2. Открыть депозит */}
-      <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-        <SkeletonBlock width="52px" height="40px" borderRadius="6px" />
+      <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', padding: '14.5px 16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <SkeletonBlock width="47px" height="36px" borderRadius="5.5px" />
         <SkeletonBlock width="130px" height="16px" borderRadius="4px" />
       </div>
 
       {/* 3. Kaspi Бонус */}
-      <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', padding: '18px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <SkeletonBlock width="52px" height="40px" borderRadius="6px" />
+          <SkeletonBlock width="47px" height="36px" borderRadius="5.5px" />
           <SkeletonBlock width="95px" height="16px" borderRadius="4px" />
         </div>
         <SkeletonBlock width="65px" height="16px" borderRadius="4px" />

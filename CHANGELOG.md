@@ -2,6 +2,42 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 18:01] — Экран «Мой Банк» (MyBankScreen): микрокалибровка иконок, выравнивание сумм по строке и пропорции блоков
+
+### 🎯 Запрос пользователя:
+> *«alright look make the gold card icon smaller by 10% and the inside logo icon bigger 4% and then the Bonus green icon gotta be smaller by 10% then the black bonus icon less bolder then the numbers of money and bonus make them bigger 1pt. top header decrese by 1px the arraow weight +20 then the text Мой банк +1pt the white section blocks the fisrt one bigger by 5px the открыть депозит smaller by 3px kaspi bonus block bigger by 4 px the icons. the icon inside ОТкрыть депозит gotta be in the simmilar size with gold card and the same shape as well. The numbers in the kaspi gold section in the line with word KAspi gold not inthe center»*
+
+### 🛠️ Что сделано:
+1. **Золотая карточка Kaspi Gold**:
+   - Размер миниатюры уменьшен на 10%: с `52×40px` до **`47×36px`** (`borderRadius: 5.5px`).
+   - Медальон семьи внутри увеличен на 4%: до **`20.8×27px`**.
+   - Сумма баланса карты (`110 922,58 ₸`) выровнена на **одну горизонтальную базовую строку с названием «Kaspi Gold»** (`alignItems: 'baseline'`), а не по центру всей карточки.
+   - Размер шрифта суммы увеличен на 1pt: с `17px` до **`18px`**.
+   - Высота белого блока увеличена на 5px (`padding: '18.5px 16px'`).
+2. **Иконка и блок «Открыть депозит»**:
+   - Контейнер иконки плюса приведён к точно такой же прямоугольной форме и размерам, как у карты Gold: **`47×36px`**, скругление `5.5px`, цвет `#F0F5F9`.
+   - Внутри центрирован плюс `15×15px` (`#63666B`, толщина `2.2px`).
+   - Высота белого блока уменьшена на 3px (`padding: '14.5px 16px'`).
+3. **Карточка Kaspi Бонус**:
+   - Зелёная иконка бонуса уменьшена на 10%: до **`47×36px`**.
+   - Сумма бонусов увеличена на 1pt: до **`18px`**.
+   - Тёмный символ бонуса `Ƃ` сделан менее жирным: `strokeWidth` уменьшен с `2.89` до **`2.2`**, пропорции синхронизированы (`9.26×17px`).
+   - Высота белого блока увеличена на 4px (`padding: '18px 16px'`).
+4. **Шапка экрана**:
+   - Высота уменьшена на 1px: с `48px` до **`47px`**.
+   - Жирность стрелки назад увеличена на 20%: `strokeWidth` с `2.5` до **`3.0`**.
+   - Текст «Мой Банк» увеличен на 1pt: с `17px` до **`18px`**.
+5. **Скелетон (`KaspiSkeleton.jsx`)**:
+   - Синхронизированы размеры `47×36px`, высота шапки `47px` и отступы блоков.
+6. **Проверка**:
+   - `npm run build` успешно прошёл сборку.
+   - Скриншот `my_bank_rendered.png` зафиксировал идеальное совпадение всех 13 параметров.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/MyBankScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx)
+- [`kaspi-app/src/components/KaspiSkeleton.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiSkeleton.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
 ## [2026-10-29 17:41] — Экран «Мой Банк» (MyBankScreen): 100% аутентичный редизайн 1:1 по оригинальному Kaspi
 
 ### 🎯 Запрос пользователя:
