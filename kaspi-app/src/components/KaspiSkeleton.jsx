@@ -152,42 +152,48 @@ export const MyBankSkeleton = () => (
     {/* Nav Header */}
     <div style={{
       width: '100%',
+      height: '48px',
       backgroundColor: '#FFFFFF',
-      paddingTop: '12px',
-      paddingBottom: '12px',
+      borderBottom: '1px solid #EBEBEB',
       paddingLeft: '16px',
       paddingRight: '16px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      position: 'relative'
+      position: 'relative',
+      boxSizing: 'border-box'
     }}>
-      <SkeletonBlock width="12px" height="20px" borderRadius="3px" style={{ position: 'absolute', left: '16px' }} />
-      <SkeletonBlock width="80px" height="20px" borderRadius="6px" />
+      <SkeletonBlock width="12px" height="22px" borderRadius="3px" style={{ position: 'absolute', left: '16px' }} />
+      <SkeletonBlock width="90px" height="18px" borderRadius="4px" />
     </div>
 
-    {/* Main Kaspi Gold Card */}
-    <div style={{ margin: '16px', backgroundColor: '#FFFFFF', borderRadius: '16px', padding: '16px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <SkeletonBlock width="120px" height="24px" borderRadius="6px" />
-        <SkeletonBlock width="54px" height="34px" borderRadius="8px" />
-      </div>
-      <SkeletonBlock width="160px" height="30px" borderRadius="8px" style={{ marginTop: '24px' }} />
-      <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
-        <SkeletonBlock width="50%" height="40px" borderRadius="10px" />
-        <SkeletonBlock width="50%" height="40px" borderRadius="10px" />
-      </div>
-    </div>
-
-    {/* Deposit Block */}
-    <div style={{ margin: '0 16px 16px 16px', backgroundColor: '#FFFFFF', borderRadius: '16px', padding: '16px' }}>
-      <SkeletonBlock width="140px" height="20px" borderRadius="6px" />
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '16px' }}>
-        <SkeletonBlock width="56px" height="44px" borderRadius="6px" />
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <SkeletonBlock width="60%" height="16px" borderRadius="4px" />
-          <SkeletonBlock width="40%" height="14px" borderRadius="4px" />
+    {/* 3 Account Cards */}
+    <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* 1. Kaspi Gold Card */}
+      <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <SkeletonBlock width="52px" height="40px" borderRadius="6px" />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <SkeletonBlock width="100px" height="16px" borderRadius="4px" />
+            <SkeletonBlock width="50px" height="12px" borderRadius="4px" />
+          </div>
         </div>
+        <SkeletonBlock width="90px" height="16px" borderRadius="4px" />
+      </div>
+
+      {/* 2. Открыть депозит */}
+      <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <SkeletonBlock width="52px" height="40px" borderRadius="6px" />
+        <SkeletonBlock width="130px" height="16px" borderRadius="4px" />
+      </div>
+
+      {/* 3. Kaspi Бонус */}
+      <div style={{ backgroundColor: '#FFFFFF', borderRadius: '12px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <SkeletonBlock width="52px" height="40px" borderRadius="6px" />
+          <SkeletonBlock width="95px" height="16px" borderRadius="4px" />
+        </div>
+        <SkeletonBlock width="65px" height="16px" borderRadius="4px" />
       </div>
     </div>
   </div>

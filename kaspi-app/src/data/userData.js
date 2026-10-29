@@ -34,7 +34,7 @@ export const initialUserData = {
     bonus: {
       id: "kaspi_bonus",
       name: "Kaspi Бонус",
-      balance: 79.87,
+      balance: 79.97,
       currency: "₸"
     }
   },

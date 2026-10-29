@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArrowLeft, ChevronRight, Plus } from 'lucide-react';
 import { parseAndFormatKaspiBalance } from '../utils/formatters';
 
 export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
@@ -12,6 +11,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
     }}>
       {/* Top Header */}
       <div style={{
+        position: 'relative',
         height: '48px',
         backgroundColor: '#FFFFFF',
         borderBottom: '1px solid #EBEBEB',
@@ -19,15 +19,50 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
         alignItems: 'center',
         paddingLeft: '16px',
         paddingRight: '16px',
-        boxSizing: 'border-box',
-        gap: '12px'
+        boxSizing: 'border-box'
       }}>
-        <div onClick={onBack} className="touchable" style={{ padding: '6px' }}>
-          <ArrowLeft size={22} color="#1F1F1F" />
+        {/* Back Button (authentic iOS Chevron <) */}
+        <div
+          onClick={onBack}
+          className="touchable"
+          style={{
+            padding: '8px 10px',
+            marginLeft: '-8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2,
+            cursor: 'pointer'
+          }}
+        >
+          <svg width="12" height="22" viewBox="0 0 12 22" fill="none" style={{ display: 'block' }}>
+            <path
+              d="M10 1.5L1.5 11L10 20.5"
+              stroke="#1F1F1F"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
-        <span style={{ fontSize: '18px', fontWeight: '700', color: '#1F1F1F' }}>
-          Мой Банк
-        </span>
+
+        {/* Centered Title */}
+        <div style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          textAlign: 'center',
+          pointerEvents: 'none'
+        }}>
+          <span style={{
+            fontSize: '17px',
+            fontWeight: '600',
+            color: '#1F1F1F',
+            fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+          }}>
+            Мой Банк
+          </span>
+        </div>
       </div>
 
       {/* Accounts List Container */}
@@ -38,45 +73,71 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           className="touchable"
           style={{
             backgroundColor: '#FFFFFF',
-            borderRadius: '10px',
-            padding: '20px 18px',
+            borderRadius: '12px',
+            padding: '16px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+            boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+            cursor: 'pointer'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            {/* Gold Card Miniature */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            {/* Gold Card Miniature (52px x 40px, rounded 6px, authentic gold color, white medallion centered) */}
             <div style={{
-              width: '46px',
-              height: '28px',
-              borderRadius: '5px',
-              background: 'linear-gradient(135deg, #ECC880 0%, #C49B4B 100%)',
+              width: '52px',
+              height: '40px',
+              borderRadius: '6px',
+              backgroundColor: '#D4AF67',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'flex-end',
-              paddingRight: '6px',
-              boxShadow: '0 1px 3px rgba(196, 155, 75, 0.3)'
+              justifyContent: 'center',
+              flexShrink: 0,
+              overflow: 'hidden'
             }}>
-              <span style={{ fontSize: '10px', color: '#FFFFFF', fontWeight: 'bold' }}>MC</span>
+              <img
+                src="/kaspi_assets/icon_white.svg"
+                alt="Kaspi Gold"
+                style={{
+                  width: '20px',
+                  height: '26px',
+                  objectFit: 'contain',
+                  display: 'block'
+                }}
+              />
             </div>
 
             <div>
-              <div style={{ fontSize: '18px', fontWeight: '600', color: '#1F1F1F' }}>
+              <div style={{
+                fontSize: '17px',
+                fontWeight: '400',
+                color: '#1F1F1F',
+                lineHeight: '21px',
+                fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+              }}>
                 {cards.gold.name}
               </div>
-              <div style={{ fontSize: '13.5px', color: '#757575', marginTop: '2px' }}>
-                {cards.gold.subtitle}
+              <div style={{
+                fontSize: '14px',
+                color: '#757575',
+                marginTop: '3px',
+                lineHeight: '17px',
+                fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+              }}>
+                • {cards.gold.last4 || '4163'}
               </div>
             </div>
           </div>
 
-          <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '18px', fontWeight: '700', color: '#1F1F1F' }}>
+          <div style={{ textAlign: 'right' }}>
+            <span style={{
+              fontSize: '17px',
+              fontWeight: '400',
+              color: '#1F1F1F',
+              fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+            }}>
               {parseAndFormatKaspiBalance(cards.gold.balance)} {cards.gold.currency}
             </span>
-            <ChevronRight size={20} color="#C2C2C2" />
           </div>
         </div>
 
@@ -85,28 +146,49 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           className="touchable"
           style={{
             backgroundColor: '#FFFFFF',
-            borderRadius: '10px',
-            padding: '18px 18px',
+            borderRadius: '12px',
+            padding: '16px',
             display: 'flex',
             alignItems: 'center',
-            gap: '16px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+            gap: '14px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+            cursor: 'pointer'
           }}
         >
           <div style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '50%',
-            backgroundColor: '#DEF8CF',
+            width: '52px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            color: '#42760D'
+            justifyContent: 'flex-start',
+            flexShrink: 0
           }}>
-            <Plus size={22} strokeWidth={2.5} />
+            <div style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '8px',
+              backgroundColor: '#F0F5F9',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M8 2.5V13.5M2.5 8H13.5"
+                  stroke="#63666B"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           </div>
 
-          <span style={{ fontSize: '18px', fontWeight: '600', color: '#0089D0' }}>
+          <span style={{
+            fontSize: '17px',
+            fontWeight: '400',
+            color: '#0089D0',
+            fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+          }}>
             Открыть депозит
           </span>
         </div>
@@ -116,40 +198,80 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           className="touchable"
           style={{
             backgroundColor: '#FFFFFF',
-            borderRadius: '10px',
-            padding: '20px 18px',
+            borderRadius: '12px',
+            padding: '16px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+            boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+            cursor: 'pointer'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            {/* Green Bonus Card (52px x 40px) */}
             <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '8px',
-              backgroundColor: '#58A000',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#FFFFFF',
-              fontWeight: '700',
-              fontSize: '18px'
+              width: '52px',
+              height: '40px',
+              borderRadius: '6px',
+              flexShrink: 0,
+              overflow: 'hidden',
+              display: 'flex'
             }}>
-              Б
+              <svg
+                width="52"
+                height="40"
+                viewBox="0 0 51.90 40"
+                fill="none"
+                style={{ width: '100%', height: '100%', display: 'block' }}
+              >
+                <rect width="51.90" height="40" rx="5.60" fill="#589F01" />
+                <path
+                  d="M20.6 10.5H31.62M31.7 15.2H20.6V29.53H28.65A3.8 3.8 0 0 0 32.45 25.73V25.38A3.8 3.8 0 0 0 28.65 21.58H20.6"
+                  fill="none"
+                  stroke="#FFFFFF"
+                  strokeWidth="2.35"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </div>
 
-            <div style={{ fontSize: '18px', fontWeight: '600', color: '#1F1F1F' }}>
+            <div style={{
+              fontSize: '17px',
+              fontWeight: '400',
+              color: '#1F1F1F',
+              fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+            }}>
               {cards.bonus.name}
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '18px', fontWeight: '700', color: '#1F1F1F' }}>
-              {cards.bonus.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} {cards.bonus.currency}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span style={{
+              fontSize: '17px',
+              fontWeight: '400',
+              color: '#1F1F1F',
+              fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+            }}>
+              {cards.bonus.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })}
             </span>
-            <ChevronRight size={20} color="#C2C2C2" />
+            {/* Kaspi Bonus Dark Sign: b-dark.svg */}
+            <svg
+              width="8.72"
+              height="16"
+              viewBox="0 0 13.08 24"
+              fill="none"
+              style={{ display: 'inline-block', flexShrink: 0 }}
+            >
+              <path
+                d="M1.44 1.44H10.44M10.35 6.95H1.59V22.56H7.92A3.72 3.72 0 0 0 11.64 18.84V17.37A3.72 3.72 0 0 0 7.92 13.65H1.59"
+                fill="none"
+                stroke="#222222"
+                strokeWidth="2.89"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
         </div>
       </div>
