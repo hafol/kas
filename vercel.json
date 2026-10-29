@@ -3,5 +3,11 @@
   "framework": "vite",
   "installCommand": "if [ -d kaspi-app ]; then cd kaspi-app && npm ci; else npm ci; fi",
   "buildCommand": "if [ -d kaspi-app ]; then cd kaspi-app && npm run build && mkdir -p ../dist && cp -r dist/* ../dist/; else npm run build; fi",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
 }
