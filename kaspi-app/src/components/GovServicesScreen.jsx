@@ -383,9 +383,12 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
       boxSizing: 'border-box'
     }}>
       {/* =====================================================================
-          BLOCK A: Status Bar + Nav Bar + Segmented Control + Search Field
+          BLOCK A: Status Bar + Nav Bar + Segmented Control + Search Field (Sticky)
           ===================================================================== */}
       <div style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 45,
         width: '100%',
         backgroundColor: surface,
         borderBottomLeftRadius: '16px',
@@ -396,6 +399,13 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
         flexDirection: 'column',
         boxSizing: 'border-box'
       }}>
+        {/* Status bar inset spacer (white behind the status bar) */}
+        <div style={{
+          height: 'env(safe-area-inset-top, 47px)',
+          minHeight: '44px',
+          width: '100%',
+          backgroundColor: surface
+        }} />
 
         {/* Nav Bar (height 44, no divider under it) */}
         <div style={{

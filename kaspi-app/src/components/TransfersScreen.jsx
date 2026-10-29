@@ -61,18 +61,32 @@ export const TransfersScreen = ({ card, onBack, onCompleteTransfer }) => {
       flexDirection: 'column',
       paddingBottom: '30px'
     }}>
-      {/* Top Header */}
+      {/* Sticky Top Header with Status Bar safe area */}
       <div style={{
-        height: '48px',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
         backgroundColor: '#FFFFFF',
         borderBottom: '1px solid #EBEBEB',
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: '16px',
-        paddingRight: '16px',
-        boxSizing: 'border-box',
-        gap: '12px'
+        boxSizing: 'border-box'
       }}>
+        {/* Status bar inset spacer (white behind the status bar) */}
+        <div style={{
+          height: 'env(safe-area-inset-top, 47px)',
+          minHeight: '44px',
+          width: '100%',
+          backgroundColor: '#FFFFFF'
+        }} />
+
+        <div style={{
+          height: '48px',
+          display: 'flex',
+          alignItems: 'center',
+          paddingLeft: '16px',
+          paddingRight: '16px',
+          boxSizing: 'border-box',
+          gap: '12px'
+        }}>
         <div
           onClick={() => {
             if (subMode === 'client_kaspi') {
@@ -86,9 +100,10 @@ export const TransfersScreen = ({ card, onBack, onCompleteTransfer }) => {
         >
           <ArrowLeft size={22} color="#1F1F1F" />
         </div>
-        <span style={{ fontSize: '18px', fontWeight: '700', color: '#1F1F1F' }}>
-          {subMode === 'client_kaspi' ? 'Клиенту Kaspi' : 'Переводы'}
-        </span>
+          <span style={{ fontSize: '18px', fontWeight: '700', color: '#1F1F1F' }}>
+            {subMode === 'client_kaspi' ? 'Клиенту Kaspi' : 'Переводы'}
+          </span>
+        </div>
       </div>
 
       {subMode === 'list' ? (

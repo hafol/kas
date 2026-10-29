@@ -55,68 +55,77 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack, onUpdateBonus, onUpd
       display: 'flex',
       flexDirection: 'column'
     }}>
-      {/* Native iOS Status Bar Safe Area Spacer (Белое пространство под часы/батарею) */}
+      {/* Sticky Header: Status bar spacer + 44px Navbar (stays fixed on scroll) */}
       <div style={{
-        height: 'env(safe-area-inset-top, 44px)',
-        minHeight: '44px',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
         backgroundColor: '#FFFFFF',
         width: '100%',
-        flexShrink: 0
-      }} />
-
-      {/* Top Header: 47px */}
-      <div style={{
-        position: 'relative',
-        height: '47px',
-        backgroundColor: '#FFFFFF',
         borderBottom: '1px solid #EBEBEB',
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: '16px',
-        paddingRight: '16px',
         boxSizing: 'border-box'
       }}>
-        {/* Back Button (iOS Chevron <, strokeWidth 2.4) */}
-        <div
-          onClick={onBack}
-          className="touchable"
-          style={{
-            padding: '8px 10px',
-            marginLeft: '-8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2,
-            cursor: 'pointer'
-          }}
-        >
-          <svg width="12" height="22" viewBox="0 0 12 22" fill="none" style={{ display: 'block' }}>
-            <path
-              d="M10 1.5L1.5 11L10 20.5"
-              stroke="#1F1F1F"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-
-        {/* Centered Title: 19px */}
+        {/* Status bar inset spacer (pure white behind iOS clock & battery) */}
         <div style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          textAlign: 'center',
-          pointerEvents: 'none'
+          height: 'env(safe-area-inset-top, 47px)',
+          minHeight: '44px',
+          width: '100%',
+          backgroundColor: '#FFFFFF'
+        }} />
+
+        {/* 44px Navigation Bar (Back arrow + Centered Title) */}
+        <div style={{
+          position: 'relative',
+          height: '44px',
+          display: 'flex',
+          alignItems: 'center',
+          paddingLeft: '16px',
+          paddingRight: '16px',
+          backgroundColor: '#FFFFFF',
+          boxSizing: 'border-box'
         }}>
-          <span style={{
-            fontSize: '19px',
-            fontWeight: '600',
-            color: '#1F1F1F',
-            fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+          {/* Back Button (iOS Chevron <, strokeWidth 2.4) */}
+          <div
+            onClick={onBack}
+            className="touchable"
+            style={{
+              padding: '8px 10px',
+              marginLeft: '-8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 2,
+              cursor: 'pointer'
+            }}
+          >
+            <svg width="12" height="22" viewBox="0 0 12 22" fill="none" style={{ display: 'block' }}>
+              <path
+                d="M10 1.5L1.5 11L10 20.5"
+                stroke="#1F1F1F"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          {/* Centered Title: 19px, bold */}
+          <div style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            textAlign: 'center',
+            pointerEvents: 'none'
           }}>
-            Мой Банк
-          </span>
+            <span style={{
+              fontSize: '19px',
+              fontWeight: '700',
+              color: '#1F1F1F',
+              fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+            }}>
+              Мой Банк
+            </span>
+          </div>
         </div>
       </div>
 

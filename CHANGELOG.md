@@ -2,7 +2,27 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-30 04:28] — Фиксация шапок при скролле (sticky) во всех разделах + калибровка таббара (49pt + 34pt inset) + сброс кэша
+
+### 🎯 Запрос пользователя:
+> *«в верзнем надо как в хоум пейдж зафексировать их типа есть же когда вниз скролиш их все еще видно надо типа так же во всех старнцах гос услуги тоже но вот проблему с внизу навбаром я не понял она как и была так и осталось мне вот так клод говорит...»*
+
+### 🛠️ Что сделано:
+1. **Фиксация шапок при скролле (Sticky Headers) с безопасной зоной**:
+   - **«Мой Банк» ([MyBankScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx))**: шапка сделана `position: sticky, top: 0, zIndex: 50`. Сверху встроен спейсер `env(safe-area-inset-top, 47px)` с белым фоном `#FFFFFF`. При скролле карточек вниз шапка с часами и стрелкой назад `<` остается зафиксированной вверху, в точности как на Главной.
+   - **«Госуслуги» ([GovServicesScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx))**: блок Block A переведен в `position: sticky, top: 0, zIndex: 45` со спейсером статус-бара `env(safe-area-inset-top, 47px)`.
+   - **«Переводы» ([TransfersScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/TransfersScreen.jsx))**: верхняя панель зафиксирована со спейсером безопасной зоны.
+2. **Точная калибровка нижней панели навигации ([BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx))**:
+   - Высота контентной части строго `49px` с центрированием элементов (иконка 24px + отступ 3px + подпись 11.5px).
+   - Безопасная зона `safe-area-inset-bottom` (34px) применяется ровно **один раз** (`paddingBottom: 'env(safe-area-inset-bottom, 34px)'`).
+   - Убраны все лишние отступы, марджины и жесткие высоты, создававшие двойной гэп на iOS PWA. Белый фон продолжается до нижней грани экрана.
+3. **Защита от кэширования PWA на сервере ([vercel.json](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/vercel.json))**:
+   - В корневой `vercel.json` добавлены заголовки `Cache-Control: public, max-age=0, must-revalidate` для `index.html`. Теперь закрепленный сайт на рабочем столе iPhone не удерживает старые стили.
+4. **Деплой на Vercel Production**:
+   - Проект успешно собран и развернут на [https://kas-two-rho.vercel.app](https://kas-two-rho.vercel.app).
+
 ## [2026-10-30 04:08] — Устранение нижнего гэпа навбара и добавление статус-бар спейсера (MyBankScreen) под iOS PWA
+
 
 ### 🎯 Запрос пользователя:
 > *«так стоп вот как должно ыбть по идеи типа сверху такой место и снизу опустить реф фото это как должно ыбть... да там реально так крч старые закрепелнные сайты на рабочем столе нету таких внизу гепов в вот когда новый делаешь там выходит геп е делать почему так»*

@@ -83,21 +83,14 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
       maxWidth: '430px',
       margin: '0 auto',
       backgroundColor: '#FFFFFF',
-      opacity: 1,
-      backdropFilter: 'none',
-      WebkitBackdropFilter: 'none',
       borderTop: '0.5px solid #EFEFEF',
-      borderBottom: 'none',
-      borderLeft: 'none',
-      borderRight: 'none',
-      boxShadow: 'none',
       zIndex: 60,
-      paddingBottom: 'env(safe-area-inset-bottom, 10px)',
+      paddingBottom: 'env(safe-area-inset-bottom, 34px)',
       boxSizing: 'border-box'
     }}>
       <div style={{
         display: 'flex',
-        height: '50px',
+        height: '49px',
         width: '100%',
         alignItems: 'stretch',
         position: 'relative'
@@ -121,6 +114,7 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
                 flex: 1,
                 position: 'relative',
                 height: '100%',
@@ -128,12 +122,11 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 fontFamily: "'Roboto', sans-serif"
               }}
             >
-              {/* Icon wrapper: 27.6 x 27.6 px, centered, top: 4px for all tabs so services is in line */}
+              {/* Icon wrapper */}
               <div style={{
-                position: 'absolute',
-                top: '4px',
-                width: '27.6px',
-                height: '27.6px',
+                position: 'relative',
+                width: '24px',
+                height: '24px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -145,7 +138,7 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                   <div style={{
                     position: 'absolute',
                     top: '-4px',
-                    left: '15.5px',
+                    left: '14px',
                     width: '19px',
                     height: '14px',
                     borderRadius: '7px',
@@ -166,15 +159,14 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 )}
               </div>
 
-              {/* Label: Roboto Regular 11.5px, top at 32px */}
+              {/* Label: Roboto Regular 11.5px */}
               <span style={{
-                position: 'absolute',
-                top: '32px',
                 fontFamily: "'Roboto', sans-serif",
                 fontSize: '11.5px',
                 fontWeight: '400',
                 color: labelColor,
-                lineHeight: '14px',
+                lineHeight: '13px',
+                marginTop: '3px',
                 letterSpacing: 0,
                 textAlign: 'center',
                 whiteSpace: 'nowrap'
