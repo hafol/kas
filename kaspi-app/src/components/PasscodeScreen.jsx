@@ -390,18 +390,18 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
           />
         </div>
 
-        {/* 5. TITLE "Код доступа": 16 px Regular (1px smaller), #212121, text top N = 257 */}
+        {/* 5. TITLE "Код доступа": 17 px Regular (+1pt / 1px bigger), #212121, text top N = 257 */}
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 253.5px)',
+            top: 'calc(env(safe-area-inset-top, 0px) + 253px)',
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '16px',
+            fontSize: '17px',
             fontWeight: 400,
-            lineHeight: '16px',
-            height: '16px',
+            lineHeight: '17px',
+            height: '17px',
             color: '#212121',
             letterSpacing: '0px',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -430,7 +430,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
           );
         })}
 
-        {/* 7. KEYPAD DIGITS: Not bold (300 weight), digit height 24.5 (≈ 34 px font), #212121 */}
+        {/* 7. KEYPAD DIGITS: 390 weight, digit height 24.5 (≈ 34 px font), #212121 */}
         {/* Row centre N: 427.5 / 518.5 / 609.5 / 701.5 (moved down 1.5 px) */}
         {keypadKeys.map(({ num, cx, topOffset }) => {
           const isActive = activeDigit === num;
@@ -474,7 +474,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
                 style={{
                   position: 'relative',
                   fontSize: '34px',
-                  fontWeight: 300,
+                  fontWeight: 390,
                   lineHeight: '34px',
                   color: isActive ? '#FFFFFF' : '#212121',
                   fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",

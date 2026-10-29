@@ -2,6 +2,39 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 17:06] — Экран блокировки (PasscodeScreen): калибровка жирности цифр клавиатуры на 390
+
+### 🎯 Запрос пользователя:
+> *«поставь 390»*
+
+### 🛠️ Что сделано:
+1. **Калибровка font-weight цифр цифровой клавиатуры**:
+   - В компоненте [`PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx) для цифр клавиатуры (`num`) параметр `fontWeight` изменён с `300` на `390`.
+   - Использован вариативный нативный шрифт `'Roboto Flex Kaspi'`, поддерживающий точную плотность линий без размытия и утолщения.
+2. **Проверка**:
+   - `npm run build` успешно прошёл сборку без ошибок.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+## [2026-10-29 16:53] — Экран блокировки (PasscodeScreen): увеличение размера текста «Код доступа» на 1pt
+
+### 🎯 Запрос пользователя:
+> *«in the screen lock page make the text Код доступа bigger for like 1pt»*
+
+### 🛠️ Что сделано:
+1. **Увеличение шрифта заголовка «Код доступа»**:
+   - В компоненте [`PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx) размер шрифта заголовка «Код доступа» увеличен с `16px` до `17px` (+1pt / +1px).
+   - Свойства `lineHeight` и `height` синхронизированы до `17px`.
+   - Верхняя координата `top` откалибрована до `calc(env(safe-area-inset-top, 0px) + 253px)` для сохранения вертикальной центровки.
+2. **Проверка**:
+   - `npm run build` успешно прошёл сборку без единого предупреждения/ошибки.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/PasscodeScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
 ## [2026-10-29 06:32] — Полная свобода действий при редактировании баланса: отмена принудительных ",00" в конце
 
 ### 🎯 Запрос пользователя:
