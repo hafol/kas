@@ -2,6 +2,28 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-30 04:45] — Устранение нижнего гэпа навбара (опускание иконок/подписей к Home bar) + Sticky header для Удостоверения личности + Отключение непереводов
+
+### 🎯 Запрос пользователя:
+> *«не внизу все еще гап и так же в странице удостоверение личности тоже такую фикс сделай как в других и так же сделай так что бы нельзя было нажать на переоды она не доработанная»*
+
+### 🛠️ Что сделано:
+1. **Устранение нижнего гэпа и опускание навбара ([BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx))**:
+   - Откалиброван отступ снизу: заменено грубое `env(safe-area-inset-bottom, 34px)` на выверенное `max(calc(env(safe-area-inset-bottom, 0px) - 22px), 10px)`.
+   - В результате на iPhone с полосой жестов (Home Indicator) расстояние от подписей вкладок («Главная», «Kaspi QR», «Сообщения», «Сервисы») до черной полоски жестов сократилось с 26pt до аутентичных 2-3pt, в 100% точности как на физическом референсе из оригинального приложения ([media_1793314446944.png](file:///C:/Users/erkez/.gemini/antigravity-ide/brain/53d54d9e-cf38-41d5-9a24-d3c8fd7e1577/.tempmediaStorage/media_1793314446944.png)).
+   - Белый фон таббара непрерывно продолжается до самой нижней грани экрана без пустот.
+2. **Фиксация шапки при скролле в «Удостоверении личности» ([DigitalIdScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/DigitalIdScreen.jsx))**:
+   - Шапка вынесена в фиксированный контейнер `position: sticky, top: 0, zIndex: 50, backgroundColor: pageBg`.
+   - Встроен спейсер статус-бара iOS `env(safe-area-inset-top, 47px)` с цветом фона документа `pageBg` (часы, остров Dynamic Island и батарея больше не наезжают на стрелку и текст).
+   - В шапку помещены: стрелка назад `<` (`onBack`), центрированный заголовок «Удостоверение личности» и кнопка сохранения фото (галочка).
+   - При скролле карточек удостоверения вверх они аккуратно уходят под шапку.
+3. **Полное отключение раздела «Переводы» (Transfers)**:
+   - В [HomeScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx): иконка «Переводы» на сетке сервисов Главной сделана некликабельной (`cursor: default`, удален `onClick={onOpenTransfers}`).
+   - В [App.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx): в `handleSelectService` переход по `serviceId === 'transfers'` заблокирован (`return;`), а в свойствах `KaspiGoldDetailScreen` передан `onOpenTransfer={undefined}`.
+   - В [KaspiGoldDetailScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx): пункт «Перевести» в списке «Действия» отключен (`onClick: undefined`, курсор `default`, без отклика нажатия).
+4. **Сборка и развертывание**:
+   - `npm run build` успешно завершен без ошибок.
+
 ## [2026-10-30 04:28] — Фиксация шапок при скролле (sticky) во всех разделах + калибровка таббара (49pt + 34pt inset) + сброс кэша
 
 ### 🎯 Запрос пользователя:

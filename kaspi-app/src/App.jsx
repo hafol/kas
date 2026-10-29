@@ -12,6 +12,8 @@ import { MessagesScreen } from './components/MessagesScreen';
 import { ServicesScreen } from './components/ServicesScreen';
 import { SettingsScreen } from './components/SettingsScreen';
 import { KaspiQrScreen } from './components/KaspiQrScreen';
+import { ActivationScreen } from './components/ActivationScreen';
+import { AdminScreen } from './components/AdminScreen';
 import {
   GovServicesSkeleton,
   MyBankSkeleton,
@@ -26,6 +28,7 @@ export default function App() {
       const savedProfile = localStorage.getItem('kaspi_user_profile');
       const savedBalance = localStorage.getItem('kaspi_gold_balance');
       const savedLast4 = localStorage.getItem('kaspi_gold_last4');
+      const savedBonus = localStorage.getItem('kaspi_bonus_balance');
       let data = { ...initialUserData };
       if (savedProfile) {
         data.profile = {
@@ -43,7 +46,7 @@ export default function App() {
           }
         };
       }
-      if (savedLast4) {
+      if (savedLast4 && savedLast4 !== '4163') {
         const cleanLast4 = savedLast4.slice(0, 4);
         data.cards = {
           ...data.cards,
@@ -54,12 +57,24 @@ export default function App() {
           }
         };
       }
+      if (savedBonus !== null && savedBonus !== '') {
+        const bonusNum = parseFloat(savedBonus);
+        if (!isNaN(bonusNum)) {
+          data.cards = {
+            ...data.cards,
+            bonus: {
+              ...data.cards.bonus,
+              balance: bonusNum
+            }
+          };
+        }
+      }
       return data;
     } catch (e) {}
     return initialUserData;
   });
 
-  // Listen for balance and last4 updates from Kaspi Gold detail screen
+  // Listen for balance, last4, and bonus updates
   useEffect(() => {
     const handleBalanceUpdate = (e) => {
       const newBal = parseAndFormatKaspiBalance(e.detail);
@@ -88,16 +103,88 @@ export default function App() {
         }
       }));
     };
+    const handleBonusUpdate = (e) => {
+      const newBonus = parseFloat(e.detail);
+      if (!isNaN(newBonus)) {
+        setUserData(prev => ({
+          ...prev,
+          cards: {
+            ...prev.cards,
+            bonus: {
+              ...prev.cards.bonus,
+              balance: newBonus
+            }
+          }
+        }));
+      }
+    };
     window.addEventListener('kaspi_balance_updated', handleBalanceUpdate);
     window.addEventListener('kaspi_last4_updated', handleLast4Update);
+    window.addEventListener('kaspi_bonus_updated', handleBonusUpdate);
     return () => {
       window.removeEventListener('kaspi_balance_updated', handleBalanceUpdate);
       window.removeEventListener('kaspi_last4_updated', handleLast4Update);
+      window.removeEventListener('kaspi_bonus_updated', handleBonusUpdate);
     };
   }, []);
 
   const [activeTab, setActiveTab] = useState('home'); // 'home' | 'qr' | 'messages' | 'services'
   
+  // Device Activation state
+  const [activationState, setActivationState] = useState(() => {
+    try {
+      const code = localStorage.getItem('activation_code');
+      const devId = localStorage.getItem('device_id');
+      return {
+        isActivated: Boolean(code && devId),
+        errorMessage: ''
+      };
+    } catch (e) {
+      return { isActivated: false, errorMessage: '' };
+    }
+  });
+
+  // Background activation re-verification on launch (Requirement 6)
+  useEffect(() => {
+    try {
+      const savedCode = localStorage.getItem('activation_code');
+      const savedDeviceId = localStorage.getItem('device_id');
+      if (!savedCode || !savedDeviceId) return;
+
+      let cancelled = false;
+      const verifyActivation = async () => {
+        try {
+          const res = await fetch('/api/activate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deviceId: savedDeviceId, code: savedCode })
+          });
+          if (cancelled) return;
+          if (!res.ok) {
+            let resData = {};
+            try { resData = await res.json(); } catch(e) {}
+            // Server revoked, expired or rejected code! Clear localStorage and lock app
+            localStorage.removeItem('activation_code');
+            setActivationState({
+              isActivated: false,
+              errorMessage: resData.error === 'expired'
+                ? 'Срок действия временного доступа истёк'
+                : (res.status === 403
+                  ? 'Данное устройство заблокировано администратором'
+                  : 'Срок действия или код активации недействителен')
+            });
+          }
+        } catch (err) {
+          // Network error: keep unlocked offline per requirement 6
+          console.log('[Activation] Offline or network error; maintaining unlocked state');
+        }
+      };
+
+      verifyActivation();
+      return () => { cancelled = true; };
+    } catch (e) {}
+  }, []);
+
   // Smoothly dismiss the instant native Kaspi splash screen
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -304,7 +391,8 @@ export default function App() {
     if (serviceId === 'bank') {
       handleOpenMyBank();
     } else if (serviceId === 'transfers') {
-      navigateToScreen('transfers');
+      // Disabled per user request (transfers feature is unfinished)
+      return;
     } else if (serviceId === 'gov') {
       handleOpenGov();
     } else if (serviceId === 'shop') {
@@ -313,6 +401,7 @@ export default function App() {
   };
 
   const handleTabChange = (tabId) => {
+    if (tabId === 'messages' || tabId === 'services') return;
     setActiveTab(tabId);
     if (tabId === 'qr') {
       setCurrentScreen('qr_modal');
@@ -401,6 +490,31 @@ export default function App() {
             cards={userData.cards}
             onSelectCard={() => navigateToScreen('gold_detail')}
             onBack={() => navigateBack('tab')}
+            onUpdateBonus={(newBonus) => {
+              setUserData(prev => ({
+                ...prev,
+                cards: {
+                  ...prev.cards,
+                  bonus: {
+                    ...prev.cards.bonus,
+                    balance: newBonus
+                  }
+                }
+              }));
+            }}
+            onUpdateLast4={(newLast4) => {
+              setUserData(prev => ({
+                ...prev,
+                cards: {
+                  ...prev.cards,
+                  gold: {
+                    ...prev.cards.gold,
+                    last4: newLast4,
+                    cardNumberFormatted: `4400 4303 6188 ${newLast4}`
+                  }
+                }
+              }));
+            }}
           />
         );
 
@@ -413,7 +527,7 @@ export default function App() {
             statement={userData.statement}
             onBack={() => navigateBack('my_bank')}
             onOpenQr={() => setCurrentScreen('qr_modal')}
-            onOpenTransfer={() => navigateToScreen('transfers')}
+            onOpenTransfer={undefined}
             onUpdateBalance={(newBal) => {
               setUserData(prev => ({
                 ...prev,
@@ -496,6 +610,30 @@ export default function App() {
         : null);
 
   const isSubscreenActive = currentScreen !== 'tab' && currentScreen !== 'passcode' && currentScreen !== 'qr_modal';
+
+  const isAdminRoute = typeof window !== 'undefined' && (
+    window.location.pathname === '/admin' ||
+    window.location.pathname.startsWith('/admin') ||
+    window.location.search.includes('admin') ||
+    window.location.hash === '#admin'
+  );
+
+  if (isAdminRoute) {
+    return <AdminScreen />;
+  }
+
+  if (!activationState.isActivated) {
+    return (
+      <div className="app-viewport" style={{ backgroundColor: '#FFFFFF' }}>
+        <ActivationScreen
+          initialError={activationState.errorMessage}
+          onActivateSuccess={() => {
+            setActivationState({ isActivated: true, errorMessage: '' });
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div

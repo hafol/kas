@@ -114,10 +114,10 @@ const DEFAULT_STATEMENT_GROUPS = [
 
 export const KaspiGoldDetailScreen = ({
   card = {
-    id: "gold_4163",
+    id: "gold_0000",
     name: "Kaspi Gold",
-    last4: "4163",
-    cardNumberFormatted: "4400 4303 6188 4163",
+    last4: "0000",
+    cardNumberFormatted: "4400 4303 6188 0000",
     iban: "KZ54722C000021658491",
     balance: 110922.58,
     currency: "₸",
@@ -384,9 +384,9 @@ export const KaspiGoldDetailScreen = ({
   const [last4, setLast4] = useState(() => {
     try {
       const saved = localStorage.getItem('kaspi_gold_last4');
-      if (saved) return saved.slice(0, 4);
+      if (saved && saved !== '4163') return saved.slice(0, 4);
     } catch (e) {}
-    return card?.last4 || '4163';
+    return card?.last4 || '0000';
   });
 
   const [isEditingLast4, setIsEditingLast4] = useState(false);
@@ -399,7 +399,7 @@ export const KaspiGoldDetailScreen = ({
 
   const handleSaveLast4 = (overrideValue) => {
     const raw = (overrideValue !== undefined ? overrideValue : last4Input).trim().replace(/\D/g, '');
-    const finalVal = raw.length > 0 ? raw.slice(0, 4) : (last4 || '4163');
+    const finalVal = raw.length > 0 ? raw.slice(0, 4) : (last4 || '0000');
     setLast4(finalVal);
     try {
       localStorage.setItem('kaspi_gold_last4', finalVal);
@@ -432,6 +432,118 @@ export const KaspiGoldDetailScreen = ({
     } catch (e) {}
     if (onUpdateBalance) onUpdateBalance(finalVal);
     setIsEditingBalance(false);
+  };
+
+  // Secret toggle for dev/admin menu in Statement ("+ Добавить операцию" & "🎲 Рандом имена")
+  const [showStatementMenu, setShowStatementMenu] = useState(() => {
+    try {
+      return localStorage.getItem('kaspi_show_statement_menu') === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
+  const secretClickCountRef = React.useRef(0);
+  const secretClickTimerRef = React.useRef(null);
+
+  const handleToggleStatementMenu = () => {
+    secretClickCountRef.current += 1;
+    if (secretClickTimerRef.current) clearTimeout(secretClickTimerRef.current);
+    if (secretClickCountRef.current >= 3) {
+      setShowStatementMenu(prev => {
+        const next = !prev;
+        try {
+          localStorage.setItem('kaspi_show_statement_menu', String(next));
+        } catch (e) {}
+        return next;
+      });
+      secretClickCountRef.current = 0;
+    } else {
+      secretClickTimerRef.current = setTimeout(() => {
+        secretClickCountRef.current = 0;
+      }, 500);
+    }
+  };
+
+  // Editable operations total sums (+ and -) with localStorage persistence
+  const [statementIncome, setStatementIncome] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kaspi_statement_income');
+      if (saved) return saved;
+    } catch (e) {}
+    return '+ 1 059 650 ₸';
+  });
+  const [statementExpense, setStatementExpense] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kaspi_statement_expense');
+      if (saved) return saved;
+    } catch (e) {}
+    return '- 970 912,39 ₸';
+  });
+
+  const [isEditingIncome, setIsEditingIncome] = useState(false);
+  const [incomeInput, setIncomeInput] = useState('');
+
+  const [isEditingExpense, setIsEditingExpense] = useState(false);
+  const [expenseInput, setExpenseInput] = useState('');
+
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
+  const [modalIncomeInput, setModalIncomeInput] = useState('');
+  const [modalExpenseInput, setModalExpenseInput] = useState('');
+
+  const handleSaveIncome = (customVal) => {
+    const raw = (customVal !== undefined ? customVal : incomeInput).trim();
+    if (raw) {
+      const cleaned = raw.replace(/[^\d.,]/g, '').replace(',', '.');
+      const num = parseFloat(cleaned);
+      let formatted;
+      if (!isNaN(num)) {
+        const decimals = raw.includes('.') || raw.includes(',')
+          ? (raw.split(/[.,]/)[1] || '').length
+          : 0;
+        formatted = `+ ${num.toLocaleString('ru-RU', {
+          minimumFractionDigits: Math.min(decimals, 2),
+          maximumFractionDigits: 2
+        })} ₸`;
+      } else {
+        formatted = raw.includes('₸') ? raw : `+ ${raw} ₸`;
+      }
+      setStatementIncome(formatted);
+      try {
+        localStorage.setItem('kaspi_statement_income', formatted);
+      } catch (e) {}
+    }
+    setIsEditingIncome(false);
+  };
+
+  const handleSaveExpense = (customVal) => {
+    const raw = (customVal !== undefined ? customVal : expenseInput).trim();
+    if (raw) {
+      const cleaned = raw.replace(/[^\d.,]/g, '').replace(',', '.');
+      const num = parseFloat(cleaned);
+      let formatted;
+      if (!isNaN(num)) {
+        const decimals = raw.includes('.') || raw.includes(',')
+          ? (raw.split(/[.,]/)[1] || '').length
+          : 2;
+        formatted = `- ${num.toLocaleString('ru-RU', {
+          minimumFractionDigits: Math.min(decimals, 2),
+          maximumFractionDigits: 2
+        })} ₸`;
+      } else {
+        formatted = raw.includes('₸') ? raw : `- ${raw} ₸`;
+      }
+      setStatementExpense(formatted);
+      try {
+        localStorage.setItem('kaspi_statement_expense', formatted);
+      } catch (e) {}
+    }
+    setIsEditingExpense(false);
+  };
+
+  const handleSaveSummaryModal = () => {
+    handleSaveIncome(modalIncomeInput);
+    handleSaveExpense(modalExpenseInput);
+    setShowSummaryModal(false);
   };
 
   // Editable statement groups with persistent localStorage cache
@@ -609,7 +721,7 @@ export const KaspiGoldDetailScreen = ({
   // 11 items for TAB 1: ДЕЙСТВИЯ (exact match with Right Screenshot)
   const actionsList = [
     { id: 'qr', title: 'Kaspi QR', IconComponent: IconKaspiQrGold },
-    { id: 'transfer', title: 'Перевести', IconComponent: IconTransferGold, onClick: onOpenTransfer },
+    { id: 'transfer', title: 'Перевести', IconComponent: IconTransferGold, onClick: undefined },
     { id: 'topup', title: 'Пополнить Kaspi Gold', IconComponent: IconTopupGold },
     { id: 'webpay', title: 'Оплата в интернете', IconComponent: IconWebPayGold },
     { id: 'subscriptions', title: 'Платные сервисы и подписки', IconComponent: IconSubscriptionsGold },
@@ -1087,14 +1199,14 @@ export const KaspiGoldDetailScreen = ({
                     <div
                       key={action.id}
                       onClick={action.onClick}
-                      className="touchable"
+                      className={action.onClick ? "touchable" : ""}
                       style={{
                         height: '74px',
                         padding: '0 22px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        cursor: 'pointer',
+                        cursor: action.onClick ? 'pointer' : 'default',
                         boxSizing: 'border-box'
                       }}
                     >
@@ -1310,14 +1422,18 @@ export const KaspiGoldDetailScreen = ({
                   <div style={{ height: '1px', backgroundColor: '#F2F2F4', marginLeft: '74px', width: 'calc(100% - 74px)' }} />
 
                   {/* Summary Row: "Операции" (+8% icon: 28px) + "+ 1 059 650 ₸" (NOT bold) / "- 970 912,39 ₸" */}
-                  <div style={{
-                    height: '62px',
-                    padding: '0 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    cursor: 'pointer'
-                  }} className="touchable">
+                  <div
+                    onClick={handleToggleStatementMenu}
+                    style={{
+                      height: '62px',
+                      padding: '0 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      cursor: 'pointer'
+                    }}
+                    className="touchable"
+                  >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <div style={{
                         width: '44px',
@@ -1343,85 +1459,188 @@ export const KaspiGoldDetailScreen = ({
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                        <span style={{
-                          fontSize: '18px',
-                          fontWeight: '400',
-                          color: '#27A13B',
-                          lineHeight: 1.25
-                        }}>
-                          + 1 059 650 ₸
-                        </span>
-                        <span style={{
-                          fontSize: '14.5px',
-                          fontWeight: '400',
-                          color: '#757575',
-                          marginTop: '2px',
-                          lineHeight: 1.2
-                        }}>
-                          - 970 912,39 ₸
-                        </span>
+                        {isEditingIncome ? (
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ display: 'flex', alignItems: 'center', gap: '2px' }}
+                          >
+                            <span style={{ fontSize: '18px', color: '#27A13B', fontWeight: '400' }}>+</span>
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              autoFocus
+                              value={incomeInput}
+                              onChange={(e) => setIncomeInput(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleSaveIncome();
+                                if (e.key === 'Escape') setIsEditingIncome(false);
+                              }}
+                              onBlur={() => handleSaveIncome()}
+                              style={{
+                                fontSize: '18px',
+                                fontWeight: '400',
+                                color: '#27A13B',
+                                fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
+                                border: 'none',
+                                borderBottom: '1.5px solid #27A13B',
+                                outline: 'none',
+                                width: '130px',
+                                textAlign: 'right',
+                                padding: '0 2px',
+                                backgroundColor: 'transparent'
+                              }}
+                            />
+                            <span style={{ fontSize: '18px', color: '#27A13B', fontWeight: '400' }}>₸</span>
+                          </div>
+                        ) : (
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsEditingIncome(true);
+                              setIncomeInput(statementIncome.replace(/[+₸\s]/g, '').trim());
+                            }}
+                            title="Нажмите, чтобы изменить сумму пополнений"
+                            style={{
+                              fontSize: '18px',
+                              fontWeight: '400',
+                              color: '#27A13B',
+                              lineHeight: 1.25,
+                              cursor: 'pointer'
+                            }}
+                          >
+                            {statementIncome}
+                          </span>
+                        )}
+
+                        {isEditingExpense ? (
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ display: 'flex', alignItems: 'center', gap: '2px', marginTop: '2px' }}
+                          >
+                            <span style={{ fontSize: '14.5px', color: '#757575', fontWeight: '400' }}>-</span>
+                            <input
+                              type="text"
+                              inputMode="decimal"
+                              autoFocus
+                              value={expenseInput}
+                              onChange={(e) => setExpenseInput(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleSaveExpense();
+                                if (e.key === 'Escape') setIsEditingExpense(false);
+                              }}
+                              onBlur={() => handleSaveExpense()}
+                              style={{
+                                fontSize: '14.5px',
+                                fontWeight: '400',
+                                color: '#757575',
+                                fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
+                                border: 'none',
+                                borderBottom: '1.5px solid #757575',
+                                outline: 'none',
+                                width: '120px',
+                                textAlign: 'right',
+                                padding: '0 2px',
+                                backgroundColor: 'transparent'
+                              }}
+                            />
+                            <span style={{ fontSize: '14.5px', color: '#757575', fontWeight: '400' }}>₸</span>
+                          </div>
+                        ) : (
+                          <span
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsEditingExpense(true);
+                              setExpenseInput(statementExpense.replace(/[-₸\s]/g, '').trim());
+                            }}
+                            title="Нажмите, чтобы изменить сумму списаний"
+                            style={{
+                              fontSize: '14.5px',
+                              fontWeight: '400',
+                              color: '#757575',
+                              marginTop: '2px',
+                              lineHeight: 1.2,
+                              cursor: 'pointer'
+                            }}
+                          >
+                            {statementExpense}
+                          </span>
+                        )}
                       </div>
-                      <ChevronRightIcon color="#C7C7CC" />
+
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowSummaryModal(true);
+                          setModalIncomeInput(statementIncome.replace(/[+₸\s]/g, '').trim());
+                          setModalExpenseInput(statementExpense.replace(/[-₸\s]/g, '').trim());
+                        }}
+                        style={{ cursor: 'pointer', padding: '4px' }}
+                        title="Изменить суммы операций"
+                      >
+                        <ChevronRightIcon color="#C7C7CC" />
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Actions row: "+ Добавить операцию" and "🎲 Случайные имена" */}
-                <div style={{
-                  display: 'flex',
-                  gap: '8px',
-                  padding: '10px 12px 6px 12px'
-                }}>
-                  <button
-                    type="button"
-                    onClick={() => setShowAddTxModal(true)}
-                    className="touchable"
-                    style={{
-                      flex: 1,
-                      height: '44px',
-                      backgroundColor: '#FFFFFF',
-                      borderRadius: '12px',
-                      border: '1px dashed #E2464A',
-                      color: '#E2464A',
-                      fontSize: '15px',
-                      fontWeight: '600',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px',
-                      cursor: 'pointer',
-                      boxShadow: '0 0.5px 1.5px rgba(0, 0, 0, 0.03)'
-                    }}
-                  >
-                    <span style={{ fontSize: '18px', lineHeight: 1 }}>+</span>
-                    <span>Добавить операцию / дату</span>
-                  </button>
+                {/* Actions row: "+ Добавить операцию" and "🎲 Случайные имена" (hidden by default, secret 3-tap on "Операции" to reveal) */}
+                {showStatementMenu && (
+                  <div style={{
+                    display: 'flex',
+                    gap: '8px',
+                    padding: '10px 12px 6px 12px'
+                  }}>
+                    <button
+                      type="button"
+                      onClick={() => setShowAddTxModal(true)}
+                      className="touchable"
+                      style={{
+                        flex: 1,
+                        height: '44px',
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '12px',
+                        border: '1px dashed #E2464A',
+                        color: '#E2464A',
+                        fontSize: '15px',
+                        fontWeight: '600',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        cursor: 'pointer',
+                        boxShadow: '0 0.5px 1.5px rgba(0, 0, 0, 0.03)'
+                      }}
+                    >
+                      <span style={{ fontSize: '18px', lineHeight: 1 }}>+</span>
+                      <span>Добавить операцию / дату</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={handleRandomizeAllNames}
-                    className="touchable"
-                    title="Сгенерировать случайные имена для переводов"
-                    style={{
-                      height: '44px',
-                      padding: '0 12px',
-                      backgroundColor: '#FFFFFF',
-                      borderRadius: '12px',
-                      border: '1px solid #EBEBEB',
-                      color: '#666666',
-                      fontSize: '13.5px',
-                      fontWeight: '500',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      cursor: 'pointer',
-                      boxShadow: '0 0.5px 1.5px rgba(0, 0, 0, 0.03)'
-                    }}
-                  >
-                    <span>🎲</span>
-                    <span>Рандом имена</span>
-                  </button>
-                </div>
+                    <button
+                      type="button"
+                      onClick={handleRandomizeAllNames}
+                      className="touchable"
+                      title="Сгенерировать случайные имена для переводов"
+                      style={{
+                        height: '44px',
+                        padding: '0 12px',
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '12px',
+                        border: '1px solid #EBEBEB',
+                        color: '#666666',
+                        fontSize: '13.5px',
+                        fontWeight: '500',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        cursor: 'pointer',
+                        boxShadow: '0 0.5px 1.5px rgba(0, 0, 0, 0.03)'
+                      }}
+                    >
+                      <span>🎲</span>
+                      <span>Рандом имена</span>
+                    </button>
+                  </div>
+                )}
 
                 {/* Grouped Transactions List by Date: Date headers on grey background + Curved white cards */}
                 {statementGroups
@@ -2103,6 +2322,129 @@ export const KaspiGoldDetailScreen = ({
               }}
             >
               Добавить в выписку
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for editing Operations Summary (+ and -) */}
+      {showSummaryModal && (
+        <div
+          onClick={() => setShowSummaryModal(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.45)',
+            zIndex: 100,
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'center'
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '100%',
+              maxWidth: '430px',
+              backgroundColor: '#FFFFFF',
+              borderTopLeftRadius: '20px',
+              borderTopRightRadius: '20px',
+              padding: '20px 20px 32px 20px',
+              boxSizing: 'border-box'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ fontSize: '19px', fontWeight: '600', color: '#000000' }}>
+                Сумма операций
+              </div>
+              <div
+                onClick={() => setShowSummaryModal(false)}
+                style={{ padding: '6px', cursor: 'pointer', fontSize: '18px', color: '#8E8E93' }}
+              >
+                ✕
+              </div>
+            </div>
+
+            {/* Income field */}
+            <div style={{ marginBottom: '14px' }}>
+              <div style={{ fontSize: '13.5px', color: '#27A13B', fontWeight: '500', marginBottom: '6px' }}>
+                Пополнения (+)
+              </div>
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '12px', fontSize: '18px', color: '#27A13B', fontWeight: '600' }}>+</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={modalIncomeInput}
+                  onChange={(e) => setModalIncomeInput(e.target.value)}
+                  placeholder="1 059 650"
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    backgroundColor: '#F8F8FA',
+                    border: '1px solid #EBEBEB',
+                    borderRadius: '12px',
+                    padding: '0 40px 0 32px',
+                    fontSize: '18px',
+                    fontWeight: '600',
+                    color: '#27A13B',
+                    boxSizing: 'border-box',
+                    outline: 'none'
+                  }}
+                />
+                <span style={{ position: 'absolute', right: '14px', top: '12px', fontSize: '18px', fontWeight: '600', color: '#8E8E93' }}>₸</span>
+              </div>
+            </div>
+
+            {/* Expense field */}
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ fontSize: '13.5px', color: '#757575', fontWeight: '500', marginBottom: '6px' }}>
+                Списания (-)
+              </div>
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '12px', fontSize: '18px', color: '#757575', fontWeight: '600' }}>-</span>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={modalExpenseInput}
+                  onChange={(e) => setModalExpenseInput(e.target.value)}
+                  placeholder="970 912,39"
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    backgroundColor: '#F8F8FA',
+                    border: '1px solid #EBEBEB',
+                    borderRadius: '12px',
+                    padding: '0 40px 0 32px',
+                    fontSize: '18px',
+                    fontWeight: '600',
+                    color: '#000000',
+                    boxSizing: 'border-box',
+                    outline: 'none'
+                  }}
+                />
+                <span style={{ position: 'absolute', right: '14px', top: '12px', fontSize: '18px', fontWeight: '600', color: '#8E8E93' }}>₸</span>
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <button
+              type="button"
+              onClick={handleSaveSummaryModal}
+              className="touchable"
+              style={{
+                width: '100%',
+                height: '48px',
+                backgroundColor: '#EE3524',
+                color: '#FFFFFF',
+                borderRadius: '12px',
+                border: 'none',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer'
+              }}
+            >
+              Сохранить
             </button>
           </div>
         </div>

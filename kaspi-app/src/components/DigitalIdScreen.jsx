@@ -509,8 +509,120 @@ export const DigitalIdScreen = ({ onBack }) => {
       overflowX: 'hidden',
       WebkitOverflowScrolling: 'touch',
       fontFamily,
-      letterSpacing: 0
+      letterSpacing: 0,
+      display: 'flex',
+      flexDirection: 'column'
     }}>
+      {/* Sticky Header with iOS Status Bar Spacer */}
+      <div style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+        backgroundColor: pageBg,
+        width: '100%',
+        boxSizing: 'border-box'
+      }}>
+        {/* iOS Status Bar Spacer (pageBg behind clock & battery) */}
+        <div style={{
+          height: 'env(safe-area-inset-top, 47px)',
+          minHeight: '44px',
+          width: '100%',
+          backgroundColor: pageBg,
+          flexShrink: 0
+        }} />
+
+        {/* 44px Navigation Bar (Back chevron + Title + Save Checkmark) */}
+        <div style={{
+          position: 'relative',
+          height: '44px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: pageBg,
+          boxSizing: 'border-box'
+        }}>
+          {/* Back button */}
+          <button
+            type="button"
+            onClick={onBack}
+            aria-label="Назад"
+            style={{
+              position: 'absolute',
+              left: '25px',
+              top: '11.5px',
+              width: '11.5px',
+              height: '21px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              color: textPrimary,
+              cursor: 'pointer',
+              outline: 'none',
+              zIndex: 20,
+              WebkitTapHighlightColor: 'transparent'
+            }}
+          >
+            <BackChevronIcon />
+          </button>
+
+          {/* Title "Удостоверение личности" */}
+          <h1 style={{
+            margin: 0,
+            padding: 0,
+            fontFamily,
+            fontSize: '18.5px',
+            fontWeight: 600,
+            color: textPrimary,
+            lineHeight: 1.15,
+            whiteSpace: 'nowrap',
+            textAlign: 'center',
+            letterSpacing: '-0.2px',
+            zIndex: 10
+          }}>
+            Удостоверение личности
+          </h1>
+
+          {/* Save checkmark button if photo uploaded and not saved */}
+          {photoUrl && !isSaved && (
+            <button
+              type="button"
+              onClick={handleSave}
+              aria-label="Сохранить"
+              className="touchable"
+              style={{
+                position: 'absolute',
+                right: '16px',
+                top: '4px',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: '#0175CC',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: 'none',
+                color: '#FFFFFF',
+                cursor: 'pointer',
+                zIndex: 20
+              }}
+            >
+              <Check size={20} strokeWidth={2.4} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Relative container holding screen content with status bar offset */}
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        flex: 1,
+        minHeight: '820px',
+        marginTop: '-44px'
+      }}>
       {/* Hidden file input */}
       <input
         ref={fileInputRef}
@@ -519,87 +631,6 @@ export const DigitalIdScreen = ({ onBack }) => {
         style={{ display: 'none' }}
         onChange={handlePhotoUpload}
       />
-
-      {/* =====================================================================
-          1. NAV BAR (starts right at the top of the page, no status bar gap)
-          - back chevron: top 14.5px, x 25px, size 11.5 x 21, stroke ≈ 2 px
-          - title: top 17.5px, 218 wide (font ≈ 18.5 px Semibold), centred on screen
-          ===================================================================== */}
-      {/* Back button */}
-      <button
-        type="button"
-        onClick={onBack}
-        aria-label="Назад"
-        style={{
-          position: 'absolute',
-          left: '25px',
-          top: '14.5px', // 62.5 - 48 = 14.5px
-          width: '11.5px',
-          height: '21px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          color: textPrimary,
-          cursor: 'pointer',
-          outline: 'none',
-          zIndex: 20,
-          WebkitTapHighlightColor: 'transparent'
-        }}
-      >
-        <BackChevronIcon />
-      </button>
-
-      {/* Title "Удостоверение личности": 218 wide, text top 14.5px (up 1px), centred */}
-      <h1 style={{
-        position: 'absolute',
-        top: '14.5px', // up by 1px (was 15.5px)
-        left: 'calc(50% - 109px)',
-        width: '218px',
-        margin: 0,
-        padding: 0,
-        fontFamily,
-        fontSize: '18.5px',
-        fontWeight: 600,
-        color: textPrimary,
-        lineHeight: 1.15,
-        whiteSpace: 'nowrap',
-        textAlign: 'center',
-        letterSpacing: '-0.2px',
-        zIndex: 10
-      }}>
-        Удостоверение личности
-      </h1>
-
-      {/* Save checkmark button if photo uploaded and not saved */}
-      {photoUrl && !isSaved && (
-        <button
-          type="button"
-          onClick={handleSave}
-          aria-label="Сохранить"
-          className="touchable"
-          style={{
-            position: 'absolute',
-            right: '16px',
-            top: '8px',
-            width: '36px',
-            height: '36px',
-            borderRadius: '50%',
-            backgroundColor: '#0175CC',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: 'none',
-            color: '#FFFFFF',
-            cursor: 'pointer',
-            zIndex: 20
-          }}
-        >
-          <Check size={20} strokeWidth={2.4} />
-        </button>
-      )}
 
       {/* =====================================================================
           2. SEGMENTED CONTROL (Документ / Реквизиты)
@@ -1423,6 +1454,7 @@ export const DigitalIdScreen = ({ onBack }) => {
           Скопировано в буфер обмена
         </div>
       )}
+      </div>
     </div>
   );
 };

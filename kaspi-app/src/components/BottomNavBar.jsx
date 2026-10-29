@@ -85,12 +85,12 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
       backgroundColor: '#FFFFFF',
       borderTop: '0.5px solid #EFEFEF',
       zIndex: 60,
-      paddingBottom: 'env(safe-area-inset-bottom, 34px)',
+      paddingBottom: 'max(calc(env(safe-area-inset-bottom, 0px) - 22px), 10px)',
       boxSizing: 'border-box'
     }}>
       <div style={{
         display: 'flex',
-        height: '49px',
+        height: '48px',
         width: '100%',
         alignItems: 'stretch',
         position: 'relative'
