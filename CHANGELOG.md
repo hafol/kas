@@ -2,6 +2,26 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 05:33] — Экран Kaspi Gold: Уменьшение размера векторного медальона (SVG) на 10% (со 125px до 112.5px)
+
+### 🎯 Запрос пользователя:
+> *«can you see that svg at the right can you make it smaller for like 10%»*
+
+### 🛠️ Что сделано:
+1. **Уменьшение размера SVG-эмблемы (Kaspi Gold Medallion)**:
+   - В компоненте [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx) размеры контейнера векторного медальона уменьшены ровно на 10%: с `125px × 125px` до **`112.5px × 112.5px`**.
+   - Сохранены точные координаты прилипания и отступы (`right: 26px`, `top: calc(env(safe-area-inset-top, 0px) + 72px)`).
+   - Векторная чёткость силуэта родителей и ребёнка сохранена на 100% без потери качества.
+2. **Проверка**:
+   - `npm run build` успешно прошёл (1931 модуль скомпилирован за 1.05с без ошибок).
+   - Скриншот мобильного экрана 393×852 подтвердил гармоничные и сбалансированные пропорции в шапке Kaspi Gold.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
+
+---
+
 ## [2026-10-29 05:00] — Экран Kaspi Gold: Восстановление компактного верхнего отступа (заголовок y=66px), разделение фона и векторного логотипа (SVG), статичное закрепление медальона при любом скролле (position: sticky, top: 0)
 
 ### 🎯 Запрос пользователя:
