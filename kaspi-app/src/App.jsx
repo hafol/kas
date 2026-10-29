@@ -23,18 +23,48 @@ export default function App() {
   const [userData, setUserData] = useState(() => {
     try {
       const savedProfile = localStorage.getItem('kaspi_user_profile');
+      const savedBalance = localStorage.getItem('kaspi_gold_balance');
+      let data = { ...initialUserData };
       if (savedProfile) {
-        return {
-          ...initialUserData,
-          profile: {
-            ...initialUserData.profile,
-            ...JSON.parse(savedProfile)
+        data.profile = {
+          ...data.profile,
+          ...JSON.parse(savedProfile)
+        };
+      }
+      if (savedBalance !== null && savedBalance !== '') {
+        const num = parseFloat(savedBalance.replace(/\s+/g, '').replace(',', '.'));
+        data.cards = {
+          ...data.cards,
+          gold: {
+            ...data.cards.gold,
+            balance: isNaN(num) ? savedBalance : num
           }
         };
       }
+      return data;
     } catch (e) {}
     return initialUserData;
   });
+
+  // Listen for balance updates from Kaspi Gold detail screen
+  useEffect(() => {
+    const handleBalanceUpdate = (e) => {
+      const newBal = e.detail;
+      setUserData(prev => ({
+        ...prev,
+        cards: {
+          ...prev.cards,
+          gold: {
+            ...prev.cards.gold,
+            balance: newBal
+          }
+        }
+      }));
+    };
+    window.addEventListener('kaspi_balance_updated', handleBalanceUpdate);
+    return () => window.removeEventListener('kaspi_balance_updated', handleBalanceUpdate);
+  }, []);
+
   const [activeTab, setActiveTab] = useState('home'); // 'home' | 'qr' | 'messages' | 'services'
   
   // Smoothly dismiss the instant native Kaspi splash screen
@@ -349,6 +379,18 @@ export default function App() {
             onBack={() => navigateBack('my_bank')}
             onOpenQr={() => setCurrentScreen('qr_modal')}
             onOpenTransfer={() => navigateToScreen('transfers')}
+            onUpdateBalance={(newBal) => {
+              setUserData(prev => ({
+                ...prev,
+                cards: {
+                  ...prev.cards,
+                  gold: {
+                    ...prev.cards.gold,
+                    balance: newBal
+                  }
+                }
+              }));
+            }}
           />
         );
 

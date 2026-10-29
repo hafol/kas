@@ -23,7 +23,6 @@ import {
   StatementOperationsReceiptIcon,
   StatementBasketIcon,
   StatementPersonIcon,
-  ApplePayBadge,
   KaspiGoldMedallion
 } from './KaspiGoldIcons';
 
@@ -58,6 +57,60 @@ const SearchIcon = ({ size = 20, color = "#8E8E93" }) => (
   </svg>
 );
 
+const RANDOM_KASPI_NAMES = [
+  'Айдос С.',
+  'Динара М.',
+  'Нурлан К.',
+  'Мадина Б.',
+  'Ерлан Т.',
+  'Камила А.',
+  'Азамат Б.',
+  'Данияр О.',
+  'Алия Ж.',
+  'Руслан В.',
+  'Арман К.',
+  'Асель Т.'
+];
+
+const DEFAULT_STATEMENT_GROUPS = [
+  {
+    date: '23 октября',
+    items: [
+      {
+        id: 'tx_1',
+        title: 'Супермаркет Daily',
+        category: 'Супермаркеты',
+        amount: '- 1 640 ₸',
+        iconType: 'basket'
+      }
+    ]
+  },
+  {
+    date: '22 октября',
+    items: [
+      {
+        id: 'tx_2',
+        title: 'Алия Б.',
+        category: 'Переводы',
+        amount: '- 1 100 ₸',
+        iconType: 'person'
+      }
+    ]
+  },
+  {
+    date: '21 октября',
+    items: [
+      {
+        id: 'tx_3',
+        title: 'Magnum Daily',
+        category: 'Супермаркеты',
+        amount: '- 8 450 ₸',
+        iconType: 'basket'
+      }
+    ]
+  }
+];
+
 export const KaspiGoldDetailScreen = ({
   card = {
     id: "gold_4163",
@@ -65,13 +118,14 @@ export const KaspiGoldDetailScreen = ({
     last4: "4163",
     cardNumberFormatted: "4400 4303 6188 4163",
     iban: "KZ54722C000021658491",
-    balance: 112022.58,
+    balance: 110922.58,
     currency: "₸",
     expiry: "09/29",
     cvv: "•••"
   },
   onBack,
-  onOpenTransfer
+  onOpenTransfer,
+  onUpdateBalance
 }) => {
   const [activeTab, setActiveTab] = useState('actions'); // 'actions' | 'info' | 'statement'
   const [sliderHeight, setSliderHeight] = useState('auto');
@@ -310,14 +364,231 @@ export const KaspiGoldDetailScreen = ({
     setTimeout(() => setCopiedField(null), 2000);
   };
 
-  const formattedBalance = typeof card.balance === 'number'
-    ? card.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\u00a0/g, ' ') + ' ₸'
-    : (card.balance || '110 922,58 ₸');
+  // Editable balance with persistent localStorage cache
+  const [balance, setBalance] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kaspi_gold_balance');
+      if (saved !== null && saved !== '') {
+        const num = parseFloat(saved.replace(/\s+/g, '').replace(',', '.'));
+        return isNaN(num) ? saved : num;
+      }
+    } catch (e) {}
+    return card?.balance ?? 110922.58;
+  });
 
+  const [isEditingBalance, setIsEditingBalance] = useState(false);
+  const [balanceInput, setBalanceInput] = useState('');
+
+  const formatBalance = (val) => {
+    if (typeof val === 'number') {
+      return val.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\u00a0/g, ' ') + ' ₸';
+    }
+    const str = String(val).trim();
+    return str.endsWith('₸') ? str : `${str} ₸`;
+  };
+
+  const formattedBalance = formatBalance(balance);
   const balanceAmount = formattedBalance.endsWith('₸')
     ? formattedBalance.slice(0, -1).trimEnd()
     : formattedBalance;
   const balanceSymbol = formattedBalance.endsWith('₸') ? '₸' : '';
+
+  const handleStartEditBalance = () => {
+    setIsEditingBalance(true);
+    setBalanceInput(
+      typeof balance === 'number'
+        ? balance.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\u00a0/g, ' ')
+        : String(balance).replace('₸', '').trim()
+    );
+  };
+
+  const handleSaveBalance = () => {
+    const raw = balanceInput.trim();
+    if (!raw) {
+      setIsEditingBalance(false);
+      return;
+    }
+    const cleanNum = parseFloat(raw.replace(/\s+/g, '').replace(',', '.'));
+    const finalVal = isNaN(cleanNum) ? raw : cleanNum;
+    setBalance(finalVal);
+    try {
+      localStorage.setItem('kaspi_gold_balance', String(finalVal));
+      window.dispatchEvent(new CustomEvent('kaspi_balance_updated', { detail: finalVal }));
+    } catch (e) {}
+    if (onUpdateBalance) onUpdateBalance(finalVal);
+    setIsEditingBalance(false);
+  };
+
+  // Editable statement groups with persistent localStorage cache
+  const [statementGroups, setStatementGroups] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kaspi_gold_statement');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    return DEFAULT_STATEMENT_GROUPS;
+  });
+
+  const saveStatementGroups = (newGroups) => {
+    setStatementGroups(newGroups);
+    try {
+      localStorage.setItem('kaspi_gold_statement', JSON.stringify(newGroups));
+    } catch (e) {}
+  };
+
+  // Editing transaction amounts / titles
+  const [editingTxId, setEditingTxId] = useState(null);
+  const [editingTxAmount, setEditingTxAmount] = useState('');
+  const [editingTxTitleId, setEditingTxTitleId] = useState(null);
+  const [editingTxTitle, setEditingTxTitle] = useState('');
+
+  const startEditTxAmount = (tx) => {
+    setEditingTxId(tx.id);
+    setEditingTxAmount(tx.amount.replace('₸', '').trim());
+  };
+
+  const handleSaveTxAmount = (txId) => {
+    if (!editingTxAmount.trim()) {
+      setEditingTxId(null);
+      return;
+    }
+    let val = editingTxAmount.trim();
+    if (!val.endsWith('₸')) {
+      val = `${val} ₸`;
+    }
+    const updated = statementGroups.map(group => ({
+      ...group,
+      items: group.items.map(item => item.id === txId ? { ...item, amount: val } : item)
+    }));
+    saveStatementGroups(updated);
+    setEditingTxId(null);
+  };
+
+  const startEditTxTitle = (tx) => {
+    setEditingTxTitleId(tx.id);
+    setEditingTxTitle(tx.title);
+  };
+
+  const handleSaveTxTitle = (txId) => {
+    if (!editingTxTitle.trim()) {
+      setEditingTxTitleId(null);
+      return;
+    }
+    const updated = statementGroups.map(group => ({
+      ...group,
+      items: group.items.map(item => item.id === txId ? { ...item, title: editingTxTitle.trim() } : item)
+    }));
+    saveStatementGroups(updated);
+    setEditingTxTitleId(null);
+  };
+
+  const handleDeleteTx = (txId) => {
+    const updated = statementGroups
+      .map(group => ({
+        ...group,
+        items: group.items.filter(item => item.id !== txId)
+      }))
+      .filter(group => group.items.length > 0);
+    saveStatementGroups(updated);
+  };
+
+  const handleRandomizeAllNames = () => {
+    let pool = [...RANDOM_KASPI_NAMES].sort(() => 0.5 - Math.random());
+    let poolIdx = 0;
+    const updated = statementGroups.map(group => ({
+      ...group,
+      items: group.items.map(item => {
+        if (item.category === 'Переводы' || item.iconType === 'person') {
+          const randName = pool[poolIdx % pool.length];
+          poolIdx++;
+          return { ...item, title: randName };
+        }
+        return item;
+      })
+    }));
+    saveStatementGroups(updated);
+  };
+
+  // Add Operation modal state
+  const [showAddTxModal, setShowAddTxModal] = useState(false);
+  const [newTxDate, setNewTxDate] = useState('Сегодня');
+  const [newTxTitle, setNewTxTitle] = useState('');
+  const [newTxCategory, setNewTxCategory] = useState('Переводы');
+  const [newTxAmount, setNewTxAmount] = useState('1 000');
+  const [newTxType, setNewTxType] = useState('expense'); // 'expense' (-) | 'income' (+)
+
+  const handleSetRandomName = () => {
+    const rand = RANDOM_KASPI_NAMES[Math.floor(Math.random() * RANDOM_KASPI_NAMES.length)];
+    setNewTxTitle(rand);
+  };
+
+  const handleAddNewTx = () => {
+    if (!newTxTitle.trim() || !newTxAmount.trim()) return;
+
+    const prefix = newTxType === 'income' ? '+ ' : '- ';
+    const cleanAmount = newTxAmount.trim().replace(/^[+-]\s*/, '').replace('₸', '').trim();
+    const finalAmount = `${prefix}${cleanAmount} ₸`;
+
+    let iconType = 'receipt';
+    if (newTxCategory === 'Переводы') iconType = 'person';
+    else if (newTxCategory === 'Супермаркеты') iconType = 'basket';
+    else if (newTxCategory === 'Пополнение') iconType = 'topup';
+
+    const newTx = {
+      id: `tx_${Date.now()}`,
+      title: newTxTitle.trim(),
+      category: newTxCategory,
+      amount: finalAmount,
+      iconType
+    };
+
+    const targetDate = newTxDate.trim() || 'Сегодня';
+    let found = false;
+    let newGroups = statementGroups.map(group => {
+      if (group.date.trim().toLowerCase() === targetDate.toLowerCase()) {
+        found = true;
+        return {
+          ...group,
+          items: [newTx, ...group.items]
+        };
+      }
+      return group;
+    });
+
+    if (!found) {
+      newGroups = [
+        {
+          date: targetDate,
+          items: [newTx]
+        },
+        ...newGroups
+      ];
+    }
+
+    saveStatementGroups(newGroups);
+    setShowAddTxModal(false);
+    setNewTxTitle('');
+    setNewTxAmount('1 000');
+  };
+
+  const getStatementIcon = (item) => {
+    if (item.icon) return item.icon;
+    switch (item.iconType) {
+      case 'basket':
+        return StatementBasketIcon;
+      case 'person':
+        return StatementPersonIcon;
+      case 'topup':
+        return IconTopupGold;
+      case 'receipt':
+      default:
+        return StatementOperationsReceiptIcon;
+    }
+  };
 
   // 11 items for TAB 1: ДЕЙСТВИЯ (exact match with Right Screenshot)
   const actionsList = [
@@ -344,46 +615,6 @@ export const KaspiGoldDetailScreen = ({
     { id: 'terminals', title: 'Терминалы и банкоматы', IconComponent: IconAtmsGold },
     { id: 'tips', title: 'Полезные советы', IconComponent: IconTipsGold },
     { id: 'visa_topup', title: 'Пополнения с Visa', subtitle: 'Из другого банка по номеру телефона', IconComponent: IconVisaTopupGold }
-  ];
-
-  // Transactions list for TAB 3: ВЫПИСКА (exact user-provided SVGs matching Screenshot 3)
-  const statementGroups = [
-    {
-      date: '23 октября',
-      items: [
-        {
-          id: 'tx_1',
-          title: 'ИП МАЙМАХОВА',
-          category: 'Супермаркеты',
-          amount: '- 1 640 ₸',
-          icon: StatementBasketIcon
-        }
-      ]
-    },
-    {
-      date: '22 октября',
-      items: [
-        {
-          id: 'tx_2',
-          title: 'Әнел Ш.',
-          category: 'Переводы',
-          amount: '- 1 100 ₸',
-          icon: StatementPersonIcon
-        }
-      ]
-    },
-    {
-      date: '21 октября',
-      items: [
-        {
-          id: 'tx_3',
-          title: 'Magnum',
-          category: 'Супермаркеты',
-          amount: '- 8 450 ₸',
-          icon: StatementBasketIcon
-        }
-      ]
-    }
   ];
 
   return (
@@ -535,7 +766,7 @@ export const KaspiGoldDetailScreen = ({
           willChange: 'opacity, transform'
         }}
       >
-        {/* Card Name + Apple Pay badge */}
+        {/* Card Name (Apple Pay badge removed per user request) */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -552,7 +783,6 @@ export const KaspiGoldDetailScreen = ({
           }}>
             Kaspi Gold *{card.last4}
           </span>
-          <ApplePayBadge style={{ marginLeft: '9px' }} />
         </div>
 
         {/* Caption "Доступно" */}
@@ -566,9 +796,10 @@ export const KaspiGoldDetailScreen = ({
           Доступно
         </div>
 
-        {/* Big Balance: 110 922,58 ₸ */}
+        {/* Big Balance: Click to edit, Enter to save cache */}
         <div style={{
-          display: 'inline-block',
+          display: 'inline-flex',
+          alignItems: 'center',
           fontSize: 'calc(43px + 1.2pt)',
           fontWeight: '630',
           fontVariationSettings: "'wght' 630",
@@ -581,15 +812,57 @@ export const KaspiGoldDetailScreen = ({
           transformOrigin: 'left center',
           textShadow: '0 1px 2px rgba(0,0,0,0.1)'
         }}>
-          {balanceAmount}
-          {balanceSymbol && (
-            <span style={{
-              fontWeight: '487',
-              fontVariationSettings: "'wght' 487",
-              marginLeft: '12px'
-            }}>
-              {balanceSymbol}
-            </span>
+          {isEditingBalance ? (
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <input
+                type="text"
+                autoFocus
+                value={balanceInput}
+                onChange={(e) => setBalanceInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSaveBalance();
+                  if (e.key === 'Escape') setIsEditingBalance(false);
+                }}
+                onBlur={handleSaveBalance}
+                style={{
+                  fontSize: 'calc(36px + 1pt)',
+                  fontWeight: '630',
+                  color: '#FFFFFF',
+                  fontFamily: "'Roboto Flex Kaspi', 'Roboto', sans-serif",
+                  backgroundColor: 'rgba(255, 255, 255, 0.18)',
+                  border: 'none',
+                  borderBottom: '2.5px solid #FFFFFF',
+                  borderRadius: '6px',
+                  padding: '2px 8px',
+                  outline: 'none',
+                  width: '260px',
+                  boxSizing: 'border-box'
+                }}
+              />
+              <span style={{ fontSize: '28px', color: '#FFFFFF', fontWeight: '400' }}>₸</span>
+            </div>
+          ) : (
+            <div
+              onClick={handleStartEditBalance}
+              className="touchable"
+              title="Нажмите, чтобы изменить баланс (Enter для сохранения)"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'baseline',
+                cursor: 'pointer'
+              }}
+            >
+              <span>{balanceAmount}</span>
+              {balanceSymbol && (
+                <span style={{
+                  fontWeight: '487',
+                  fontVariationSettings: "'wght' 487",
+                  marginLeft: '12px'
+                }}>
+                  {balanceSymbol}
+                </span>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -1024,8 +1297,77 @@ export const KaspiGoldDetailScreen = ({
                   </div>
                 </div>
 
+                {/* Actions row: "+ Добавить операцию" and "🎲 Случайные имена" */}
+                <div style={{
+                  display: 'flex',
+                  gap: '8px',
+                  padding: '10px 12px 6px 12px'
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowAddTxModal(true)}
+                    className="touchable"
+                    style={{
+                      flex: 1,
+                      height: '44px',
+                      backgroundColor: '#FFFFFF',
+                      borderRadius: '12px',
+                      border: '1px dashed #E2464A',
+                      color: '#E2464A',
+                      fontSize: '15px',
+                      fontWeight: '600',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      cursor: 'pointer',
+                      boxShadow: '0 0.5px 1.5px rgba(0, 0, 0, 0.03)'
+                    }}
+                  >
+                    <span style={{ fontSize: '18px', lineHeight: 1 }}>+</span>
+                    <span>Добавить операцию / дату</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleRandomizeAllNames}
+                    className="touchable"
+                    title="Сгенерировать случайные имена для переводов"
+                    style={{
+                      height: '44px',
+                      padding: '0 12px',
+                      backgroundColor: '#FFFFFF',
+                      borderRadius: '12px',
+                      border: '1px solid #EBEBEB',
+                      color: '#666666',
+                      fontSize: '13.5px',
+                      fontWeight: '500',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      cursor: 'pointer',
+                      boxShadow: '0 0.5px 1.5px rgba(0, 0, 0, 0.03)'
+                    }}
+                  >
+                    <span>🎲</span>
+                    <span>Рандом имена</span>
+                  </button>
+                </div>
+
                 {/* Grouped Transactions List by Date: Date headers on grey background + Curved white cards */}
-                {statementGroups.map((group) => (
+                {statementGroups
+                  .map(group => ({
+                    ...group,
+                    items: group.items.filter(item => {
+                      if (!searchQuery) return true;
+                      const q = searchQuery.toLowerCase();
+                      return item.title.toLowerCase().includes(q) ||
+                        item.category.toLowerCase().includes(q) ||
+                        item.amount.toLowerCase().includes(q);
+                    })
+                  }))
+                  .filter(group => group.items.length > 0)
+                  .map((group) => (
                   <div key={group.date} style={{ display: 'flex', flexDirection: 'column', marginTop: '4px' }}>
                     {/* Date Header: e.g. "23 октября" sitting on the grey background */}
                     <div style={{
@@ -1047,21 +1389,20 @@ export const KaspiGoldDetailScreen = ({
                       boxShadow: '0 0.5px 1.5px rgba(0, 0, 0, 0.03)'
                     }}>
                       {group.items.map((tx, idx) => {
-                        const Icon = tx.icon;
+                        const Icon = getStatementIcon(tx);
                         return (
                           <React.Fragment key={tx.id}>
                             <div
-                              className="touchable"
                               style={{
-                                height: '74px',
-                                padding: '0 16px',
+                                minHeight: '74px',
+                                padding: '12px 16px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
-                                cursor: 'pointer'
+                                boxSizing: 'border-box'
                               }}
                             >
-                              <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
                                 {/* Circular icon container: unchanged 44px, icon inside +8%: 28px */}
                                 <div style={{
                                   width: '44px',
@@ -1076,15 +1417,49 @@ export const KaspiGoldDetailScreen = ({
                                   <Icon size={28} color="#262626" />
                                 </div>
 
-                                <div style={{ marginLeft: '14px', display: 'flex', flexDirection: 'column' }}>
-                                  <span style={{
-                                    fontSize: '18px',
-                                    fontWeight: '400',
-                                    color: '#000000',
-                                    lineHeight: 1.25
-                                  }}>
-                                    {tx.title}
-                                  </span>
+                                <div style={{ marginLeft: '14px', display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+                                  {editingTxTitleId === tx.id ? (
+                                    <input
+                                      type="text"
+                                      autoFocus
+                                      value={editingTxTitle}
+                                      onChange={(e) => setEditingTxTitle(e.target.value)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === 'Enter') handleSaveTxTitle(tx.id);
+                                        if (e.key === 'Escape') setEditingTxTitleId(null);
+                                      }}
+                                      onBlur={() => handleSaveTxTitle(tx.id)}
+                                      style={{
+                                        fontSize: '17px',
+                                        fontWeight: '500',
+                                        color: '#000000',
+                                        border: 'none',
+                                        borderBottom: '1.5px solid #E2464A',
+                                        outline: 'none',
+                                        backgroundColor: '#FFF5F5',
+                                        padding: '2px 4px',
+                                        borderRadius: '4px',
+                                        maxWidth: '160px'
+                                      }}
+                                    />
+                                  ) : (
+                                    <span
+                                      onClick={() => startEditTxTitle(tx)}
+                                      title="Нажмите, чтобы изменить имя (Enter для сохранения)"
+                                      style={{
+                                        fontSize: '18px',
+                                        fontWeight: '400',
+                                        color: '#000000',
+                                        lineHeight: 1.25,
+                                        cursor: 'pointer',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap'
+                                      }}
+                                    >
+                                      {tx.title}
+                                    </span>
+                                  )}
                                   <span style={{
                                     fontSize: '14.5px',
                                     fontWeight: '400',
@@ -1097,16 +1472,65 @@ export const KaspiGoldDetailScreen = ({
                                 </div>
                               </div>
 
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                {/* Number is NOT bold: fontWeight 400 */}
-                                <span style={{
-                                  fontSize: '18px',
-                                  fontWeight: '400',
-                                  color: '#000000'
-                                }}>
-                                  {tx.amount}
-                                </span>
-                                <ChevronRightIcon color="#C7C7CC" />
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, marginLeft: '8px' }}>
+                                {editingTxId === tx.id ? (
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input
+                                      type="text"
+                                      autoFocus
+                                      value={editingTxAmount}
+                                      onChange={(e) => setEditingTxAmount(e.target.value)}
+                                      onKeyDown={(e) => {
+                                        if (e.key === 'Enter') handleSaveTxAmount(tx.id);
+                                        if (e.key === 'Escape') setEditingTxId(null);
+                                      }}
+                                      onBlur={() => handleSaveTxAmount(tx.id)}
+                                      style={{
+                                        fontSize: '17px',
+                                        fontWeight: '500',
+                                        color: '#000000',
+                                        border: 'none',
+                                        borderBottom: '1.5px solid #E2464A',
+                                        outline: 'none',
+                                        backgroundColor: '#FFF5F5',
+                                        padding: '2px 4px',
+                                        borderRadius: '4px',
+                                        width: '100px',
+                                        textAlign: 'right'
+                                      }}
+                                    />
+                                  </div>
+                                ) : (
+                                  <span
+                                    onClick={() => startEditTxAmount(tx)}
+                                    title="Нажмите, чтобы изменить сумму трат (Enter для сохранения)"
+                                    style={{
+                                      fontSize: '18px',
+                                      fontWeight: '400',
+                                      color: tx.amount?.startsWith('+') ? '#27A13B' : '#000000',
+                                      cursor: 'pointer'
+                                    }}
+                                  >
+                                    {tx.amount}
+                                  </span>
+                                )}
+                                <div
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteTx(tx.id);
+                                  }}
+                                  className="touchable"
+                                  title="Удалить операцию"
+                                  style={{
+                                    padding: '4px',
+                                    cursor: 'pointer',
+                                    color: '#C7C7CC',
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                  }}
+                                >
+                                  <ChevronRightIcon color="#C7C7CC" />
+                                </div>
                               </div>
                             </div>
 
@@ -1281,6 +1705,307 @@ export const KaspiGoldDetailScreen = ({
                 </span>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          ADD TRANSACTION / SECTION MODAL
+      ===================================================================== */}
+      {showAddTxModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.55)',
+          zIndex: 350,
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+          backdropFilter: 'blur(2px)'
+        }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '430px',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '22px 22px 0 0',
+            padding: '20px 20px 36px 20px',
+            boxSizing: 'border-box',
+            maxHeight: '90vh',
+            overflowY: 'auto'
+          }}>
+            {/* Modal drag pill */}
+            <div style={{
+              width: '36px',
+              height: '4px',
+              backgroundColor: '#D1D1D6',
+              borderRadius: '2px',
+              margin: '0 auto 16px auto'
+            }} />
+
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '18px'
+            }}>
+              <span style={{ fontSize: '20px', fontWeight: '700', color: '#000000' }}>
+                Добавить операцию / дату
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowAddTxModal(false)}
+                className="touchable"
+                style={{
+                  background: '#F2F2F4',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: '#8E8E93',
+                  fontSize: '16px'
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Date field */}
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontSize: '13.5px', color: '#8E8E93', marginBottom: '6px' }}>
+                Дата (раздел выписки)
+              </div>
+              <input
+                type="text"
+                value={newTxDate}
+                onChange={(e) => setNewTxDate(e.target.value)}
+                placeholder="Например: Сегодня, 24 октября, 23 октября"
+                style={{
+                  width: '100%',
+                  height: '44px',
+                  backgroundColor: '#F8F8FA',
+                  border: '1px solid #EBEBEB',
+                  borderRadius: '12px',
+                  padding: '0 14px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  boxSizing: 'border-box',
+                  outline: 'none'
+                }}
+              />
+              {/* Quick date chips */}
+              <div style={{ display: 'flex', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
+                {['Сегодня', 'Вчера', '24 октября', '23 октября'].map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => setNewTxDate(d)}
+                    style={{
+                      padding: '5px 10px',
+                      backgroundColor: newTxDate === d ? '#FFF0F0' : '#F2F2F4',
+                      color: newTxDate === d ? '#EE3524' : '#555555',
+                      border: newTxDate === d ? '1px solid #EE3524' : 'none',
+                      borderRadius: '8px',
+                      fontSize: '13px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Title / Name field with Random button */}
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '6px'
+              }}>
+                <span style={{ fontSize: '13.5px', color: '#8E8E93' }}>
+                  Название / Клиент / Магазин
+                </span>
+                <button
+                  type="button"
+                  onClick={handleSetRandomName}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#EE3524',
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    padding: 0
+                  }}
+                >
+                  🎲 Случайное имя
+                </button>
+              </div>
+              <input
+                type="text"
+                value={newTxTitle}
+                onChange={(e) => setNewTxTitle(e.target.value)}
+                placeholder="Например: Данияр К., Magnum, Coffee Shop"
+                style={{
+                  width: '100%',
+                  height: '44px',
+                  backgroundColor: '#F8F8FA',
+                  border: '1px solid #EBEBEB',
+                  borderRadius: '12px',
+                  padding: '0 14px',
+                  fontSize: '16px',
+                  color: '#000000',
+                  boxSizing: 'border-box',
+                  outline: 'none'
+                }}
+              />
+            </div>
+
+            {/* Category chips */}
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontSize: '13.5px', color: '#8E8E93', marginBottom: '6px' }}>
+                Категория
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {['Переводы', 'Супермаркеты', 'Транспорт', 'Кафе и рестораны', 'Платежи', 'Пополнение'].map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => {
+                      setNewTxCategory(cat);
+                      if (cat === 'Пополнение') setNewTxType('income');
+                      else if (newTxType === 'income') setNewTxType('expense');
+                    }}
+                    style={{
+                      padding: '7px 12px',
+                      backgroundColor: newTxCategory === cat ? '#EE3524' : '#F2F2F4',
+                      color: newTxCategory === cat ? '#FFFFFF' : '#333333',
+                      border: 'none',
+                      borderRadius: '10px',
+                      fontSize: '13.5px',
+                      fontWeight: newTxCategory === cat ? '600' : '400',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Type & Amount */}
+            <div style={{ marginBottom: '22px' }}>
+              <div style={{ fontSize: '13.5px', color: '#8E8E93', marginBottom: '6px' }}>
+                Тип и сумма
+              </div>
+              {/* Type toggle */}
+              <div style={{
+                display: 'flex',
+                backgroundColor: '#F0F0F2',
+                borderRadius: '10px',
+                padding: '3px',
+                marginBottom: '10px'
+              }}>
+                <button
+                  type="button"
+                  onClick={() => setNewTxType('expense')}
+                  style={{
+                    flex: 1,
+                    height: '36px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: newTxType === 'expense' ? '#FFFFFF' : 'transparent',
+                    color: newTxType === 'expense' ? '#000000' : '#8E8E93',
+                    fontWeight: newTxType === 'expense' ? '600' : '400',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    boxShadow: newTxType === 'expense' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                  }}
+                >
+                  Списание (-)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setNewTxType('income')}
+                  style={{
+                    flex: 1,
+                    height: '36px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: newTxType === 'income' ? '#FFFFFF' : 'transparent',
+                    color: newTxType === 'income' ? '#27A13B' : '#8E8E93',
+                    fontWeight: newTxType === 'income' ? '600' : '400',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    boxShadow: newTxType === 'income' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                  }}
+                >
+                  Пополнение (+)
+                </button>
+              </div>
+
+              {/* Amount input */}
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="text"
+                  value={newTxAmount}
+                  onChange={(e) => setNewTxAmount(e.target.value)}
+                  placeholder="2 500"
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    backgroundColor: '#F8F8FA',
+                    border: '1px solid #EBEBEB',
+                    borderRadius: '12px',
+                    padding: '0 40px 0 14px',
+                    fontSize: '18px',
+                    fontWeight: '600',
+                    color: newTxType === 'income' ? '#27A13B' : '#000000',
+                    boxSizing: 'border-box',
+                    outline: 'none'
+                  }}
+                />
+                <span style={{
+                  position: 'absolute',
+                  right: '14px',
+                  top: '12px',
+                  fontSize: '18px',
+                  fontWeight: '600',
+                  color: '#8E8E93'
+                }}>
+                  ₸
+                </span>
+              </div>
+            </div>
+
+            {/* Submit button */}
+            <button
+              type="button"
+              onClick={handleAddNewTx}
+              className="touchable"
+              style={{
+                width: '100%',
+                height: '48px',
+                backgroundColor: '#EE3524',
+                color: '#FFFFFF',
+                borderRadius: '12px',
+                border: 'none',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                marginBottom: '10px'
+              }}
+            >
+              Добавить в выписку
+            </button>
           </div>
         </div>
       )}
