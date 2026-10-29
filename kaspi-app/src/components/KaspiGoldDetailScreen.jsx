@@ -81,6 +81,7 @@ export const KaspiGoldDetailScreen = ({
   const containerRef = React.useRef(null);
   const navBarRef = React.useRef(null);
   const bigHeaderRef = React.useRef(null);
+  const medallionRef = React.useRef(null);
   const compactTitleRef = React.useRef(null);
   const tabBarRef = React.useRef(null);
   const sheetRef = React.useRef(null);
@@ -163,6 +164,9 @@ export const KaspiGoldDetailScreen = ({
               bigHeaderRef.current.style.transform = `translate3d(0, ${-s}px, 0)`;
               bigHeaderRef.current.style.pointerEvents = 'auto';
             }
+            if (medallionRef.current) {
+              medallionRef.current.style.opacity = '1';
+            }
             if (compactTitleRef.current) {
               compactTitleRef.current.style.opacity = '0';
               compactTitleRef.current.style.pointerEvents = 'none';
@@ -179,16 +183,24 @@ export const KaspiGoldDetailScreen = ({
           // 1. Big header fades out from 13% of scroll up to 100% (pin threshold):
           const bigHeaderOpacity = Math.min(Math.max(1 - (progress - 0.13) / (1.0 - 0.13), 0), 1);
 
-          // 2. Compact title fades in from halfway (49%) up to 94% of scroll:
+          // 2. Medallion SVG fades out smoothly as you scroll down:
+          // User: "когда скролл вниз стрницы она должна начинать исчезать типа"
+          const medallionOpacity = Math.min(Math.max(1 - progress / 0.85, 0), 1);
+
+          // 3. Compact title fades in from halfway (49%) up to 94% of scroll:
           const navTitleOpacity = Math.min(Math.max((progress - 0.49) / (0.94 - 0.49), 0), 1);
 
-          // 3. Subtle parallax drift up to 4.6px:
+          // 4. Subtle parallax drift up to 4.6px:
           const drift = Math.min(Math.max((progress - 0.13) * 4.6, 0), 4.6);
 
           if (bigHeaderRef.current) {
             bigHeaderRef.current.style.opacity = bigHeaderOpacity;
             bigHeaderRef.current.style.transform = `translate3d(0, -${drift}px, 0)`;
             bigHeaderRef.current.style.pointerEvents = bigHeaderOpacity < 0.1 ? 'none' : 'auto';
+          }
+
+          if (medallionRef.current) {
+            medallionRef.current.style.opacity = medallionOpacity;
           }
 
           if (compactTitleRef.current) {
@@ -234,6 +246,9 @@ export const KaspiGoldDetailScreen = ({
           bigHeaderRef.current.style.transition = 'none';
           bigHeaderRef.current.style.transform = `translate3d(0, ${pullOffset}px, 0)`;
         }
+        if (medallionRef.current) {
+          medallionRef.current.style.opacity = '1';
+        }
         if (sheetRef.current) {
           sheetRef.current.style.transition = 'none';
           sheetRef.current.style.transform = `translate3d(0, ${pullOffset}px, 0)`;
@@ -246,6 +261,9 @@ export const KaspiGoldDetailScreen = ({
         if (bigHeaderRef.current) {
           bigHeaderRef.current.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
           bigHeaderRef.current.style.transform = 'translate3d(0, 0, 0)';
+        }
+        if (medallionRef.current) {
+          medallionRef.current.style.opacity = '1';
         }
         if (sheetRef.current) {
           sheetRef.current.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
@@ -260,6 +278,9 @@ export const KaspiGoldDetailScreen = ({
       if (bigHeaderRef.current) {
         bigHeaderRef.current.style.transition = 'none';
         bigHeaderRef.current.style.transform = 'translate3d(0, 0, 0)';
+      }
+      if (medallionRef.current) {
+        medallionRef.current.style.opacity = '1';
       }
       if (sheetRef.current) {
         sheetRef.current.style.transition = 'none';
@@ -399,6 +420,7 @@ export const KaspiGoldDetailScreen = ({
         }}
       >
         <div
+          ref={medallionRef}
           style={{
             position: 'absolute',
             right: '26px',
@@ -408,7 +430,8 @@ export const KaspiGoldDetailScreen = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            willChange: 'opacity'
           }}
         >
           <img
