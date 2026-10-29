@@ -25,6 +25,7 @@ export default function App() {
     try {
       const savedProfile = localStorage.getItem('kaspi_user_profile');
       const savedBalance = localStorage.getItem('kaspi_gold_balance');
+      const savedLast4 = localStorage.getItem('kaspi_gold_last4');
       let data = { ...initialUserData };
       if (savedProfile) {
         data.profile = {
@@ -42,12 +43,23 @@ export default function App() {
           }
         };
       }
+      if (savedLast4) {
+        const cleanLast4 = savedLast4.slice(0, 4);
+        data.cards = {
+          ...data.cards,
+          gold: {
+            ...data.cards.gold,
+            last4: cleanLast4,
+            cardNumberFormatted: `4400 4303 6188 ${cleanLast4}`
+          }
+        };
+      }
       return data;
     } catch (e) {}
     return initialUserData;
   });
 
-  // Listen for balance updates from Kaspi Gold detail screen
+  // Listen for balance and last4 updates from Kaspi Gold detail screen
   useEffect(() => {
     const handleBalanceUpdate = (e) => {
       const newBal = parseAndFormatKaspiBalance(e.detail);
@@ -62,8 +74,26 @@ export default function App() {
         }
       }));
     };
+    const handleLast4Update = (e) => {
+      const newLast4 = String(e.detail).slice(0, 4);
+      setUserData(prev => ({
+        ...prev,
+        cards: {
+          ...prev.cards,
+          gold: {
+            ...prev.cards.gold,
+            last4: newLast4,
+            cardNumberFormatted: `4400 4303 6188 ${newLast4}`
+          }
+        }
+      }));
+    };
     window.addEventListener('kaspi_balance_updated', handleBalanceUpdate);
-    return () => window.removeEventListener('kaspi_balance_updated', handleBalanceUpdate);
+    window.addEventListener('kaspi_last4_updated', handleLast4Update);
+    return () => {
+      window.removeEventListener('kaspi_balance_updated', handleBalanceUpdate);
+      window.removeEventListener('kaspi_last4_updated', handleLast4Update);
+    };
   }, []);
 
   const [activeTab, setActiveTab] = useState('home'); // 'home' | 'qr' | 'messages' | 'services'
@@ -392,6 +422,19 @@ export default function App() {
                   gold: {
                     ...prev.cards.gold,
                     balance: newBal
+                  }
+                }
+              }));
+            }}
+            onUpdateLast4={(newLast4) => {
+              setUserData(prev => ({
+                ...prev,
+                cards: {
+                  ...prev.cards,
+                  gold: {
+                    ...prev.cards.gold,
+                    last4: newLast4,
+                    cardNumberFormatted: `4400 4303 6188 ${newLast4}`
                   }
                 }
               }));

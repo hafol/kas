@@ -39,14 +39,14 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
             <path
               d="M10 1.5L1.5 11L10 20.5"
               stroke="#1F1F1F"
-              strokeWidth="3.0"
+              strokeWidth="2.4"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
           </svg>
         </div>
 
-        {/* Centered Title: 18px (+1pt) */}
+        {/* Centered Title: 19px (+1pt) */}
         <div style={{
           position: 'absolute',
           left: 0,
@@ -55,7 +55,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           pointerEvents: 'none'
         }}>
           <span style={{
-            fontSize: '18px',
+            fontSize: '19px',
             fontWeight: '600',
             color: '#1F1F1F',
             fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
@@ -67,14 +67,14 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
 
       {/* Accounts List Container */}
       <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {/* 1. Kaspi Gold Item: padding 18.5px 16px (+5px block height) */}
+        {/* 1. Kaspi Gold Item: padding 21px 16px (+5px block height) */}
         <div
           onClick={() => onSelectCard('gold')}
           className="touchable"
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '12px',
-            padding: '18.5px 16px',
+            padding: '21px 16px',
             display: 'flex',
             alignItems: 'center',
             gap: '14px',
@@ -94,13 +94,13 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
             flexShrink: 0,
             overflow: 'hidden'
           }}>
-            {/* Medallion: 20.8px x 27px (+4% bigger) */}
+            {/* Medallion: 21.8px x 28.35px (+5% bigger) */}
             <img
               src="/kaspi_assets/icon_white.svg"
               alt="Kaspi Gold"
               style={{
-                width: '20.8px',
-                height: '27px',
+                width: '21.8px',
+                height: '28.35px',
                 objectFit: 'contain',
                 display: 'block'
               }}
@@ -149,13 +149,13 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           </div>
         </div>
 
-        {/* 2. Открыть депозит button: padding 14.5px 16px (-3px block height) */}
+        {/* 2. Открыть депозит button: padding 16px 16px (+3px block height) */}
         <div
           className="touchable"
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '12px',
-            padding: '14.5px 16px',
+            padding: '16px 16px',
             display: 'flex',
             alignItems: 'center',
             gap: '14px',
@@ -195,13 +195,13 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           </span>
         </div>
 
-        {/* 3. Kaspi Бонус Item: padding 18px 16px (+4px block height) */}
+        {/* 3. Kaspi Бонус Item: padding 20.5px 16px (+5px block height) */}
         <div
           className="touchable"
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '12px',
-            padding: '18px 16px',
+            padding: '20.5px 16px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -258,10 +258,10 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
             }}>
               {cards.bonus.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })}
             </span>
-            {/* Kaspi Bonus Dark Sign: less bold (strokeWidth 2.2 instead of 2.89) */}
+            {/* Kaspi Bonus Dark Sign: smaller by 2pt (14.5px height x 7.9px width) */}
             <svg
-              width="9.26"
-              height="17"
+              width="7.9"
+              height="14.5"
               viewBox="0 0 13.08 24"
               fill="none"
               style={{ display: 'inline-block', flexShrink: 0 }}
@@ -270,7 +270,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
                 d="M1.44 1.44H10.44M10.35 6.95H1.59V22.56H7.92A3.72 3.72 0 0 0 11.64 18.84V17.37A3.72 3.72 0 0 0 7.92 13.65H1.59"
                 fill="none"
                 stroke="#222222"
-                strokeWidth="2.2"
+                strokeWidth="2.1"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />

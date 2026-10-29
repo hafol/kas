@@ -126,7 +126,8 @@ export const KaspiGoldDetailScreen = ({
   },
   onBack,
   onOpenTransfer,
-  onUpdateBalance
+  onUpdateBalance,
+  onUpdateLast4
 }) => {
   const [activeTab, setActiveTab] = useState('actions'); // 'actions' | 'info' | 'statement'
   const [sliderHeight, setSliderHeight] = useState('auto');
@@ -378,6 +379,35 @@ export const KaspiGoldDetailScreen = ({
 
   const [isEditingBalance, setIsEditingBalance] = useState(false);
   const [balanceInput, setBalanceInput] = useState('');
+
+  // Editable last 4 digits with persistent localStorage cache
+  const [last4, setLast4] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kaspi_gold_last4');
+      if (saved) return saved.slice(0, 4);
+    } catch (e) {}
+    return card?.last4 || '4163';
+  });
+
+  const [isEditingLast4, setIsEditingLast4] = useState(false);
+  const [last4Input, setLast4Input] = useState('');
+
+  const handleStartEditLast4 = () => {
+    setIsEditingLast4(true);
+    setLast4Input(last4);
+  };
+
+  const handleSaveLast4 = (overrideValue) => {
+    const raw = (overrideValue !== undefined ? overrideValue : last4Input).trim().replace(/\D/g, '');
+    const finalVal = raw.length > 0 ? raw.slice(0, 4) : (last4 || '4163');
+    setLast4(finalVal);
+    try {
+      localStorage.setItem('kaspi_gold_last4', finalVal);
+      window.dispatchEvent(new CustomEvent('kaspi_last4_updated', { detail: finalVal }));
+    } catch (e) {}
+    if (onUpdateLast4) onUpdateLast4(finalVal);
+    setIsEditingLast4(false);
+  };
 
   const formattedBalance = `${balance} ₸`;
   const balanceAmount = balance;
@@ -718,7 +748,7 @@ export const KaspiGoldDetailScreen = ({
             color: '#FFFFFF',
             lineHeight: 1.2
           }}>
-            Kaspi Gold *{card.last4}
+            Kaspi Gold *{last4}
           </span>
           <span style={{
             fontSize: '13px',
@@ -752,23 +782,76 @@ export const KaspiGoldDetailScreen = ({
           willChange: 'opacity, transform'
         }}
       >
-        {/* Card Name (Apple Pay badge removed per user request) */}
+        {/* Card Name: Click to edit last 4 digits */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           marginTop: '2px'
         }}>
-          <span style={{
-            fontSize: 'calc(22.5px + 0.5pt)',
-            fontWeight: '750',
-            fontVariationSettings: "'wght' 750",
-            fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
-            color: '#FFFFFF',
-            letterSpacing: '0.1px',
-            textShadow: '0 1px 2px rgba(0,0,0,0.1)'
-          }}>
-            Kaspi Gold *{card.last4}
-          </span>
+          {isEditingLast4 ? (
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+              <span style={{
+                fontSize: 'calc(22.5px + 0.5pt)',
+                fontWeight: '750',
+                color: '#FFFFFF',
+                fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
+                textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+              }}>
+                Kaspi Gold *
+              </span>
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={4}
+                autoFocus
+                value={last4Input}
+                onChange={(e) => setLast4Input(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSaveLast4();
+                  if (e.key === 'Escape') setIsEditingLast4(false);
+                }}
+                onBlur={() => handleSaveLast4()}
+                style={{
+                  fontSize: 'calc(22.5px + 0.5pt)',
+                  fontWeight: '750',
+                  color: '#FFFFFF',
+                  fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
+                  backgroundColor: 'rgba(255, 255, 255, 0.22)',
+                  border: 'none',
+                  borderBottom: '2.5px solid #FFFFFF',
+                  borderRadius: '4px',
+                  padding: '0 4px',
+                  outline: 'none',
+                  width: '68px',
+                  boxSizing: 'border-box',
+                  textAlign: 'left'
+                }}
+              />
+            </div>
+          ) : (
+            <div
+              onClick={handleStartEditLast4}
+              className="touchable"
+              title="Нажмите, чтобы изменить последние 4 цифры карты"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                cursor: 'pointer'
+              }}
+            >
+              <span style={{
+                fontSize: 'calc(22.5px + 0.5pt)',
+                fontWeight: '750',
+                fontVariationSettings: "'wght' 750",
+                fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
+                color: '#FFFFFF',
+                letterSpacing: '0.1px',
+                textShadow: '0 1px 2px rgba(0,0,0,0.1)'
+              }}>
+                Kaspi Gold *{last4}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Caption "Доступно" */}
@@ -1607,7 +1690,6 @@ export const KaspiGoldDetailScreen = ({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {/* Card Number */}
               <div
-                onClick={() => copyToClipboard('4400 4303 6188 4163', 'card')}
                 className="touchable"
                 style={{
                   padding: '16px 16px',
@@ -1615,19 +1697,49 @@ export const KaspiGoldDetailScreen = ({
                   borderRadius: '12px',
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center',
-                  cursor: 'pointer'
+                  alignItems: 'center'
                 }}
               >
-                <div>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ color: '#8E8E93', fontSize: '13.5px' }}>Номер карты</div>
                   <div style={{ fontWeight: '600', fontSize: '18px', color: '#000000', marginTop: '2px' }}>
-                    4400 4303 6188 4163
+                    4400 4303 6188 {last4}
                   </div>
                 </div>
-                <span style={{ fontSize: '14.5px', color: copiedField === 'card' ? '#27A13B' : '#E2464A', fontWeight: '500' }}>
-                  {copiedField === 'card' ? 'Скопировано' : 'Скопировать'}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const input = window.prompt('Введите последние 4 цифры карты:', last4);
+                      if (input !== null) {
+                        const cleaned = input.trim().replace(/\D/g, '').slice(0, 4);
+                        if (cleaned) handleSaveLast4(cleaned);
+                      }
+                    }}
+                    style={{
+                      fontSize: '14.5px',
+                      color: '#0089D0',
+                      fontWeight: '500',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Изменить
+                  </span>
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyToClipboard(`4400 4303 6188 ${last4}`, 'card');
+                    }}
+                    style={{
+                      fontSize: '14.5px',
+                      color: copiedField === 'card' ? '#27A13B' : '#E2464A',
+                      fontWeight: '500',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {copiedField === 'card' ? 'Скопировано' : 'Скопировать'}
+                  </span>
+                </div>
               </div>
 
               {/* Cardholder Name */}

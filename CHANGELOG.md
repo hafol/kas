@@ -2,6 +2,31 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 18:16] — Редактирование последних 4 цифр карты (KaspiGoldDetailScreen) + калибровка иконки бонуса, стрелки, шапки и блоков (MyBankScreen)
+
+### 🎯 Запрос пользователя:
+> *«make the feature so you can change the last 4 digit in the page where you can change the number money and thenn the black bonus icon make it smaller by 2pt»*
+> *«THe arrow weight decrease by 20, мой банк size +1pt, the white sections bigger by 5px for each bonus and kaspi gold and then +3px for открыть депозит, then the logo icon inside the gold card increase size by 5%»*
+
+### 🛠️ Что сделано:
+1. **Редактирование последних 4 цифр карты Kaspi Gold (`KaspiGoldDetailScreen.jsx`, `App.jsx`)**:
+   - В шапке экрана `KaspiGoldDetailScreen` блок `Kaspi Gold *{last4}` сделан интерактивным при тапе: открывается инлайн-ввод 4 цифр (`inputMode="numeric"`, `maxLength={4}`).
+   - При сохранении (Enter или клик вне поля) значение сохраняется в `localStorage.setItem('kaspi_gold_last4')`, вызывается колбэк `onUpdateLast4` и отправляется системное событие `kaspi_last4_updated`.
+   - Номер синхронизируется в `App.jsx`, обновляя `userData.cards.gold.last4` и отображение на экранах `MyBankScreen` (`• {last4}`) и `TransfersScreen` (`*{last4}`).
+   - В модальном окне «Реквизиты карты и счета» номер карты теперь динамический (`4400 4303 6188 {last4}`), добавлена кнопка «Изменить» и корректное копирование в буфер обмена.
+2. **Черная иконка бонуса `Ƃ` (`MyBankScreen.jsx`)**:
+   - Уменьшена на 2pt: высота с `17px` до **`14.5px`**, ширина с `9.26px` до **`7.9px`**, толщина линии `strokeWidth` `2.1`.
+3. **Стрелка назад в шапке (`MyBankScreen.jsx`)**:
+   - Толщина уменьшена на 20%: с `3.0` до **`2.4`**.
+4. **Текст шапки «Мой Банк» (`MyBankScreen.jsx`)**:
+   - Размер шрифта увеличен на +1pt: с `18px` до **`19px`**.
+5. **Белые блоки разделов (`MyBankScreen.jsx`, `KaspiSkeleton.jsx`)**:
+   - Блок Kaspi Gold: увеличен на 5px (padding `21px 16px`).
+   - Блок «Открыть депозит»: увеличен на 3px (padding `16px 16px`).
+   - Блок «Kaspi Бонус»: увеличен на 5px (padding `20.5px 16px`).
+6. **Логотип внутри золотой карты (`MyBankScreen.jsx`)**:
+   - Размер увеличен на 5%: с `20.8×27px` до **`21.8×28.35px`**.
+
 ## [2026-10-29 18:01] — Экран «Мой Банк» (MyBankScreen): микрокалибровка иконок, выравнивание сумм по строке и пропорции блоков
 
 ### 🎯 Запрос пользователя:
