@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft, ChevronRight, Plus } from 'lucide-react';
+import { parseAndFormatKaspiBalance } from '../utils/formatters';
 
 export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
   return (
@@ -73,7 +74,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
 
           <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '18px', fontWeight: '700', color: '#1F1F1F' }}>
-              {cards.gold.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} {cards.gold.currency}
+              {parseAndFormatKaspiBalance(cards.gold.balance)} {cards.gold.currency}
             </span>
             <ChevronRight size={20} color="#C2C2C2" />
           </div>

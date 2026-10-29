@@ -25,6 +25,7 @@ import {
   StatementPersonIcon,
   KaspiGoldMedallion
 } from './KaspiGoldIcons';
+import { parseAndFormatKaspiBalance } from '../utils/formatters';
 
 // Chevron right: grey > (+30% bigger: 9 x 17, stroke 2.2)
 const ChevronRightIcon = ({ color = "#C7C7CC" }) => (
@@ -364,42 +365,27 @@ export const KaspiGoldDetailScreen = ({
     setTimeout(() => setCopiedField(null), 2000);
   };
 
-  // Editable balance with persistent localStorage cache
+  // Editable balance with persistent localStorage cache & freedom of action
   const [balance, setBalance] = useState(() => {
     try {
       const saved = localStorage.getItem('kaspi_gold_balance');
       if (saved !== null && saved !== '') {
-        const num = parseFloat(saved.replace(/\s+/g, '').replace(',', '.'));
-        return isNaN(num) ? saved : num;
+        return parseAndFormatKaspiBalance(saved);
       }
     } catch (e) {}
-    return card?.balance ?? 110922.58;
+    return parseAndFormatKaspiBalance(card?.balance ?? '110 922,58');
   });
 
   const [isEditingBalance, setIsEditingBalance] = useState(false);
   const [balanceInput, setBalanceInput] = useState('');
 
-  const formatBalance = (val) => {
-    if (typeof val === 'number') {
-      return val.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\u00a0/g, ' ') + ' ₸';
-    }
-    const str = String(val).trim();
-    return str.endsWith('₸') ? str : `${str} ₸`;
-  };
-
-  const formattedBalance = formatBalance(balance);
-  const balanceAmount = formattedBalance.endsWith('₸')
-    ? formattedBalance.slice(0, -1).trimEnd()
-    : formattedBalance;
-  const balanceSymbol = formattedBalance.endsWith('₸') ? '₸' : '';
+  const formattedBalance = `${balance} ₸`;
+  const balanceAmount = balance;
+  const balanceSymbol = '₸';
 
   const handleStartEditBalance = () => {
     setIsEditingBalance(true);
-    setBalanceInput(
-      typeof balance === 'number'
-        ? balance.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\u00a0/g, ' ')
-        : String(balance).replace('₸', '').trim()
-    );
+    setBalanceInput(String(balance).replace(/\s*₸\s*$/, '').trim());
   };
 
   const handleSaveBalance = () => {
@@ -408,11 +394,10 @@ export const KaspiGoldDetailScreen = ({
       setIsEditingBalance(false);
       return;
     }
-    const cleanNum = parseFloat(raw.replace(/\s+/g, '').replace(',', '.'));
-    const finalVal = isNaN(cleanNum) ? raw : cleanNum;
+    const finalVal = parseAndFormatKaspiBalance(raw);
     setBalance(finalVal);
     try {
-      localStorage.setItem('kaspi_gold_balance', String(finalVal));
+      localStorage.setItem('kaspi_gold_balance', finalVal);
       window.dispatchEvent(new CustomEvent('kaspi_balance_updated', { detail: finalVal }));
     } catch (e) {}
     if (onUpdateBalance) onUpdateBalance(finalVal);
@@ -531,7 +516,8 @@ export const KaspiGoldDetailScreen = ({
 
     const prefix = newTxType === 'income' ? '+ ' : '- ';
     const cleanAmount = newTxAmount.trim().replace(/^[+-]\s*/, '').replace('₸', '').trim();
-    const finalAmount = `${prefix}${cleanAmount} ₸`;
+    const formattedAmount = parseAndFormatKaspiBalance(cleanAmount);
+    const finalAmount = `${prefix}${formattedAmount} ₸`;
 
     let iconType = 'receipt';
     if (newTxCategory === 'Переводы') iconType = 'person';

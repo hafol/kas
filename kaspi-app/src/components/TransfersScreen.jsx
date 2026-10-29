@@ -3,6 +3,7 @@ import {
   ArrowLeft, ChevronRight, ArrowRightLeft, User, Building2,
   PlusCircle, Globe, Search, QrCode, CreditCard, Smartphone
 } from 'lucide-react';
+import { parseAndFormatKaspiBalance } from '../utils/formatters';
 
 export const TransfersScreen = ({ card, onBack, onCompleteTransfer }) => {
   const [activeTab, setActiveTab] = useState('my'); // 'my' | 'history'
@@ -288,7 +289,7 @@ export const TransfersScreen = ({ card, onBack, onCompleteTransfer }) => {
                 </div>
 
                 <div style={{ fontSize: '15px', fontWeight: '700' }}>
-                  {card.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} ₸
+                  {parseAndFormatKaspiBalance(card.balance)} ₸
                 </div>
               </div>
 

@@ -2,6 +2,37 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-29 06:32] — Полная свобода действий при редактировании баланса: отмена принудительных ",00" в конце
+
+### 🎯 Запрос пользователя:
+> *«там не должно два нуля всегда в конце быть если я убрал то нету ну крч сътам свобода дейстивии»*
+
+### 🛠️ Что сделано:
+1. **Удалены принудительные `,00` (`minimumFractionDigits: 2`)**:
+   - Создан модуль форматирования [`formatters.js`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/utils/formatters.js) с функцией `parseAndFormatKaspiBalance`.
+   - Если пользователь вводит или сохраняет целое число (например, `100 000`, `110 922`), число форматируется с нативными разделителями тысяч пробелами, но **копейки `,00` больше НЕ добавляются насильно**.
+   - Если пользователь вводит копейки явно (например, `,58`, `,5` или `,00`), они точно сохраняются.
+   - Если пользователь удаляет копейки (оставляет только целое число), баланс сохраняется и отображается без копеек (`110 922 ₸`).
+2. **Интеграция по всему приложению**:
+   - [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx): баланс в большой шапке, в компактной строке при скролле и в поле редактирования теперь работает без навязанных нулей.
+   - [`MyBankScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx): отображение баланса карты Kaspi Gold синхронизировано без принудительных копеек.
+   - [`TransfersScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/TransfersScreen.jsx): отображение баланса на экране переводов обновлено для поддержки свободных строк и целых чисел.
+   - [`App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx): сохранение и расчёт баланса при переводах обновлены с `parseAndFormatKaspiBalance`.
+3. **Проверка**:
+   - Тест `_archive/scripts/test_balance_freedom.py` успешно проверил:
+     - Ввод `100 000` -> отображается `100 000 ₸` (без `,00`).
+     - Ввод `110 922,58` -> отображается `110 922,58 ₸`.
+     - Удаление копеек `110 922` -> отображается `110 922 ₸` (без `,00`).
+   - Скриншот `_archive/test_balance_freedom.png` зафиксировал идеальный вид интерфейса.
+   - `npm run build` прошёл за 2.19с без единой ошибки.
+
+### 📁 Затронутые файлы:
+- [`kaspi-app/src/utils/formatters.js`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/utils/formatters.js)
+- [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
+- [`kaspi-app/src/components/MyBankScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx)
+- [`kaspi-app/src/components/TransfersScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/TransfersScreen.jsx)
+- [`kaspi-app/src/App.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx)
+- [`CHANGELOG.md`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/CHANGELOG.md)
 ## [2026-10-29 06:10] — Экран Kaspi Gold: Редактируемый баланс с кэшем (localStorage), удаление Apple Pay, случайные имена в выписке, редактирование трат и добавление новых операций/секций
 
 ### 🎯 Запрос пользователя:

@@ -18,6 +18,7 @@ import {
   TransfersSkeleton,
   GenericPageSkeleton
 } from './components/KaspiSkeleton';
+import { parseAndFormatKaspiBalance } from './utils/formatters';
 
 export default function App() {
   const [userData, setUserData] = useState(() => {
@@ -32,12 +33,12 @@ export default function App() {
         };
       }
       if (savedBalance !== null && savedBalance !== '') {
-        const num = parseFloat(savedBalance.replace(/\s+/g, '').replace(',', '.'));
+        const formatted = parseAndFormatKaspiBalance(savedBalance);
         data.cards = {
           ...data.cards,
           gold: {
             ...data.cards.gold,
-            balance: isNaN(num) ? savedBalance : num
+            balance: formatted
           }
         };
       }
@@ -49,7 +50,7 @@ export default function App() {
   // Listen for balance updates from Kaspi Gold detail screen
   useEffect(() => {
     const handleBalanceUpdate = (e) => {
-      const newBal = e.detail;
+      const newBal = parseAndFormatKaspiBalance(e.detail);
       setUserData(prev => ({
         ...prev,
         cards: {
@@ -308,7 +309,11 @@ export default function App() {
 
   const handleCompleteTransfer = (newTx) => {
     setUserData(prev => {
-      const newBal = prev.cards.gold.balance + newTx.amount;
+      const currentNum = typeof prev.cards.gold.balance === 'number'
+        ? prev.cards.gold.balance
+        : parseFloat(String(prev.cards.gold.balance).replace(/\s+/g, '').replace(',', '.')) || 0;
+      const newBalNum = currentNum + newTx.amount;
+      const newBal = parseAndFormatKaspiBalance(newBalNum);
       return {
         ...prev,
         cards: {
