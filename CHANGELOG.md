@@ -12,9 +12,11 @@
    - В компоненте [`KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx) размеры контейнера векторного медальона уменьшены ровно на 10%: с `125px × 125px` до **`112.5px × 112.5px`**.
    - Сохранены точные координаты прилипания и отступы (`right: 26px`, `top: calc(env(safe-area-inset-top, 0px) + 72px)`).
    - Векторная чёткость силуэта родителей и ребёнка сохранена на 100% без потери качества.
-2. **Проверка**:
+2. **Проверка и деплой на Vercel Production**:
    - `npm run build` успешно прошёл (1931 модуль скомпилирован за 1.05с без ошибок).
    - Скриншот мобильного экрана 393×852 подтвердил гармоничные и сбалансированные пропорции в шапке Kaspi Gold.
+   - Изменения зафиксированы в Git и отправлены в репозиторий `origin/main` (`commit 148b045`).
+   - Успешный деплой в продакшн Vercel: [https://kas-two-rho.vercel.app](https://kas-two-rho.vercel.app) (HTTP 200 OK, `Cache-Control: public, max-age=0, must-revalidate`).
 
 ### 📁 Затронутые файлы:
 - [`kaspi-app/src/components/KaspiGoldDetailScreen.jsx`](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/KaspiGoldDetailScreen.jsx)
