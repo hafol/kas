@@ -1,8 +1,8 @@
 import React from 'react';
 
-// B2. Главная (active) icon – house (outline style, 27.6 x 27.6 pt [+15%], stroke 2 pt, active brand red #C8392F / #E2464A)
+// B2. Главная (active) icon – house (outline style, 24.84 x 24.84 pt [-10%], stroke 2 pt, active brand red #C8392F / #E2464A)
 const NavIconHome = ({ color = "#C8392F" }) => (
-  <svg width="27.6" height="27.6" viewBox="0 0 24 24" fill="none">
+  <svg width="24.84" height="24.84" viewBox="0 0 24 24" fill="none">
     <path
       d="M3 9.5L12 2.5L21 9.5V20.5C21 21.05 20.55 21.5 20 21.5H15V15.5H9V21.5H4C3.45 21.5 3 21.05 3 20.5V9.5Z"
       stroke={color}
@@ -14,15 +14,29 @@ const NavIconHome = ({ color = "#C8392F" }) => (
   </svg>
 );
 
-// B3. Kaspi QR icon (27.6 x 27.6 pt [+15%], stroke 2 pt, #4C4C4C)
+// B3. Kaspi QR icon (24.84 x 24.84 pt [-10%], refined stroke, less bold, #4C4C4C)
 const NavIconQR = ({ color = "#4C4C4C" }) => (
-  <svg width="27.6" height="27.6" viewBox="0 0 24 24" fill="none">
-    <path
-      d="M1.2 2.5C1.2 1.8 1.8 1.2 2.5 1.2H7C7.6 1.2 8 1.6 8 2.2C8 2.8 7.6 3.2 7 3.2H3.2V7C3.2 7.6 2.8 8 2.2 8C1.6 8 1.2 7.6 1.2 7V2.5ZM16 2.2C16 1.6 16.4 1.2 17 1.2H21.5C22.2 1.2 22.8 1.8 22.8 2.5V7C22.8 7.6 22.4 8 21.8 8C21.2 8 20.8 7.6 20.8 7V3.2H17C16.4 3.2 16 2.8 16 2.2ZM2.2 16C2.8 16 3.2 16.4 3.2 17V20.8H7C7.6 20.8 8 21.2 8 21.8C8 22.4 7.6 22.8 7 22.8H2.5C1.8 22.8 1.2 22.2 1.2 21.5V17C1.2 16.4 1.6 16 2.2 16ZM22.8 16C22.8 16.6 22.4 17 21.8 17H20.8V20.8H17C16.4 20.8 16 21.2 16 21.8C16 22.4 16.4 22.8 17 22.8H21.5C22.2 22.8 22.8 22.2 22.8 21.5V17C22.8 16.4 22.8 16 22.8 16ZM5.5 4.5C4.9 4.5 4.5 4.9 4.5 5.5V10.5C4.5 11.1 4.9 11.5 5.5 11.5H10.5C11.1 11.5 11.5 11.1 11.5 10.5V5.5C11.5 4.9 11.1 4.5 10.5 4.5H5.5ZM12.5 5.5C12.5 4.9 12.9 4.5 13.5 4.5H18.5C19.1 4.5 19.5 4.9 19.5 5.5V10.5C19.5 11.1 19.1 11.5 18.5 11.5H13.5C12.9 11.5 12.5 11.1 12.5 10.5V5.5ZM5.5 12.5C4.9 12.5 4.5 12.9 4.5 13.5V18.5C4.5 19.1 4.9 19.5 5.5 19.5H10.5C11.1 19.5 11.5 19.1 11.5 18.5V13.5C11.5 12.9 11.1 12.5 10.5 12.5H5.5ZM13.5 12.5H17.2V14.5H14.5V17.2H12.5V13.5C12.5 12.9 12.9 12.5 13.5 12.5ZM14.5 9.5V6.5H17.5V9.5H14.5ZM17.5 14.8V17.5H14.8V19.5H18.5C19.1 19.5 19.5 19.1 19.5 18.5V14.8H17.5ZM6.5 14.5V17.5H9.5V14.5H6.5ZM16.8 7.2H15.2V8.8H16.8V7.2ZM15.2 15.2H16.8V16.8H15.2V15.2ZM8.8 15.2H7.2V16.8H8.8V15.2ZM6.5 6.5V9.5H9.5V6.5H6.5ZM7.2 7.2H8.8V8.8H7.2V7.2Z"
-      fill={color}
-      fillRule="evenodd"
-      clipRule="evenodd"
-    />
+  <svg width="24.84" height="24.84" viewBox="0 0 24 24" fill="none">
+    {/* 4 outer corners - clean refined stroke */}
+    <path d="M2.5 7.5V3.8C2.5 3.08 3.08 2.5 3.8 2.5H7.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16.5 2.5H20.2C20.92 2.5 21.5 3.08 21.5 3.8V7.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2.5 16.5V20.2C2.5 20.92 3.08 21.5 3.8 21.5H7.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16.5 21.5H20.2C20.92 21.5 21.5 20.92 21.5 20.2V16.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    
+    {/* 3 inner corner markers */}
+    <rect x="5.2" y="5.2" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.5" />
+    <rect x="6.9" y="6.9" width="1.7" height="1.7" rx="0.4" fill={color} />
+    
+    <rect x="13.7" y="5.2" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.5" />
+    <rect x="15.4" y="6.9" width="1.7" height="1.7" rx="0.4" fill={color} />
+    
+    <rect x="5.2" y="13.7" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.5" />
+    <rect x="6.9" y="15.4" width="1.7" height="1.7" rx="0.4" fill={color} />
+    
+    {/* Bottom-right structure */}
+    <path d="M13.7 13.7H16.5V16.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16.5 16.5H19.2V19.2" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="15.1" cy="18" r="0.85" fill={color} />
   </svg>
 );
 
@@ -78,13 +92,12 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
       borderRight: 'none',
       boxShadow: 'none',
       zIndex: 60,
-      height: '84.7px',
-      paddingBottom: '30.7px',
+      paddingBottom: 'env(safe-area-inset-bottom, 10px)',
       boxSizing: 'border-box'
     }}>
       <div style={{
         display: 'flex',
-        height: '54px',
+        height: '50px',
         width: '100%',
         alignItems: 'stretch',
         position: 'relative'
@@ -94,12 +107,16 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
           const { IconComponent } = tab;
           const iconColor = isActive ? (tab.id === 'home' ? '#C8392F' : '#E2464A') : '#4C4C4C';
           const labelColor = isActive ? '#E2464A' : '#808080';
+          const isDisabled = tab.id === 'messages' || tab.id === 'services';
 
           return (
             <div
               key={tab.id}
-              onClick={() => onTabChange(tab.id)}
-              className="touchable"
+              onClick={() => {
+                if (isDisabled) return;
+                onTabChange(tab.id);
+              }}
+              className={isDisabled ? '' : 'touchable'}
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -107,14 +124,14 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 flex: 1,
                 position: 'relative',
                 height: '100%',
-                cursor: 'pointer',
+                cursor: isDisabled ? 'default' : 'pointer',
                 fontFamily: "'Roboto', sans-serif"
               }}
             >
-              {/* Icon wrapper: 27.6 x 27.6 px, centered, top: 6px for all tabs so services is in line */}
+              {/* Icon wrapper: 27.6 x 27.6 px, centered, top: 4px for all tabs so services is in line */}
               <div style={{
                 position: 'absolute',
-                top: '6px',
+                top: '4px',
                 width: '27.6px',
                 height: '27.6px',
                 display: 'flex',
@@ -149,12 +166,12 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
                 )}
               </div>
 
-              {/* Label: Roboto Regular 12.5px (+0.5pt), top at 38.5px */}
+              {/* Label: Roboto Regular 11.5px, top at 32px */}
               <span style={{
                 position: 'absolute',
-                top: '38.5px',
+                top: '32px',
                 fontFamily: "'Roboto', sans-serif",
-                fontSize: '12.5px',
+                fontSize: '11.5px',
                 fontWeight: '400',
                 color: labelColor,
                 lineHeight: '14px',

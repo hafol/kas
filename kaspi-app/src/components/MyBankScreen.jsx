@@ -1,7 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { parseAndFormatKaspiBalance } from '../utils/formatters';
 
-export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
+export const MyBankScreen = ({ cards, onSelectCard, onBack, onUpdateBonus, onUpdateLast4 }) => {
+  // Editable Kaspi Bonus state
+  const [isEditingBonus, setIsEditingBonus] = useState(false);
+  const [bonusInput, setBonusInput] = useState('');
+
+  // Editable Last 4 digits state
+  const [isEditingLast4, setIsEditingLast4] = useState(false);
+  const [last4Input, setLast4Input] = useState('');
+
+  const currentBonus = cards?.bonus?.balance ?? 79.97;
+  const currentLast4 = cards?.gold?.last4 || '0000';
+
+  const handleStartEditBonus = (e) => {
+    e?.stopPropagation();
+    setBonusInput(String(currentBonus));
+    setIsEditingBonus(true);
+  };
+
+  const handleSaveBonus = () => {
+    const cleaned = String(bonusInput).trim().replace(/\s/g, '').replace(',', '.');
+    const parsed = parseFloat(cleaned);
+    const finalVal = !isNaN(parsed) && parsed >= 0 ? parsed : currentBonus;
+    try {
+      localStorage.setItem('kaspi_bonus_balance', String(finalVal));
+      window.dispatchEvent(new CustomEvent('kaspi_bonus_updated', { detail: finalVal }));
+    } catch (e) {}
+    if (onUpdateBonus) onUpdateBonus(finalVal);
+    setIsEditingBonus(false);
+  };
+
+  const handleStartEditLast4 = (e) => {
+    e?.stopPropagation();
+    setLast4Input(currentLast4);
+    setIsEditingLast4(true);
+  };
+
+  const handleSaveLast4 = () => {
+    const raw = String(last4Input).trim().replace(/\D/g, '');
+    const finalVal = raw.length > 0 ? raw.slice(0, 4) : currentLast4;
+    try {
+      localStorage.setItem('kaspi_gold_last4', finalVal);
+      window.dispatchEvent(new CustomEvent('kaspi_last4_updated', { detail: finalVal }));
+    } catch (e) {}
+    if (onUpdateLast4) onUpdateLast4(finalVal);
+    setIsEditingLast4(false);
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -9,7 +55,16 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
       display: 'flex',
       flexDirection: 'column'
     }}>
-      {/* Top Header: 47px (-1px) */}
+      {/* Native iOS Status Bar Safe Area Spacer (Белое пространство под часы/батарею) */}
+      <div style={{
+        height: 'env(safe-area-inset-top, 44px)',
+        minHeight: '44px',
+        backgroundColor: '#FFFFFF',
+        width: '100%',
+        flexShrink: 0
+      }} />
+
+      {/* Top Header: 47px */}
       <div style={{
         position: 'relative',
         height: '47px',
@@ -21,7 +76,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
         paddingRight: '16px',
         boxSizing: 'border-box'
       }}>
-        {/* Back Button (iOS Chevron <, strokeWidth 3.0 (+20% weight)) */}
+        {/* Back Button (iOS Chevron <, strokeWidth 2.4) */}
         <div
           onClick={onBack}
           className="touchable"
@@ -46,7 +101,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           </svg>
         </div>
 
-        {/* Centered Title: 19px (+1pt) */}
+        {/* Centered Title: 19px */}
         <div style={{
           position: 'absolute',
           left: 0,
@@ -107,7 +162,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
             />
           </div>
 
-          {/* Right info: Line 1 = Kaspi Gold + Money Balance in the SAME line; Line 2 = • 4163 */}
+          {/* Right info: Line 1 = Kaspi Gold + Money Balance in the SAME line; Line 2 = • 0000 */}
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{
               display: 'flex',
@@ -121,7 +176,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
                 lineHeight: '21px',
                 fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
               }}>
-                {cards.gold.name}
+                {cards?.gold?.name || 'Kaspi Gold'}
               </div>
               <div style={{
                 fontSize: '18px',
@@ -133,18 +188,59 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
                 whiteSpace: 'nowrap',
                 marginLeft: '8px'
               }}>
-                {parseAndFormatKaspiBalance(cards.gold.balance)} {cards.gold.currency}
+                {parseAndFormatKaspiBalance(cards?.gold?.balance)} {cards?.gold?.currency || '₸'}
               </div>
             </div>
 
-            <div style={{
-              fontSize: '14px',
-              color: '#757575',
-              marginTop: '3px',
-              lineHeight: '17px',
-              fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
-            }}>
-              • {cards.gold.last4 || '4163'}
+            <div
+              onClick={handleStartEditLast4}
+              title="Нажмите, чтобы изменить последние 4 цифры"
+              style={{
+                fontSize: '14px',
+                color: '#757575',
+                marginTop: '3px',
+                lineHeight: '17px',
+                fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              {isEditingLast4 ? (
+                <div
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <span>•</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={4}
+                    autoFocus
+                    value={last4Input}
+                    onChange={(e) => setLast4Input(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSaveLast4();
+                      if (e.key === 'Escape') setIsEditingLast4(false);
+                    }}
+                    onBlur={handleSaveLast4}
+                    style={{
+                      fontSize: '14px',
+                      color: '#1F1F1F',
+                      fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
+                      border: 'none',
+                      borderBottom: '1.5px solid #0089D0',
+                      outline: 'none',
+                      width: '46px',
+                      padding: '0 2px',
+                      backgroundColor: 'transparent'
+                    }}
+                  />
+                </div>
+              ) : (
+                <span>• {currentLast4}</span>
+              )}
             </div>
           </div>
         </div>
@@ -195,9 +291,11 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
           </span>
         </div>
 
-        {/* 3. Kaspi Бонус Item: padding 20.5px 16px (+5px block height) */}
+        {/* 3. Kaspi Бонус Item: padding 20.5px 16px (+5px block height) with editing support */}
         <div
+          onClick={handleStartEditBonus}
           className="touchable"
+          title="Нажмите, чтобы изменить количество бонусов"
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: '12px',
@@ -244,37 +342,97 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack }) => {
               color: '#1F1F1F',
               fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
             }}>
-              {cards.bonus.name}
+              {cards?.bonus?.name || 'Kaspi Бонус'}
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-            {/* Bonus Numbers: 18px (+1pt) */}
-            <span style={{
-              fontSize: '18px',
-              fontWeight: '400',
-              color: '#1F1F1F',
-              fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
-            }}>
-              {cards.bonus.balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })}
-            </span>
-            {/* Kaspi Bonus Dark Sign: smaller by 2pt (14.5px height x 7.9px width) */}
-            <svg
-              width="7.9"
-              height="14.5"
-              viewBox="0 0 13.08 24"
-              fill="none"
-              style={{ display: 'inline-block', flexShrink: 0 }}
-            >
-              <path
-                d="M1.44 1.44H10.44M10.35 6.95H1.59V22.56H7.92A3.72 3.72 0 0 0 11.64 18.84V17.37A3.72 3.72 0 0 0 7.92 13.65H1.59"
-                fill="none"
-                stroke="#222222"
-                strokeWidth="2.1"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              handleStartEditBonus(e);
+            }}
+            style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+          >
+            {isEditingBonus ? (
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  autoFocus
+                  value={bonusInput}
+                  onChange={(e) => setBonusInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveBonus();
+                    if (e.key === 'Escape') setIsEditingBonus(false);
+                  }}
+                  onBlur={handleSaveBonus}
+                  style={{
+                    fontSize: '18px',
+                    fontWeight: '400',
+                    color: '#1F1F1F',
+                    fontFamily: "'Roboto', system-ui, -apple-system, sans-serif",
+                    border: 'none',
+                    borderBottom: '1.5px solid #589F01',
+                    outline: 'none',
+                    width: '90px',
+                    textAlign: 'right',
+                    padding: '0 2px',
+                    backgroundColor: 'transparent'
+                  }}
+                />
+                <button
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleSaveBonus();
+                  }}
+                  style={{
+                    backgroundColor: '#589F01',
+                    border: 'none',
+                    borderRadius: '4px',
+                    color: '#FFFFFF',
+                    cursor: 'pointer',
+                    padding: '2px 6px',
+                    fontSize: '13px',
+                    fontWeight: '600'
+                  }}
+                >
+                  ✓
+                </button>
+              </div>
+            ) : (
+              <>
+                {/* Bonus Numbers: 18px */}
+                <span style={{
+                  fontSize: '18px',
+                  fontWeight: '400',
+                  color: '#1F1F1F',
+                  fontFamily: "'Roboto', system-ui, -apple-system, sans-serif"
+                }}>
+                  {Number(currentBonus).toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+                {/* Kaspi Bonus Dark Sign: 14.5px height x 7.9px width */}
+                <svg
+                  width="7.9"
+                  height="14.5"
+                  viewBox="0 0 13.08 24"
+                  fill="none"
+                  style={{ display: 'inline-block', flexShrink: 0 }}
+                >
+                  <path
+                    d="M1.44 1.44H10.44M10.35 6.95H1.59V22.56H7.92A3.72 3.72 0 0 0 11.64 18.84V17.37A3.72 3.72 0 0 0 7.92 13.65H1.59"
+                    fill="none"
+                    stroke="#222222"
+                    strokeWidth="2.1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </>
+            )}
           </div>
         </div>
       </div>
