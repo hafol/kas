@@ -2,6 +2,32 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-30 05:08] — Устранение первопричины нижнего гэпа на новых PWA (удаление скрипта масштабирования вьюпорта) + Восстановление эталонного BottomNavBar
+
+### 🎯 Запрос пользователя:
+> *«не там все еще есть что то вниуз что на верх толкает нав бар нижний типа может со скриптами попробуешь выяснить проблемую потому что прикол в том что нативные приложение которые стояли у меня давно с ними теперь плохо случается из за того что код меняяется не похоже на оригниал а вот новые им вообще пофиг не меняются все ще этот белый вещь внизу вот посмотри на скрине че удем делать»*
+
+### 🛠️ Что сделано и выяснено:
+1. **Обнаружена и устранена фундаментальная первопричина бага**:
+   - В [index.html](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html) ранее был добавлен синхронный скрипт компенсации iOS Display Zoom, принудительно переписывавший метатег `<meta name="viewport">` динамическими значениями `initial-scale=0.8205` и `width=390`.
+   - В iOS WebKit при установке `initial-scale < 1.0` режим `viewport-fit=cover` ломается на уровне движка Safari, вебвью не доходит до нижнего края экрана (образуется мертвая зона в 59px снизу), а шапка страницы смещается вверх за пределы экрана (на скриншоте пользователя в окне активации красный заголовок 52px был почти полностью обрезан сверху, а снизу висел белый прямоугольник).
+   - Скрипт масштабирования удален. Восстановлен чистый нативный мобильный вьюпорт: `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />`.
+2. **Перевод высоты на `-webkit-fill-available` ([index.css](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css))**:
+   - В селекторах `html`, `body` и `#root` удалено жесткое ограничение `height: 100dvh` (которое на iOS PWA вычитает безопасную зону и блокирует полное заполнение).
+   - Установлено нативное для WebKit свойство `min-height: -webkit-fill-available`, гарантирующее растяжение контейнера на 100% экрана от верхнего до нижнего стекла.
+3. **Восстановление аутентичного BottomNavBar по стандарту AGENTS.md (Правило 5)**:
+   - В [BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx) возвращены оригинальные пропорции, которые идеально работали в старом ярлыке:
+     - `height: calc(54px + env(safe-area-inset-bottom, 30.7px))`
+     - `paddingBottom: env(safe-area-inset-bottom, 30.7px)`
+     - Иконки: `27.6 × 27.6px`, строго по единой линии `top: 6px`
+     - Подписи: `12.5px`, Roboto Regular, `top: 38.5px`
+     - Цвета: активный `#E2464A`, неактивный `#808080`.
+4. **Безопасная зона в окне активации ([ActivationScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/ActivationScreen.jsx))**:
+   - Добавлен красный спейсер статус-бара `height: env(safe-area-inset-top, 44px)` над шапкой Kaspi Red, чтобы заголовок не заезжал под часы и вырез iPhone.
+   - Фон подложки окна активации в [App.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx) переведен на `#F2F2F2`.
+5. **Создан телеметрический логгер ([api/debug-log.js](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/api/debug-log.js))**:
+   - Позволяет в реальном времени снимать метрики экрана устройства пользователя (`window.innerHeight`, `screen.width`, `devicePixelRatio`, `standalone`) через endpoint `/api/debug-log`.
+
 ## [2026-10-30 04:45] — Устранение нижнего гэпа навбара (опускание иконок/подписей к Home bar) + Sticky header для Удостоверения личности + Отключение непереводов
 
 ### 🎯 Запрос пользователя:

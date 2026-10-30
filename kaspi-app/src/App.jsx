@@ -624,7 +624,7 @@ export default function App() {
 
   if (!activationState.isActivated) {
     return (
-      <div className="app-viewport" style={{ backgroundColor: '#FFFFFF' }}>
+      <div className="app-viewport" style={{ backgroundColor: '#F2F2F2' }}>
         <ActivationScreen
           initialError={activationState.errorMessage}
           onActivateSuccess={() => {
