@@ -85,8 +85,8 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
       backgroundColor: '#FFFFFF',
       borderTop: '0.5px solid #EFEFEF',
       zIndex: 60,
-      height: 'calc(54px + env(safe-area-inset-bottom, 30.7px))',
-      paddingBottom: 'env(safe-area-inset-bottom, 30.7px)',
+      height: 'calc(54px + env(safe-area-inset-bottom, 0px))',
+      paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       boxSizing: 'border-box'
     }}>
       <div style={{

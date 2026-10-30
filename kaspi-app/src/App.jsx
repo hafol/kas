@@ -196,6 +196,18 @@ export default function App() {
     }, 700);
   }, []);
 
+  // Sync document and body background color with active screen state (prevents unpainted safe area gap on iOS)
+  useEffect(() => {
+    let bgColor = '#FFFFFF';
+    if (!activationState.isActivated) {
+      bgColor = '#F2F2F2';
+    } else if (currentScreen === 'gold_detail') {
+      bgColor = '#D4AE6D';
+    }
+    document.documentElement.style.backgroundColor = bgColor;
+    document.body.style.backgroundColor = bgColor;
+  }, [activationState.isActivated, currentScreen]);
+
   // Modal / Subscreen Navigation stack
   const [currentScreen, setCurrentScreen] = useState(() => {
     if (typeof window !== 'undefined') {

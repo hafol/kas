@@ -2,6 +2,27 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-30 05:27] — Фундаментальное устранение нижнего белого гэпа на iOS PWA (удаление 100dvh, обнуление fallback inset, синхронизация фона body)
+
+### 🎯 Запрос пользователя:
+> *«так и что будем деллать с гепом»*
+
+### 🔍 Результаты расследования первопричины (Root Cause):
+1. **Причина обрезания контейнера**:
+   - В [index.css](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css) в `@media (max-width: 600px)` селекторы `#root` и `.app-viewport` имели `height: 100dvh;`.
+   - В iOS WebKit в режиме Standalone PWA единица `100dvh` вычисляется как `window.innerHeight` (768pt на iPhone 11 вместо физических 812pt/896pt), **полностью исключая нижнюю безопасную зону Home Indicator (44-57px)**.
+   - Из-за этого серый контейнер окна активации (`#F2F2F2`) физически обрывался на отметке `y = 967px` (что четко зафиксировано пиксельным анализом скриншота пользователя), а оставшиеся 57px снизу вокруг Home Indicator оставались пустой белой подложкой браузера.
+2. **Причина задирания нижнего навбара**:
+   - В [BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx) стояло `env(safe-area-inset-bottom, 30.7px)`. Когда WebKit в Standalone режиме не возвращал значение inset, срабатывал ложный fallback `30.7px`, создававший дополнительный двойной отступ снизу.
+
+### 🛠️ Что сделано:
+1. **Удаление `height: 100dvh` ([index.css](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css))**:
+   - Для `#root` и `.app-viewport` удалено `height: 100dvh`. Установлено честное растяжение `height: 100%; min-height: 100%; min-height: -webkit-fill-available;`, благодаря чему контейнер приложения непрерывно доходит до нижнего стекла телефона.
+2. **Обнуление fallback отступа навбара ([BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx))**:
+   - `env(safe-area-inset-bottom, 30.7px)` заменено на `env(safe-area-inset-bottom, 0px)`. Навбар больше не раздувается искусственными 30px на устройствах с уже учтенным окном.
+3. **Синхронизация фона документа ([App.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx))**:
+   - Добавлен `useEffect`, динамически окрашивающий `document.documentElement` и `document.body` в цвет текущего активного экрана (`#F2F2F2` на активации, `#D4AE6D` на Kaspi Gold, `#FFFFFF` на остальных экранах), исключая любые белые полосы в системных зонах переполнения.
+
 ## [2026-10-30 05:16] — Возврат скрипта компенсации Display Zoom по запросу пользователя + переход на apple-mobile-web-app-status-bar-style="default"
 
 ### 🎯 Запрос пользователя:
