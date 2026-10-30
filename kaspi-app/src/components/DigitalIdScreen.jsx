@@ -524,8 +524,7 @@ export const DigitalIdScreen = ({ onBack }) => {
       }}>
         {/* iOS Status Bar Spacer (pageBg behind clock & battery) */}
         <div style={{
-          height: 'env(safe-area-inset-top, 47px)',
-          minHeight: '44px',
+          height: 'var(--sat, 0px)',
           width: '100%',
           backgroundColor: pageBg,
           flexShrink: 0

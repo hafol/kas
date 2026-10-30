@@ -61,7 +61,7 @@ export const ServicesScreen = ({ profile, onOpenSettings, onSelectService }) => 
 
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: '100%',
       backgroundColor: '#F2F2F2',
       display: 'flex',
       flexDirection: 'column',

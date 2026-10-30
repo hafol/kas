@@ -127,7 +127,7 @@ export const MessagesScreen = ({ messages, onBack }) => {
 
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: '100%',
       backgroundColor: '#FFFFFF',
       display: 'flex',
       flexDirection: 'column',

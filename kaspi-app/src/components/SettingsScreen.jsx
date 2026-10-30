@@ -24,7 +24,7 @@ export const SettingsScreen = ({ profile, onUpdateProfile, onBack }) => {
 
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: '100%',
       backgroundColor: '#F2F2F2',
       display: 'flex',
       flexDirection: 'column',

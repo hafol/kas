@@ -401,8 +401,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
       }}>
         {/* Status bar inset spacer (white behind the status bar) */}
         <div style={{
-          height: 'env(safe-area-inset-top, 47px)',
-          minHeight: '44px',
+          height: 'var(--sat, 0px)',
           width: '100%',
           backgroundColor: surface
         }} />
@@ -416,7 +415,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
           alignItems: 'center',
           boxSizing: 'border-box'
         }}>
-          {/* Back button: 11.5 x 21 at x 25, top y 62.5 (safeArea 48 + 14.5) */}
+          {/* Back button: 11.5 x 21 at x 25, vertically centered in 44px bar */}
           <button
             type="button"
             onClick={onBack}
@@ -425,7 +424,7 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             style={{
               position: 'absolute',
               left: '25px',
-              top: '14.5px',
+              top: '11.5px',
               width: '11.5px',
               height: '21px',
               display: 'flex',
@@ -442,12 +441,12 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
             <BackChevronIcon />
           </button>
 
-          {/* Title "Госуслуги": text top y 65.5 (48 + 17.5 = 65.5), width 86, centered, slightly bolder (fontWeight 700) */}
+          {/* Title "Госуслуги": vertically centered in 44px bar, width 86, centered, slightly bolder (fontWeight 700) */}
           <h1 style={{
             position: 'absolute',
             left: 0,
             right: 0,
-            top: '17.5px',
+            top: '13px',
             margin: 0,
             fontSize: '18px',
             fontWeight: '700',
@@ -765,8 +764,8 @@ export const GovServicesScreen = ({ onOpenDoc, onBack }) => {
         <div style={{ height: '5px' }} />
       </div>
 
-      {/* Grey gap between Block B and Block C: 446.5 - 421.5 = 25px */}
-      <div style={{ height: '25px', flexShrink: 0 }} />
+      {/* Grey gap between Block B (documents) and Block C (categories) */}
+      <div style={{ height: '12px', flexShrink: 0 }} />
 
       {/* =====================================================================
           5. CATEGORIES + 6. SECTION TITLE + SERVICE ROWS (Block C starts y 446.5)

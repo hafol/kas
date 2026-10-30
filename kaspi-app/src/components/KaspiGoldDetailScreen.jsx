@@ -783,7 +783,7 @@ export const KaspiGoldDetailScreen = ({
           style={{
             position: 'absolute',
             right: '26px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 72px)',
+            top: 'calc(var(--sat, 0px) + 72px)',
             width: '112.5px',
             height: '112.5px',
             display: 'flex',
@@ -816,8 +816,8 @@ export const KaspiGoldDetailScreen = ({
           right: 0,
         zIndex: 50,
         backgroundColor: '#D5AE6B',
-        height: 'calc(48px + env(safe-area-inset-top, 0px))',
-        paddingTop: 'env(safe-area-inset-top, 0px)',
+        height: 'calc(48px + var(--sat, 0px))',
+        paddingTop: 'var(--sat, 0px)',
         paddingLeft: '18px',
         paddingRight: '18px',
         display: 'flex',
@@ -882,7 +882,7 @@ export const KaspiGoldDetailScreen = ({
         ref={bigHeaderRef}
         style={{
           position: 'sticky',
-          top: 'calc(48px + env(safe-area-inset-top, 0px))',
+          top: 'calc(48px + var(--sat, 0px))',
           left: 0,
           right: 0,
           zIndex: 3,
@@ -1062,7 +1062,7 @@ export const KaspiGoldDetailScreen = ({
           boxSizing: 'border-box',
           position: 'relative',
           zIndex: 10,
-          paddingBottom: 'calc(180px + env(safe-area-inset-bottom, 34px))'
+          paddingBottom: 'calc(180px + var(--sab, 34px))'
         }}
       >
         {/* =====================================================================
@@ -1077,7 +1077,7 @@ export const KaspiGoldDetailScreen = ({
           ref={tabBarRef}
           style={{
             position: 'sticky',
-            top: 'calc(48px + env(safe-area-inset-top, 0px))',
+            top: 'calc(48px + var(--sat, 0px))',
             zIndex: 40,
             backgroundColor: '#FFFFFF',
             padding: '14px 14px 9px 14px',

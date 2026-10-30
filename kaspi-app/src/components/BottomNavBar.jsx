@@ -22,17 +22,17 @@ const NavIconQR = ({ color = "#4C4C4C" }) => (
     <path d="M16.5 2.5H20.2C20.92 2.5 21.5 3.08 21.5 3.8V7.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     <path d="M2.5 16.5V20.2C2.5 20.92 3.08 21.5 3.8 21.5H7.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     <path d="M16.5 21.5H20.2C20.92 21.5 21.5 20.92 21.5 20.2V16.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    
+
     {/* 3 inner corner markers */}
     <rect x="5.2" y="5.2" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.5" />
     <rect x="6.9" y="6.9" width="1.7" height="1.7" rx="0.4" fill={color} />
-    
+
     <rect x="13.7" y="5.2" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.5" />
     <rect x="15.4" y="6.9" width="1.7" height="1.7" rx="0.4" fill={color} />
-    
+
     <rect x="5.2" y="13.7" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.5" />
     <rect x="6.9" y="15.4" width="1.7" height="1.7" rx="0.4" fill={color} />
-    
+
     {/* Bottom-right structure */}
     <path d="M13.7 13.7H16.5V16.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     <path d="M16.5 16.5H19.2V19.2" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -85,8 +85,8 @@ export const BottomNavBar = ({ activeTab, onTabChange }) => {
       backgroundColor: '#FFFFFF',
       borderTop: '0.5px solid #EFEFEF',
       zIndex: 60,
-      height: 'calc(54px + env(safe-area-inset-bottom, 0px))',
-      paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      height: 'calc(54px + var(--sab, 0px))',
+      paddingBottom: 'var(--sab, 0px)',
       boxSizing: 'border-box'
     }}>
       <div style={{

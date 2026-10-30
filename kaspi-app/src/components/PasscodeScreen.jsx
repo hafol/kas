@@ -260,7 +260,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
           style={{
             position: 'absolute',
             left: '19.5px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 13.5px)',
+            top: 'calc(var(--sat, 0px) + 13.5px)',
             width: '28.2px',
             height: '27px',
             display: 'flex',
@@ -285,7 +285,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
           style={{
             position: 'absolute',
             right: '19.5px',
-            top: 'calc(env(safe-area-inset-top, 0px) + 13.5px)',
+            top: 'calc(var(--sat, 0px) + 13.5px)',
             width: '28.2px',
             height: '27px',
             display: 'flex',
@@ -318,7 +318,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
           style={{
             position: 'absolute',
             left: 'calc(50% - 46.5px)',
-            top: 'calc(env(safe-area-inset-top, 0px) + 49px)',
+            top: 'calc(var(--sat, 0px) + 49px)',
             width: '93px',
             height: '93px',
             borderRadius: '50%',
@@ -352,7 +352,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 155px)',
+            top: 'calc(var(--sat, 0px) + 155px)',
             left: 0,
             right: 0,
             display: 'flex',
@@ -394,7 +394,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 253px)',
+            top: 'calc(var(--sat, 0px) + 253px)',
             left: 0,
             right: 0,
             textAlign: 'center',
@@ -418,7 +418,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
               key={idx}
               style={{
                 position: 'absolute',
-                top: 'calc(env(safe-area-inset-top, 0px) + 296.5px)',
+                top: 'calc(var(--sat, 0px) + 296.5px)',
                 left: `${cx - 6.5}px`,
                 width: '13px',
                 height: '13px',
@@ -443,7 +443,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
               style={{
                 position: 'absolute',
                 left: `${cx - 50}px`,
-                top: `calc(env(safe-area-inset-top, 0px) + ${topOffset}px)`,
+                top: `calc(var(--sat, 0px) + ${topOffset}px)`,
                 width: '100px',
                 height: '80px',
                 border: 'none',
@@ -496,7 +496,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
             style={{
               position: 'absolute',
               left: `${321 - 50}px`,
-              top: 'calc(env(safe-area-inset-top, 0px) + 661.5px)',
+              top: 'calc(var(--sat, 0px) + 661.5px)',
               width: '100px',
               height: '80px',
               border: 'none',
@@ -518,7 +518,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
         <div
           style={{
             position: 'absolute',
-            top: 'calc(env(safe-area-inset-top, 0px) + 767.5px)',
+            top: 'calc(var(--sat, 0px) + 767.5px)',
             left: 0,
             right: 0,
             height: '18px',

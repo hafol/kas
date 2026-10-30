@@ -55,7 +55,7 @@ export const TransfersScreen = ({ card, onBack, onCompleteTransfer }) => {
 
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: '100%',
       backgroundColor: '#F2F2F2',
       display: 'flex',
       flexDirection: 'column',
@@ -72,8 +72,7 @@ export const TransfersScreen = ({ card, onBack, onCompleteTransfer }) => {
       }}>
         {/* Status bar inset spacer (white behind the status bar) */}
         <div style={{
-          height: 'env(safe-area-inset-top, 47px)',
-          minHeight: '44px',
+          height: 'var(--sat, 0px)',
           width: '100%',
           backgroundColor: '#FFFFFF'
         }} />

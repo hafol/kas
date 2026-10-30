@@ -433,3 +433,57 @@ body {
   pointer-events: none;
 }
 
+
+/* ───────────────────────────────────────────────────────────────────────────
+   SAFE-AREA VARIABLES (single source of truth)
+   Components read var(--sat/--sab/--sal/--sar) instead of env() directly, so
+   on a real iPhone these resolve to the native insets, while the dev-only iOS
+   simulator (index.html, activated by ?ios=…) can override them on a laptop.
+   ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   DEV-ONLY iOS DEVICE SIMULATOR OVERLAY
+   Only renders when <html data-ios-sim="…"> is set (i.e. URL has ?ios=…).
+   Draws the notch / Dynamic Island at top and the home-indicator bar at bottom
+   so the laptop preview looks like the real device. Never active in production.
+   ─────────────────────────────────────────────────────────────────────────── */
+html[data-ios-sim]::before,
+html[data-ios-sim]::after {
+  content: "";
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  pointer-events: none;
+  background: #000;
+}
+/* Top cutout: wide notch for 11/x, pill island for 15pro/16pro */
+html[data-ios-sim]::before {
+  top: 8px;
+  width: 160px;
+  height: 30px;
+  border-radius: 20px;
+}
+html[data-ios-sim="15pro"]::before,
+html[data-ios-sim="16pro"]::before {
+  top: 11px;
+  width: 125px;
+  height: 36px;
+  border-radius: 18px;
+}
+html[data-ios-sim="se"]::before { display: none; } /* SE has no notch */
+/* Bottom home-indicator bar */
+html[data-ios-sim]::after {
+  bottom: 8px;
+  width: 140px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.35);
+}
+html[data-ios-sim="se"]::after { display: none; } /* SE uses a home button */

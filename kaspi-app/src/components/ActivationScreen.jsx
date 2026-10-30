@@ -129,7 +129,7 @@ export const ActivationScreen = ({ onActivateSuccess, initialError }) => {
     }}>
       {/* iOS Status Bar Spacer (Kaspi Red behind clock & notch) */}
       <div style={{
-        height: 'env(safe-area-inset-top, 44px)',
+        height: 'var(--sat, 44px)',
         backgroundColor: '#C8392F',
         width: '100%'
       }} />
@@ -159,7 +159,7 @@ export const ActivationScreen = ({ onActivateSuccess, initialError }) => {
       {/* Main Content */}
       <div style={{
         flex: 1,
-        padding: '20px 16px calc(24px + env(safe-area-inset-bottom, 20px)) 16px',
+        padding: '20px 16px calc(24px + var(--sab, 20px)) 16px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

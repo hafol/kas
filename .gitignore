@@ -26,3 +26,10 @@ desktop.ini
 !.vscode/extensions.json
 .vercel
 .env*
+
+# Reference material containing real personal data (teacher's originals) — keep LOCAL only
+kaspi-app/references/
+kaspi-app/public/kaspi_assets/documents/annotated_ref.png
+
+# Generated screenshot/comparison artifacts
+kaspi-app/scripts/shots/

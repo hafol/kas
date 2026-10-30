@@ -18,10 +18,10 @@ export const initialUserData = {
 
   cards: {
     gold: {
-      id: "gold_4163",
+      id: "gold_0000",
       name: "Kaspi Gold",
-      last4: "4163",
-      cardNumberFormatted: "4400 4303 6188 4163",
+      last4: "0000",
+      cardNumberFormatted: "4400 4303 6188 0000",
       iban: "KZ54722C000021658491",
       balance: 110922.58,
       currency: "₸",

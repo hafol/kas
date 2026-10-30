@@ -12,31 +12,100 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png?v=kaspi-official-2026" />
     <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-180x180.png?v=kaspi-official-2026" />
     <link rel="manifest" href="/manifest.json?v=kaspi-official-2026" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <script>
       (function () {
-        // iOS Display Zoom reports a smaller screen. Map "zoomed" screen sizes to the real width.
-        // key: screenWidth x screenHeight @ devicePixelRatio  ->  real width in pt
-        var ZOOMED = {
-          '375x812@2': 414,  // iPhone XR, 11 with Display Zoom (real 414 x 896)
-          '375x667@3': 414,  // iPhone 6s/7/8 Plus with Display Zoom (real 414 x 736)
-          '320x693@3': 390,  // iPhone 12/13/14, 12/13 Pro, 14 Pro, 15, 16 with Display Zoom (real 390 or 393)
-          '320x568@2': 375   // iPhone SE 2/3, 6s/7/8 with Display Zoom (real 375 x 667)
-        };
-        var isIOS = /iPhone/.test(navigator.userAgent);
-        if (!isIOS) return;
-        var w = Math.min(screen.width, screen.height);
-        var h = Math.max(screen.width, screen.height);
-        var key = w + 'x' + h + '@' + Math.round(window.devicePixelRatio);
-        var realWidth = ZOOMED[key];
-        if (!realWidth) return;
-        var scale = w / realWidth; // e.g. 375 / 414 = 0.9058
-        var meta = document.querySelector('meta[name=viewport]');
-        meta.setAttribute('content',
-          'width=' + realWidth + ', initial-scale=' + scale.toFixed(4) +
-          ', minimum-scale=' + scale.toFixed(4) + ', maximum-scale=' + scale.toFixed(4) +
-          ', user-scalable=no, viewport-fit=cover');
-        document.documentElement.setAttribute('data-display-zoom', 'on');
+        // ─────────────────────────────────────────────────────────────────────
+        // UNIVERSAL VIEWPORT — single source of truth for cross-device layout.
+        //
+        // The whole UI is authored in absolute px calibrated to a 414px-wide
+        // canvas (iPhone 11). Because sizes live in inline JSX styles (not CSS),
+        // the only way to make every phone look identical is to scale the whole
+        // <html> element. We do that with CSS `zoom` (supported in all modern
+        // browsers incl. Firefox 126+), NOT viewport initial-scale — a sub-1
+        // initial-scale breaks `viewport-fit=cover` on iOS PWA (~56px white strip
+        // at the bottom). `zoom` keeps the native full-screen viewport intact.
+        //
+        // IMPORTANT: because <html> is zoomed, never size anything with vh/dvh —
+        // those measure the UNSCALED viewport and will overflow/leave a gap.
+        // Use height:100% (chained from html) instead. The CSS relies on this.
+        //
+        // scale = clamp(viewportWidth / 414). On phones that fills the width edge
+        // to edge; the cap stops the UI ballooning on wide foldables (≤600px).
+        // Above 600px (tablet/desktop) we don't scale — #root shows a phone frame.
+        // ─────────────────────────────────────────────────────────────────────
+        var DESIGN_WIDTH = 414;   // authoring canvas width (iPhone 11 logical px)
+        var MAX_SCALE = 1.18;     // ceiling so wide foldables don't balloon
+        var MIN_SCALE = 0.72;     // floor for tiny/ultra-narrow devices
+        var PHONE_MAX = 600;      // above this: no scaling, centered phone frame
+        var html = document.documentElement;
+
+        function currentWidth() {
+          // visualViewport is the most accurate on mobile (accounts for the
+          // on-screen keyboard and dynamic browser chrome); fall back gracefully.
+          var vv = window.visualViewport;
+          return (vv && vv.width) || window.innerWidth || html.clientWidth || DESIGN_WIDTH;
+        }
+
+        function applyZoom() {
+          var w = currentWidth();
+          if (!w || w > PHONE_MAX) {
+            html.style.zoom = '';
+            html.style.removeProperty('--app-scale');
+            html.removeAttribute('data-app-zoom');
+            return;
+          }
+          var z = w / DESIGN_WIDTH;
+          if (z > MAX_SCALE) z = MAX_SCALE;
+          if (z < MIN_SCALE) z = MIN_SCALE;
+          z = z.toFixed(4);
+          html.style.zoom = z;
+          // Exposed so components/CSS can react to the scale if ever needed.
+          html.style.setProperty('--app-scale', z);
+          html.setAttribute('data-app-zoom', z);
+        }
+
+        applyZoom();
+        window.addEventListener('resize', applyZoom);
+        window.addEventListener('pageshow', applyZoom); // bfcache restore
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener('resize', applyZoom);
+        }
+        window.addEventListener('orientationchange', function () {
+          setTimeout(applyZoom, 150);
+        });
+      })();
+    </script>
+    <script>
+      // ───────────────────────────────────────────────────────────────────────
+      // DEV-ONLY iOS SAFE-AREA SIMULATOR
+      // On a laptop, env(safe-area-inset-*) is always 0, so the notch / home-bar
+      // spacing can't be tested. Add ?ios=11 (or 15pro / 16pro / se / none) to the
+      // URL and this overrides --sat/--sab/--sal/--sar with that device's real
+      // inset values, and sets data-ios-sim to draw the notch overlay (index.css).
+      // Does NOTHING unless ?ios= is present, so the shipped app is unaffected.
+      //   e.g.  http://localhost:5173/?ios=11
+      // ───────────────────────────────────────────────────────────────────────
+      (function () {
+        try {
+          var preset = new URLSearchParams(window.location.search).get('ios');
+          if (!preset) return;
+          var presets = {
+            '11':    { top: 48, bottom: 34 }, // iPhone 11 / XR (notch) — the reference (real inset ≈48)
+            'x':     { top: 44, bottom: 34 }, // iPhone X/XS/11 Pro
+            '15pro': { top: 59, bottom: 34 }, // Dynamic Island
+            '16pro': { top: 59, bottom: 34 }, // Dynamic Island
+            'se':    { top: 20, bottom: 0  }, // iPhone SE (home button)
+            'none':  { top: 0,  bottom: 0  }
+          };
+          var d = presets[preset] || presets['11'];
+          var s = document.documentElement.style;
+          s.setProperty('--sat', d.top + 'px');
+          s.setProperty('--sab', d.bottom + 'px');
+          s.setProperty('--sal', '0px');
+          s.setProperty('--sar', '0px');
+          document.documentElement.setAttribute('data-ios-sim', preset);
+        } catch (e) {}
       })();
     </script>
     <script>

@@ -50,7 +50,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack, onUpdateBonus, onUpd
 
   return (
     <div style={{
-      minHeight: '100vh',
+      minHeight: '100%',
       backgroundColor: '#F2F2F2',
       display: 'flex',
       flexDirection: 'column'
@@ -67,8 +67,7 @@ export const MyBankScreen = ({ cards, onSelectCard, onBack, onUpdateBonus, onUpd
       }}>
         {/* Status bar inset spacer (pure white behind iOS clock & battery) */}
         <div style={{
-          height: 'env(safe-area-inset-top, 47px)',
-          minHeight: '44px',
+          height: 'var(--sat, 0px)',
           width: '100%',
           backgroundColor: '#FFFFFF'
         }} />

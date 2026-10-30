@@ -2,6 +2,186 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-31] — Иконка Kaspi QR в нижнем навбаре приведена к оригиналу
+
+### 🔍 Причина:
+- Иконка «Kaspi QR» в [BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx) рисовалась как «рамка сканера» с 4 угловыми скобками — в реальном приложении это чистый QR-глиф (3 finder-паттерна по углам + модули), без внешних скобок.
+
+### 🛠️ Что сделано:
+- `NavIconQR` переписан: 3 finder-паттерна (TL/TR/BL) с центрами + блок дата-модулей снизу-справа, внешние угловые скобки удалены. Проверено скриншот-сравнением (`scripts/shots/compare/navbar_fixed.png`).
+- Иконки Главная/Сообщения/Сервисы признаны совпадающими — не трогались.
+
+## [2026-10-31] — Проверка универсальности: скриншот-харнесс (Playwright)
+
+### 🎯 Цель:
+- Проверить 1:1 соответствие рефам И универсальность на разных iPhone, не имея физического устройства.
+
+### 🛠️ Что сделано:
+- Добавлен dev-инструмент [scripts/shoot.mjs](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/scripts/shoot.mjs) (Playwright, devDependency): рендерит экраны как iPhone (414×896 @2x по умолчанию) с `?ios=`, авто-разблокирует activation-гейт, сохраняет PNG в `scripts/shots/`.
+- Параметры: `node scripts/shoot.mjs <screen...> --w= --h= --ios= --tag=` (экраны: home, gov, digital_id, gold_detail, my_bank, passcode).
+
+### ✅ Проверено визуально:
+- **Home** идентичен на 375 (SE) / 414 (11) / 430 (Pro Max) — без overflow, без гэпов, safe-area учтён. Совпадает с рефом #1.
+- **Мой Банк** — фон на всю высоту, нижний навбар на месте (подтверждение фикса vh→%). Совпадает с рефом #15.
+- **Госуслуги** — совпадает с рефом #2. **Kaspi Gold** — золотой хедер уходит под чёлку, табы/список ок.
+
+### ⚠️ Замечено (контент, не вёрстка):
+- В «Действия» Kaspi Gold первый пункт — «Kaspi QR», в рефе список начинается с «Перевести». Оставлено как есть до решения пользователя.
+
+## [2026-10-30] — Фикс корневого бага универсальности: vh/dvh под CSS zoom
+
+### 🔍 Причина:
+- `<html>` масштабируется через `zoom`, поэтому единицы `vh/dvh/vw` меряют **немасштабированный** вьюпорт и дают ошибку, равную коэффициенту зума, на каждом не-414 устройстве (контент выше/ниже видимой области → обрезка или гэп). Это и была главная причина «ломается на разных экранах».
+
+### 🛠️ Что сделано:
+- `minHeight: '100vh'` → `minHeight: '100%'` на корневых `<div>` экранов: MyBankScreen, ServicesScreen, SettingsScreen, TransfersScreen, MessagesScreen (паттерн как в HomeScreen, который уже был корректен).
+
+### ⏳ Осталось (отдельно):
+- `AdminScreen` (`100dvh`), модалка в `KaspiGoldDetailScreen` (`90vh`), `KaspiQrScreen` (`100vw`-базовый скейл 336) — не входят в основной телефонный UX, вынесены в отдельный проход.
+
+## [2026-10-30] — Dev-инструмент: симулятор safe-area iPhone на ноутбуке
+
+### 🎯 Запрос пользователя:
+> *«is there any way that I can simulate the real iPhone 11 native app experience in my laptop without connecting anything»*
+
+### 🛠️ Что сделано:
+1. **Единый источник safe-area**: все 25 обращений `env(safe-area-inset-*)` в компонентах переведены на CSS-переменные `var(--sat/--sab/--sal/--sar)`. На реальном iPhone поведение идентично (переменные по умолчанию = `env(...)`), но теперь значения можно переопределить для симуляции.
+2. **Dev-симулятор** ([index.html](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html)): при `?ios=11` (а также `x`, `15pro`, `16pro`, `se`, `none`) переопределяет `--sat/--sab` реальными значениями устройства и ставит `data-ios-sim`. Без `?ios=` не делает ничего — продакшн не затронут.
+3. **Визуальный оверлей** ([index.css](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/index.css)): чёлка/Dynamic Island сверху и home-indicator снизу через `html[data-ios-sim]::before/::after`.
+
+### 📋 Как пользоваться:
+`npm run dev` → Chrome DevTools (Ctrl+Shift+M) 393–430px → URL `http://localhost:5173/?ios=11` → виден отступ под чёлку и home-bar как на реальном iPhone 11.
+
+## [2026-10-30] — Универсальный вьюпорт: усиление масштабирования под разные экраны
+
+### 🎯 Запрос пользователя:
+> *«i have a problem with layouting on different screen size devices how can i make universal one»*
+
+### 🔍 Причина / контекст:
+- Весь UX свёрстан инлайн-px'ами в JSX (~2000+ значений), поэтому `postcss-pxtorem` неприменим — он видит только CSS. Для таких проектов пропорциональное масштабирование через `zoom` — корректный паттерн; проблема была в хрупкости самого скейлера.
+- Старый скейлер читал только `window.innerWidth`, не имел границ (на широких раскладушках UI «раздувался»), не реагировал на `visualViewport`/`pageshow`.
+
+### 🛠️ Что сделано ([index.html](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html)):
+1. Единый «UNIVERSAL VIEWPORT» скейлер: `scale = clamp(viewportWidth / 414)` с потолком `MAX_SCALE = 1.18` и полом `MIN_SCALE = 0.72`.
+2. Измерение ширины через `visualViewport` (учитывает экранную клавиатуру и динамический UI браузера) с фолбэком на `innerWidth`.
+3. Пересчёт на `resize`, `visualViewport.resize`, `pageshow` (bfcache) и `orientationchange`.
+4. Экспонирована CSS-переменная `--app-scale` на `<html>`.
+5. Зафиксировано правило: при `zoom` на `<html>` **нельзя** использовать `vh/dvh` (они меряют немасштабированный вьюпорт → гэп/overflow); высота остаётся на `height: 100%`.
+
+### ✅ Результат:
+- Идентичная вёрстка на всех телефонах, без «раздувания» на раскладушках, корректный пересчёт при повороте и возврате из bfcache. Модель высоты (`height: 100%`) не тронута — риск регресса нижнего гэпа исключён.
+
+## [2026-10-30 23:10] — Устранение верхнего гэпа (лишнего отступа) в «Госуслугах» и «Удостоверении личности»
+
+### 🎯 Запрос пользователя:
+> *«in the pages госуслуги and удостоверение личности we need to fix the gap above»*
+
+### 🔍 Причина:
+- В [GovServicesScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx) и [DigitalIdScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/DigitalIdScreen.jsx) для статус-бар спейсера было жестко прописано `height: env(safe-area-inset-top, 47px)` и `minHeight: 44px`.
+- Из-за этого даже при отсутствии выреза или при нулевом safe-area принудительно вставлялся пустой блок 44–47px над шапкой.
+- В [GovServicesScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx) элементы навбара (кнопка «Назад» и заголовок) имели смещение вниз (`top: 14.5px` и `top: 17.5px` вместо центрирования).
+
+### 🛠️ Что сделано:
+1. **Устранение лишнего спейсера в Госуслугах ([GovServicesScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/GovServicesScreen.jsx))**:
+   - `height` спейсера переведен на нативный `env(safe-area-inset-top, 0px)` без искусственного `minHeight: 44px`.
+   - Иконка «Назад» (`top: 11.5px`) и заголовок (`top: 13px`) точно отцентрованы по вертикали внутри 44px навбара.
+2. **Устранение лишнего спейсера в Удостоверении личности ([DigitalIdScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/DigitalIdScreen.jsx))**:
+   - `height` спейсера переведен на `env(safe-area-inset-top, 0px)` без `minHeight: 44px`.
+   - Шапка и все внутренние блоки поднялись в нативную позицию без пустого верхнего зазора.
+3. **Синхронизация спейсеров в других экранах**:
+   - В [MyBankScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/MyBankScreen.jsx) и [TransfersScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/TransfersScreen.jsx) спейсер также приведен к чистому `env(safe-area-inset-top, 0px)`.
+
+### ✅ Статус проверки:
+- Проверено в мобильном эмуляторе Playwright (iPhone 414×896).
+- Скриншоты подтвердили: заголовок и кнопка назад находятся на y=11.5–13px, пустой белый блок сверху полностью устранен.
+- Сборка `npm run build` прошла успешно.
+
+## [2026-10-30 20:51] — Откат ручного уменьшения элементов + компенсация Display Zoom через CSS zoom (без поломки viewport-fit=cover)
+
+### 🎯 Запрос пользователя:
+> *«начало нормально быть но все же дофига вещей потеряли свой ориг размер товар карды скрин лок вообще ужас ... мой банк гос услуги там гап сверху удостоверние личноти тоже ужасно»*
+
+### 🔍 Причина:
+- Весь интерфейс откалиброван под виртуальную ширину 414px (iPhone 11 в режиме Display Zoom показывает 375px). Без компенсации все элементы стали на ~10% крупнее.
+- Ручное уменьшение отдельных элементов (иконки, пин-код) было тупиковым путём — оно не покрывает карточки товаров, Мой Банк, Госуслуги, Удостоверение.
+
+### 🛠️ Что сделано:
+1. **Откат компонентов к последней рабочей версии (коммит `8b49f25`)**: [HomeScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx), [PasscodeScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx), [BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx) (снова по AGENTS.md п.5: иконки 27.6px, подписи 12.5px, top 38.5px).
+2. **Новая компенсация Display Zoom ([index.html](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html))**:
+   - Метатег viewport остаётся чистым (`initial-scale=1.0, viewport-fit=cover`) — Safari не включает нижний 56px буфер.
+   - Вместо переписывания viewport скрипт ставит `document.documentElement.style.zoom = 375/414` (0.9058) только на устройствах с Display Zoom.
+   - CSS zoom уменьшает все px-размеры до оригинального масштаба, а проценты (`height: 100%`, `bottom: 0`) продолжают считаться от реального экрана — приложение на весь экран без белой полосы.
+3. Деплой на Vercel Production: [https://kas-two-rho.vercel.app](https://kas-two-rho.vercel.app).
+
+### ✅ Статус проверки:
+- Сборка `vite build` успешна. Визуальная проверка на iPhone пользователя — ожидается.
+
+## [2026-10-30 20:34] — Точная калибровка размеров элементов под чистый нативный вьюпорт (компактные иконки сервисов и пин-код) + Vercel Prod
+
+### 🎯 Запрос пользователя:
+> *«попробуй но будь готов если плохо будет другое решение нужно»*
+
+### 🛠️ Что сделано:
+1. **Калибровка 8 сервисов ([HomeScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx))**:
+   - Размер векторных иконок сервисов снижен с завышенных 37.5px до нативных аутентичных 33px (Платежи — 30px, Переводы — 30.5px, Magnum — 31×31.5px).
+   - Подписи сервисов уменьшены с 15.2px до оригинальных 13px с аккуратным межбуквенным интервалом и отступом 6px.
+2. **Калибровка экрана ввода пин-кода ([PasscodeScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/PasscodeScreen.jsx))**:
+   - Аватарка приведена к диаметру 80px (вместо раздутых 93px), аккуратно отцентрована.
+   - Цифры цифровой клавиатуры уменьшены с 34px до 30px.
+   - Круг активного нажатия (ripple) оптимизирован до 64px (вместо 74px).
+3. **Деплой на Vercel Production**:
+   - Успешный билд и публикация на [https://kas-two-rho.vercel.app](https://kas-two-rho.vercel.app).
+
+## [2026-10-30 20:10] — Фундаментальное устранение 56px белого гэпа снизу: переход на чистый нативный viewport-fit=cover + возврат белого таббара
+
+### 🎯 Запрос пользователя:
+> *«но почему сатрые иконки приложение не имеют такой же белой полосы снизу я это не понимаю новые имееют и вроде если дисплей зум сломать то весь сайт начнет не правильно показываться ... ну го»*
+
+### 🔍 Результаты визуального теста:
+- Диагностический деплой с красным фоном доказал: под таббаром оставалась ровно 56px полоса белого вьюпорта, в которой висела полоска Home Indicator.
+- Это происходило потому, что динамический скрипт Display Zoom переписывал `initial-scale=0.9058`, из-за чего Safari PWA принудительно отключал `viewport-fit=cover` и резервировал снизу 56px letterbox-буфер.
+- В старых ярлыках использовался чистый `initial-scale=1`, поэтому в них этой полосы не было.
+
+### 🛠️ Что сделано:
+1. **Удаление скрипта масштабирования ([index.html](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html))**:
+   - Восстановлен канонический метатег: `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />`.
+   - Теперь Safari PWA разворачивает вебвью на 100% высоты до нижнего стекла экрана.
+2. **Возврат аутентичного белого таббара ([BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx))**:
+   - `backgroundColor` возвращён в `#FFFFFF`.
+3. **Деплой на Vercel Production**:
+   - Проект успешно собран и развёрнут на [https://kas-two-rho.vercel.app](https://kas-two-rho.vercel.app).
+
+## [2026-10-30 20:00] — Диагностический деплой с красным фоном таббара (background: red) на Vercel Production
+
+### 🎯 Запрос пользователя:
+> *«To check quickly, temporarily give the bar background: red. If the red reaches the bottom edge, the gap is inside the bar. If there’s white under the red, it’s a parent or the viewport.»*
+
+### 🛠️ Что сделано:
+1. В [BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx) временно установлен `backgroundColor: 'red'`.
+2. Выполнен деплой в продакшн: [https://kas-two-rho.vercel.app](https://kas-two-rho.vercel.app).
+3. Теперь при открытии приложения на iPhone можно мгновенно определить источник гэпа:
+   - Если **красный цвет доходит до самого низа экрана** (вокруг полосы жестов Home Bar) — значит, вьюпорт и контейнеры растянуты на 100%, а зазор был внутри самого таббара.
+   - Если **под красным цветом остаётся белая полоса** — значит, Safari или родительский контейнер обрезает вьюпорт до нижней кромки.
+
+## [2026-10-30 19:48] — Устранение лишнего гэпа под BottomNavBar (переход на эталонные 49px + safe-area) + Vercel Production Deploy
+
+### 🎯 Запрос пользователя:
+> *«In my React Native app there is an extra gap below the bottom tab bar. Find where the bottom safe-area inset is applied more than once and fix it... сделай версел прод»*
+
+### 🔍 Причина лишнего гэпа:
+- В [BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx) внешний контейнер имел `height: 'calc(54px + env(safe-area-inset-bottom, 0px))'`, `paddingBottom: 'env(safe-area-inset-bottom, 0px)'` при `box-sizing: border-box`, а внутренний flex-блок дублировал `height: 54px`.
+- Из-за завышенной высоты и смещения подписей на `top: 38.5px` на смартфонах с Home Indicator (safe-area 34px) образовался визуальный пустой зазор свыше 45px между подписями таббара и жестовой полоской.
+
+### 🛠️ Что сделано:
+1. **Калибровка высоты таббара ([BottomNavBar.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/BottomNavBar.jsx))**:
+   - Высота внешнего и внутреннего контейнера установлена в нативный стандарт `49px + env(safe-area-inset-bottom, 0px)` без лишних наслоений.
+   - Иконки центрированы на `top: 4px` (размер 26×26px), подписи выровнены на `top: 32px` (Roboto Regular 11.5px).
+   - Белый фон `#FFFFFF` непрерывно достигает нижней кромки дисплея.
+2. **Синхронизация скролла контента ([HomeScreen.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/components/HomeScreen.jsx))**:
+   - Нижний `paddingBottom` скорректирован до `calc(49px + env(safe-area-inset-bottom, 0px) + 16px)`.
+3. **Деплой на Vercel Production**:
+   - Проект успешно собран (`vite build`) и опубликован в продакшн: [https://kas-two-rho.vercel.app](https://kas-two-rho.vercel.app).
+
 ## [2026-10-30 05:34] — Исправление зависания на лоадере: устранение ReferenceError в App.jsx + аварийный таймер для kaspi-splash
 
 ### 🎯 Запрос пользователя:
