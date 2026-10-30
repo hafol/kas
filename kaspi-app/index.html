@@ -130,6 +130,15 @@
     <div id="kaspi-splash">
       <img src="/kaspi-splash-emblem.png?v=kaspi-official-2026" alt="Kaspi.kz" width="104" height="104" />
     </div>
+    <script>
+      setTimeout(function() {
+        var s = document.getElementById('kaspi-splash');
+        if (s) {
+          s.style.opacity = '0';
+          setTimeout(function() { if (s && s.parentNode) s.parentNode.removeChild(s); }, 350);
+        }
+      }, 1500);
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

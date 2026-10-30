@@ -196,18 +196,6 @@ export default function App() {
     }, 700);
   }, []);
 
-  // Sync document and body background color with active screen state (prevents unpainted safe area gap on iOS)
-  useEffect(() => {
-    let bgColor = '#FFFFFF';
-    if (!activationState.isActivated) {
-      bgColor = '#F2F2F2';
-    } else if (currentScreen === 'gold_detail') {
-      bgColor = '#D4AE6D';
-    }
-    document.documentElement.style.backgroundColor = bgColor;
-    document.body.style.backgroundColor = bgColor;
-  }, [activationState.isActivated, currentScreen]);
-
   // Modal / Subscreen Navigation stack
   const [currentScreen, setCurrentScreen] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -235,6 +223,20 @@ export default function App() {
   const [loadingScreen, setLoadingScreen] = useState(null);
   // eGov splash shown for ~1.5 s before the ID card screen opens
   const [egovSplash, setEgovSplash] = useState(null); // null | 'in' | 'out'
+
+  // Sync document and body background color with active screen state (prevents unpainted safe area gap on iOS)
+  useEffect(() => {
+    let bgColor = '#FFFFFF';
+    if (!activationState.isActivated) {
+      bgColor = '#F2F2F2';
+    } else if (currentScreen === 'gold_detail') {
+      bgColor = '#D4AE6D';
+    }
+    if (typeof document !== 'undefined') {
+      if (document.documentElement) document.documentElement.style.backgroundColor = bgColor;
+      if (document.body) document.body.style.backgroundColor = bgColor;
+    }
+  }, [activationState.isActivated, currentScreen]);
 
   // Preload so the splash appears instantly on tap
   useEffect(() => {

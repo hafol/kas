@@ -2,6 +2,22 @@
 
 В этом файле фиксируются **все** изменения проекта для сохранения непрерывного контекста, фиксации дизайн-решений и защиты от случайного отката правок.
 
+## [2026-10-30 05:34] — Исправление зависания на лоадере: устранение ReferenceError в App.jsx + аварийный таймер для kaspi-splash
+
+### 🎯 Запрос пользователя:
+> *«приложение не открывается там просто лоадер стоит и все»*
+
+### 🔍 Причина зависания:
+- В [App.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx) новый хук синхронизации фонового цвета был помещен выше объявления `const [currentScreen, setCurrentScreen] = useState(...)`.
+- В JavaScript обращение к переменной `currentScreen` в массиве зависимостей хука до строки ее объявления вызывало фатальный `ReferenceError: Cannot access 'currentScreen' before initialization`.
+- Из-за этого React падал при первом рендере, компонент `App` не монтировался, и `#kaspi-splash` (с `z-index: 9999999`) никогда не скрывался.
+
+### 🛠️ Что сделано:
+1. **Перемещение хука ниже объявления состояния ([App.jsx](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/src/App.jsx))**:
+   - `useEffect` синхронизации цвета документа перенесен строго под объявление `currentScreen` и всех сопутствующих состояний. Ошибка `ReferenceError` полностью устранена.
+2. **Аварийный таймер скрытия сплэша ([index.html](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html))**:
+   - В [index.html](file:///c:/Users/erkez/Downloads/uptodown-kz.kaspi.mobile/kaspi-app/index.html) встроен автономный inline-таймер на 1.5 секунды, который гарантированно плавно скрывает и удаляет `#kaspi-splash` из DOM, даже если бандл React задерживается.
+
 ## [2026-10-30 05:27] — Фундаментальное устранение нижнего белого гэпа на iOS PWA (удаление 100dvh, обнуление fallback inset, синхронизация фона body)
 
 ### 🎯 Запрос пользователя:
