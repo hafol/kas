@@ -68,7 +68,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
       const saved = localStorage.getItem('kaspi_user_shortname');
       if (saved) return saved;
     } catch (e) {}
-    return profile?.shortName || 'Парасат Ж.';
+    return profile?.shortName || 'Твое Имя';
   });
   const [avatarUrl, setAvatarUrl] = useState(() => {
     try {

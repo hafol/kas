@@ -1,7 +1,7 @@
 // Все данные Парасат Ж. полностью редактируемые в одном месте!
 export const initialUserData = {
   profile: {
-    shortName: "Парасат Ж.",
+    shortName: "Твое Имя",
     fullName: "Жұмаш Парасат Дінмұратұлы",
     cardholderName: "PARASSAT ZHUMASH",
     iin: "100723552899",

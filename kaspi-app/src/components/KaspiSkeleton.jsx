@@ -196,41 +196,36 @@ export const MyBankSkeleton = () => (
   </div>
 );
 
-// 3. TransfersSkeleton
+// 3. TransfersSkeleton — mirrors the Переводы list (header + segmented + rows)
 export const TransfersSkeleton = () => (
   <div style={{
-    width: '100%',
-    minHeight: '100%',
-    backgroundColor: '#F2F2F2',
-    display: 'flex',
-    flexDirection: 'column',
-    boxSizing: 'border-box'
+    width: '100%', minHeight: '100%', backgroundColor: '#FFFFFF',
+    display: 'flex', flexDirection: 'column', boxSizing: 'border-box'
   }}>
-    <div style={{
-      width: '100%',
-      backgroundColor: '#FFFFFF',
-      paddingTop: '12px',
-      paddingBottom: '12px',
-      paddingLeft: '16px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative'
-    }}>
-      <SkeletonBlock width="12px" height="20px" borderRadius="3px" style={{ position: 'absolute', left: '16px' }} />
-      <SkeletonBlock width="90px" height="20px" borderRadius="6px" />
+    {/* status bar inset + 44px header */}
+    <div style={{ height: 'var(--sat, 0px)' }} />
+    <div style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+      <SkeletonBlock width="12px" height="20px" borderRadius="3px" style={{ position: 'absolute', left: '17px' }} />
+      <SkeletonBlock width="112px" height="18px" borderRadius="6px" />
     </div>
 
-    <div style={{ margin: '16px', backgroundColor: '#FFFFFF', borderRadius: '16px', padding: '16px' }}>
-      <SkeletonBlock width="100%" height="48px" borderRadius="12px" />
-      <div style={{ display: 'flex', gap: '14px', marginTop: '20px' }}>
-        {[1, 2, 3, 4].map(i => (
-          <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-            <SkeletonBlock width="50px" height="50px" borderRadius="50%" />
-            <SkeletonBlock width="44px" height="12px" borderRadius="4px" />
+    {/* segmented control */}
+    <div style={{ margin: '6px 16px 8px' }}>
+      <SkeletonBlock width="100%" height="40px" borderRadius="11px" />
+    </div>
+
+    {/* 5 option rows (first has no subtitle, like "Между своими счетами") */}
+    <div style={{ marginTop: '4px' }}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '13px', padding: '12px 16px' }}>
+          <SkeletonBlock width="44px" height="44px" borderRadius="50%" />
+          <div style={{ flex: 1 }}>
+            <SkeletonBlock width={i === 1 ? '58%' : '52%'} height="15px" borderRadius="5px" />
+            {i !== 1 && <SkeletonBlock width="40%" height="11px" borderRadius="4px" style={{ marginTop: '7px' }} />}
           </div>
-        ))}
-      </div>
+          <SkeletonBlock width="8px" height="14px" borderRadius="3px" />
+        </div>
+      ))}
     </div>
   </div>
 );

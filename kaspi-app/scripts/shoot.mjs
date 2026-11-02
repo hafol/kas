@@ -35,7 +35,62 @@ const SCREEN_QUERY = {
   digital_id: '&screen=digital_id',
   gold_detail: '&screen=gold_detail',
   my_bank: '&screen=my_bank',
+  transfers: '&screen=transfers',
+  transfers_form: '&screen=transfers',     // clicks into "Клиенту Kaspi" (see CLICKS)
+  transfers_found: '&screen=transfers',    // phone typed → recipient box (see ACTIONS)
+  transfers_phonefocus: '&screen=transfers', // phone focused, empty (see ACTIONS)
+  transfers_receipt: '&screen=transfers',  // full transfer → receipt (see ACTIONS)
   passcode: '&screen=passcode',
+};
+
+// Optional: after load, click an element containing this text, then re-wait.
+const CLICKS = {
+  transfers_form: 'Клиенту Kaspi',
+};
+
+// Optional: after load, run a custom interaction sequence, then re-wait.
+const ACTIONS = {
+  // open form → Телефон tab → focus phone, type → fill amount → Перевести → receipt
+  transfers_receipt: async (page) => {
+    await page.getByText('Клиенту Kaspi', { exact: true }).first().click();
+    await page.waitForTimeout(400);
+    await page.getByText('Телефон', { exact: true }).first().click();
+    await page.waitForTimeout(200);
+    const lbl = page.getByText('Телефон получателя');
+    const box = await lbl.boundingBox();
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await page.waitForTimeout(150);
+    await page.keyboard.type('7051234567');
+    await page.waitForTimeout(300);
+    await page.locator('input').nth(1).fill('100');   // amount (2nd input once phone active)
+    await page.waitForTimeout(300);
+    await page.getByRole('button', { name: /Перевести/ }).click();
+    await page.waitForTimeout(500);
+  },
+  // open form → Телефон tab → focus + type phone → shows mask + floating label + found box
+  transfers_found: async (page) => {
+    await page.getByText('Клиенту Kaspi', { exact: true }).first().click();
+    await page.waitForTimeout(400);
+    await page.getByText('Телефон', { exact: true }).first().click();
+    await page.waitForTimeout(200);
+    const lbl = page.getByText('Телефон получателя');
+    const box = await lbl.boundingBox();
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await page.waitForTimeout(150);
+    await page.keyboard.type('7051234567');
+    await page.waitForTimeout(500);
+  },
+  // open form → Телефон tab → focus only (no digits) → shows empty template + blue label
+  transfers_phonefocus: async (page) => {
+    await page.getByText('Клиенту Kaspi', { exact: true }).first().click();
+    await page.waitForTimeout(400);
+    await page.getByText('Телефон', { exact: true }).first().click();
+    await page.waitForTimeout(200);
+    const lbl = page.getByText('Телефон получателя');
+    const box = await lbl.boundingBox();
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await page.waitForTimeout(400);
+  },
 };
 
 await mkdir(OUT, { recursive: true });
@@ -66,6 +121,13 @@ for (const screen of screens) {
   const page = await context.newPage();
   await page.goto(url, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1600); // splash (700ms) + skeleton (320ms) + margin
+  if (CLICKS[screen]) {
+    await page.getByText(CLICKS[screen], { exact: true }).first().click();
+    await page.waitForTimeout(500);
+  }
+  if (ACTIONS[screen]) {
+    await ACTIONS[screen](page);
+  }
   const file = join(OUT, `${screen}${tag}.png`);
   await page.screenshot({ path: file });
   console.log(`✓ ${(screen + tag).padEnd(14)} ${width}x${height}  ${url}  →  ${file}`);

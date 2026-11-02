@@ -14,46 +14,26 @@ const NavIconHome = ({ color = "#C8392F" }) => (
   </svg>
 );
 
-// B3. Kaspi QR icon (24.84 x 24.84 pt [-10%], refined stroke, less bold, #4C4C4C)
-const NavIconQR = ({ color = "#4C4C4C" }) => (
-  <svg width="24.84" height="24.84" viewBox="0 0 24 24" fill="none">
-    {/* 4 outer corners - clean refined stroke */}
-    <path d="M2.5 7.5V3.8C2.5 3.08 3.08 2.5 3.8 2.5H7.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M16.5 2.5H20.2C20.92 2.5 21.5 3.08 21.5 3.8V7.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M2.5 16.5V20.2C2.5 20.92 3.08 21.5 3.8 21.5H7.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M16.5 21.5H20.2C20.92 21.5 21.5 20.92 21.5 20.2V16.5" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-
-    {/* 3 inner corner markers */}
-    <rect x="5.2" y="5.2" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.5" />
-    <rect x="6.9" y="6.9" width="1.7" height="1.7" rx="0.4" fill={color} />
-
-    <rect x="13.7" y="5.2" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.5" />
-    <rect x="15.4" y="6.9" width="1.7" height="1.7" rx="0.4" fill={color} />
-
-    <rect x="5.2" y="13.7" width="5.1" height="5.1" rx="1.2" stroke={color} strokeWidth="1.5" />
-    <rect x="6.9" y="15.4" width="1.7" height="1.7" rx="0.4" fill={color} />
-
-    {/* Bottom-right structure */}
-    <path d="M13.7 13.7H16.5V16.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M16.5 16.5H19.2V19.2" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    <circle cx="15.1" cy="18" r="0.85" fill={color} />
-  </svg>
+// B3. Kaspi QR icon — rendered from the traced asset, recoloured via CSS mask.
+export const NavIconQR = ({ color = "#4C4C4C", size = 24.84 }) => (
+  <div style={{
+    width: size, height: size, backgroundColor: color,
+    WebkitMaskImage: 'url(/icons/qr-scan.svg)', maskImage: 'url(/icons/qr-scan.svg)',
+    WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat',
+    WebkitMaskSize: 'contain', maskSize: 'contain',
+    WebkitMaskPosition: 'center', maskPosition: 'center'
+  }} />
 );
 
-// B4. Сообщения icon (speech bubble with three small dots: 27.6 x 27.6 pt [+15%], stroke 2 pt, #4C4C4C)
+// B4. Сообщения icon — rendered from the traced asset, recoloured via CSS mask.
 const NavIconMessages = ({ color = "#4C4C4C" }) => (
-  <svg width="27.6" height="27.6" viewBox="0 0 24 24" fill="none">
-    <path
-      d="M2.5 6C2.5 4.1 4.1 2.5 6 2.5H18C19.9 2.5 21.5 4.1 21.5 6V13.5C21.5 15.4 19.9 17 18 17H11L6 20.5V17H6C4.1 17 2.5 15.4 2.5 13.5V6Z"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <circle cx="8" cy="9.8" r="1.1" fill={color} />
-    <circle cx="12" cy="9.8" r="1.1" fill={color} />
-    <circle cx="16" cy="9.8" r="1.1" fill={color} />
-  </svg>
+  <div style={{
+    width: '27.6px', height: '27.6px', backgroundColor: color,
+    WebkitMaskImage: 'url(/icons/message.svg)', maskImage: 'url(/icons/message.svg)',
+    WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat',
+    WebkitMaskSize: 'contain', maskSize: 'contain',
+    WebkitMaskPosition: 'center', maskPosition: 'center'
+  }} />
 );
 
 // B5. Сервисы icon (hamburger: 23.7 x 18.4 pt [+15%], in line with others, three 2 pt bars, #4C4C4C)

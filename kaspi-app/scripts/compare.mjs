@@ -19,6 +19,10 @@ const PAIRS = {
   gold_detail: ['references/photo_5406696723213656072_y.jpg', 'scripts/shots/gold_detail.png'],
   digital_id:  ['references/photo_5404444923399972143_y.jpg', 'scripts/shots/digital_id.png'],
   passcode:    ['references/photo_5415776782293606524_y.jpg', 'scripts/shots/passcode.png'],
+  transfers:      ['references/photo_5406696723213656071_y.jpg', 'scripts/shots/transfers.png'],
+  transfers_form: ['references/photo_5406696723213656068_y.jpg', 'scripts/shots/transfers_form.png'],
+  transfers_found:   ['references/transfer_phone_ref.png', 'scripts/shots/transfers_found.png'],
+  transfers_receipt: ['references/receipt_ref.png', 'scripts/shots/transfers_receipt.png'],
 };
 
 const dataUri = async (rel) => {

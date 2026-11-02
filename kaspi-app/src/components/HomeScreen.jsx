@@ -618,9 +618,11 @@ export const HomeScreen = ({
             </span>
           </div>
 
-          {/* 4. Переводы (на дороботке — отключен вход) */}
+          {/* 4. Переводы */}
           <div
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'default' }}
+            onClick={() => onOpenService('transfers')}
+            className="touchable"
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
               <IconTransfers size={34.5} color="#F14635" />

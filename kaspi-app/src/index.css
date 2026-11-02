@@ -487,3 +487,16 @@ html[data-ios-sim]::after {
   background: rgba(0, 0, 0, 0.35);
 }
 html[data-ios-sim="se"]::after { display: none; } /* SE uses a home button */
+
+/* Переводы — recipient "found" box drop-in */
+@keyframes txDropIn {
+  from { opacity: 0; transform: translateY(-8px); max-height: 0; }
+  to   { opacity: 1; transform: translateY(0);     max-height: 120px; }
+}
+.tx-dropin { animation: txDropIn 520ms cubic-bezier(0.22, 1, 0.36, 1); overflow: hidden; }
+
+/* Переводы — Клиенту Kaspi sub-page slide in/out (slow, smooth) */
+@keyframes txPageIn  { from { transform: translate3d(100%, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+@keyframes txPageOut { from { transform: translate3d(0, 0, 0); }    to { transform: translate3d(100%, 0, 0); } }
+.tx-page-in  { animation: txPageIn 380ms cubic-bezier(0.22, 1, 0.36, 1); }
+.tx-page-out { animation: txPageOut 360ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }

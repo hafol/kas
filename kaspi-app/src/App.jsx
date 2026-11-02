@@ -215,6 +215,9 @@ export default function App() {
       if (params.get('screen') === 'my_bank' || window.location.hash === '#my_bank') {
         return 'my_bank';
       }
+      if (params.get('screen') === 'transfers' || window.location.hash === '#transfers') {
+        return 'transfers';
+      }
     }
     return 'tab';
   });
@@ -394,6 +397,15 @@ export default function App() {
     }
   };
 
+  const handleOpenTransfers = () => {
+    if (!isAuthenticated) {
+      setPendingSecureScreen('transfers');
+      setCurrentScreen('passcode');
+    } else {
+      navigateToScreen('transfers');
+    }
+  };
+
   const handleUnlock = () => {
     setIsAuthenticated(true);
     const target = pendingSecureScreen || 'my_bank';
@@ -405,8 +417,7 @@ export default function App() {
     if (serviceId === 'bank') {
       handleOpenMyBank();
     } else if (serviceId === 'transfers') {
-      // Disabled per user request (transfers feature is unfinished)
-      return;
+      handleOpenTransfers();
     } else if (serviceId === 'gov') {
       handleOpenGov();
     } else if (serviceId === 'shop') {
@@ -595,8 +606,10 @@ export default function App() {
         ) : (
           <TransfersScreen
             card={userData.cards.gold}
+            sender={userData.profile?.shortName || 'Твое Имя'}
             onBack={() => navigateBack('tab')}
             onCompleteTransfer={handleCompleteTransfer}
+            onOpenQr={() => setCurrentScreen('qr_modal')}
           />
         );
 
