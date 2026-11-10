@@ -454,7 +454,7 @@ export const HomeScreen = ({
           Page indicator capsule: dots 4.5, centre-to-centre 8.75, bottom 4.5.
       ===================================================================== */}
       <div style={{
-        marginTop: '11px',
+        marginTop: '13px',
         paddingLeft: '17px',
         paddingRight: '17px',
         width: '100%',
@@ -583,9 +583,9 @@ export const HomeScreen = ({
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-              <IconShop size={37.5} color="#F14635" />
+              <IconShop size={36.4} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '14.6px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Магазин
             </span>
           </div>
@@ -597,9 +597,9 @@ export const HomeScreen = ({
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-              <IconMyBank size={37.5} color="#F14635" />
+              <IconMyBank size={36.4} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '14.6px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Мой Банк
             </span>
           </div>
@@ -611,9 +611,9 @@ export const HomeScreen = ({
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-              <IconPayments size={34} color="#F14635" />
+              <IconPayments size={33.3} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '14.6px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Платежи
             </span>
           </div>
@@ -625,9 +625,9 @@ export const HomeScreen = ({
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-              <IconTransfers size={34.5} color="#F14635" />
+              <IconTransfers size={33.8} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '14.6px', fontWeight: '400', color: '#000000', marginTop: '8.5px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Переводы
             </span>
           </div>
@@ -639,10 +639,10 @@ export const HomeScreen = ({
             className="touchable"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
-            <div style={{ width: '35.5px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-1px' }}>
-              <IconMagnum width={35.5} height={36} />
+            <div style={{ width: '34.9px', height: '35.4px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-1px' }}>
+              <IconMagnum width={34.9} height={35.4} />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '9px', lineHeight: '18px', letterSpacing: '0.15px' }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '14.6px', fontWeight: '400', color: '#000000', marginTop: '9px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Magnum
             </span>
           </div>
@@ -654,9 +654,9 @@ export const HomeScreen = ({
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-              <IconTravel size={37.5} color="#F14635" />
+              <IconTravel size={36.4} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '10px', lineHeight: '18px', letterSpacing: '0.15px' }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '14.6px', fontWeight: '400', color: '#000000', marginTop: '10px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Travel
             </span>
           </div>
@@ -668,9 +668,9 @@ export const HomeScreen = ({
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-              <IconGov size={37.5} color="#F14635" />
+              <IconGov size={36.4} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '10px', lineHeight: '18px', letterSpacing: '0.15px' }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '14.6px', fontWeight: '400', color: '#000000', marginTop: '10px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Госуслуги
             </span>
           </div>
@@ -682,9 +682,9 @@ export const HomeScreen = ({
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', cursor: 'pointer' }}
           >
             <div style={{ width: '38px', height: '34px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-              <IconJobs size={37.5} color="#F14635" />
+              <IconJobs size={36.4} color="#F14635" />
             </div>
-            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '15.2px', fontWeight: '400', color: '#000000', marginTop: '10px', lineHeight: '18px', letterSpacing: '0.15px' }}>
+            <span style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif', fontSize: '14.6px', fontWeight: '400', color: '#000000', marginTop: '10px', lineHeight: '18px', letterSpacing: '0.15px' }}>
               Работа
             </span>
           </div>
@@ -755,7 +755,7 @@ export const HomeScreen = ({
           }}>
             <div style={{
               fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-              fontSize: '18px',
+              fontSize: '17.3px',
               fontWeight: '400',
               color: '#000000',
               lineHeight: '24px',
@@ -766,7 +766,7 @@ export const HomeScreen = ({
             <div style={{ display: 'flex', alignItems: 'center', lineHeight: '24px' }}>
               <span style={{
                 fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-                fontSize: '18px',
+                fontSize: '17.3px',
                 fontWeight: '400',
                 color: '#000000',
                 lineHeight: '24px',
@@ -839,7 +839,7 @@ export const HomeScreen = ({
           }}>
             <span style={{
               fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-              fontSize: '18px',
+              fontSize: '17.3px',
               fontWeight: '400',
               color: '#000000',
               lineHeight: '24px',
@@ -890,7 +890,7 @@ export const HomeScreen = ({
           paddingLeft: '18.5px',
           paddingRight: '18.5px',
           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif',
-          fontSize: '18px',
+          fontSize: '16.2px',
           fontWeight: '700',
           color: '#000000',
           lineHeight: '22px',
@@ -924,19 +924,19 @@ export const HomeScreen = ({
               className="touchable"
               style={{
                 flexShrink: 0,
-                width: '110px',
+                width: '115px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 cursor: 'pointer'
               }}
             >
-              {/* Image box: 110 x 110, radius 10, white fill, 1 px border #EFEFEF */}
+              {/* Image box: square, matches card width, radius 10, white fill, 1 px border #EFEFEF */}
               <div style={{
-                width: '110px',
-                height: '110px',
-                minWidth: '110px',
-                minHeight: '110px',
+                width: '115px',
+                height: '115px',
+                minWidth: '115px',
+                minHeight: '115px',
                 borderRadius: '10px',
                 backgroundColor: '#FFFFFF',
                 border: '1px solid #EFEFEF',
@@ -965,7 +965,7 @@ export const HomeScreen = ({
                       position: 'absolute',
                       left: 0,
                       bottom: 0,
-                      height: '20px',
+                      height: '16.8px',
                       borderRadius: '4px 6px 0 10px',
                       backgroundColor: '#EC473A',
                       padding: '0 6px',
@@ -977,8 +977,8 @@ export const HomeScreen = ({
                     }}>
                       <span style={{
                         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-                        fontSize: '12px',
-                        fontWeight: '600',
+                        fontSize: '9.4px',
+                        fontWeight: '700',
                         color: '#FFFFFF',
                         lineHeight: 1,
                         whiteSpace: 'nowrap'
@@ -991,7 +991,7 @@ export const HomeScreen = ({
                       position: 'absolute',
                       left: 0,
                       bottom: 0,
-                      height: '20px',
+                      height: '16.8px',
                       borderRadius: '4px 6px 0 10px',
                       backgroundColor: '#589F07',
                       padding: '0 6px',
@@ -1001,7 +1001,7 @@ export const HomeScreen = ({
                       boxSizing: 'border-box'
                     }}>
                       {item.hasFlame && (
-                        <svg width="8" height="11" viewBox="14 1 71 82" fill="none" style={{ marginRight: '4px', flexShrink: 0 }}>
+                        <svg width="8.2" height="9.5" viewBox="14 1 71 82" fill="none" style={{ marginRight: '4px', flexShrink: 0 }}>
                           <path
                             fill="#FFC400"
                             d="M27 20.5C31 22 35 28 38 34C39.5 28 42 17 45 11.5C47 7.5 49 5.5 51 4.5C54 7 56.5 14 58.5 21C60.5 28 62 35 63 41C64 37 66 33 68.5 30.5C73 32.5 77 40 79.5 47C81.5 54 80.5 62 77 68C74 73 69.5 77 64.5 79.5C62 77 61.5 73 61.5 70.5C61.5 68 60 65.5 58 64C56 66.5 53.5 68.5 50.5 69.5C46.5 67.5 42 61 40.5 55C38 59 36 65 35.5 70C35.2 73.5 34.5 76.5 32 79C26 77 21 70 19 62C17.5 55 19 48 21.5 41C23.5 34 24.5 27 27 20.5Z"
@@ -1010,8 +1010,8 @@ export const HomeScreen = ({
                       )}
                       <span style={{
                         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-                        fontSize: '12px',
-                        fontWeight: '600',
+                        fontSize: '9.4px',
+                        fontWeight: '700',
                         color: '#FFFFFF',
                         lineHeight: 1,
                         whiteSpace: 'nowrap'
@@ -1022,15 +1022,15 @@ export const HomeScreen = ({
                         <span style={{
                           marginLeft: '4.5px',
                           backgroundColor: '#FFFFFF',
-                          height: '14px',
+                          height: '10.5px',
                           borderRadius: '4px',
                           padding: '0 2.5px',
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-                          fontSize: '12px',
-                          fontWeight: '600',
+                          fontSize: '9.4px',
+                          fontWeight: '700',
                           color: '#589F07',
                           lineHeight: 1,
                           whiteSpace: 'nowrap'
@@ -1078,11 +1078,11 @@ export const HomeScreen = ({
                 )}
               </div>
 
-              {/* Green bonus box: 111 x 39, radius 8, #DEF9D0 mint, top 20.5 below price text top (box top y 705.5) */}
+              {/* Green bonus box: fits the card width, radius 8, #DEF9D0 mint */}
               {item.bonusBox && (
                 <div style={{
                   marginTop: '2.5px',
-                  width: '111px',
+                  width: '100%',
                   height: '39px',
                   borderRadius: '8px',
                   backgroundColor: '#DEF9D0',
@@ -1094,7 +1094,7 @@ export const HomeScreen = ({
                   flexDirection: 'column'
                 }}>
                   <div style={{
-                    fontSize: '13px',
+                    fontSize: '11.3px',
                     fontWeight: '700',
                     color: '#589F07',
                     lineHeight: '13px',
@@ -1104,7 +1104,7 @@ export const HomeScreen = ({
                     {item.bonusBox.price}
                   </div>
                   <div style={{
-                    fontSize: '11px',
+                    fontSize: '10px',
                     fontWeight: '400',
                     color: '#000000',
                     lineHeight: '13px',
@@ -1117,13 +1117,13 @@ export const HomeScreen = ({
                 </div>
               )}
 
-              {/* Product name: text top 44 px under box top (y 749.5) / 707 without box */}
+              {/* Product name: constrained to the card width, single line, ellipsis */}
               <div style={{
                 marginTop: item.bonusBox ? '5px' : '4px',
                 fontSize: '13px',
                 fontWeight: '400',
                 color: '#000000',
-                width: '110px',
+                width: '100%',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',

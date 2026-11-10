@@ -20,7 +20,7 @@ const chevronGrey   = '#BDBDBD';
 
 // Russian typography rule used by Kaspi: glue 1–2 letter words (к, в, и, по…) to the next word
 // with a no-break space, so titles wrap as "Прикрепление / к медорганизации".
-const glueShortWords = (text) => text.replace(/(?<=^|[\s ])([а-яё]{1,2}) /gi, '$1 ');
+const glueShortWords = (text) => text.replace(/(^|[\s ])([а-яё]{1,2}) /gi, '$1$2 ');
 
 // 1. Back Chevron (<) SVG: 11.5 x 21 at x 25, top y 62.5. Stroke ≈ 2 px (2.1 px)
 const BackChevronIcon = ({ width = 11.5, height = 21 }) => (

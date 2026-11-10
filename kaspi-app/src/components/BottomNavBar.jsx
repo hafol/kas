@@ -15,7 +15,7 @@ const NavIconHome = ({ color = "#C8392F" }) => (
 );
 
 // B3. Kaspi QR icon — rendered from the traced asset, recoloured via CSS mask.
-export const NavIconQR = ({ color = "#4C4C4C", size = 24.84 }) => (
+export const NavIconQR = ({ color = "#4C4C4C", size = 25.6 }) => (
   <div style={{
     width: size, height: size, backgroundColor: color,
     WebkitMaskImage: 'url(/icons/qr-scan.svg)', maskImage: 'url(/icons/qr-scan.svg)',
@@ -28,7 +28,7 @@ export const NavIconQR = ({ color = "#4C4C4C", size = 24.84 }) => (
 // B4. Сообщения icon — rendered from the traced asset, recoloured via CSS mask.
 const NavIconMessages = ({ color = "#4C4C4C" }) => (
   <div style={{
-    width: '27.6px', height: '27.6px', backgroundColor: color,
+    width: '27.05px', height: '27.05px', backgroundColor: color,
     WebkitMaskImage: 'url(/icons/message.svg)', maskImage: 'url(/icons/message.svg)',
     WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat',
     WebkitMaskSize: 'contain', maskSize: 'contain',

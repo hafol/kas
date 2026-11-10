@@ -154,11 +154,14 @@ export const AdminScreen = () => {
           isForever: data.isForever,
           days: data.days,
           expiryDate: data.expiryDate,
-          createdDate: new Date().toLocaleDateString('ru-RU', {
+          createdAt: Date.now(),
+          createdDate: new Date().toLocaleString('ru-RU', {
             day: '2-digit',
             month: '2-digit',
+            year: 'numeric',
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
+            second: '2-digit'
           })
         };
         setLastGenerated(item);
@@ -199,11 +202,29 @@ export const AdminScreen = () => {
     }
   };
 
+  const deleteHistoryItem = (id) => {
+    const updated = history.filter((h) => h.id !== id);
+    setHistory(updated);
+    try {
+      localStorage.setItem('kaspi_admin_history', JSON.stringify(updated));
+    } catch (e) {}
+  };
+
+  const clearHistory = () => {
+    setHistory([]);
+    try {
+      localStorage.removeItem('kaspi_admin_history');
+    } catch (e) {}
+  };
+
   // 1. Password Lock View
   if (!isAuthenticated) {
     return (
       <div style={{
-        minHeight: '100dvh',
+        height: '100dvh',
+        overflowY: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        boxSizing: 'border-box',
         backgroundColor: '#0F1216',
         color: '#FFFFFF',
         fontFamily: "'Roboto', -apple-system, sans-serif",
@@ -310,7 +331,10 @@ export const AdminScreen = () => {
   // 2. Generator Dashboard View
   return (
     <div style={{
-      minHeight: '100dvh',
+      height: '100dvh',
+      overflowY: 'auto',
+      WebkitOverflowScrolling: 'touch',
+      boxSizing: 'border-box',
       backgroundColor: '#0F1216',
       color: '#FFFFFF',
       fontFamily: "'Roboto', -apple-system, sans-serif",
@@ -319,7 +343,7 @@ export const AdminScreen = () => {
       flexDirection: 'column',
       alignItems: 'center'
     }}>
-      <div style={{ width: '100%', maxWidth: '420px' }}>
+      <div style={{ width: '100%', maxWidth: '420px', paddingBottom: '32px' }}>
         
         {/* Top bar */}
         <div style={{
@@ -602,6 +626,12 @@ export const AdminScreen = () => {
                 : `Доступ активен до: ${lastGenerated.expiryDate} (включительно)`}
             </div>
 
+            {lastGenerated.createdDate && (
+              <div style={{ fontSize: '11px', color: '#5E6B7A', textAlign: 'center', marginBottom: '14px' }}>
+                🕒 Создан: {lastGenerated.createdDate}
+              </div>
+            )}
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <button
                 type="button"
@@ -656,8 +686,25 @@ export const AdminScreen = () => {
         {/* History of recent codes */}
         {history.length > 0 && (
           <div>
-            <div style={{ fontSize: '13px', color: '#8E9AA8', fontWeight: '600', marginBottom: '10px' }}>
-              История сгенерированных кодов:
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+              <div style={{ fontSize: '13px', color: '#8E9AA8', fontWeight: '600' }}>
+                История сгенерированных кодов:
+              </div>
+              <button
+                onClick={clearHistory}
+                style={{
+                  background: 'none',
+                  border: '1px solid #5A2A2A',
+                  color: '#FF6B6B',
+                  borderRadius: '6px',
+                  padding: '4px 10px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                🗑 Очистить всё
+              </button>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {history.map((item) => (
@@ -673,28 +720,49 @@ export const AdminScreen = () => {
                     alignItems: 'center'
                   }}
                 >
-                  <div>
+                  <div style={{ minWidth: 0 }}>
                     <div style={{ fontFamily: 'monospace', fontSize: '14px', fontWeight: '700', color: '#FFFFFF' }}>
                       {item.code}
                     </div>
                     <div style={{ fontSize: '11px', color: '#8E9AA8', marginTop: '2px' }}>
                       ID: {item.deviceId} • {item.isForever ? 'Навсегда' : `${item.days} дн.`}
                     </div>
+                    {item.createdDate && (
+                      <div style={{ fontSize: '11px', color: '#5E6B7A', marginTop: '2px' }}>
+                        🕒 {item.createdDate}
+                      </div>
+                    )}
                   </div>
-                  <button
-                    onClick={() => copyToClipboard(item.code, () => {})}
-                    style={{
-                      background: 'none',
-                      border: '1px solid #2C3542',
-                      color: '#C1CAD4',
-                      borderRadius: '6px',
-                      padding: '4px 8px',
-                      fontSize: '11px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Копировать
-                  </button>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flexShrink: 0 }}>
+                    <button
+                      onClick={() => copyToClipboard(item.code, () => {})}
+                      style={{
+                        background: 'none',
+                        border: '1px solid #2C3542',
+                        color: '#C1CAD4',
+                        borderRadius: '6px',
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Копировать
+                    </button>
+                    <button
+                      onClick={() => deleteHistoryItem(item.id)}
+                      style={{
+                        background: 'none',
+                        border: '1px solid #5A2A2A',
+                        color: '#FF6B6B',
+                        borderRadius: '6px',
+                        padding: '4px 8px',
+                        fontSize: '11px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Удалить
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

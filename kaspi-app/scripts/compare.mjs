@@ -23,6 +23,7 @@ const PAIRS = {
   transfers_form: ['references/photo_5406696723213656068_y.jpg', 'scripts/shots/transfers_form.png'],
   transfers_found:   ['references/transfer_phone_ref.png', 'scripts/shots/transfers_found.png'],
   transfers_receipt: ['references/receipt_ref.png', 'scripts/shots/transfers_receipt.png'],
+  home_audit:        ['references/home_real.png', 'references/home_ours.png'],
 };
 
 const dataUri = async (rel) => {

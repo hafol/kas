@@ -398,7 +398,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
             left: 0,
             right: 0,
             textAlign: 'center',
-            fontSize: '17px',
+            fontSize: '16.5px',
             fontWeight: 400,
             lineHeight: '17px',
             height: '17px',
@@ -473,9 +473,9 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
               <span
                 style={{
                   position: 'relative',
-                  fontSize: '34px',
+                  fontSize: '33px',
                   fontWeight: 390,
-                  lineHeight: '34px',
+                  lineHeight: '33px',
                   color: isActive ? '#FFFFFF' : '#212121',
                   fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
                   letterSpacing: '0px'
@@ -534,7 +534,7 @@ export const PasscodeScreen = ({ profile, onUnlock, onBack, onLogout, onUpdatePr
               background: 'none',
               border: 'none',
               padding: 0,
-              fontSize: '17.5px',
+              fontSize: '16px',
               fontWeight: 400,
               lineHeight: '18px',
               color: '#1F6FA3',

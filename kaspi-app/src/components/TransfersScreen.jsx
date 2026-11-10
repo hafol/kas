@@ -1,11 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { parseAndFormatKaspiBalance } from '../utils/formatters';
 import { BottomNavBar, NavIconQR } from './BottomNavBar';
-import {
-  IconTransferGold,   // Между своими счетами (swap)
-  IconTopupGold,      // Пополнить Kaspi Gold (card +)
-  IconWebPayGold      // Международные переводы (globe)
-} from './KaspiGoldIcons';
 import { IconClientKaspi, IconOtherBank, IconScanCard, IconContact } from './TransferIcons';
 import { TransferReceipt } from './TransferReceipt';
 
@@ -37,6 +32,16 @@ const formatPhone = (sub) => {
   if (d.length) out += ' (' + d.slice(0, 3);
   if (d.length >= 3) out += ')';
   if (d.length > 3) out += ' ' + d.slice(3, 6);
+  if (d.length > 6) out += '-' + d.slice(6, 8);
+  if (d.length > 8) out += '-' + d.slice(8, 10);
+  return out;
+};
+// Same as formatPhone, but never trails a separator after the last typed digit,
+// so the caret sits right next to the numbers while typing.
+const phoneTyped = (sub) => {
+  const d = digitsOf(sub).slice(0, 10);
+  let out = '+7 (' + d.slice(0, 3);
+  if (d.length > 3) out += ') ' + d.slice(3, 6);
   if (d.length > 6) out += '-' + d.slice(6, 8);
   if (d.length > 8) out += '-' + d.slice(8, 10);
   return out;
@@ -88,6 +93,13 @@ const MaskIcon = ({ src, size, color }) => (
   }} />
 );
 
+// Переводы list icons — masked copies of the project's traced SVGs (public/icons),
+// all at stroke-width 2.1 so the whole list matches in weight. These are local to
+// this screen; the shared Kaspi Gold detail screen keeps its own KaspiGoldIcons.
+const IconListSwap  = ({ size = 27, color }) => <MaskIcon src="/icons/swap.svg" size={size} color={color} />;
+const IconListTopup = ({ size = 27, color }) => <MaskIcon src="/icons/card-add.svg" size={size} color={color} />;
+const IconListGlobe = ({ size = 27, color }) => <MaskIcon src="/icons/globe.svg" size={size} color={color} />;
+
 // Segmented control with a white pill that slides smoothly to the active item.
 const Segmented = ({ items, value, onChange, dark, height = 38 }) => {
   const n = items.length;
@@ -116,7 +128,7 @@ const Segmented = ({ items, value, onChange, dark, height = 38 }) => {
             style={{
               position: 'relative', zIndex: 1, flex: 1, height: `${height}px`,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-              fontSize: dark ? '16px' : '15px', fontWeight: dark ? '600' : (sel ? '600' : '500'),
+              fontSize: dark ? '15px' : '15px', fontWeight: dark ? '500' : (sel ? '500' : '400'),
               color: labelColor(sel), cursor: 'pointer', transition: 'color 220ms ease'
             }}
           >
@@ -132,7 +144,7 @@ const Segmented = ({ items, value, onChange, dark, height = 38 }) => {
 export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOpenQr }) => {
   const [activeTab, setActiveTab] = useState('my');       // 'my' | 'history'
   const [subMode, setSubMode] = useState('list');         // 'list' | 'client_kaspi' | 'receipt'
-  const [clientTab, setClientTab] = useState('card');     // 'phone' | 'card' | 'qr'
+  const [clientTab, setClientTab] = useState('phone');    // 'phone' | 'card' | 'qr'
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const [message, setMessage] = useState('');
@@ -165,11 +177,11 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
     : (recipientDigits ? resolveName(recipientDigits) : 'Получатель');
 
   const options = [
-    { id: 'between', title: 'Между своими счетами', subtitle: null, Icon: IconTransferGold },
+    { id: 'between', title: 'Между своими счетами', subtitle: null, Icon: IconListSwap },
     { id: 'client_kaspi', title: 'Клиенту Kaspi', subtitle: 'На карту Kaspi Gold', Icon: IconClientKaspi, onClick: () => openForm() },
     { id: 'client_other', title: 'Клиенту другого банка', subtitle: 'По номеру телефона или карты', Icon: IconOtherBank },
-    { id: 'topup', title: 'Пополнить Kaspi Gold', subtitle: 'С карты другого банка', Icon: IconTopupGold },
-    { id: 'international', title: 'Международные переводы', subtitle: 'По номеру карты или телефона', Icon: IconWebPayGold }
+    { id: 'topup', title: 'Пополнить Kaspi Gold', subtitle: 'С карты другого банка', Icon: IconListTopup, iconSize: 29 },
+    { id: 'international', title: 'Международные переводы', subtitle: 'По номеру карты или телефона', Icon: IconListGlobe }
   ];
 
   const recipientPlaceholder =
@@ -224,7 +236,7 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
           <BackChevron />
         </div>
         <div style={{ position: 'absolute', left: 0, right: 0, textAlign: 'center', pointerEvents: 'none' }}>
-          <span style={{ fontSize: '17px', fontWeight: '700', color: TEXT, letterSpacing: '0.1px' }}>{title}</span>
+          <span style={{ fontSize: '17px', fontWeight: '600', color: TEXT, letterSpacing: '0.1px' }}>{title}</span>
         </div>
       </div>
     </div>
@@ -236,8 +248,9 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
         <Header title="Переводы" />
 
         {/* Segmented control: Мои Переводы / История */}
-        <div style={{ margin: '6px 16px 8px' }}>
+        <div style={{ margin: '13px 16px 18px' }}>
           <Segmented
+            height={33}
             items={[{ id: 'my', label: 'Мои Переводы' }, { id: 'history', label: 'История' }]}
             value={activeTab}
             onChange={setActiveTab}
@@ -255,21 +268,21 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
                   className="touchable"
                   style={{
                     display: 'flex', alignItems: 'center', gap: '13px',
-                    padding: '12px 16px', cursor: 'pointer'
+                    padding: '14.25px 16px', cursor: 'pointer'
                   }}
                 >
                   <div style={{
-                    width: '44px', height: '44px', borderRadius: '50%', backgroundColor: '#F6F6F7',
+                    width: '42px', height: '42px', borderRadius: '50%', backgroundColor: '#FBFBFC',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
                   }}>
-                    <Icon size={25} color={RED} />
+                    <Icon size={opt.iconSize || 27} color="#B0423D" />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '16px', fontWeight: '500', color: TEXT, letterSpacing: '0.1px' }}>
+                    <div style={{ fontSize: '16px', fontWeight: '400', color: TEXT, letterSpacing: '0.1px' }}>
                       {opt.title}
                     </div>
                     {opt.subtitle && (
-                      <div style={{ fontSize: '12.5px', color: SUBTLE, marginTop: '1px' }}>{opt.subtitle}</div>
+                      <div style={{ fontSize: '13px', color: '#8E8E93', marginTop: '1px' }}>{opt.subtitle}</div>
                     )}
                   </div>
                   <ChevronRight />
@@ -305,18 +318,18 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: 0 }}>
           {/* From-account card */}
           <div style={{
-            margin: '16px 16.5px 0', backgroundColor: '#FFFFFF', borderRadius: '13.5px',
-            padding: '14px 16.5px', height: '66.6px', boxSizing: 'border-box',
+            margin: '14px 14.5px 0', backgroundColor: '#FFFFFF', borderRadius: '16px',
+            padding: '14px 16.5px', height: '70.6px', boxSizing: 'border-box',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             boxShadow: '0 1px 4px rgba(0,0,0,0.07)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
               {/* Gold card miniature — 37 × 28.4, radius 4.5 (spec) */}
               <div style={{
-                width: '37px', height: '28.4px', borderRadius: '4.5px', backgroundColor: '#D4AF67',
+                width: '38.85px', height: '29.82px', borderRadius: '4.73px', backgroundColor: '#D4AF67',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, overflow: 'hidden'
               }}>
-                <img src="/kaspi_assets/icon_white.svg" alt="Kaspi Gold" style={{ width: '17.8px', height: '23px', objectFit: 'contain', display: 'block' }} />
+                <img src="/kaspi_assets/icon_white.svg" alt="Kaspi Gold" style={{ width: '18.69px', height: '24.15px', objectFit: 'contain', display: 'block' }} />
               </div>
               <span style={{ fontSize: '17px', fontWeight: '400', color: TEXT }}>Kaspi Gold</span>
             </div>
@@ -326,7 +339,7 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
           </div>
 
           {/* Grey gap with the chevron circle centred in it (two-panel header) */}
-          <div style={{ position: 'relative', height: '12.5px', backgroundColor: '#F2F2F2', marginTop: '8px' }}>
+          <div style={{ position: 'relative', height: '12.5px', backgroundColor: '#F2F2F2', marginTop: '17px' }}>
             <div style={{
               position: 'absolute', left: '50%', top: '-10.6px', transform: 'translateX(-50%)',
               width: '33.7px', height: '33.7px', borderRadius: '50%', backgroundColor: '#FFFFFF',
@@ -340,7 +353,7 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
           <div style={{ margin: '16px 16.5px 0' }}>
             <Segmented
               dark
-              height={37.6}
+              height={34.6}
               items={[
                 { id: 'phone', label: 'Телефон' },
                 { id: 'card', label: 'Карта' },
@@ -374,19 +387,19 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
                   {(phoneFocused || recipient) && (
                     <>
                       <div style={{
-                        position: 'absolute', left: '16.5px', top: '33px', fontSize: '17px', color: TEXT,
+                        position: 'absolute', left: '16.5px', top: '33px', fontSize: '16.5px', color: TEXT,
                         pointerEvents: 'none', fontVariantNumeric: 'tabular-nums', letterSpacing: '0.5px'
                       }}>{fullTemplate(recipient)}</div>
                       <input
                         ref={phoneRef}
-                        value={recipient ? phoneDisplay : '+7 ('}
+                        value={phoneTyped(recipient)}
                         onChange={(e) => setRecipient(digitsOf(e.target.value.replace(/^\+7\s*/, '')).slice(0, 10))}
                         onFocus={() => setPhoneFocused(true)}
                         onBlur={() => setPhoneFocused(false)}
                         inputMode="tel"
                         style={{
                           position: 'absolute', left: '16.5px', top: '33px', right: '50px',
-                          fontSize: '17px', color: 'transparent', caretColor: '#007AFF',
+                          fontSize: '16.5px', color: 'transparent', caretColor: '#007AFF',
                           background: 'transparent', border: 'none', outline: 'none', padding: 0,
                           fontVariantNumeric: 'tabular-nums', letterSpacing: '0.5px'
                         }}
@@ -454,7 +467,7 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
 
           {/* Amount field — "0 ₸" black, editable, capped at balance */}
           <div style={{
-            margin: '25px 16.5px 0', backgroundColor: FIELD, borderRadius: '13.5px',
+            margin: '25px 16.5px 0', backgroundColor: FIELD, borderRadius: '16px',
             height: '66.6px', display: 'flex', alignItems: 'center', padding: '0 16.5px'
           }}>
             <input
@@ -467,17 +480,18 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
               inputMode="numeric"
               style={{
                 border: 'none', outline: 'none', background: 'transparent',
-                fontSize: '22px', fontWeight: '400', color: '#181818',
+                fontSize: '20px', fontWeight: '390', color: TEXT,
+                fontFamily: "'Roboto Flex Kaspi', 'Roboto', -apple-system, sans-serif",
                 width: `${(amount ? amountLabel : '0').length + 0.1}ch`, padding: 0
               }}
             />
-            <span style={{ fontSize: '22px', color: '#181818', marginLeft: '2px' }}>₸</span>
+            <span style={{ fontSize: '20px', color: TEXT, marginLeft: '2px' }}>₸</span>
           </div>
 
           {/* Message field */}
           <div style={{
             margin: '24px 16.5px 0', backgroundColor: FIELD, borderRadius: '13.5px',
-            height: '87.8px', padding: '15px 16.5px', display: 'flex', boxSizing: 'border-box'
+            height: '94.8px', padding: '15px 16.5px', display: 'flex', boxSizing: 'border-box'
           }}>
             <textarea
               value={message}
@@ -523,10 +537,10 @@ export const TransfersScreen = ({ card, sender, onBack, onCompleteTransfer, onOp
               style={{
                 width: '100%', height: '57.4px', borderRadius: '13.5px', border: 'none',
                 backgroundColor: BLUE, color: '#FFFFFF',
-                fontSize: '18px', fontWeight: '600', cursor: amountNum > 0 ? 'pointer' : 'default'
+                fontSize: '17px', fontWeight: '500', cursor: amountNum > 0 ? 'pointer' : 'default'
               }}
             >
-              Перевести {amountLabel} ₸
+              Перевести <span style={{ fontWeight: 390, fontSize: '16px' }}>{amountLabel}</span> ₸
             </button>
           </div>
       </div>
